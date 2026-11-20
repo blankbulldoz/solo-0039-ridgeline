@@ -11,8 +11,11 @@ func Validate(q model.Query) error {
 	if err := model.ValidateQuery(q); err != nil {
 		return err
 	}
-	if q.Step <= 0 || q.Step > model.MaxTime || !model.ValidTime(q.Origin) {
-		return model.Bad("window step and origin outside supported range")
+	if q.Calendar != nil && (q.Step != 0 || q.Origin != 0) {
+		return model.Bad("calendar windows cannot be combined with step or origin")
+	}
+	if _, err := Locate(q); err != nil {
+		return err
 	}
 	switch q.Function {
 	case "count", "sum", "min", "max", "avg", "first", "last", "rate":

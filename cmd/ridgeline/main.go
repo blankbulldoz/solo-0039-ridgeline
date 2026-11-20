@@ -10,6 +10,9 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	// Embed the IANA database so calendar windows resolve named zones
+	// even when the host has no system tzdata installed.
+	_ "time/tzdata"
 
 	"ridgeline/internal/engine"
 	"ridgeline/internal/wire"

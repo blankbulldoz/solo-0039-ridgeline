@@ -27,16 +27,20 @@ func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error)
 	if q.Function == "rate" {
 		return Rates(series, q)
 	}
+	locate, err := Locate(q)
+	if err != nil {
+		return nil, err
+	}
 	groups := map[string]*accumulator{}
 	for _, s := range series {
 		key, labels := Group(s.Series.Labels, q.GroupBy)
 		for _, p := range s.Points {
-			start := Bucket(p.Time, q.Origin, q.Step)
+			start, end, local := locate(p.Time)
 			k := fmt.Sprintf("%s/%d", key, start)
 			a := groups[k]
 			if a == nil {
 				a = &accumulator{
-					cell:   model.Cell{Labels: labels, Start: start, End: start + q.Step},
+					cell:   model.Cell{Labels: labels, Start: start, End: end, Local: local},
 					firstT: p.Time, lastT: p.Time, first: p.Value, last: p.Value,
 					firstKey: s.Series.ID, lastKey: s.Series.ID,
 					min: p.Value, max: p.Value,

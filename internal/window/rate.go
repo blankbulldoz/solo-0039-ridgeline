@@ -8,18 +8,33 @@ import (
 )
 
 func Rates(series []model.SeriesPoints, q model.Query) ([]model.Cell, error) {
+	locate, err := Locate(q)
+	if err != nil {
+		return nil, err
+	}
+	type bucket struct {
+		end    int64
+		local  string
+		points []model.Sample
+	}
 	cells := map[string]*model.Cell{}
 	for _, s := range series {
 		key, labels := Group(s.Series.Labels, q.GroupBy)
-		windows := map[int64][]model.Sample{}
+		windows := map[int64]*bucket{}
 		for _, point := range s.Points {
 			if point.Value < 0 {
 				return nil, model.Bad("counter rate requires nonnegative values")
 			}
-			start := Bucket(point.Time, q.Origin, q.Step)
-			windows[start] = append(windows[start], point)
+			start, end, local := locate(point.Time)
+			w := windows[start]
+			if w == nil {
+				w = &bucket{end: end, local: local}
+				windows[start] = w
+			}
+			w.points = append(w.points, point)
 		}
-		for start, points := range windows {
+		for start, w := range windows {
+			points := w.points
 			if len(points) < 2 {
 				continue
 			}
@@ -36,7 +51,7 @@ func Rates(series []model.SeriesPoints, q model.Query) ([]model.Cell, error) {
 			k := fmt.Sprintf("%s/%d", key, start)
 			cell := cells[k]
 			if cell == nil {
-				cell = &model.Cell{Labels: labels, Start: start, End: start + q.Step}
+				cell = &model.Cell{Labels: labels, Start: start, End: w.end, Local: w.local}
 				cells[k] = cell
 			}
 			cell.Value += value

@@ -47,7 +47,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
-| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/aggregate` | interval, step or calendar, function, group_by |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -72,6 +72,33 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+## Calendar Windows
+
+Besides a fixed `step`/`origin`, an aggregate query may bucket by civil
+calendar in a named IANA timezone (the zone database is embedded in the
+binary):
+
+```json
+{"start":1772859600000,"end":1775102400000,
+ "calendar":{"unit":"day","timezone":"America/New_York"},
+ "group_by":["zone"],"function":"count"}
+```
+
+`unit` is `day`, `week` or `month`; `week_start` (weekday name, default
+`monday`) is accepted for `week` only. `calendar` cannot be combined with
+`step` or `origin`. Each cell reports `start`/`end` as the UTC millisecond
+instants of the local civil boundaries plus a `local` label naming the day
+(`2026-03-08`), week start date or month (`2026-03`). Boundaries follow the
+civil calendar, not a constant duration: the America/New_York spring-forward
+day spans 23 hours, the fall-back day 25, and March 2026 spans 743 hours.
+Only populated windows appear, so a civil window without source points is
+absent from the result. When the query interval clips the first or last
+window, the cell keeps its full natural boundaries and aggregates only the
+points inside the query interval. Calendar queries merge head points, sealed
+blocks and corrections like any other aggregate; rollups may store calendar
+definitions. The `calendar` walkthrough workflow demonstrates these rules
+against DST-transition and month-end data.
 
 ## Storage And Recovery
 

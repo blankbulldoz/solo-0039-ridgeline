@@ -40,6 +40,19 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+As an alternative to a fixed step, a query may name a calendar: civil day,
+week or month windows in an IANA timezone, with a configurable first
+weekday for weeks (default Monday). Calendar and fixed-step parameters are
+mutually exclusive in one query. Window boundaries follow the local civil
+calendar, so a day containing a UTC offset transition spans 23 or 25 hours
+and a month spans its true civil length; emitted start and end are the UTC
+millisecond instants of the local boundaries, accompanied by a local
+calendar label. Only populated windows appear: a civil window with no
+source points yields no cell. When the query interval clips the first or
+last window, the cell keeps its full natural boundaries while aggregating
+only the points inside the query interval. Calendar queries merge head
+points, sealed blocks and corrections exactly like fixed-step queries.
+
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
 deletions into one block per selected series; empty series retain their identity.

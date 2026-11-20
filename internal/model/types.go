@@ -59,8 +59,18 @@ type Query struct {
 	Limit    int       `json:"limit"`
 	Step     int64     `json:"step"`
 	Origin   int64     `json:"origin"`
+	Calendar *Calendar `json:"calendar,omitempty"`
 	GroupBy  []string  `json:"group_by"`
 	Function string    `json:"function"`
+}
+
+// Calendar selects civil day, week or month windows in an IANA timezone
+// instead of a fixed millisecond step. WeekStart names the first weekday
+// of week windows and defaults to monday.
+type Calendar struct {
+	Unit      string `json:"unit"`
+	Timezone  string `json:"timezone"`
+	WeekStart string `json:"week_start,omitempty"`
 }
 
 type SeriesPoints struct {
@@ -89,6 +99,7 @@ type Cell struct {
 	Labels Labels  `json:"labels"`
 	Start  int64   `json:"start"`
 	End    int64   `json:"end"`
+	Local  string  `json:"local,omitempty"`
 	Value  float64 `json:"value"`
 	Count  int     `json:"count"`
 }
