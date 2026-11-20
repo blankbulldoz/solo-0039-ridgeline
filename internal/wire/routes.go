@@ -32,6 +32,25 @@ func Handler(e *engine.Engine) http.Handler {
 			return e.Write(r.PathValue("space"), input)
 		})
 	})
+	mux.HandleFunc("POST "+base+"/histograms", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input model.HistogramWriteRequest) (any, error) {
+			return e.WriteHistograms(r.PathValue("space"), input)
+		})
+	})
+	mux.HandleFunc("POST "+base+"/histogram-range", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.HistogramQuery) (any, error) {
+			return e.HistogramRange(r.PathValue("space"), q)
+		})
+	})
+	mux.HandleFunc("POST "+base+"/histogram-query", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.HistogramQuery) (any, error) {
+			return e.Histograms(r.PathValue("space"), q)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/histogram-blocks", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.HistogramBlocks(r.PathValue("space"))
+		respond(w, out, err)
+	})
 	mux.HandleFunc("POST "+base+"/series", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(input struct {
 			Matchers []model.Matcher `json:"matchers"`

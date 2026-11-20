@@ -14,7 +14,15 @@ func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance,
 	if err != nil {
 		return model.Maintenance{}, err
 	}
-	for _, bucket := range [][]byte{volume.Head, volume.Blocks, volume.Payloads, volume.Deletes} {
+	histRaw, _, err := scanHistograms(b, n,
+		model.HistogramQuery{Start: model.MinTime, End: model.MaxTime + 1}, volume.Current(tx))
+	if err != nil {
+		return model.Maintenance{}, err
+	}
+	for _, bucket := range [][]byte{
+		volume.Head, volume.Blocks, volume.Payloads, volume.Deletes,
+		volume.HistHead, volume.HistBlocks, volume.HistPayloads,
+	} {
 		if err := clearBucket(b, bucket); err != nil {
 			return model.Maintenance{}, err
 		}
@@ -30,6 +38,13 @@ func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance,
 		}
 		receipt.Blocks++
 		receipt.Points += len(s.Points)
+	}
+	for _, s := range histRaw {
+		if err := putHistBlock(b, s.Series.ID, seq, s.Points); err != nil {
+			return receipt, err
+		}
+		receipt.HistogramBlock++
+		receipt.Histograms += len(s.Points)
 	}
 	n.LastSequence = seq
 	return receipt, volume.PutJSON(b, volume.Config, n)

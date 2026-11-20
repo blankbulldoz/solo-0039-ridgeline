@@ -52,6 +52,82 @@ func ValidateObservation(p Observation) error {
 	return nil
 }
 
+// MaxHistogramBuckets bounds request size and per-window merge work.
+const MaxHistogramBuckets = 256
+
+func ValidateHistogram(p HistogramObservation) error {
+	if err := ValidateLabels(p.Labels); err != nil {
+		return err
+	}
+	if !ValidTime(p.Time) {
+		return Bad("time outside supported range")
+	}
+	if len(p.Bounds) == 0 || len(p.Bounds) > MaxHistogramBuckets {
+		return Bad("histogram requires 1..256 buckets")
+	}
+	if len(p.Bounds) != len(p.Counts) {
+		return Bad("histogram bounds and counts must have equal length")
+	}
+	if math.IsNaN(p.Sum) || math.IsInf(p.Sum, 0) {
+		return Bad("histogram sum must be finite")
+	}
+	previous := math.Inf(-1)
+	for i, bound := range p.Bounds {
+		if math.IsNaN(bound) || math.IsInf(bound, 0) || bound <= previous {
+			return Bad("histogram bounds must be strictly increasing finite numbers")
+		}
+		if i > 0 && p.Counts[i] < p.Counts[i-1] {
+			return Bad("histogram cumulative counts must be non-decreasing within one observation")
+		}
+		previous = bound
+	}
+	return nil
+}
+
+func ValidateHistogramSample(p HistogramSample) error {
+	observation := HistogramObservation{
+		Labels: Labels{"__name__": "histogram"}, Time: p.Time,
+		Bounds: p.Bounds, Counts: p.Counts, Sum: p.Sum,
+	}
+	return ValidateHistogram(observation)
+}
+
+func ValidateHistogramQuery(q HistogramQuery) error {
+	if !ValidTime(q.Start) || q.End < MinTime || q.End > MaxTime+1 || q.Start >= q.End {
+		return Bad("query requires a supported nonempty half-open interval")
+	}
+	if q.Step <= 0 || q.Step > MaxTime || !ValidTime(q.Origin) {
+		return Bad("window step and origin outside supported range")
+	}
+	return validateHistogramSelectors(q)
+}
+
+// ValidateHistogramRange validates a raw snapshot query without window
+// parameters: step and origin only matter for windowed reduction.
+func ValidateHistogramRange(q HistogramQuery) error {
+	if !ValidTime(q.Start) || q.End < MinTime || q.End > MaxTime+1 || q.Start >= q.End {
+		return Bad("query requires a supported nonempty half-open interval")
+	}
+	return validateHistogramSelectors(q)
+}
+
+func validateHistogramSelectors(q HistogramQuery) error {
+	if len(q.Matchers) > 32 || len(q.Quantiles) > 32 {
+		return Bad("invalid matcher or quantile count")
+	}
+	for _, quantile := range q.Quantiles {
+		if math.IsNaN(quantile) || quantile <= 0 || quantile >= 1 {
+			return Bad("quantiles must lie strictly between 0 and 1")
+		}
+	}
+	for _, label := range q.GroupBy {
+		if !ValidName(label) {
+			return Bad("invalid grouping label")
+		}
+	}
+	return nil
+}
+
 func ValidateNamespace(n Namespace) error {
 	if !ValidName(n.Name) {
 		return Bad("invalid namespace name")

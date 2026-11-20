@@ -15,8 +15,170 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "compact", "backup",
+    "explain", "histograms",
 ]
+
+# Two bucket layouts describing the same latency distribution. Their bounds
+# differ, so merged query results must report incompatibility instead of
+# adding bucket counts together.
+SCHEME_A = [10, 25, 50, 100]
+SCHEME_B = [20, 40, 80, 160]
+
+
+def hist(node, time_ms, counts, bounds=SCHEME_A, total=None):
+    return {
+        "labels": {"__name__": "latency_ms", "node": node},
+        "time": time_ms,
+        "bounds": bounds,
+        "counts": counts,
+        "sum": float(total if total is not None else counts[-1] * 20),
+    }
+
+
+def run_histograms(base, space, op):
+    """Exercise cumulative histogram ingestion, merge and reset semantics."""
+    hist_space = "spaces/histlab"
+    policy = {
+        "name": "histlab", "retention_ms": 1000, "lateness_ms": 30000,
+        "future_ms": 1000, "max_series": 100, "max_write": 1000, "max_scan": 100000,
+    }
+    op("histogram namespace", "spaces", policy)
+
+    # Scalar samples and histograms coexist on the same series catalog.
+    op("scalar beside histogram", hist_space + "/points", {
+        "now": 30000,
+        "points": [{"labels": {"__name__": "scalar_probe", "node": "edge-1"},
+                    "time": 30000, "value": 1.5}],
+    })
+
+    # Same underlying distribution, two different bucket layouts, two nodes.
+    op("histogram ingest layout a", hist_space + "/histograms", {
+        "now": 30000,
+        "histograms": [
+            hist("edge-1", 30000, [10, 40, 80, 100], SCHEME_A),
+            hist("edge-2", 30000, [8, 45, 75, 100], SCHEME_B),
+        ],
+    })
+    # Invalid observation: cumulative counts must not decrease within one
+    # snapshot and bounds must be strictly increasing.
+    op("histogram invalid snapshot", hist_space + "/histograms", {
+        "now": 30000,
+        "histograms": [hist("edge-1", 30001, [5, 3], [10, 10])],
+    }, status=400)
+
+    # Second cumulative snapshot. The window increase is snapshot2 - snapshot1
+    # for every bucket, merged across instances sharing a layout.
+    op("histogram ingest second snapshot", hist_space + "/histograms", {
+        "now": 31000,
+        "histograms": [
+            hist("edge-1", 31000, [20, 70, 140, 200], SCHEME_A),
+            hist("edge-2", 31000, [12, 55, 135, 200], SCHEME_B),
+        ],
+    })
+
+    query = {
+        "start": 30000, "end": 32000, "step": 10000, "origin": 30000,
+        "quantiles": [0.5, 0.9], "group_by": ["node"],
+    }
+    grouped = op("histogram quantiles grouped", hist_space + "/histogram-query", query)
+    cell = grouped["cells"][0]
+    if not cell["compatible"] or cell["count"] == 0:
+        raise RuntimeError("single-node windows with one layout must be compatible")
+    if len(cell["quantiles"]) != 2 or cell["quantiles"][0]["value"] is None:
+        raise RuntimeError("quantile estimates missing")
+    if "bucket_resolution_estimate" not in cell["limitations"]:
+        raise RuntimeError("query must disclose bucket-resolution limitation")
+
+    # No group_by: the two layouts meet in one cell and must not be summed.
+    merged_query = {k: v for k, v in query.items() if k != "group_by"}
+    merged = op("histogram incompatible layouts", hist_space + "/histogram-query", merged_query)
+    cell = merged["cells"][0]
+    if cell["compatible"] or len(cell["schemes"]) != 2:
+        raise RuntimeError("different bucket layouts must yield per-scheme partials")
+    if "incompatible_bucket_layouts" not in cell["limitations"]:
+        raise RuntimeError("incompatible layouts must be explicitly flagged")
+    if any("counts" in scheme and scheme["counts"][-1] == 0 for scheme in cell["schemes"]):
+        raise RuntimeError("partial scheme increases must be preserved")
+
+    # Counter restart: cumulative counts drop. The reset snapshot is counted
+    # wholesale and the cell reports the reset limitation.
+    op("histogram counter reset", hist_space + "/histograms", {
+        "now": 31500,
+        "histograms": [hist("edge-1", 31500, [5, 25, 40, 50], SCHEME_A)],
+    })
+    reset_window = {
+        "start": 31000, "end": 32000, "step": 10000, "origin": 30000,
+        "quantiles": [0.5],
+        "matchers": [{"label": "node", "op": "=", "value": "edge-1"}],
+    }
+    reset = op("histogram reset query", hist_space + "/histogram-query", reset_window)
+    cell = reset["cells"][0]
+    if cell["resets"] != 1 or "counter_reset_observed" not in cell["limitations"]:
+        raise RuntimeError("counter reset not surfaced: " + json.dumps(cell))
+    # Increase in this window equals the post-reset snapshot's own counts.
+    if cell["counts"] != [5, 25, 40, 50]:
+        raise RuntimeError("reset-aware increase wrong: " + json.dumps(cell["counts"]))
+
+    # Corrective write at an existing timestamp replaces the whole snapshot.
+    op("histogram correction", hist_space + "/histograms", {
+        "now": 31500,
+        "histograms": [hist("edge-1", 31500, [6, 26, 41, 51], SCHEME_A)],
+    })
+    raw = op("histogram raw range", hist_space + "/histogram-range", {
+        "start": 31500, "end": 31600,
+        "matchers": [{"label": "node", "op": "=", "value": "edge-1"}],
+    })
+    if raw["series"][0]["points"][0]["counts"] != [6, 26, 41, 51]:
+        raise RuntimeError("histogram correction did not replace the snapshot")
+
+    # Sealing moves head snapshots into format-2 compressed blocks while
+    # preserving every logical result.
+    before_seal = op("histogram pre-seal query", hist_space + "/histogram-query", merged_query)
+    receipt = op("histogram seal", hist_space + "/seal", {})
+    if receipt["histogram_blocks"] == 0:
+        raise RuntimeError("seal produced no histogram blocks")
+    inventory = op("histogram block inventory", hist_space + "/histogram-blocks")
+    if not inventory or inventory[0]["format"] != 2:
+        raise RuntimeError("histogram block format missing from inventory")
+    after_seal = op("histogram post-seal query", hist_space + "/histogram-query", merged_query)
+    if after_seal["cells"] != before_seal["cells"]:
+        raise RuntimeError("sealing changed histogram query results")
+
+    # Deletion hides a snapshot; a later correction at that time is admitted.
+    op("histogram delete", hist_space + "/deletions", {
+        "start": 30000, "end": 30001,
+        "matchers": [{"label": "node", "op": "=", "value": "edge-1"}],
+    })
+    deleted = op("histogram deleted range", hist_space + "/histogram-range", {
+        "start": 30000, "end": 30001,
+        "matchers": [{"label": "node", "op": "=", "value": "edge-1"}],
+    })
+    if deleted["stats"]["visible"] != 0:
+        raise RuntimeError("deletion did not hide histogram snapshot")
+    op("histogram readmit after delete", hist_space + "/histograms", {
+        "now": 32000,
+        "histograms": [hist("edge-1", 30000, [1, 2, 3, 4], SCHEME_A)],
+    })
+
+    # Compaction must preserve logical results across head and blocks.
+    logical = op("histogram pre-compaction", hist_space + "/histogram-query", merged_query)
+    op("histogram compact", hist_space + "/compact", {})
+    physical = op("histogram post-compaction", hist_space + "/histogram-query", merged_query)
+    if physical["cells"] != logical["cells"]:
+        raise RuntimeError("compaction changed histogram results")
+
+    # Retention floor physically removes old histograms and blocks resurrection.
+    op("histogram retention", hist_space + "/retention", {"now": 33000})
+    swept = op("histogram post-retention range", hist_space + "/histogram-range", {
+        "start": 0, "end": 40000,
+    })
+    if swept["stats"]["visible"] != 0:
+        raise RuntimeError("retention did not sweep histogram snapshots")
+    op("histogram retention rejection", hist_space + "/histograms", {
+        "now": 33000,
+        "histograms": [hist("edge-1", 31000, [1, 1, 1, 1], SCHEME_A)],
+    }, status=409)
 
 
 def request(base, route, payload=None, method=None, status=200):
@@ -148,6 +310,14 @@ def exercise(workflow, output):
                 if restored != source:
                     raise RuntimeError("restored image differs from source read")
                 observations.append({"step": "restored", "response": restored})
+            finally:
+                stop(process)
+            # The histogram workflow uses its own namespace and database state,
+            # so it runs after the backup/restore scenario of the main space.
+            process, base = launch(binary, scratch / "histlab.db", log)
+            try:
+                run_histograms(base, "spaces/histlab",
+                               lambda label, route, payload=None, **options: op(label, route, payload, **options))
             finally:
                 stop(process)
     if output:

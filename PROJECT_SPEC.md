@@ -40,13 +40,32 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+Cumulative histogram snapshots extend scalar sampling. One observation holds
+strictly increasing finite bucket upper bounds, cumulative counts over those
+buckets and a cumulative value sum. A query reduces snapshots into the same
+origin-aligned windows: per series, consecutive snapshots with an identical
+bucket layout yield bucket-wise increases. Any count decrease, or a sum
+decrease, is a counter restart: the restarting snapshot is counted wholesale
+and the window reports a reset count. The first snapshot in a window is a
+baseline and is never extrapolated. A bucket layout is fingerprinted by its
+upper bounds; instances merge by summing counts only within one fingerprint.
+Different layouts in one cell are incompatible: per-layout partial increases
+are returned with an explicit limitation and no merged estimate, because
+incompatible buckets must never be added. Quantiles are estimated by linear
+interpolation inside finite-width buckets; the open low edge pins estimates
+to the first bound and flags them capped. Every result states its limitation
+codes. Histograms use the same admission policy, catalog, correction rule,
+deletion intervals, retention floor and sequence as scalar samples.
+
 Sealing moves all current head points into compressed per-series blocks in
-one transaction. Compaction resolves overlapping blocks, corrections and
-deletions into one block per selected series; empty series retain their identity.
-Retention advances an irreversible floor and compacts the namespace physically.
-Deleting measurements does not erase catalog identity or promise to shrink the
-database file. bbolt reuses free pages; returning pages to the filesystem is
-outside the current API.
+one transaction; histogram head snapshots use a parallel format-2 block
+stream with the same gzip and checksum envelope. Compaction resolves
+overlapping blocks, corrections and deletions into one block per selected
+series for both streams; empty series retain their identity. Retention
+advances an irreversible floor and compacts the namespace physically.
+Deleting measurements does not erase catalog identity or promise to shrink
+the database file. bbolt reuses free pages; returning pages to the filesystem
+is outside the current API.
 
 Rollups store a query definition and its output at a database sequence.
 Inspection reports whether the namespace has changed since materialization;

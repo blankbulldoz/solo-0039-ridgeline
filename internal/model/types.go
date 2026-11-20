@@ -39,6 +39,92 @@ type WriteRequest struct {
 	Points []Observation `json:"points"`
 }
 
+// HistogramObservation is one cumulative histogram snapshot: strictly
+// increasing bucket upper bounds, cumulative counts over those buckets and
+// the cumulative sum of every observed value. Counts reset to smaller
+// values only when the emitting counter restarts.
+type HistogramObservation struct {
+	Labels Labels    `json:"labels"`
+	Time   int64     `json:"time"`
+	Bounds []float64 `json:"bounds"`
+	Counts []uint64  `json:"counts"`
+	Sum    float64   `json:"sum"`
+}
+
+type HistogramWriteRequest struct {
+	Now        int64                  `json:"now"`
+	Histograms []HistogramObservation `json:"histograms"`
+}
+
+type HistogramSample struct {
+	Time     int64     `json:"time"`
+	Bounds   []float64 `json:"bounds"`
+	Counts   []uint64  `json:"counts"`
+	Sum      float64   `json:"sum"`
+	Sequence uint64    `json:"sequence"`
+}
+
+type HistogramQuery struct {
+	Start     int64     `json:"start"`
+	End       int64     `json:"end"`
+	Step      int64     `json:"step"`
+	Origin    int64     `json:"origin"`
+	Quantiles []float64 `json:"quantiles"`
+	GroupBy   []string  `json:"group_by"`
+	Matchers  []Matcher `json:"matchers"`
+}
+
+type QuantileEstimate struct {
+	Quantile float64  `json:"quantile"`
+	Value    *float64 `json:"value"`
+	Capped   bool     `json:"capped"`
+}
+
+type SchemePartial struct {
+	Fingerprint string    `json:"scheme"`
+	Bounds      []float64 `json:"bounds"`
+	Counts      []uint64  `json:"counts"`
+	Count       uint64    `json:"count"`
+	Sum         float64   `json:"sum"`
+	Series      int       `json:"series"`
+}
+
+type HistogramCell struct {
+	Labels      Labels             `json:"labels"`
+	Start       int64              `json:"start"`
+	End         int64              `json:"end"`
+	Compatible  bool               `json:"compatible"`
+	Fingerprint string             `json:"scheme,omitempty"`
+	Bounds      []float64          `json:"bounds,omitempty"`
+	Counts      []uint64           `json:"counts,omitempty"`
+	Count       uint64             `json:"count"`
+	Sum         float64            `json:"sum"`
+	Series      int                `json:"series"`
+	Resets      int                `json:"resets"`
+	Quantiles   []QuantileEstimate `json:"quantiles"`
+	Schemes     []SchemePartial    `json:"schemes,omitempty"`
+	Limitations []string           `json:"limitations"`
+}
+
+type SeriesHistograms struct {
+	Series Series            `json:"series"`
+	Points []HistogramSample `json:"points"`
+}
+
+type HistogramResult struct {
+	Sequence uint64          `json:"sequence"`
+	Floor    int64           `json:"floor"`
+	Cells    []HistogramCell `json:"cells"`
+	Stats    ScanStats       `json:"stats"`
+}
+
+type HistogramRangeResult struct {
+	Sequence uint64             `json:"sequence"`
+	Floor    int64              `json:"floor"`
+	Series   []SeriesHistograms `json:"series"`
+	Stats    ScanStats          `json:"stats"`
+}
+
 type WriteReceipt struct {
 	Sequence  uint64 `json:"sequence"`
 	Accepted  int    `json:"accepted"`
@@ -131,8 +217,10 @@ type RollupView struct {
 }
 
 type Maintenance struct {
-	Sequence uint64 `json:"sequence"`
-	Blocks   int    `json:"blocks"`
-	Points   int    `json:"points"`
-	Floor    int64  `json:"floor"`
+	Sequence       uint64 `json:"sequence"`
+	Blocks         int    `json:"blocks"`
+	Points         int    `json:"points"`
+	HistogramBlock int    `json:"histogram_blocks"`
+	Histograms     int    `json:"histograms"`
+	Floor          int64  `json:"floor"`
 }

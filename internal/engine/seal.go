@@ -21,6 +21,17 @@ func putBlock(b *bolt.Bucket, id string, seq uint64, points []model.Sample) erro
 	return b.Bucket(volume.Payloads).Put([]byte(block.ID), payload)
 }
 
+func putHistBlock(b *bolt.Bucket, id string, seq uint64, points []model.HistogramSample) error {
+	block, payload, err := chunk.BuildHistograms(id, seq, points)
+	if err != nil {
+		return err
+	}
+	if err := volume.PutJSON(b.Bucket(volume.HistBlocks), []byte(block.ID), block); err != nil {
+		return err
+	}
+	return b.Bucket(volume.HistPayloads).Put([]byte(block.ID), payload)
+}
+
 func clearBucket(parent *bolt.Bucket, name []byte) error {
 	if err := parent.DeleteBucket(name); err != nil {
 		return err
@@ -51,6 +62,21 @@ func (e *Engine) Seal(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
+		histGrouped := map[string][]model.HistogramSample{}
+		err = b.Bucket(volume.HistHead).ForEach(func(k, v []byte) error {
+			if len(k) != 72 {
+				return model.Bad("invalid stored histogram key")
+			}
+			var point model.HistogramSample
+			if err := json.Unmarshal(v, &point); err != nil {
+				return err
+			}
+			histGrouped[string(k[:64])] = append(histGrouped[string(k[:64])], point)
+			return nil
+		})
+		if err != nil {
+			return err
+		}
 		seq, err := volume.Next(tx)
 		if err != nil {
 			return err
@@ -62,7 +88,17 @@ func (e *Engine) Seal(name string) (model.Maintenance, error) {
 			receipt.Blocks++
 			receipt.Points += len(points)
 		}
+		for id, points := range histGrouped {
+			if err := putHistBlock(b, id, seq, points); err != nil {
+				return err
+			}
+			receipt.HistogramBlock++
+			receipt.Histograms += len(points)
+		}
 		if err := clearBucket(b, volume.Head); err != nil {
+			return err
+		}
+		if err := clearBucket(b, volume.HistHead); err != nil {
 			return err
 		}
 		n.LastSequence = seq

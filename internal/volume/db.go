@@ -20,6 +20,9 @@ var Blocks = []byte("blocks")
 var Payloads = []byte("payloads")
 var Deletes = []byte("deletes")
 var Rollups = []byte("rollups")
+var HistHead = []byte("hist_head")
+var HistBlocks = []byte("hist_blocks")
+var HistPayloads = []byte("hist_payloads")
 var Config = []byte("config")
 
 type DB struct {
@@ -62,7 +65,10 @@ func CreateNamespace(tx *bolt.Tx, name string) (*bolt.Bucket, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, bucket := range [][]byte{Catalog, Head, Blocks, Payloads, Deletes, Rollups} {
+	for _, bucket := range [][]byte{
+		Catalog, Head, Blocks, Payloads, Deletes, Rollups,
+		HistHead, HistBlocks, HistPayloads,
+	} {
 		if _, err = ns.CreateBucket(bucket); err != nil {
 			return nil, err
 		}

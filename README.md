@@ -45,12 +45,16 @@ All methods below return 200 on success.
 | GET | `/spaces/{space}` | policy, watermark, floor, source sequence |
 | PUT | `/spaces/{space}/mode` | `{"read_only":true}` |
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
+| POST | `/spaces/{space}/histograms` | cumulative histogram observations |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/histogram-range` | corrected raw histogram snapshots |
+| POST | `/spaces/{space}/histogram-query` | windowed quantile estimates and limitations |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
+| GET | `/spaces/{space}/histogram-blocks` | physical histogram block inventory |
 | POST | `/spaces/{space}/deletions` | interval and matchers |
 | GET | `/spaces/{space}/deletions` | deletion sequence inventory |
 | POST | `/spaces/{space}/retention` | `{"now":11000}` |
@@ -59,7 +63,7 @@ All methods below return 200 on success.
 | GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
 | GET | `/image` | consistent binary image, SHA-256 and sequence headers |
 
-Sample query:
+Scalar sample query:
 
 ```json
 {"start":-5000,"end":10000,"step":1000,"origin":0,
@@ -73,12 +77,51 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+## Cumulative Histograms
+
+Latency quantiles cannot be reconstructed from a few averages, so producers
+may submit cumulative histogram snapshots next to scalar samples. Each
+observation carries strictly increasing finite bucket upper bounds,
+cumulative counts over those buckets and the cumulative sum of observed
+values:
+
+```json
+{"now":30000,"histograms":[
+  {"labels":{"__name__":"latency_ms","node":"edge-1"},"time":30000,
+   "bounds":[10,25,50,100],"counts":[10,40,80,100],"sum":3000.0}
+]}
+```
+
+Within one observation counts must be non-decreasing and bounds strictly
+increasing. Across observations, a smaller cumulative count or sum means the
+emitting counter restarted: the reset snapshot becomes the post-reset
+baseline and is counted wholesale, never treated as a negative delta. A
+histogram query returns origin-aligned windows with the reset-aware increase,
+bucket-interpolated quantile estimates and explicit limitation codes.
+
+A bucket layout is identified by a fingerprint of its upper bounds. Multiple
+instances are summed inside a window only when fingerprints match. When
+different layouts meet, the cell reports `compatible:false`, keeps each
+scheme's partial counts under `schemes` and returns no merged estimate with
+the `incompatible_bucket_layouts` limitation rather than adding incompatible
+buckets. Estimates always carry `bucket_resolution_estimate` (linear
+interpolation inside finite-width buckets) and `window_baseline_excluded`
+(the first snapshot per window is a baseline, not an extrapolation); resets
+and edge-bucket capping add their own codes.
+
+Histograms share the scalar path for corrections (newest sequence wins per
+series-timestamp), deletions, retention floors, read-only policy and the
+scan budget. Sealing moves head snapshots into format-2 gzip blocks using the
+same checksum envelope; compaction rewrites them with corrections and
+deletions resolved.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
-deletes and rollups buckets. Numeric point keys encode signed time in
-lexicographic order. Blocks use format 1: a gzip stream containing an ordered
-JSON sample array, with SHA-256 over the compressed payload.
+deletes, rollups, hist_head, hist_blocks and hist_payloads buckets. Numeric
+point keys encode signed time in lexicographic order. Scalar blocks use
+format 1 and histogram blocks format 2: both are a gzip stream containing an
+ordered JSON array, with SHA-256 over the compressed payload.
 
 Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with
