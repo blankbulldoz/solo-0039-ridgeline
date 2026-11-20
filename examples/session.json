@@ -238,6 +238,7 @@
             {
               "time": 500,
               "value": 0.5,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -256,11 +257,13 @@
             {
               "time": -500,
               "value": 0.25,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 0.75,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -278,21 +281,25 @@
             {
               "time": -1500,
               "value": 10,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": -500,
               "value": 14,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 2,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 1500,
               "value": 6,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -310,11 +317,13 @@
             {
               "time": -1500,
               "value": 3,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 7,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -326,6 +335,7 @@
         "head": 9,
         "decoded": 9,
         "visible": 9,
+        "stale": 0,
         "tombstones": 0
       },
       "truncated": false
@@ -355,6 +365,7 @@
             {
               "time": 500,
               "value": 0.5,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -373,6 +384,7 @@
             {
               "time": -500,
               "value": 0.25,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -384,6 +396,7 @@
         "head": 9,
         "decoded": 9,
         "visible": 9,
+        "stale": 0,
         "tombstones": 0
       },
       "truncated": true
@@ -456,6 +469,7 @@
         "head": 9,
         "decoded": 9,
         "visible": 9,
+        "stale": 0,
         "tombstones": 0
       }
     }
@@ -498,6 +512,7 @@
         "head": 6,
         "decoded": 6,
         "visible": 6,
+        "stale": 0,
         "tombstones": 0
       }
     }
@@ -535,6 +550,7 @@
             {
               "time": 500,
               "value": 0.5,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -553,11 +569,13 @@
             {
               "time": -500,
               "value": 0.25,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 0.75,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -575,21 +593,25 @@
             {
               "time": -1500,
               "value": 10,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": -500,
               "value": 14,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 2,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 1500,
               "value": 6,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -607,11 +629,13 @@
             {
               "time": -1500,
               "value": 3,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 7,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -623,6 +647,7 @@
         "head": 0,
         "decoded": 9,
         "visible": 9,
+        "stale": 0,
         "tombstones": 0
       },
       "truncated": false
@@ -638,8 +663,8 @@
         "start": 500,
         "end": 501,
         "count": 1,
-        "bytes": 64,
-        "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+        "bytes": 77,
+        "checksum": "ba3deaeaf29e053147e562c7dc8700debe472aaa91bab12313935b116d6aac3b",
         "format": 1
       },
       {
@@ -648,8 +673,8 @@
         "start": -500,
         "end": 501,
         "count": 2,
-        "bytes": 105,
-        "checksum": "4c2f12747df3833972d963a29b9b86b6225d2de929c6252543feb51e3c6ceb20",
+        "bytes": 87,
+        "checksum": "cdef5f72704bef31af99bec90ce04bdc765ec3e6e53276e85b18ce284fc4056c",
         "format": 1
       },
       {
@@ -658,8 +683,8 @@
         "start": -1500,
         "end": 1501,
         "count": 4,
-        "bytes": 80,
-        "checksum": "f62effbef22081bacda4663b08c17e44f621f0135a4c07c22feb6b601c4c1d4a",
+        "bytes": 98,
+        "checksum": "7b694a34c4494186ee8d9f30d94bff68ad16d66794d2c2599b848d1a34fe2448",
         "format": 1
       },
       {
@@ -668,8 +693,8 @@
         "start": -1500,
         "end": 501,
         "count": 2,
-        "bytes": 100,
-        "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+        "bytes": 85,
+        "checksum": "aea11e5043320c774683680861b4752ac12886e7287e6bfcb3d169a5f10bbb77",
         "format": 1
       }
     ]
@@ -810,6 +835,7 @@
           "head": 1,
           "decoded": 10,
           "visible": 6,
+          "stale": 0,
           "tombstones": 1
         }
       }
@@ -879,6 +905,7 @@
           "head": 1,
           "decoded": 10,
           "visible": 6,
+          "stale": 0,
           "tombstones": 1
         }
       },
@@ -972,6 +999,7 @@
           "head": 1,
           "decoded": 10,
           "visible": 6,
+          "stale": 0,
           "tombstones": 1
         }
       },
@@ -1001,6 +1029,7 @@
             {
               "time": 500,
               "value": 0.5,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -1018,16 +1047,19 @@
             {
               "time": -1500,
               "value": 10,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 9,
+              "stale": false,
               "sequence": 7
             },
             {
               "time": 1500,
               "value": 6,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -1045,11 +1077,13 @@
             {
               "time": -1500,
               "value": 3,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 7,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -1061,6 +1095,7 @@
         "head": 1,
         "decoded": 10,
         "visible": 6,
+        "stale": 0,
         "tombstones": 1
       },
       "truncated": false
@@ -1099,6 +1134,7 @@
             {
               "time": 500,
               "value": 0.5,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -1116,16 +1152,19 @@
             {
               "time": -1500,
               "value": 10,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 9,
+              "stale": false,
               "sequence": 7
             },
             {
               "time": 1500,
               "value": 6,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -1143,11 +1182,13 @@
             {
               "time": -1500,
               "value": 3,
+              "stale": false,
               "sequence": 2
             },
             {
               "time": 500,
               "value": 7,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -1159,6 +1200,7 @@
         "head": 0,
         "decoded": 6,
         "visible": 6,
+        "stale": 0,
         "tombstones": 0
       },
       "truncated": false
@@ -1215,8 +1257,8 @@
           "start": 500,
           "end": 501,
           "count": 1,
-          "bytes": 64,
-          "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+          "bytes": 77,
+          "checksum": "ba3deaeaf29e053147e562c7dc8700debe472aaa91bab12313935b116d6aac3b",
           "format": 1
         },
         {
@@ -1225,8 +1267,8 @@
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
+          "bytes": 95,
+          "checksum": "22efac34d94d85e00a6e761dfb24e69d474a8d043e07855b785830fad2a47b6d",
           "format": 1
         },
         {
@@ -1235,8 +1277,8 @@
           "start": -1500,
           "end": 501,
           "count": 2,
-          "bytes": 100,
-          "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+          "bytes": 85,
+          "checksum": "aea11e5043320c774683680861b4752ac12886e7287e6bfcb3d169a5f10bbb77",
           "format": 1
         }
       ],
@@ -1340,13 +1382,2376 @@
     }
   },
   {
+    "step": "staleness namespace",
+    "request": {
+      "name": "meridian",
+      "retention_ms": 100000,
+      "lateness_ms": 100000,
+      "future_ms": 1000,
+      "max_series": 50,
+      "max_write": 1000,
+      "max_scan": 100000
+    },
+    "response": {
+      "name": "meridian",
+      "read_only": false,
+      "retention_ms": 100000,
+      "lateness_ms": 100000,
+      "future_ms": 1000,
+      "max_series": 50,
+      "max_write": 1000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 12
+    }
+  },
+  {
+    "step": "report",
+    "request": {
+      "now": 6000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 0,
+          "value": 0
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 1000,
+          "value": 5
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 2000,
+          "value": 12
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 3000,
+          "value": 20
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-2",
+            "zone": "east"
+          },
+          "time": 0,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-2",
+            "zone": "east"
+          },
+          "time": 1000,
+          "value": 2
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-2",
+            "zone": "east"
+          },
+          "time": 2000,
+          "value": 3
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-2",
+            "zone": "east"
+          },
+          "time": 3000,
+          "value": 4
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-2",
+            "zone": "east"
+          },
+          "time": 4000,
+          "value": 5
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-2",
+            "zone": "east"
+          },
+          "time": 5000,
+          "value": 6
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-2",
+            "zone": "east"
+          },
+          "time": 6000,
+          "value": 7
+        }
+      ]
+    },
+    "response": {
+      "sequence": 13,
+      "accepted": 11,
+      "new_series": 2,
+      "watermark": 6000
+    }
+  },
+  {
+    "step": "decommission",
+    "request": {
+      "now": 6000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 4000,
+          "stale": true
+        }
+      ]
+    },
+    "response": {
+      "sequence": 14,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 6000
+    }
+  },
+  {
+    "step": "raw sees marker",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 14,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 12,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": null,
+              "stale": true,
+              "sequence": 14
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 12,
+        "decoded": 12,
+        "visible": 12,
+        "stale": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "aggregate skips marker",
+    "request": {
+      "start": -1000,
+      "end": 8000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "sequence": 14,
+      "cells": [
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 0,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 5,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 2000,
+          "end": 3000,
+          "value": 12,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 3000,
+          "end": 4000,
+          "value": 20,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 1,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 2,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 2000,
+          "end": 3000,
+          "value": 3,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 3000,
+          "end": 4000,
+          "value": 4,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 4000,
+          "end": 5000,
+          "value": 5,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 5000,
+          "end": 6000,
+          "value": 6,
+          "count": 1
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 6000,
+          "end": 7000,
+          "value": 7,
+          "count": 1
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 12,
+        "decoded": 12,
+        "visible": 12,
+        "stale": 1,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "rate stops at marker",
+    "request": {
+      "start": -1000,
+      "end": 8000,
+      "step": 8000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "rate",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "beats_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 14,
+      "cells": [
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 6.666666666666667,
+          "count": 4
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 1,
+          "count": 7
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 12,
+        "decoded": 12,
+        "visible": 12,
+        "stale": 1,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "recovery",
+    "request": {
+      "now": 6000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 5000,
+          "value": 25
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 6000,
+          "value": 31
+        }
+      ]
+    },
+    "response": {
+      "sequence": 15,
+      "accepted": 2,
+      "new_series": 0,
+      "watermark": 6000
+    }
+  },
+  {
+    "step": "rate respects marker gap",
+    "request": {
+      "start": -1000,
+      "end": 8000,
+      "step": 8000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "rate",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "beats_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 15,
+      "cells": [
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 6.5,
+          "count": 6
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 1,
+          "count": 7
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 14,
+        "decoded": 14,
+        "visible": 14,
+        "stale": 1,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "late value corrects marker",
+    "request": {
+      "now": 6000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 4000,
+          "value": 22
+        }
+      ]
+    },
+    "response": {
+      "sequence": 16,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 6000
+    }
+  },
+  {
+    "step": "raw marker corrected",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 16,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 12,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 14,
+        "decoded": 14,
+        "visible": 14,
+        "stale": 0,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "rate reconnects",
+    "request": {
+      "start": -1000,
+      "end": 8000,
+      "step": 8000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "rate",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "beats_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 16,
+      "cells": [
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 5.166666666666667,
+          "count": 7
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 1,
+          "count": 7
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 14,
+        "decoded": 14,
+        "visible": 14,
+        "stale": 0,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "late marker invalidates value",
+    "request": {
+      "now": 6000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 2000,
+          "stale": true
+        }
+      ]
+    },
+    "response": {
+      "sequence": 17,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 6000
+    }
+  },
+  {
+    "step": "raw late marker",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 17,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": null,
+              "stale": true,
+              "sequence": 17
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 14,
+        "decoded": 14,
+        "visible": 14,
+        "stale": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "rate re-segments",
+    "request": {
+      "start": -1000,
+      "end": 8000,
+      "step": 8000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "rate",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "beats_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 17,
+      "cells": [
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 4,
+          "count": 6
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 1,
+          "count": 7
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 14,
+        "decoded": 14,
+        "visible": 14,
+        "stale": 1,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "aggregate count drops",
+    "request": {
+      "start": -1000,
+      "end": 8000,
+      "step": 8000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "count"
+    },
+    "response": {
+      "sequence": 17,
+      "cells": [
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 6,
+          "count": 6
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 7,
+          "count": 7
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 14,
+        "decoded": 14,
+        "visible": 14,
+        "stale": 1,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "same request override",
+    "request": {
+      "now": 6000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 7000,
+          "value": 35
+        },
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 7000,
+          "stale": true
+        }
+      ]
+    },
+    "response": {
+      "sequence": 18,
+      "accepted": 2,
+      "new_series": 0,
+      "watermark": 7000
+    }
+  },
+  {
+    "step": "raw same request override",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 18,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": null,
+              "stale": true,
+              "sequence": 17
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 7000,
+              "value": null,
+              "stale": true,
+              "sequence": 18
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 15,
+        "decoded": 15,
+        "visible": 15,
+        "stale": 2,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "committed value overrides marker",
+    "request": {
+      "now": 7000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 7000,
+          "value": 35
+        }
+      ]
+    },
+    "response": {
+      "sequence": 19,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 7000
+    }
+  },
+  {
+    "step": "raw override corrected",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 19,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": null,
+              "stale": true,
+              "sequence": 17
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 7000,
+              "value": 35,
+              "stale": false,
+              "sequence": 19
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 15,
+        "decoded": 15,
+        "visible": 15,
+        "stale": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "pre-seal markers",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 19,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": null,
+              "stale": true,
+              "sequence": 17
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 7000,
+              "value": 35,
+              "stale": false,
+              "sequence": 19
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 0,
+        "head": 15,
+        "decoded": 15,
+        "visible": 15,
+        "stale": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "seal with markers",
+    "request": {},
+    "response": {
+      "sequence": 20,
+      "blocks": 2,
+      "points": 15,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "sealed markers raw",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 20,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": null,
+              "stale": true,
+              "sequence": 17
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 7000,
+              "value": 35,
+              "stale": false,
+              "sequence": 19
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 2,
+        "head": 0,
+        "decoded": 15,
+        "visible": 15,
+        "stale": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "marker blocks",
+    "request": null,
+    "response": [
+      {
+        "id": "00000000000000000020-955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+        "series_id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+        "start": 0,
+        "end": 7001,
+        "count": 8,
+        "bytes": 137,
+        "checksum": "b61ed6dffe52613661aeb11cc5cb3aecf7b3455e805e29aecd0393d7ed4b2565",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000020-e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+        "series_id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+        "start": 0,
+        "end": 6001,
+        "count": 7,
+        "bytes": 116,
+        "checksum": "fd141b35d4cffdb753fda01ec9e643f10bb12a40ec0ac76ab65191821760ea92",
+        "format": 1
+      }
+    ]
+  },
+  {
+    "step": "delete marker",
+    "request": {
+      "start": 1500,
+      "end": 2500,
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "web-1"
+        }
+      ]
+    },
+    "response": {
+      "id": "00000000000000000021",
+      "series": [
+        "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349"
+      ],
+      "start": 1500,
+      "end": 2500,
+      "sequence": 21
+    }
+  },
+  {
+    "step": "raw after marker delete",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 21,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 7000,
+              "value": 35,
+              "stale": false,
+              "sequence": 19
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 2,
+        "head": 0,
+        "decoded": 15,
+        "visible": 14,
+        "stale": 0,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "rate after marker delete",
+    "request": {
+      "start": -1000,
+      "end": 8000,
+      "step": 8000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "rate",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "beats_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 21,
+      "cells": [
+        {
+          "labels": {
+            "node": "web-1"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 5,
+          "count": 7
+        },
+        {
+          "labels": {
+            "node": "web-2"
+          },
+          "start": 0,
+          "end": 8000,
+          "value": 1,
+          "count": 7
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 2,
+        "head": 0,
+        "decoded": 15,
+        "visible": 14,
+        "stale": 0,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "re-admit marker",
+    "request": {
+      "now": 7000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 2000,
+          "stale": true
+        }
+      ]
+    },
+    "response": {
+      "sequence": 22,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 7000
+    }
+  },
+  {
+    "step": "raw re-admitted marker",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 22,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": null,
+              "stale": true,
+              "sequence": 22
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 7000,
+              "value": 35,
+              "stale": false,
+              "sequence": 19
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 2,
+        "head": 1,
+        "decoded": 16,
+        "visible": 15,
+        "stale": 1,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "pre-compact markers",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 22,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": null,
+              "stale": true,
+              "sequence": 22
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 7000,
+              "value": 35,
+              "stale": false,
+              "sequence": 19
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 2,
+        "head": 1,
+        "decoded": 16,
+        "visible": 15,
+        "stale": 1,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "compact with markers",
+    "request": {},
+    "response": {
+      "sequence": 23,
+      "blocks": 2,
+      "points": 15,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "compacted markers raw",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 23,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 0,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": null,
+              "stale": true,
+              "sequence": 22
+            },
+            {
+              "time": 3000,
+              "value": 20,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 22,
+              "stale": false,
+              "sequence": 16
+            },
+            {
+              "time": 5000,
+              "value": 25,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 6000,
+              "value": 31,
+              "stale": false,
+              "sequence": 15
+            },
+            {
+              "time": 7000,
+              "value": 35,
+              "stale": false,
+              "sequence": 19
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "e4f16e3cb6cf47888c9b78a00385e18e1f47cbd115a5936660ccaa5c1f835040",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-2",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 1,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 1000,
+              "value": 2,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 2000,
+              "value": 3,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 3000,
+              "value": 4,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 4000,
+              "value": 5,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 5000,
+              "value": 6,
+              "stale": false,
+              "sequence": 13
+            },
+            {
+              "time": 6000,
+              "value": 7,
+              "stale": false,
+              "sequence": 13
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 2,
+        "head": 0,
+        "decoded": 15,
+        "visible": 15,
+        "stale": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "retention drops markers",
+    "request": {
+      "now": 107000
+    },
+    "response": {
+      "sequence": 24,
+      "blocks": 1,
+      "points": 1,
+      "floor": 7000
+    }
+  },
+  {
+    "step": "raw after retention",
+    "request": {
+      "start": -1000,
+      "end": 8000
+    },
+    "response": {
+      "sequence": 24,
+      "floor": 7000,
+      "series": [
+        {
+          "series": {
+            "id": "955d88a59505910f04194bfac3aedba862ea3a4eb85cb8694e73b22be3bc0349",
+            "labels": {
+              "__name__": "beats_total",
+              "node": "web-1",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 7000,
+              "value": 35,
+              "stale": false,
+              "sequence": 19
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 1,
+        "visible": 1,
+        "stale": 0,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "marker below floor rejected",
+    "request": {
+      "now": 7000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "beats_total",
+            "node": "web-1",
+            "zone": "east"
+          },
+          "time": 6000,
+          "stale": true
+        }
+      ]
+    },
+    "response": {
+      "code": "conflict",
+      "detail": "point precedes retention floor"
+    }
+  },
+  {
     "step": "backup source",
     "request": {
       "start": -5000,
       "end": 10000
     },
     "response": {
-      "sequence": 11,
+      "sequence": 24,
       "floor": 1000,
       "series": [
         {
@@ -1362,6 +3767,7 @@
             {
               "time": 1500,
               "value": 6,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -1373,6 +3779,7 @@
         "head": 0,
         "decoded": 1,
         "visible": 1,
+        "stale": 0,
         "tombstones": 0
       },
       "truncated": false
@@ -1380,14 +3787,14 @@
   },
   {
     "step": "backup",
-    "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sequence": "24",
+    "sha256": "6791c1fac880443bd7b64a518391b7235f7a167d3f5c388d06e1c3ce4c57d1fc",
+    "bytes": 61440
   },
   {
     "step": "restored",
     "response": {
-      "sequence": 11,
+      "sequence": 24,
       "floor": 1000,
       "series": [
         {
@@ -1403,6 +3810,7 @@
             {
               "time": 1500,
               "value": 6,
+              "stale": false,
               "sequence": 2
             }
           ]
@@ -1414,6 +3822,7 @@
         "head": 0,
         "decoded": 1,
         "visible": 1,
+        "stale": 0,
         "tombstones": 0
       },
       "truncated": false

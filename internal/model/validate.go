@@ -46,8 +46,19 @@ func ValidateObservation(p Observation) error {
 	if err := ValidateLabels(p.Labels); err != nil {
 		return err
 	}
-	if !ValidTime(p.Time) || math.IsNaN(p.Value) || math.IsInf(p.Value, 0) {
-		return Bad("time outside supported range or value is not finite")
+	if !ValidTime(p.Time) {
+		return Bad("time outside supported range")
+	}
+	if p.Stale {
+		// The invalidation marker is explicit; it is not the number zero
+		// and must not carry any numeric value.
+		if p.Value != nil {
+			return Bad("staleness marker must not carry a value")
+		}
+		return nil
+	}
+	if p.Value == nil || math.IsNaN(*p.Value) || math.IsInf(*p.Value, 0) {
+		return Bad("point requires a finite value or an explicit stale marker")
 	}
 	return nil
 }

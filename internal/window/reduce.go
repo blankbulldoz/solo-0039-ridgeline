@@ -31,27 +31,33 @@ func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error)
 	for _, s := range series {
 		key, labels := Group(s.Series.Labels, q.GroupBy)
 		for _, p := range s.Points {
+			if p.Stale {
+				// A marker is not an observation: it populates no window
+				// and contributes no value to any function.
+				continue
+			}
+			v := *p.Value
 			start := Bucket(p.Time, q.Origin, q.Step)
 			k := fmt.Sprintf("%s/%d", key, start)
 			a := groups[k]
 			if a == nil {
 				a = &accumulator{
 					cell:   model.Cell{Labels: labels, Start: start, End: start + q.Step},
-					firstT: p.Time, lastT: p.Time, first: p.Value, last: p.Value,
+					firstT: p.Time, lastT: p.Time, first: v, last: v,
 					firstKey: s.Series.ID, lastKey: s.Series.ID,
-					min: p.Value, max: p.Value,
+					min: v, max: v,
 				}
 				groups[k] = a
 			}
 			a.cell.Count++
-			a.sum += p.Value
-			a.min = math.Min(a.min, p.Value)
-			a.max = math.Max(a.max, p.Value)
+			a.sum += v
+			a.min = math.Min(a.min, v)
+			a.max = math.Max(a.max, v)
 			if p.Time < a.firstT || (p.Time == a.firstT && s.Series.ID < a.firstKey) {
-				a.firstT, a.firstKey, a.first = p.Time, s.Series.ID, p.Value
+				a.firstT, a.firstKey, a.first = p.Time, s.Series.ID, v
 			}
 			if p.Time > a.lastT || (p.Time == a.lastT && s.Series.ID > a.lastKey) {
-				a.lastT, a.lastKey, a.last = p.Time, s.Series.ID, p.Value
+				a.lastT, a.lastKey, a.last = p.Time, s.Series.ID, v
 			}
 		}
 	}

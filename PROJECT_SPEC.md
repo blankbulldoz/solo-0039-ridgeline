@@ -20,6 +20,19 @@ one request. A deletion hides samples committed at or before the deletion;
 new measurements at those timestamps may be admitted again. Retention is
 different: its monotonic floor prevents old measurements from returning.
 
+Collection invalidation is explicit. A submitted point is either a finite
+value or a staleness marker (`stale: true`); a marker carries no value and
+is never the number zero. A marker and a value at the same series and
+timestamp are alternative versions of one sample: the most recently
+committed version wins regardless of kind, and within one request the
+later point wins. A late value at a marker's timestamp therefore corrects
+the invalidation, and a late marker at a value's timestamp invalidates it
+retroactively. A marker invalidates only its own timestamp as a stored
+sample; as a query-time signal it closes the current counter segment, so
+nothing is computed across it until collection resumes. Markers advance
+the namespace watermark, are sealed into blocks, are hidden by deletions
+and are removed by the retention floor exactly like values.
+
 Ingestion is atomic per request. Namespace policy bounds point count, total
 series, age relative to the newest previously accepted timestamp and future
 skew relative to an explicit caller-supplied observation time. Empty namespaces
@@ -31,14 +44,21 @@ resolve corrections, deletions and retention. A query runs in one bbolt read
 transaction. Exact label, inequality and regular-expression matchers are
 supported; absent labels behave as the empty string for matcher evaluation.
 Limits reject excessive source work rather than silently dropping points.
-Raw result limits are explicit and include a truncation indicator.
+Raw result limits are explicit and include a truncation indicator. Markers
+appear in raw results with a null value and a true stale flag, so readers
+see collection stop and resume; scan statistics count them separately.
 
 Window aggregation supports count, sum, min, max, average, first and last.
 Buckets align to a caller-supplied origin, including before the Unix epoch.
 Only populated windows appear. An average weights observations, not series.
-Counter rate sums positive changes and treats a decrease as a reset to zero;
-its denominator is elapsed time between the first and last observed point.
-No extrapolation, interpolation or clock correction is implied.
+Markers are not observations: they populate no window and contribute no
+value to any function. Counter rate sums positive changes and treats a
+decrease as a reset to zero; a marker closes the current segment, so no
+change is summed across it and the invalidation gap contributes neither
+increase nor elapsed time. Each segment's denominator is elapsed time
+between its own first and last observed point; segment increases and
+segment elapsed times are summed separately. No extrapolation,
+interpolation or clock correction is implied.
 
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
@@ -70,6 +90,8 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Retire a series with an explicit marker, correct it with late writes
+    and resume collection.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.

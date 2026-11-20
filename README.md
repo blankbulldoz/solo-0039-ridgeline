@@ -73,6 +73,18 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+A submitted point is either `{"labels":...,"time":...,"value":V}` or a
+staleness marker `{"labels":...,"time":...,"stale":true}`. A marker carries
+no value — it is an explicit collection-invalidation signal, not the number
+zero — and marks that a series stopped being collected, so its last value is
+not mistaken as still valid. Raw reads return markers with a null value and
+a true stale flag. Window aggregations ignore markers; counter rate treats
+each marker as a segment boundary and never sums a change across one. At the
+same timestamp, the most recently committed version wins regardless of kind:
+a later value corrects the marker, a later marker invalidates the value.
+Markers flow through sealing, deletion, compaction and the retention floor
+exactly like values, and resumed reporting restores normal collection.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,

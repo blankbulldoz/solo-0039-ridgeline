@@ -45,7 +45,7 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 			}
 		}
 		for _, p := range request.Points {
-			s := model.Sample{Time: p.Time, Value: p.Value, Sequence: seq}
+			s := model.Sample{Time: p.Time, Value: p.Value, Stale: p.Stale, Sequence: seq}
 			key := volume.PointKey(model.SeriesID(p.Labels), p.Time)
 			if err := volume.PutJSON(b.Bucket(volume.Head), key, s); err != nil {
 				return err

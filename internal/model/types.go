@@ -22,16 +22,23 @@ type Series struct {
 	Labels Labels `json:"labels"`
 }
 
+// A Sample is one committed version of a series at a timestamp. A stale
+// sample is an explicit collection-invalidation marker: it carries no value
+// (Value is nil) and is never the number zero. A marker and a value at the
+// same timestamp are alternative versions of one sample; the most recently
+// committed version wins, regardless of kind.
 type Sample struct {
-	Time     int64   `json:"time"`
-	Value    float64 `json:"value"`
-	Sequence uint64  `json:"sequence"`
+	Time     int64    `json:"time"`
+	Value    *float64 `json:"value"`
+	Stale    bool     `json:"stale"`
+	Sequence uint64   `json:"sequence"`
 }
 
 type Observation struct {
-	Labels Labels  `json:"labels"`
-	Time   int64   `json:"time"`
-	Value  float64 `json:"value"`
+	Labels Labels   `json:"labels"`
+	Time   int64    `json:"time"`
+	Value  *float64 `json:"value"`
+	Stale  bool     `json:"stale"`
 }
 
 type WriteRequest struct {
@@ -74,6 +81,7 @@ type ScanStats struct {
 	Head       int `json:"head"`
 	Decoded    int `json:"decoded"`
 	Visible    int `json:"visible"`
+	Stale      int `json:"stale"`
 	Tombstones int `json:"tombstones"`
 }
 

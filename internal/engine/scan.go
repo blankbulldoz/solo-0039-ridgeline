@@ -104,6 +104,9 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 		for _, p := range merged {
 			if !hidden(s.ID, p, tombstones) {
 				points = append(points, p)
+				if p.Stale {
+					result.Stats.Stale++
+				}
 			}
 		}
 		sort.Slice(points, func(i, j int) bool { return points[i].Time < points[j].Time })

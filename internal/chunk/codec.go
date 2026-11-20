@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 
 	"ridgeline/internal/model"
 )
@@ -56,6 +57,13 @@ func Decode(payload []byte, block model.Block) ([]model.Sample, error) {
 		return nil, fmt.Errorf("block %s count mismatch", block.ID)
 	}
 	for i, p := range points {
+		if p.Stale {
+			if p.Value != nil {
+				return nil, fmt.Errorf("block %s stale marker carries a value", block.ID)
+			}
+		} else if p.Value == nil || math.IsNaN(*p.Value) || math.IsInf(*p.Value, 0) {
+			return nil, fmt.Errorf("block %s point is neither a finite value nor a marker", block.ID)
+		}
 		if !model.ValidTime(p.Time) || p.Time < block.Start || p.Time >= block.End ||
 			(i > 0 && points[i-1].Time >= p.Time) {
 			return nil, fmt.Errorf("block %s invalid point order or bounds", block.ID)

@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import socket
@@ -15,8 +16,34 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "compact", "backup",
+    "explain", "staleness"
 ]
+
+
+def close(actual, expected):
+    return math.isclose(actual, expected, rel_tol=1e-12, abs_tol=1e-12)
+
+
+def find_cell(cells, node, start):
+    for cell in cells:
+        if cell["labels"].get("node") == node and cell["start"] == start:
+            return cell
+    return None
+
+
+def find_points(result, node):
+    for series in result["series"]:
+        if series["series"]["labels"].get("node") == node:
+            return series["points"]
+    return None
+
+
+def at(points, timestamp):
+    for point in points:
+        if point["time"] == timestamp:
+            return point
+    return None
 
 
 def request(base, route, payload=None, method=None, status=200):
@@ -67,6 +94,148 @@ def stop(process):
     process.wait(timeout=15)
     if process.returncode != 0:
         raise RuntimeError(f"service exit {process.returncode}")
+
+
+def staleness_timeline(op):
+    """Retire, correct and resume one series with explicit stale markers.
+
+    Timeline: web-1 reports a counter, is decommissioned (marker), is
+    re-reported (recovery), then the marker itself is corrected by late
+    writes in both directions. Markers are then sealed, deleted,
+    re-admitted, compacted and finally dropped by the retention floor.
+    web-2 is a control series that keeps reporting throughout.
+    """
+    space = "spaces/meridian"
+    q = {"start": -1000, "end": 8000}
+    rate = {**q, "step": 8000, "origin": 0, "group_by": ["node"],
+            "function": "rate",
+            "matchers": [{"label": "__name__", "op": "=", "value": "beats_total"}]}
+    web1 = {"__name__": "beats_total", "node": "web-1", "zone": "east"}
+    web2 = {"__name__": "beats_total", "node": "web-2", "zone": "east"}
+
+    def value(series, t, v):
+        return {"labels": series, "time": t, "value": v}
+
+    def marker(series, t):
+        return {"labels": series, "time": t, "stale": True}
+
+    op("staleness namespace", "spaces", {
+        "name": "meridian", "retention_ms": 100000, "lateness_ms": 100000,
+        "future_ms": 1000, "max_series": 50, "max_write": 1000, "max_scan": 100000})
+    op("report", space + "/points", {"now": 6000, "points": [
+        value(web1, 0, 0), value(web1, 1000, 5), value(web1, 2000, 12),
+        value(web1, 3000, 20),
+        *[value(web2, t, t // 1000 + 1) for t in range(0, 7000, 1000)]]})
+
+    # Decommission: the last value 20 must not be read as still valid.
+    op("decommission", space + "/points", {"now": 6000, "points": [marker(web1, 4000)]})
+    seen = op("raw sees marker", space + "/range", q)
+    point = at(find_points(seen, "web-1"), 4000)
+    if point is None or point["value"] is not None or point["stale"] is not True:
+        raise RuntimeError("raw read does not show the invalidation marker")
+    if seen["stats"]["stale"] != 1:
+        raise RuntimeError("scan statistics do not count the marker")
+    avg = op("aggregate skips marker", space + "/aggregate",
+             {**q, "step": 1000, "origin": 0, "group_by": ["node"], "function": "avg"})
+    if find_cell(avg["cells"], "web-1", 4000) is not None:
+        raise RuntimeError("a marker populated an aggregate window")
+    if find_cell(avg["cells"], "web-2", 4000)["value"] != 5.0:
+        raise RuntimeError("control series lost a window to the marker")
+    cells = op("rate stops at marker", space + "/aggregate", rate)["cells"]
+    cell = find_cell(cells, "web-1", 0)
+    if not close(cell["value"], 20 / 3) or cell["count"] != 4:
+        raise RuntimeError("rate chained past the decommission marker")
+
+    # Recovery: reporting resumes, but the rate must not connect across
+    # the invalidation point; segments on both sides stay separate.
+    op("recovery", space + "/points",
+       {"now": 6000, "points": [value(web1, 5000, 25), value(web1, 6000, 31)]})
+    cells = op("rate respects marker gap", space + "/aggregate", rate)["cells"]
+    cell = find_cell(cells, "web-1", 0)
+    if not close(cell["value"], 26 / 4) or cell["count"] != 6:
+        raise RuntimeError("rate connected segments across the marker")
+
+    # Late report, first direction: a value at the marker's own timestamp
+    # corrects the invalidation; the most recently committed version wins.
+    op("late value corrects marker", space + "/points",
+       {"now": 6000, "points": [value(web1, 4000, 22)]})
+    seen = op("raw marker corrected", space + "/range", q)
+    point = at(find_points(seen, "web-1"), 4000)
+    if point["value"] != 22 or point["stale"] is not False or seen["stats"]["stale"] != 0:
+        raise RuntimeError("late value did not correct the marker")
+    cells = op("rate reconnects", space + "/aggregate", rate)["cells"]
+    if not close(find_cell(cells, "web-1", 0)["value"], 31 / 6):
+        raise RuntimeError("corrected marker should rejoin the counter chain")
+
+    # Late report, second direction: a marker invalidates an old value.
+    op("late marker invalidates value", space + "/points",
+       {"now": 6000, "points": [marker(web1, 2000)]})
+    seen = op("raw late marker", space + "/range", q)
+    point = at(find_points(seen, "web-1"), 2000)
+    if point["value"] is not None or point["stale"] is not True:
+        raise RuntimeError("late marker did not invalidate the value")
+    cells = op("rate re-segments", space + "/aggregate", rate)["cells"]
+    cell = find_cell(cells, "web-1", 0)
+    if not close(cell["value"], 16 / 4) or cell["count"] != 6:
+        raise RuntimeError("rate did not re-segment around the late marker")
+    counted = op("aggregate count drops", space + "/aggregate",
+                 {**q, "step": 8000, "origin": 0, "group_by": ["node"],
+                  "function": "count"})["cells"]
+    if find_cell(counted, "web-1", 0)["value"] != 6.0:
+        raise RuntimeError("invalidated value still counted")
+
+    # Same timestamp, one request: the later point wins regardless of kind.
+    op("same request override", space + "/points",
+       {"now": 6000, "points": [value(web1, 7000, 35), marker(web1, 7000)]})
+    seen = op("raw same request override", space + "/range", q)
+    if at(find_points(seen, "web-1"), 7000)["stale"] is not True:
+        raise RuntimeError("later point in one request did not win")
+    op("committed value overrides marker", space + "/points",
+       {"now": 7000, "points": [value(web1, 7000, 35)]})
+    seen = op("raw override corrected", space + "/range", q)
+    if at(find_points(seen, "web-1"), 7000)["value"] != 35:
+        raise RuntimeError("committed value did not override the marker")
+
+    # Markers are sealed into blocks without changing logical samples.
+    before = op("pre-seal markers", space + "/range", q)["series"]
+    op("seal with markers", space + "/seal", {})
+    if op("sealed markers raw", space + "/range", q)["series"] != before:
+        raise RuntimeError("seal changed the marker timeline")
+    op("marker blocks", space + "/blocks")
+
+    # Deletion hides a marker; a fresh marker at that timestamp is
+    # admitted again, and compaction keeps the visible timeline intact.
+    op("delete marker", space + "/deletions",
+       {"start": 1500, "end": 2500,
+        "matchers": [{"label": "node", "op": "=", "value": "web-1"}]})
+    seen = op("raw after marker delete", space + "/range", q)
+    if at(find_points(seen, "web-1"), 2000) is not None or seen["stats"]["stale"] != 0:
+        raise RuntimeError("deletion did not hide the marker")
+    cells = op("rate after marker delete", space + "/aggregate", rate)["cells"]
+    if not close(find_cell(cells, "web-1", 0)["value"], 35 / 7):
+        raise RuntimeError("rate should rejoin once the marker is deleted")
+    op("re-admit marker", space + "/points", {"now": 7000, "points": [marker(web1, 2000)]})
+    seen = op("raw re-admitted marker", space + "/range", q)
+    if at(find_points(seen, "web-1"), 2000)["stale"] is not True:
+        raise RuntimeError("marker was not re-admitted after deletion")
+    before = op("pre-compact markers", space + "/range", q)["series"]
+    op("compact with markers", space + "/compact", {})
+    if op("compacted markers raw", space + "/range", q)["series"] != before:
+        raise RuntimeError("compaction changed the marker timeline")
+
+    # Retention advances the floor past every marker and rejects a marker
+    # below the floor exactly like a value.
+    floor = op("retention drops markers", space + "/retention", {"now": 107000})
+    if floor["floor"] != 7000:
+        raise RuntimeError("unexpected retention floor")
+    seen = op("raw after retention", space + "/range", q)
+    points = find_points(seen, "web-1")
+    if [p["time"] for p in points] != [7000] or seen["stats"]["stale"] != 0:
+        raise RuntimeError("retention did not drop old values and markers")
+    if find_points(seen, "web-2") is not None:
+        raise RuntimeError("control series survived the retention floor")
+    op("marker below floor rejected", space + "/points",
+       {"now": 7000, "points": [marker(web1, 6000)]}, status=409)
 
 
 def exercise(workflow, output):
@@ -133,6 +302,7 @@ def exercise(workflow, output):
                     "now": 11000, "points": [{**seed["points"][0], "time": 1500}]
                 }, status=409)
                 op("resume", space + "/mode", {"read_only": False}, method="PUT")
+                staleness_timeline(op)
                 source = op("backup source", space + "/range", q)
                 image, headers = request(base, "image")
                 if hashlib.sha256(image).hexdigest() != headers["X-Ridge-Sha256"]:
