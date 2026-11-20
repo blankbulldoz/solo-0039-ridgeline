@@ -15,11 +15,24 @@ func Validate(q model.Query) error {
 		return model.Bad("window step and origin outside supported range")
 	}
 	switch q.Function {
-	case "count", "sum", "min", "max", "avg", "first", "last", "rate":
-		return nil
+	case "count", "sum", "min", "max", "avg", "first", "last", "rate", "twavg", "integral":
 	default:
 		return model.Bad("unknown aggregation function")
 	}
+	if Weighted(q.Function) {
+		if q.MaxAgeMS <= 0 || q.MaxAgeMS > model.MaxTime {
+			return model.Bad("time-weighted functions require a positive max_age_ms")
+		}
+	} else if q.RequireCoverage || q.MaxAgeMS != 0 {
+		return model.Bad("coverage and max_age_ms options only apply to time-weighted functions")
+	}
+	return nil
+}
+
+// Weighted reports whether a reducer holds each sample until the next
+// observation instead of weighting observations equally.
+func Weighted(function string) bool {
+	return function == "twavg" || function == "integral"
 }
 
 func Bucket(t, origin, step int64) int64 {

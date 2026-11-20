@@ -73,6 +73,36 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+### Time-weighted average and integral
+
+Irregular sampling makes a plain `avg` measure observation frequency rather
+than time. Two extra reducers treat each sample as a value that stays in force
+until the next observation of the same series:
+
+| Function | Result |
+| --- | --- |
+| `twavg` | mean over the *known* duration (`integral / covered_ms`) |
+| `integral` | area under the held value, in value-milliseconds |
+
+```json
+{"start":0,"end":10000,"step":10000,"origin":0,"group_by":["node"],
+ "function":"twavg","max_age_ms":2000,
+ "matchers":[{"label":"__name__","op":"=","value":"host_load"}]}
+```
+
+`max_age_ms` is required for both functions. A held value is known only while
+it is younger than that horizon; once a gap exceeds it the remaining time in
+the window is unknown rather than extrapolated. The scan also reads the newest
+visible sample strictly before `start`, so a value already in force can cover
+the opening of a window that has no sample of its own. Every cell reports
+`covered_ms`; a window with no known time is omitted. Set
+`"require_coverage":true` to drop any cell whose contributing series were not
+known for the whole window; the response then counts them in
+`dropped_coverage`. The default (false) keeps partial windows and lets the
+caller judge coverage itself. These reducers use the same corrected,
+deletion- and retention-filtered visible data as every other query, so seal,
+compaction and corrections never change the result for the same state.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,

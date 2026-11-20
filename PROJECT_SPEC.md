@@ -40,6 +40,26 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+Two step-function reducers, `twavg` and `integral`, model a value that holds
+from its sample timestamp until the next observation of the same series. A
+hold never extends past `max_age_ms` (required, positive); the portion beyond
+that validity horizon, and any window time with no in-force sample, is unknown
+and contributes neither area nor covered duration. The newest visible sample
+strictly before the query start seeds the opening hold across a window whose
+first bucket has no sample, but it is never counted as an in-window observation
+or charged to the visible-point budget. Holds are clipped to the half-open
+query interval and split at origin-aligned bucket boundaries, so negative
+timestamps and non-zero origins use the same floor-aligned bucketing as other
+reducers. `integral` is the sum of value times covered milliseconds; `twavg`
+divides that integral by the covered duration. Each cell reports `covered_ms`.
+With `require_coverage` true, a cell is emitted only when every contributing
+series was known for the entire window length; dropped cells are counted in
+`dropped_coverage`. The default returns every partially covered cell. Grouped
+windows sum covered time across the series in the group, so a group is fully
+covered only when all of its series are. Both reducers read the same
+correction-, deletion- and retention-resolved visible points as raw queries,
+so sealing and compaction cannot alter a result for an unchanged database state.
+
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
 deletions into one block per selected series; empty series retain their identity.

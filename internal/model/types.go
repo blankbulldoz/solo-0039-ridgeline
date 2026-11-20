@@ -53,14 +53,16 @@ type Matcher struct {
 }
 
 type Query struct {
-	Start    int64     `json:"start"`
-	End      int64     `json:"end"`
-	Matchers []Matcher `json:"matchers"`
-	Limit    int       `json:"limit"`
-	Step     int64     `json:"step"`
-	Origin   int64     `json:"origin"`
-	GroupBy  []string  `json:"group_by"`
-	Function string    `json:"function"`
+	Start           int64     `json:"start"`
+	End             int64     `json:"end"`
+	Matchers        []Matcher `json:"matchers"`
+	Limit           int       `json:"limit"`
+	Step            int64     `json:"step"`
+	Origin          int64     `json:"origin"`
+	GroupBy         []string  `json:"group_by"`
+	Function        string    `json:"function"`
+	MaxAgeMS        int64     `json:"max_age_ms"`
+	RequireCoverage bool      `json:"require_coverage"`
 }
 
 type SeriesPoints struct {
@@ -86,17 +88,19 @@ type RangeResult struct {
 }
 
 type Cell struct {
-	Labels Labels  `json:"labels"`
-	Start  int64   `json:"start"`
-	End    int64   `json:"end"`
-	Value  float64 `json:"value"`
-	Count  int     `json:"count"`
+	Labels    Labels  `json:"labels"`
+	Start     int64   `json:"start"`
+	End       int64   `json:"end"`
+	Value     float64 `json:"value"`
+	Count     int     `json:"count"`
+	CoveredMS int64   `json:"covered_ms"`
 }
 
 type AggregateResult struct {
-	Sequence uint64    `json:"sequence"`
-	Cells    []Cell    `json:"cells"`
-	Stats    ScanStats `json:"stats"`
+	Sequence        uint64    `json:"sequence"`
+	Cells           []Cell    `json:"cells"`
+	Stats           ScanStats `json:"stats"`
+	DroppedCoverage int       `json:"dropped_coverage"`
 }
 
 type Tombstone struct {

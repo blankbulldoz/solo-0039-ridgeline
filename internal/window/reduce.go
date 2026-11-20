@@ -27,6 +27,10 @@ func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error)
 	if q.Function == "rate" {
 		return Rates(series, q)
 	}
+	if Weighted(q.Function) {
+		result, err := WeightedAggregate(series, q)
+		return result.Cells, err
+	}
 	groups := map[string]*accumulator{}
 	for _, s := range series {
 		key, labels := Group(s.Series.Labels, q.GroupBy)

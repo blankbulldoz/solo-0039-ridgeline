@@ -40,6 +40,15 @@ func aggregate(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64
 	if err != nil {
 		return model.AggregateResult{}, err
 	}
+	if window.Weighted(q.Function) {
+		weighted, err := window.WeightedAggregate(raw.Series, q)
+		if err != nil {
+			return model.AggregateResult{}, err
+		}
+		weighted.Sequence = sequence
+		weighted.Stats = raw.Stats
+		return weighted, nil
+	}
 	cells, err := window.Aggregate(raw.Series, q)
 	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats}, err
 }
