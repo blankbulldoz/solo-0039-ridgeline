@@ -54,6 +54,11 @@ func Handler(e *engine.Engine) http.Handler {
 			return e.Explain(r.PathValue("space"), q)
 		})
 	})
+	mux.HandleFunc("POST "+base+"/vector", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.VectorQuery) (any, error) {
+			return e.Vector(r.PathValue("space"), q)
+		})
+	})
 	mux.HandleFunc("POST "+base+"/seal", func(w http.ResponseWriter, r *http.Request) {
 		out, err := e.Seal(r.PathValue("space"))
 		respond(w, out, err)

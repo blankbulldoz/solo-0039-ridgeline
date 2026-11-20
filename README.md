@@ -48,6 +48,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/vector` | two selectors, join labels, arithmetic operator |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -72,6 +73,54 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+### Vector queries
+
+A vector query computes an arithmetic expression from two selectors inside one
+bbolt read transaction, so numerator and denominator always come from the same
+snapshot; the response reports the sequence of that snapshot. `on` lists the
+labels that associate series. Series are grouped by the value of those labels,
+absent labels joining as the empty string, exactly like matchers. No timestamp
+interpolation or nearest-neighbour carry-forward happens: each row pairs
+samples at the identical timestamp.
+
+```json
+{"start":0,"end":10000,"on":["rack"],"op":"/","relationship":"many_to_one",
+ "left":{"matchers":[{"label":"__name__","op":"=","value":"busy_total"}]},
+ "right":{"matchers":[{"label":"__name__","op":"=","value":"capacity"}]}}
+```
+
+`op` is one of `/ * + -`. Rows are left-anchored: a left series with no right
+match still emits rows, and `right_only_keys` counts right-only keys that
+produce no rows. `relationship` declares the permitted cardinality and is
+enforced per join key:
+
+| `relationship` | Allowed | Rejected |
+| --- | --- | --- |
+| `one_to_one` (default) | at most one series on each side | either side has 2+ series on a key |
+| `many_to_one` | one shared right value for many left series | 2+ right series on a key |
+| `one_to_many` | one left series over many right series | 2+ left series on a key |
+
+A violation is a `409 conflict`, never a silently picked or multiplied pair.
+Shared capacity (`many_to_one`) re-uses one right series for each left series;
+the row budget matches the namespace `max_scan` and excess rows are rejected.
+
+Every result row carries `left`, `right` and `value` as nullable numbers plus a
+`status`. Undefined arithmetic never becomes a normal-looking number:
+| `status` | Meaning |
+| --- | --- |
+| `ok` | both samples at that timestamp; `value` is the result |
+| `missing_left` | the left series has no sample at that timestamp |
+| `missing_right` | the right series has no sample at that timestamp |
+| `zero_denominator` | `/` with a right sample equal to zero |
+
+For non-`ok` rows `value` is `null`; the present side keeps its number. Results
+are sorted by join key, then timestamp. `stats` counts `rows`, each status,
+`joined_keys` (with a counterpart), `left_only_keys`/`right_only_keys` and
+`misaligned_keys` (keys emitting a missing-side row). The walkthrough's vector
+workflow demonstrates a shared-capacity `many_to_one` join, a one-to-one pair,
+the two cardinality refusals, all three undefined statuses, then removes the
+conflicting series and recomputes every row as `ok`.
 
 ## Storage And Recovery
 

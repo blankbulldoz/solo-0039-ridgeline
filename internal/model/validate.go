@@ -67,6 +67,42 @@ func ValidateNamespace(n Namespace) error {
 	return nil
 }
 
+func ValidateVector(q VectorQuery) error {
+	if !ValidTime(q.Start) || q.End < MinTime || q.End > MaxTime+1 || q.Start >= q.End {
+		return Bad("vector query requires a supported nonempty half-open interval")
+	}
+	if q.Left == nil || q.Right == nil {
+		return Bad("vector query requires both left and right selectors")
+	}
+	if len(q.Left.Matchers) > 32 || len(q.Right.Matchers) > 32 {
+		return Bad("vector query selector has too many matchers")
+	}
+	if len(q.On) == 0 || len(q.On) > 32 {
+		return Bad("vector query requires 1..32 join labels")
+	}
+	seen := map[string]bool{}
+	for _, label := range q.On {
+		if !ValidName(label) {
+			return Bad("invalid join label")
+		}
+		if seen[label] {
+			return Bad("duplicate join label")
+		}
+		seen[label] = true
+	}
+	switch q.Op {
+	case "/", "*", "+", "-":
+	default:
+		return Bad("vector operation must be one of / * + -")
+	}
+	switch q.Relationship {
+	case "", "one_to_one", "many_to_one", "one_to_many":
+	default:
+		return Bad("unknown vector relationship")
+	}
+	return nil
+}
+
 func ValidateQuery(q Query) error {
 	if !ValidTime(q.Start) || q.End < MinTime || q.End > MaxTime+1 || q.Start >= q.End {
 		return Bad("query requires a supported nonempty half-open interval")

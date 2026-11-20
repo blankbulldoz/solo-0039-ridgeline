@@ -85,6 +85,65 @@ type RangeResult struct {
 	Truncated bool           `json:"truncated"`
 }
 
+type VectorSelector struct {
+	Matchers []Matcher `json:"matchers"`
+}
+
+type VectorQuery struct {
+	Start        int64           `json:"start"`
+	End          int64           `json:"end"`
+	Left         *VectorSelector `json:"left"`
+	Right        *VectorSelector `json:"right"`
+	On           []string        `json:"on"`
+	Op           string          `json:"op"`
+	Relationship string          `json:"relationship"`
+}
+
+const (
+	VectorOK              = "ok"
+	VectorMissingLeft     = "missing_left"
+	VectorMissingRight    = "missing_right"
+	VectorZeroDenominator = "zero_denominator"
+)
+
+// VectorPoint is one aligned observation of a vector expression. Left, Right
+// and Value are null whenever the corresponding side is absent or the
+// arithmetic result is undefined; a missing operand never becomes zero.
+type VectorPoint struct {
+	Key         Labels   `json:"key"`
+	Time        int64    `json:"time"`
+	LeftSeries  string   `json:"left_series"`
+	RightSeries string   `json:"right_series"`
+	Left        *float64 `json:"left"`
+	Right       *float64 `json:"right"`
+	Value       *float64 `json:"value"`
+	Status      string   `json:"status"`
+}
+
+type VectorStats struct {
+	LeftSeries      int `json:"left_series"`
+	RightSeries     int `json:"right_series"`
+	JoinedKeys      int `json:"joined_keys"`
+	LeftOnlyKeys    int `json:"left_only_keys"`
+	RightOnlyKeys   int `json:"right_only_keys"`
+	MisalignedKeys  int `json:"misaligned_keys"`
+	Rows            int `json:"rows"`
+	OK              int `json:"ok"`
+	MissingLeft     int `json:"missing_left"`
+	MissingRight    int `json:"missing_right"`
+	ZeroDenominator int `json:"zero_denominator"`
+	Decoded         int `json:"decoded"`
+}
+
+type VectorResult struct {
+	Sequence     uint64        `json:"sequence"`
+	Op           string        `json:"op"`
+	On           []string      `json:"on"`
+	Relationship string        `json:"relationship"`
+	Points       []VectorPoint `json:"points"`
+	Stats        VectorStats   `json:"stats"`
+}
+
 type Cell struct {
 	Labels Labels  `json:"labels"`
 	Start  int64   `json:"start"`

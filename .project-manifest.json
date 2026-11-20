@@ -318,6 +318,27 @@
         "select",
         "volume"
       ]
+    },
+    {
+      "id": "vector",
+      "name": "Two-selector vector arithmetic join",
+      "entry": "POST /spaces/weave/vector",
+      "success": "One read snapshot pairs samples per join key and reports undefined rows explicitly",
+      "failure": "cardinality violation, duplicate join key or zero denominator",
+      "verification": "python3 examples/walkthrough.py --workflow vector",
+      "steps": [
+        "validate the public request",
+        "scan both selectors inside one transaction",
+        "enforce the declared relationship",
+        "emit rows with explicit missing/zero status"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "model",
+        "select",
+        "volume"
+      ]
     }
   ],
   "complexity": {
@@ -333,7 +354,10 @@
       "versioning_audit",
       "concurrency",
       "lineage",
-      "state_machine"
+      "state_machine",
+      "join_cardinality",
+      "null_semantics",
+      "snapshot_read"
     ]
   }
 }

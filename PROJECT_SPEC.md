@@ -33,6 +33,15 @@ supported; absent labels behave as the empty string for matcher evaluation.
 Limits reject excessive source work rather than silently dropping points.
 Raw result limits are explicit and include a truncation indicator.
 
+Vector queries evaluate a binary arithmetic expression over two selectors in a
+single read transaction, reporting that snapshot's sequence. Series associate
+through a declared set of join labels, using value equality where an absent
+label equals the empty string. The declared relationship bounds cardinality per
+join key; a duplicate key is refused, not resolved by arbitrary choice. Rows
+pair only samples committed at the identical timestamp — no interpolation,
+carry-forward or tolerance. A missing side or a zero divisor yields a null
+value with an explicit status instead of a numeric result.
+
 Window aggregation supports count, sum, min, max, average, first and last.
 Buckets align to a caller-supplied origin, including before the Unix epoch.
 Only populated windows appear. An average weights observations, not series.
@@ -70,6 +79,7 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Compute a two-selector vector expression with an explicit join relationship.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
