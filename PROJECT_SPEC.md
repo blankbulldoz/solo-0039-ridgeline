@@ -54,6 +54,21 @@ it never silently presents stale materialization as current. Backup returns
 a consistent bbolt database image plus SHA-256 and sequence headers. Starting
 the server with that image as RIDGE_DB restores that database directly.
 
+A rollup cell retains lossless reduction state: count, sum, min and max. Count,
+sum, average, minimum and maximum are therefore tier-reducible. A coarser tier
+names a source rollup, must share its origin and grouping and use a step that is
+an integer multiple of the source step; it reduces stored state without reading
+raw points. Average is always sum/count, so it is weighted by raw observations
+rather than by child windows. First, last and rate depend on raw point order or
+adjacency and cannot seed a derived tier. Every cell reports coverage: how many
+source windows tiled it, whether it is a clipped edge window, whether the stored
+value was exact at materialization, whether current retention has purged its raw
+source, and whether it can still be recomputed. A reading rule summarizes cell
+coverage and freshness; staleness compares namespace sequences, and
+materializing one tier does not invalidate another. Retention-dependent facts
+are recomputed on every inspection, so an expired or stale tier is reported,
+never presented as current and never silently rewritten.
+
 ## Workflows
 
 1. Create, inspect and toggle namespace read-only policy.
@@ -66,10 +81,11 @@ the server with that image as RIDGE_DB restores that database directly.
 8. Delete a range without hiding later corrections.
 9. Advance retention and reject resurrection.
 10. Materialize a rollup with source-sequence provenance.
-11. Inspect materialization freshness after later writes.
-12. Compact physical blocks while preserving query results.
-13. Export a consistent image and restart from it.
-14. Explain candidate series, physical blocks and query budgets.
+11. Derive a coarser rollup tier from stored reduction state.
+12. Inspect materialization freshness and coverage after later writes or retention.
+13. Compact physical blocks while preserving query results.
+14. Export a consistent image and restart from it.
+15. Explain candidate series, physical blocks and query budgets.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.

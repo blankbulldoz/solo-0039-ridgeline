@@ -42,13 +42,20 @@ func Group(labels model.Labels, names []string) (string, model.Labels) {
 	return string(data), out
 }
 
+// GroupKey canonicalizes cell labels for grouping, sorting and deduplication.
+func GroupKey(labels model.Labels) string {
+	data, _ := json.Marshal(labels)
+	return string(data)
+}
+
+// SortCells orders cells by canonical labels then window start. The ordering is
+// stable so a stored rollup result round-trips unchanged.
 func SortCells(cells []model.Cell) {
 	sort.Slice(cells, func(i, j int) bool {
-		a, _ := json.Marshal(cells[i].Labels)
-		b, _ := json.Marshal(cells[j].Labels)
-		if string(a) == string(b) {
+		a, b := GroupKey(cells[i].Labels), GroupKey(cells[j].Labels)
+		if a == b {
 			return cells[i].Start < cells[j].Start
 		}
-		return string(a) < string(b)
+		return a < b
 	})
 }

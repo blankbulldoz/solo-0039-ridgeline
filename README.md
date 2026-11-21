@@ -55,8 +55,9 @@ All methods below return 200 on success.
 | GET | `/spaces/{space}/deletions` | deletion sequence inventory |
 | POST | `/spaces/{space}/retention` | `{"now":11000}` |
 | POST | `/spaces/{space}/compact` | empty object |
-| PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
-| GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
+| PUT | `/spaces/{space}/rollups/{name}` | rollup definition, optionally derived from another rollup |
+| GET | `/spaces/{space}/rollups/{name}` | stored result, coverage, stale flag and read rule |
+| GET | `/spaces/{space}/rollups` | all tiers with granularity, coverage and read rule |
 | GET | `/image` | consistent binary image, SHA-256 and sequence headers |
 
 Sample query:
@@ -72,6 +73,39 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+## Rollup Tiers
+
+A rollup materializes an aggregate result with its source sequence. Tiers can be
+stacked: a definition with `"source":{"rollup":"minute"}` reduces the stored
+reduction state of another rollup instead of re-reading raw points.
+
+```json
+{"start":0,"end":3600000,"step":3600000,"origin":0,"group_by":["zone"],
+ "function":"avg","source":{"rollup":"minute"}}
+```
+
+Count, sum, avg, min and max are tier-reducible. Every reducible cell stores
+`{"count","sum","min","max","value"}`; a parent average is `sum/count`, so it is
+weighted by raw observations and never an average of child averages. `first`,
+`last` and `rate` depend on raw point order or adjacency and cannot seed a
+derived tier. A derived tier must keep the source origin and grouping and use a
+step that is an integer multiple of the source step; anything else is rejected
+rather than silently mixing spans.
+
+Each cell and result carries a `coverage` object. `expected_parts` /
+`present_parts` count source windows that tiled the cell, `complete` is false
+for a clipped edge window, `exact` says the stored value equaled a full-window
+aggregation at materialization, and `source_expired` is refreshed against the
+current retention floor each time the rollup is read. `recomputable` is true
+only while retained raw points still exist for the window.
+
+`read_rule` summarizes the rule a reader should apply, from most to least
+severe: `derived_source_expired`, `derived_stale`, `source_expired`, `stale`,
+`partial`, `derived_exact`, `exact`. Staleness compares the namespace sequence,
+not the global sequence, so materializing one tier does not make another stale.
+Inspection always reports staleness; it never presents a stale result as
+current, and a stored tier is never silently rewritten.
 
 ## Storage And Recovery
 

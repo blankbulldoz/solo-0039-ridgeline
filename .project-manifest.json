@@ -244,6 +244,25 @@
       ]
     },
     {
+      "id": "tiers",
+      "name": "Derive coarser rollup tiers",
+      "entry": "PUT /spaces/spindle/rollups/hour with source.rollup",
+      "success": "Reduced cells match a direct raw aggregation and report coverage",
+      "failure": "misaligned step, origin or grouping",
+      "verification": "python3 examples/walkthrough.py --workflow materialize",
+      "steps": [
+        "validate the public request",
+        "load the source tier's reduction state",
+        "reduce into aligned parent windows and publish"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "window",
+        "volume"
+      ]
+    },
+    {
       "id": "freshness",
       "name": "Inspect rollup freshness",
       "entry": "GET /spaces/spindle/rollups/pulse",

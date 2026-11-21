@@ -115,12 +115,36 @@ def exercise(workflow, output):
                 fresh = op("freshness", space + "/rollups/pulse")
                 if fresh["stale"]:
                     raise RuntimeError("new materialization is stale")
+                # A coarser tier is reduced from the stored reduction state, not
+                # from an average of the minute averages. It must agree exactly
+                # with a direct aggregate over the same raw range.
+                rolls = {**q, "start": -4000, "end": 4000, "step": 1000, "origin": 0,
+                         "group_by": ["zone"], "function": "avg"}
+                op("minute tier", space + "/rollups/minute", rolls, method="PUT")
+                hour_def = {**rolls, "step": 4000, "source": {"rollup": "minute"}}
+                hour = op("hour tier", space + "/rollups/hour", hour_def, method="PUT")
+                direct = op("direct hour", space + "/aggregate",
+                            {**rolls, "step": 4000, "start": -4000, "end": 4000})
+                keyed = lambda cells: [(c["labels"], c["start"], c["value"]) for c in cells]
+                if keyed(hour["result"]["cells"]) != keyed(direct["cells"]):
+                    raise RuntimeError("derived hour tier disagrees with direct aggregation")
+                if not all(c["coverage"]["exact"] for c in hour["result"]["cells"]):
+                    raise RuntimeError("aligned hour tier should be exact")
+                for function in ("count", "sum", "min", "max"):
+                    op(function + " tier", space + "/rollups/hour-" + function,
+                       {**hour_def, "function": function}, method="PUT")
+                op("misaligned tier", space + "/rollups/bad",
+                   {**hour_def, "step": 2500}, method="PUT", status=400)
+                op("rollup inventory", space + "/rollups")
                 op("new correction", space + "/points", {
                     "now": 10000, "points": [{**seed["points"][0], "time": 500, "value": 9}]
                 })
                 stale = op("stale materialization", space + "/rollups/pulse")
                 if not stale["stale"]:
                     raise RuntimeError("changed namespace should mark materialization stale")
+                derived_stale = op("stale derived tier", space + "/rollups/hour")
+                if derived_stale["read_rule"] not in ("derived_stale", "stale"):
+                    raise RuntimeError("changed namespace should mark derived tier stale")
                 logical = op("pre-compaction", space + "/range", q)["series"]
                 op("compact", space + "/compact", {})
                 if op("post-compaction", space + "/range", q)["series"] != logical:
@@ -128,6 +152,21 @@ def exercise(workflow, output):
                 op("explain", space + "/explain", q)
                 op("retention", space + "/retention", {"now": 11000})
                 op("retention no resurrection", space + "/points", replacement, status=409)
+                # Retention purged raw points behind the early tier windows. The
+                # stored values remain exact, but inspection must say the source
+                # can no longer recompute them, and no window may claim to be
+                # both recomputable and expired.
+                purged = op("expired tier", space + "/rollups/hour")
+                cells = purged["result"]["cells"]
+                if not any(c["coverage"]["source_expired"] for c in cells):
+                    raise RuntimeError("retention should expire early tier windows")
+                for cell in cells:
+                    cov = cell["coverage"]
+                    if cov["recomputable"] and cov["source_expired"]:
+                        raise RuntimeError("a cell cannot be recomputable once its source expired")
+                if purged["read_rule"] not in ("derived_source_expired", "source_expired"):
+                    raise RuntimeError("expired tier must report a source-expired read rule")
+                op("expired inventory", space + "/rollups")
                 op("read-only", space + "/mode", {"read_only": True}, method="PUT")
                 op("read-only rejection", space + "/points", {
                     "now": 11000, "points": [{**seed["points"][0], "time": 1500}]

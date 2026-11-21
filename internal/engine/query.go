@@ -41,7 +41,20 @@ func aggregate(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64
 		return model.AggregateResult{}, err
 	}
 	cells, err := window.Aggregate(raw.Series, q)
-	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats}, err
+	if err != nil {
+		return model.AggregateResult{}, err
+	}
+	// Ad-hoc aggregation reports coverage so a caller can tell a clipped edge
+	// window from a full one, and can compare it with a materialized tier.
+	if window.Reducible(q.Function) {
+		window.MarkCoverage(cells, q, n.Floor)
+	}
+	edge := window.Trim(q.Start, q.End, q.Origin, q.Step, n.Floor)
+	coverage := &model.RollupCoverage{
+		Start: edge.Start, End: edge.End, Floor: n.Floor,
+		Complete: edge.Start < edge.End,
+	}
+	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats, Coverage: coverage}, nil
 }
 
 func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, error) {

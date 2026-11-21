@@ -411,7 +411,24 @@
           "start": -2000,
           "end": -1000,
           "value": 6.5,
-          "count": 2
+          "count": 2,
+          "reduction": {
+            "count": 2,
+            "sum": 13,
+            "min": 3,
+            "max": 10
+          },
+          "coverage": {
+            "expected_parts": 1,
+            "present_parts": 1,
+            "complete": true,
+            "partial_start": false,
+            "partial_end": false,
+            "source_expired": false,
+            "exact": true,
+            "recomputable": true,
+            "rule": "exact"
+          }
         },
         {
           "labels": {
@@ -420,7 +437,24 @@
           "start": -1000,
           "end": 0,
           "value": 7.125,
-          "count": 2
+          "count": 2,
+          "reduction": {
+            "count": 2,
+            "sum": 14.25,
+            "min": 0.25,
+            "max": 14
+          },
+          "coverage": {
+            "expected_parts": 1,
+            "present_parts": 1,
+            "complete": true,
+            "partial_start": false,
+            "partial_end": false,
+            "source_expired": false,
+            "exact": true,
+            "recomputable": true,
+            "rule": "exact"
+          }
         },
         {
           "labels": {
@@ -429,7 +463,24 @@
           "start": 0,
           "end": 1000,
           "value": 3.25,
-          "count": 3
+          "count": 3,
+          "reduction": {
+            "count": 3,
+            "sum": 9.75,
+            "min": 0.75,
+            "max": 7
+          },
+          "coverage": {
+            "expected_parts": 1,
+            "present_parts": 1,
+            "complete": true,
+            "partial_start": false,
+            "partial_end": false,
+            "source_expired": false,
+            "exact": true,
+            "recomputable": true,
+            "rule": "exact"
+          }
         },
         {
           "labels": {
@@ -438,7 +489,24 @@
           "start": 1000,
           "end": 2000,
           "value": 6,
-          "count": 1
+          "count": 1,
+          "reduction": {
+            "count": 1,
+            "sum": 6,
+            "min": 6,
+            "max": 6
+          },
+          "coverage": {
+            "expected_parts": 1,
+            "present_parts": 1,
+            "complete": true,
+            "partial_start": false,
+            "partial_end": false,
+            "source_expired": false,
+            "exact": true,
+            "recomputable": true,
+            "rule": "exact"
+          }
         },
         {
           "labels": {
@@ -447,7 +515,24 @@
           "start": 0,
           "end": 1000,
           "value": 0.5,
-          "count": 1
+          "count": 1,
+          "reduction": {
+            "count": 1,
+            "sum": 0.5,
+            "min": 0.5,
+            "max": 0.5
+          },
+          "coverage": {
+            "expected_parts": 1,
+            "present_parts": 1,
+            "complete": true,
+            "partial_start": false,
+            "partial_end": false,
+            "source_expired": false,
+            "exact": true,
+            "recomputable": true,
+            "rule": "exact"
+          }
         }
       ],
       "stats": {
@@ -457,6 +542,12 @@
         "decoded": 9,
         "visible": 9,
         "tombstones": 0
+      },
+      "coverage": {
+        "start": -5000,
+        "end": 10000,
+        "floor": -4503599627370496,
+        "complete": true
       }
     }
   },
@@ -499,6 +590,12 @@
         "decoded": 6,
         "visible": 6,
         "tombstones": 0
+      },
+      "coverage": {
+        "start": -5000,
+        "end": 5000,
+        "floor": -4503599627370496,
+        "complete": true
       }
     }
   },
@@ -774,7 +871,24 @@
             "start": -2000,
             "end": -1000,
             "value": 6.5,
-            "count": 2
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           },
           {
             "labels": {
@@ -783,7 +897,24 @@
             "start": 0,
             "end": 1000,
             "value": 7.5,
-            "count": 2
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 15,
+              "min": 7,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           },
           {
             "labels": {
@@ -792,7 +923,24 @@
             "start": 1000,
             "end": 2000,
             "value": 6,
-            "count": 1
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 6,
+              "min": 6,
+              "max": 6
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           },
           {
             "labels": {
@@ -801,7 +949,24 @@
             "start": 0,
             "end": 1000,
             "value": 0.5,
-            "count": 1
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           }
         ],
         "stats": {
@@ -811,6 +976,12 @@
           "decoded": 10,
           "visible": 6,
           "tombstones": 1
+        },
+        "coverage": {
+          "start": -5000,
+          "end": 10000,
+          "floor": -4503599627370496,
+          "complete": true
         }
       }
     }
@@ -843,7 +1014,24 @@
             "start": -2000,
             "end": -1000,
             "value": 6.5,
-            "count": 2
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           },
           {
             "labels": {
@@ -852,7 +1040,24 @@
             "start": 0,
             "end": 1000,
             "value": 7.5,
-            "count": 2
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 15,
+              "min": 7,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           },
           {
             "labels": {
@@ -861,7 +1066,24 @@
             "start": 1000,
             "end": 2000,
             "value": 6,
-            "count": 1
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 6,
+              "min": 6,
+              "max": 6
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           },
           {
             "labels": {
@@ -870,7 +1092,24 @@
             "start": 0,
             "end": 1000,
             "value": 0.5,
-            "count": 1
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           }
         ],
         "stats": {
@@ -880,10 +1119,1231 @@
           "decoded": 10,
           "visible": 6,
           "tombstones": 1
+        },
+        "coverage": {
+          "start": -5000,
+          "end": 10000,
+          "floor": -4503599627370496,
+          "complete": true
         }
       },
-      "stale": false
+      "stale": false,
+      "source_stale": false,
+      "read_rule": "exact",
+      "derivable": [
+        "count",
+        "sum",
+        "avg",
+        "min",
+        "max"
+      ]
     }
+  },
+  {
+    "step": "minute tier",
+    "request": {
+      "start": -4000,
+      "end": 4000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "name": "minute",
+      "query": {
+        "start": -4000,
+        "end": 4000,
+        "matchers": null,
+        "limit": 0,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 5,
+      "result": {
+        "sequence": 6,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -2000,
+            "end": -1000,
+            "value": 6.5,
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 7.5,
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 15,
+              "min": 7,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 6,
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 6,
+              "min": 6,
+              "max": 6
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 0.5,
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 6,
+          "tombstones": 1
+        },
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      }
+    }
+  },
+  {
+    "step": "hour tier",
+    "request": {
+      "start": -4000,
+      "end": 4000,
+      "step": 4000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg",
+      "source": {
+        "rollup": "minute"
+      }
+    },
+    "response": {
+      "name": "hour",
+      "query": {
+        "start": -4000,
+        "end": 4000,
+        "matchers": null,
+        "limit": 0,
+        "step": 4000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 5,
+      "result": {
+        "sequence": 7,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -4000,
+            "end": 0,
+            "value": 6.5,
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 7,
+            "count": 3,
+            "reduction": {
+              "count": 3,
+              "sum": 21,
+              "min": 6,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 2,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 0.5,
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 6,
+          "tombstones": 1
+        },
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      },
+      "derived_from": "minute",
+      "source_rollup": {
+        "name": "minute",
+        "step": 1000,
+        "origin": 0,
+        "source_sequence": 5,
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      }
+    }
+  },
+  {
+    "step": "direct hour",
+    "request": {
+      "start": -4000,
+      "end": 4000,
+      "step": 4000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "sequence": 8,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -4000,
+          "end": 0,
+          "value": 6.5,
+          "count": 2,
+          "reduction": {
+            "count": 2,
+            "sum": 13,
+            "min": 3,
+            "max": 10
+          },
+          "coverage": {
+            "expected_parts": 1,
+            "present_parts": 1,
+            "complete": true,
+            "partial_start": false,
+            "partial_end": false,
+            "source_expired": false,
+            "exact": true,
+            "recomputable": true,
+            "rule": "exact"
+          }
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 0,
+          "end": 4000,
+          "value": 7,
+          "count": 3,
+          "reduction": {
+            "count": 3,
+            "sum": 21,
+            "min": 6,
+            "max": 8
+          },
+          "coverage": {
+            "expected_parts": 1,
+            "present_parts": 1,
+            "complete": true,
+            "partial_start": false,
+            "partial_end": false,
+            "source_expired": false,
+            "exact": true,
+            "recomputable": true,
+            "rule": "exact"
+          }
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 0,
+          "end": 4000,
+          "value": 0.5,
+          "count": 1,
+          "reduction": {
+            "count": 1,
+            "sum": 0.5,
+            "min": 0.5,
+            "max": 0.5
+          },
+          "coverage": {
+            "expected_parts": 1,
+            "present_parts": 1,
+            "complete": true,
+            "partial_start": false,
+            "partial_end": false,
+            "source_expired": false,
+            "exact": true,
+            "recomputable": true,
+            "rule": "exact"
+          }
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 4,
+        "head": 1,
+        "decoded": 10,
+        "visible": 6,
+        "tombstones": 1
+      },
+      "coverage": {
+        "start": -4000,
+        "end": 4000,
+        "floor": -4503599627370496,
+        "complete": true
+      }
+    }
+  },
+  {
+    "step": "count tier",
+    "request": {
+      "start": -4000,
+      "end": 4000,
+      "step": 4000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "count",
+      "source": {
+        "rollup": "minute"
+      }
+    },
+    "response": {
+      "name": "hour-count",
+      "query": {
+        "start": -4000,
+        "end": 4000,
+        "matchers": null,
+        "limit": 0,
+        "step": 4000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "count"
+      },
+      "source_sequence": 5,
+      "result": {
+        "sequence": 8,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -4000,
+            "end": 0,
+            "value": 2,
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 3,
+            "count": 3,
+            "reduction": {
+              "count": 3,
+              "sum": 21,
+              "min": 6,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 2,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 1,
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 6,
+          "tombstones": 1
+        },
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      },
+      "derived_from": "minute",
+      "source_rollup": {
+        "name": "minute",
+        "step": 1000,
+        "origin": 0,
+        "source_sequence": 5,
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      }
+    }
+  },
+  {
+    "step": "sum tier",
+    "request": {
+      "start": -4000,
+      "end": 4000,
+      "step": 4000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "sum",
+      "source": {
+        "rollup": "minute"
+      }
+    },
+    "response": {
+      "name": "hour-sum",
+      "query": {
+        "start": -4000,
+        "end": 4000,
+        "matchers": null,
+        "limit": 0,
+        "step": 4000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "sum"
+      },
+      "source_sequence": 5,
+      "result": {
+        "sequence": 9,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -4000,
+            "end": 0,
+            "value": 13,
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 21,
+            "count": 3,
+            "reduction": {
+              "count": 3,
+              "sum": 21,
+              "min": 6,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 2,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 0.5,
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 6,
+          "tombstones": 1
+        },
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      },
+      "derived_from": "minute",
+      "source_rollup": {
+        "name": "minute",
+        "step": 1000,
+        "origin": 0,
+        "source_sequence": 5,
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      }
+    }
+  },
+  {
+    "step": "min tier",
+    "request": {
+      "start": -4000,
+      "end": 4000,
+      "step": 4000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "min",
+      "source": {
+        "rollup": "minute"
+      }
+    },
+    "response": {
+      "name": "hour-min",
+      "query": {
+        "start": -4000,
+        "end": 4000,
+        "matchers": null,
+        "limit": 0,
+        "step": 4000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "min"
+      },
+      "source_sequence": 5,
+      "result": {
+        "sequence": 10,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -4000,
+            "end": 0,
+            "value": 3,
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 6,
+            "count": 3,
+            "reduction": {
+              "count": 3,
+              "sum": 21,
+              "min": 6,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 2,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 0.5,
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 6,
+          "tombstones": 1
+        },
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      },
+      "derived_from": "minute",
+      "source_rollup": {
+        "name": "minute",
+        "step": 1000,
+        "origin": 0,
+        "source_sequence": 5,
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      }
+    }
+  },
+  {
+    "step": "max tier",
+    "request": {
+      "start": -4000,
+      "end": 4000,
+      "step": 4000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "max",
+      "source": {
+        "rollup": "minute"
+      }
+    },
+    "response": {
+      "name": "hour-max",
+      "query": {
+        "start": -4000,
+        "end": 4000,
+        "matchers": null,
+        "limit": 0,
+        "step": 4000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "max"
+      },
+      "source_sequence": 5,
+      "result": {
+        "sequence": 11,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -4000,
+            "end": 0,
+            "value": 10,
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 8,
+            "count": 3,
+            "reduction": {
+              "count": 3,
+              "sum": 21,
+              "min": 6,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 2,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 0.5,
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 6,
+          "tombstones": 1
+        },
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      },
+      "derived_from": "minute",
+      "source_rollup": {
+        "name": "minute",
+        "step": 1000,
+        "origin": 0,
+        "source_sequence": 5,
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      }
+    }
+  },
+  {
+    "step": "misaligned tier",
+    "request": {
+      "start": -4000,
+      "end": 4000,
+      "step": 2500,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg",
+      "source": {
+        "rollup": "minute"
+      }
+    },
+    "response": {
+      "code": "invalid",
+      "detail": "target step must be a multiple of the source step and share its origin"
+    }
+  },
+  {
+    "step": "rollup inventory",
+    "request": null,
+    "response": [
+      {
+        "name": "minute",
+        "step": 1000,
+        "function": "avg",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 4,
+        "stale": false,
+        "source_stale": false,
+        "read_rule": "exact",
+        "exact_cells": 4,
+        "partial_cells": 0,
+        "expired_cells": 0,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "pulse",
+        "step": 1000,
+        "function": "avg",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "coverage": {
+          "start": -5000,
+          "end": 10000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 4,
+        "stale": false,
+        "source_stale": false,
+        "read_rule": "exact",
+        "exact_cells": 4,
+        "partial_cells": 0,
+        "expired_cells": 0,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour",
+        "step": 4000,
+        "function": "avg",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": false,
+        "source_stale": false,
+        "read_rule": "derived_exact",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 0,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour-count",
+        "step": 4000,
+        "function": "count",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": false,
+        "source_stale": false,
+        "read_rule": "derived_exact",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 0,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour-max",
+        "step": 4000,
+        "function": "max",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": false,
+        "source_stale": false,
+        "read_rule": "derived_exact",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 0,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour-min",
+        "step": 4000,
+        "function": "min",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": false,
+        "source_stale": false,
+        "read_rule": "derived_exact",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 0,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour-sum",
+        "step": 4000,
+        "function": "sum",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": false,
+        "source_stale": false,
+        "read_rule": "derived_exact",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 0,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      }
+    ]
   },
   {
     "step": "new correction",
@@ -902,7 +2362,7 @@
       ]
     },
     "response": {
-      "sequence": 7,
+      "sequence": 13,
       "accepted": 1,
       "new_series": 0,
       "watermark": 1500
@@ -936,7 +2396,24 @@
             "start": -2000,
             "end": -1000,
             "value": 6.5,
-            "count": 2
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           },
           {
             "labels": {
@@ -945,7 +2422,24 @@
             "start": 0,
             "end": 1000,
             "value": 7.5,
-            "count": 2
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 15,
+              "min": 7,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           },
           {
             "labels": {
@@ -954,7 +2448,24 @@
             "start": 1000,
             "end": 2000,
             "value": 6,
-            "count": 1
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 6,
+              "min": 6,
+              "max": 6
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           },
           {
             "labels": {
@@ -963,7 +2474,24 @@
             "start": 0,
             "end": 1000,
             "value": 0.5,
-            "count": 1
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 1,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
           }
         ],
         "stats": {
@@ -973,9 +2501,165 @@
           "decoded": 10,
           "visible": 6,
           "tombstones": 1
+        },
+        "coverage": {
+          "start": -5000,
+          "end": 10000,
+          "floor": -4503599627370496,
+          "complete": true
         }
       },
-      "stale": true
+      "stale": true,
+      "source_stale": false,
+      "read_rule": "stale",
+      "derivable": [
+        "count",
+        "sum",
+        "avg",
+        "min",
+        "max"
+      ]
+    }
+  },
+  {
+    "step": "stale derived tier",
+    "request": null,
+    "response": {
+      "name": "hour",
+      "query": {
+        "start": -4000,
+        "end": 4000,
+        "matchers": null,
+        "limit": 0,
+        "step": 4000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 5,
+      "result": {
+        "sequence": 7,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -4000,
+            "end": 0,
+            "value": 6.5,
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 7,
+            "count": 3,
+            "reduction": {
+              "count": 3,
+              "sum": 21,
+              "min": 6,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 2,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 0.5,
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": false,
+              "exact": true,
+              "recomputable": true,
+              "rule": "exact"
+            }
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 6,
+          "tombstones": 1
+        },
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      },
+      "derived_from": "minute",
+      "source_rollup": {
+        "name": "minute",
+        "step": 1000,
+        "origin": 0,
+        "source_sequence": 5,
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      },
+      "stale": true,
+      "source_stale": false,
+      "read_rule": "derived_stale",
+      "source_read_rule": "stale",
+      "derivable": [
+        "count",
+        "sum",
+        "avg",
+        "min",
+        "max"
+      ]
     }
   },
   {
@@ -985,7 +2669,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 7,
+      "sequence": 13,
       "floor": -4503599627370496,
       "series": [
         {
@@ -1023,7 +2707,7 @@
             {
               "time": 500,
               "value": 9,
-              "sequence": 7
+              "sequence": 13
             },
             {
               "time": 1500,
@@ -1070,7 +2754,7 @@
     "step": "compact",
     "request": {},
     "response": {
-      "sequence": 8,
+      "sequence": 14,
       "blocks": 3,
       "points": 6,
       "floor": -4503599627370496
@@ -1083,7 +2767,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 8,
+      "sequence": 14,
       "floor": -4503599627370496,
       "series": [
         {
@@ -1121,7 +2805,7 @@
             {
               "time": 500,
               "value": 9,
-              "sequence": 7
+              "sequence": 13
             },
             {
               "time": 1500,
@@ -1171,7 +2855,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 8,
+      "sequence": 14,
       "floor": -4503599627370496,
       "candidates": [
         {
@@ -1210,7 +2894,7 @@
       ],
       "blocks": [
         {
-          "id": "00000000000000000008-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "id": "00000000000000000014-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
           "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
           "start": 500,
           "end": 501,
@@ -1220,17 +2904,17 @@
           "format": 1
         },
         {
-          "id": "00000000000000000008-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "id": "00000000000000000014-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
           "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
+          "bytes": 139,
+          "checksum": "c5dc39b5212afe90ff14663dcdc5303d8aab6fc925d873743ed134ed44e27f26",
           "format": 1
         },
         {
-          "id": "00000000000000000008-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "id": "00000000000000000014-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
           "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
           "start": -1500,
           "end": 501,
@@ -1251,7 +2935,7 @@
       "now": 11000
     },
     "response": {
-      "sequence": 9,
+      "sequence": 15,
       "blocks": 1,
       "points": 1,
       "floor": 1000
@@ -1279,6 +2963,365 @@
     }
   },
   {
+    "step": "expired tier",
+    "request": null,
+    "response": {
+      "name": "hour",
+      "query": {
+        "start": -4000,
+        "end": 4000,
+        "matchers": null,
+        "limit": 0,
+        "step": 4000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 5,
+      "result": {
+        "sequence": 7,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -4000,
+            "end": 0,
+            "value": 6.5,
+            "count": 2,
+            "reduction": {
+              "count": 2,
+              "sum": 13,
+              "min": 3,
+              "max": 10
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": true,
+              "exact": true,
+              "recomputable": false,
+              "rule": "source_expired"
+            }
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 7,
+            "count": 3,
+            "reduction": {
+              "count": 3,
+              "sum": 21,
+              "min": 6,
+              "max": 8
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 2,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": true,
+              "exact": true,
+              "recomputable": false,
+              "rule": "source_expired"
+            }
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 4000,
+            "value": 0.5,
+            "count": 1,
+            "reduction": {
+              "count": 1,
+              "sum": 0.5,
+              "min": 0.5,
+              "max": 0.5
+            },
+            "coverage": {
+              "expected_parts": 4,
+              "present_parts": 1,
+              "complete": true,
+              "partial_start": false,
+              "partial_end": false,
+              "source_expired": true,
+              "exact": true,
+              "recomputable": false,
+              "rule": "source_expired"
+            }
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 6,
+          "tombstones": 1
+        },
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      },
+      "derived_from": "minute",
+      "source_rollup": {
+        "name": "minute",
+        "step": 1000,
+        "origin": 0,
+        "source_sequence": 5,
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        }
+      },
+      "stale": true,
+      "source_stale": false,
+      "read_rule": "derived_source_expired",
+      "source_read_rule": "stale",
+      "derivable": [
+        "count",
+        "sum",
+        "avg",
+        "min",
+        "max"
+      ],
+      "suggestion": {
+        "step": 4000,
+        "reason": "raw source behind this tier has been purged by retention; rebuild it from a coarser tier that still covers the interval"
+      }
+    }
+  },
+  {
+    "step": "expired inventory",
+    "request": null,
+    "response": [
+      {
+        "name": "minute",
+        "step": 1000,
+        "function": "avg",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 4,
+        "stale": true,
+        "source_stale": false,
+        "read_rule": "stale",
+        "exact_cells": 4,
+        "partial_cells": 0,
+        "expired_cells": 3,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "pulse",
+        "step": 1000,
+        "function": "avg",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "coverage": {
+          "start": -5000,
+          "end": 10000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 4,
+        "stale": true,
+        "source_stale": false,
+        "read_rule": "stale",
+        "exact_cells": 4,
+        "partial_cells": 0,
+        "expired_cells": 3,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour",
+        "step": 4000,
+        "function": "avg",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": true,
+        "source_stale": false,
+        "read_rule": "derived_source_expired",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 3,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour-count",
+        "step": 4000,
+        "function": "count",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": true,
+        "source_stale": false,
+        "read_rule": "derived_source_expired",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 3,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour-max",
+        "step": 4000,
+        "function": "max",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": true,
+        "source_stale": false,
+        "read_rule": "derived_source_expired",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 3,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour-min",
+        "step": 4000,
+        "function": "min",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": true,
+        "source_stale": false,
+        "read_rule": "derived_source_expired",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 3,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      },
+      {
+        "name": "hour-sum",
+        "step": 4000,
+        "function": "sum",
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "derived_from": "minute",
+        "coverage": {
+          "start": -4000,
+          "end": 4000,
+          "floor": -4503599627370496,
+          "complete": true
+        },
+        "cells": 3,
+        "stale": true,
+        "source_stale": false,
+        "read_rule": "derived_source_expired",
+        "exact_cells": 3,
+        "partial_cells": 0,
+        "expired_cells": 3,
+        "derivable": [
+          "count",
+          "sum",
+          "avg",
+          "min",
+          "max"
+        ]
+      }
+    ]
+  },
+  {
     "step": "read-only",
     "request": {
       "read_only": true
@@ -1295,7 +3338,7 @@
       "floor": 1000,
       "watermark": 1500,
       "has_watermark": true,
-      "last_sequence": 10
+      "last_sequence": 16
     }
   },
   {
@@ -1336,7 +3379,7 @@
       "floor": 1000,
       "watermark": 1500,
       "has_watermark": true,
-      "last_sequence": 11
+      "last_sequence": 17
     }
   },
   {
@@ -1346,7 +3389,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 11,
+      "sequence": 17,
       "floor": 1000,
       "series": [
         {
@@ -1380,14 +3423,14 @@
   },
   {
     "step": "backup",
-    "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sequence": "17",
+    "sha256": "b834dc462df44ebf0d4a5b6b851308d22cda6420833dde2d010c6237bf4e8836",
+    "bytes": 86016
   },
   {
     "step": "restored",
     "response": {
-      "sequence": 11,
+      "sequence": 17,
       "floor": 1000,
       "series": [
         {

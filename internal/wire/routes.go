@@ -83,12 +83,16 @@ func Handler(e *engine.Engine) http.Handler {
 		respond(w, out, err)
 	})
 	mux.HandleFunc("PUT "+base+"/rollups/{rollup}", func(w http.ResponseWriter, r *http.Request) {
-		handleBody(w, r, func(q model.Query) (any, error) {
-			return e.Materialize(r.PathValue("space"), r.PathValue("rollup"), q)
+		handleBody(w, r, func(def model.RollupDefinition) (any, error) {
+			return e.Materialize(r.PathValue("space"), r.PathValue("rollup"), def)
 		})
 	})
 	mux.HandleFunc("GET "+base+"/rollups/{rollup}", func(w http.ResponseWriter, r *http.Request) {
 		out, err := e.Rollup(r.PathValue("space"), r.PathValue("rollup"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("GET "+base+"/rollups", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.Rollups(r.PathValue("space"))
 		respond(w, out, err)
 	})
 	mux.HandleFunc("GET /ridge/v1/image", func(w http.ResponseWriter, r *http.Request) {
