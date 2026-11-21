@@ -63,6 +63,61 @@ type Query struct {
 	Function string    `json:"function"`
 }
 
+// As-of join directions. Backward only selects neighbor points at or before
+// the left observation, forward only at or after it, and nearest considers
+// both sides.
+const (
+	AsOfBackward = "backward"
+	AsOfForward  = "forward"
+	AsOfNearest  = "nearest"
+)
+
+type AsOfQuery struct {
+	Start         int64     `json:"start"`
+	End           int64     `json:"end"`
+	LeftMatchers  []Matcher `json:"left_matchers"`
+	RightMatchers []Matcher `json:"right_matchers"`
+	PairLabel     string    `json:"pair_label"`
+	Direction     string    `json:"direction"`
+	// MaxDistanceMS zero means no distance bound; a positive value rejects
+	// neighbors farther than the bound, the boundary itself being accepted.
+	MaxDistanceMS int64 `json:"max_distance_ms"`
+	Limit         int   `json:"limit"`
+}
+
+// AsOfPoint preserves the identity of the original sample that was selected.
+type AsOfPoint struct {
+	Time     int64   `json:"time"`
+	Value    float64 `json:"value"`
+	SeriesID string  `json:"series_id"`
+	Sequence uint64  `json:"sequence"`
+}
+
+type AsOfPair struct {
+	PairKey     string     `json:"pair_key"`
+	LeftSeries  Series     `json:"left_series"`
+	RightSeries *Series    `json:"right_series"`
+	Left        AsOfPoint  `json:"left"`
+	Right       *AsOfPoint `json:"right"`
+	DistanceMS  int64      `json:"distance_ms"`
+	Matched     bool       `json:"matched"`
+}
+
+type AsOfStats struct {
+	Left  ScanStats `json:"left"`
+	Right ScanStats `json:"right"`
+}
+
+type AsOfResult struct {
+	Sequence  uint64     `json:"sequence"`
+	Floor     int64      `json:"floor"`
+	PairLabel string     `json:"pair_label"`
+	Direction string     `json:"direction"`
+	Pairs     []AsOfPair `json:"pairs"`
+	Stats     AsOfStats  `json:"stats"`
+	Truncated bool       `json:"truncated"`
+}
+
 type SeriesPoints struct {
 	Series Series   `json:"series"`
 	Points []Sample `json:"points"`

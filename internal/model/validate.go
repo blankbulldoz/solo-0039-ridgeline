@@ -81,3 +81,27 @@ func ValidateQuery(q Query) error {
 	}
 	return nil
 }
+
+func ValidateAsOf(q AsOfQuery) error {
+	if !ValidTime(q.Start) || q.End < MinTime || q.End > MaxTime+1 || q.Start >= q.End {
+		return Bad("as-of query requires a supported nonempty half-open interval")
+	}
+	if q.Limit < 0 || q.Limit > 100000 {
+		return Bad("invalid as-of result limit")
+	}
+	if len(q.LeftMatchers) > 32 || len(q.RightMatchers) > 32 {
+		return Bad("as-of matcher count exceeds limit")
+	}
+	if !ValidName(q.PairLabel) {
+		return Bad("as-of pair label must be a valid label name")
+	}
+	switch q.Direction {
+	case AsOfBackward, AsOfForward, AsOfNearest:
+	default:
+		return Bad("as-of direction must be backward, forward or nearest")
+	}
+	if q.MaxDistanceMS < 0 || q.MaxDistanceMS > MaxTime {
+		return Bad("as-of max distance outside supported range")
+	}
+	return nil
+}

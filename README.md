@@ -48,6 +48,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/asof` | paired matchers, pair label, direction and max distance |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -72,6 +73,31 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+### As-of joins
+
+`/asof` pairs a left (dense) side with a right (sparse) side. Each left
+observation is matched against the closest right point whose series carries
+the same value of `pair_label`, for example correlating every power reading
+with the nearest temperature probe of the same node:
+
+```json
+{"start":0,"end":5000,"pair_label":"node","direction":"nearest",
+ "max_distance_ms":5000,
+ "left_matchers":[{"label":"__name__","op":"=","value":"power"}],
+ "right_matchers":[{"label":"__name__","op":"=","value":"temperature"}]}
+```
+
+`direction` is `backward` (at or before the left point), `forward` (at or
+after it) or `nearest` (both sides). `max_distance_ms` is an inclusive bound;
+`0` disables it. When several right points are equally close, the result is
+deterministic: series ID first, then the earlier timestamp. A left point with
+no acceptable neighbor is still emitted with `matched:false` and null right
+fields. Selected points retain their original timestamp, value, series
+identity and commit sequence, so corrections and late reports stay visible.
+Both sides read the same snapshot and merge head points with sealed blocks;
+the neighbor scan is widened by the distance bound while the output limit
+applies to emitted pairs, never to the source scans.
 
 ## Storage And Recovery
 

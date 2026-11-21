@@ -32,6 +32,10 @@
       "command": "python3 examples/walkthrough.py --workflow counters"
     },
     {
+      "workflow_id": "asof",
+      "command": "python3 examples/walkthrough.py --workflow asof"
+    },
+    {
       "workflow_id": "seal",
       "command": "python3 examples/walkthrough.py --workflow seal"
     },

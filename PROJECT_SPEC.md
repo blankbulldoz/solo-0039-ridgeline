@@ -40,6 +40,17 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+As-of joins pair two matcher-selected groups of series on a shared label
+value. Every left observation selects at most one right neighbor: backward
+chooses at or before its time, forward at or after it, nearest considers both
+sides, and an optional inclusive maximum distance rejects farther points.
+Equal-distance neighbors resolve by series identity and then earlier
+timestamp; a left observation with no acceptable neighbor stays in the output
+as an explicitly unmatched pair. The selected sample retains its original
+timestamp, value, series identity and commit sequence. Both sides resolve
+head and block visibility in one snapshot, so late reports and corrections
+participate exactly as raw queries do.
+
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
 deletions into one block per selected series; empty series retain their identity.
@@ -62,14 +73,15 @@ the server with that image as RIDGE_DB restores that database directly.
 4. Read corrected points across head and sealed blocks.
 5. Aggregate groups into signed, origin-aligned time windows.
 6. Calculate rates across counter resets.
-7. Seal mutable measurements into verified compressed blocks.
-8. Delete a range without hiding later corrections.
-9. Advance retention and reject resurrection.
-10. Materialize a rollup with source-sequence provenance.
-11. Inspect materialization freshness after later writes.
-12. Compact physical blocks while preserving query results.
-13. Export a consistent image and restart from it.
-14. Explain candidate series, physical blocks and query budgets.
+7. Join dense and sparse series through bounded as-of neighbors.
+8. Seal mutable measurements into verified compressed blocks.
+9. Delete a range without hiding later corrections.
+10. Advance retention and reject resurrection.
+11. Materialize a rollup with source-sequence provenance.
+12. Inspect materialization freshness after later writes.
+13. Compact physical blocks while preserving query results.
+14. Export a consistent image and restart from it.
+15. Explain candidate series, physical blocks and query budgets.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
