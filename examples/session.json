@@ -320,6 +320,7 @@
           ]
         }
       ],
+      "annotations": [],
       "stats": {
         "series": 4,
         "blocks": 0,
@@ -378,6 +379,7 @@
           ]
         }
       ],
+      "annotations": [],
       "stats": {
         "series": 4,
         "blocks": 0,
@@ -450,6 +452,7 @@
           "count": 1
         }
       ],
+      "annotations": [],
       "stats": {
         "series": 4,
         "blocks": 0,
@@ -492,6 +495,7 @@
           "count": 6
         }
       ],
+      "annotations": [],
       "stats": {
         "series": 2,
         "blocks": 0,
@@ -503,23 +507,86 @@
     }
   },
   {
-    "step": "seal",
-    "request": {},
+    "step": "annotate calibration",
+    "request": {
+      "start": -1000,
+      "end": 2500,
+      "kind": "calibration",
+      "note": "east analyzer recalibrated; expect offset drift",
+      "matchers": [
+        {
+          "label": "zone",
+          "op": "=",
+          "value": "east"
+        }
+      ]
+    },
     "response": {
+      "id": "00000000000000000003",
+      "matchers": [
+        {
+          "label": "zone",
+          "op": "=",
+          "value": "east"
+        }
+      ],
+      "series": [
+        "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+      ],
+      "start": -1000,
+      "end": 2500,
+      "kind": "calibration",
+      "note": "east analyzer recalibrated; expect offset drift",
       "sequence": 3,
-      "blocks": 4,
-      "points": 9,
-      "floor": -4503599627370496
+      "revisions": 0
     }
   },
   {
-    "step": "sealed range",
+    "step": "annotate maintenance",
+    "request": {
+      "start": 400,
+      "end": 1600,
+      "kind": "maintenance",
+      "note": "link maintenance on ridge-a",
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-a"
+        }
+      ]
+    },
+    "response": {
+      "id": "00000000000000000004",
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-a"
+        }
+      ],
+      "series": [
+        "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+      ],
+      "start": 400,
+      "end": 1600,
+      "kind": "maintenance",
+      "note": "link maintenance on ridge-a",
+      "sequence": 4,
+      "revisions": 0
+    }
+  },
+  {
+    "step": "annotated range",
     "request": {
       "start": -5000,
       "end": 10000
     },
     "response": {
-      "sequence": 3,
+      "sequence": 4,
       "floor": -4503599627370496,
       "series": [
         {
@@ -617,6 +684,361 @@
           ]
         }
       ],
+      "annotations": [
+        {
+          "id": "00000000000000000003",
+          "matchers": [
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "start": -1000,
+          "end": 2500,
+          "kind": "calibration",
+          "note": "east analyzer recalibrated; expect offset drift",
+          "sequence": 3,
+          "revisions": 0
+        },
+        {
+          "id": "00000000000000000004",
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "start": 400,
+          "end": 1600,
+          "kind": "maintenance",
+          "note": "link maintenance on ridge-a",
+          "sequence": 4,
+          "revisions": 0
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 0,
+        "head": 9,
+        "decoded": 9,
+        "visible": 9,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "correct annotation",
+    "request": {
+      "start": 400,
+      "end": 2000,
+      "kind": "maintenance",
+      "note": "link maintenance on ridge-a extended after carrier delay"
+    },
+    "response": {
+      "id": "00000000000000000004",
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-a"
+        }
+      ],
+      "series": [
+        "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+      ],
+      "start": 400,
+      "end": 2000,
+      "kind": "maintenance",
+      "note": "link maintenance on ridge-a extended after carrier delay",
+      "sequence": 5,
+      "revisions": 1
+    }
+  },
+  {
+    "step": "annotated windows",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "sequence": 5,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -2000,
+          "end": -1000,
+          "value": 6.5,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -1000,
+          "end": 0,
+          "value": 7.125,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 3.25,
+          "count": 3
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 6,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 0.5,
+          "count": 1
+        }
+      ],
+      "annotations": [
+        {
+          "id": "00000000000000000003",
+          "matchers": [
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "start": -1000,
+          "end": 2500,
+          "kind": "calibration",
+          "note": "east analyzer recalibrated; expect offset drift",
+          "sequence": 3,
+          "revisions": 0
+        },
+        {
+          "id": "00000000000000000004",
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "start": 400,
+          "end": 2000,
+          "kind": "maintenance",
+          "note": "link maintenance on ridge-a extended after carrier delay",
+          "sequence": 5,
+          "revisions": 1
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 0,
+        "head": 9,
+        "decoded": 9,
+        "visible": 9,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "seal",
+    "request": {},
+    "response": {
+      "sequence": 6,
+      "blocks": 4,
+      "points": 9,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "sealed range",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 6,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 0.25,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 0.75,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": -500,
+              "value": 14,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 2,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "00000000000000000003",
+          "matchers": [
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "start": -1000,
+          "end": 2500,
+          "kind": "calibration",
+          "note": "east analyzer recalibrated; expect offset drift",
+          "sequence": 3,
+          "revisions": 0
+        },
+        {
+          "id": "00000000000000000004",
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "start": 400,
+          "end": 2000,
+          "kind": "maintenance",
+          "note": "link maintenance on ridge-a extended after carrier delay",
+          "sequence": 5,
+          "revisions": 1
+        }
+      ],
       "stats": {
         "series": 4,
         "blocks": 4,
@@ -633,43 +1055,43 @@
     "request": null,
     "response": [
       {
-        "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "id": "00000000000000000006-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
         "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
         "start": 500,
         "end": 501,
         "count": 1,
-        "bytes": 64,
-        "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+        "bytes": 63,
+        "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
         "format": 1
       },
       {
-        "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "id": "00000000000000000006-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
         "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
         "start": -500,
         "end": 501,
         "count": 2,
-        "bytes": 105,
-        "checksum": "4c2f12747df3833972d963a29b9b86b6225d2de929c6252543feb51e3c6ceb20",
+        "bytes": 73,
+        "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
         "format": 1
       },
       {
-        "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "id": "00000000000000000006-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
         "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
         "start": -1500,
         "end": 1501,
         "count": 4,
-        "bytes": 80,
-        "checksum": "f62effbef22081bacda4663b08c17e44f621f0135a4c07c22feb6b601c4c1d4a",
+        "bytes": 83,
+        "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
         "format": 1
       },
       {
-        "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "id": "00000000000000000006-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
         "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
         "start": -1500,
         "end": 501,
         "count": 2,
-        "bytes": 100,
-        "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+        "bytes": 71,
+        "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
         "format": 1
       }
     ]
@@ -688,14 +1110,14 @@
       ]
     },
     "response": {
-      "id": "00000000000000000004",
+      "id": "00000000000000000007",
       "series": [
         "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
         "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
       ],
       "start": -600,
       "end": 600,
-      "sequence": 4
+      "sequence": 7
     }
   },
   {
@@ -703,14 +1125,14 @@
     "request": null,
     "response": [
       {
-        "id": "00000000000000000004",
+        "id": "00000000000000000007",
         "series": [
           "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
           "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
         ],
         "start": -600,
         "end": 600,
-        "sequence": 4
+        "sequence": 7
       }
     ]
   },
@@ -731,10 +1153,218 @@
       ]
     },
     "response": {
-      "sequence": 5,
+      "sequence": 8,
       "accepted": 1,
       "new_series": 0,
       "watermark": 1500
+    }
+  },
+  {
+    "step": "late series",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 5
+        }
+      ]
+    },
+    "response": {
+      "sequence": 9,
+      "accepted": 1,
+      "new_series": 1,
+      "watermark": 1500
+    }
+  },
+  {
+    "step": "annotation non-inheritance",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-c"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 9,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "244906c32c40567a336e8df9d6c73ddd0f87f480c8ea292aed705e27c7175532",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-c",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 5,
+              "sequence": 9
+            }
+          ]
+        }
+      ],
+      "annotations": [],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 1,
+        "decoded": 1,
+        "visible": 1,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "annotation source series",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "matchers": [
+        {
+          "label": "zone",
+          "op": "=",
+          "value": "east"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 9,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "244906c32c40567a336e8df9d6c73ddd0f87f480c8ea292aed705e27c7175532",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-c",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 5,
+              "sequence": 9
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 8,
+              "sequence": 8
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "00000000000000000003",
+          "matchers": [
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "start": -1000,
+          "end": 2500,
+          "kind": "calibration",
+          "note": "east analyzer recalibrated; expect offset drift",
+          "sequence": 3,
+          "revisions": 0
+        },
+        {
+          "id": "00000000000000000004",
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "start": 400,
+          "end": 2000,
+          "kind": "maintenance",
+          "note": "link maintenance on ridge-a extended after carrier delay",
+          "sequence": 5,
+          "revisions": 1
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 3,
+        "head": 2,
+        "decoded": 10,
+        "visible": 6,
+        "tombstones": 1
+      },
+      "truncated": false
     }
   },
   {
@@ -763,9 +1393,9 @@
         ],
         "function": "avg"
       },
-      "source_sequence": 5,
+      "source_sequence": 9,
       "result": {
-        "sequence": 5,
+        "sequence": 9,
         "cells": [
           {
             "labels": {
@@ -782,8 +1412,8 @@
             },
             "start": 0,
             "end": 1000,
-            "value": 7.5,
-            "count": 2
+            "value": 6.666666666666667,
+            "count": 3
           },
           {
             "labels": {
@@ -804,12 +1434,55 @@
             "count": 1
           }
         ],
+        "annotations": [
+          {
+            "id": "00000000000000000003",
+            "matchers": [
+              {
+                "label": "zone",
+                "op": "=",
+                "value": "east"
+              }
+            ],
+            "series": [
+              "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+            ],
+            "start": -1000,
+            "end": 2500,
+            "kind": "calibration",
+            "note": "east analyzer recalibrated; expect offset drift",
+            "sequence": 3,
+            "revisions": 0
+          },
+          {
+            "id": "00000000000000000004",
+            "matchers": [
+              {
+                "label": "node",
+                "op": "=",
+                "value": "ridge-a"
+              }
+            ],
+            "series": [
+              "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+            ],
+            "start": 400,
+            "end": 2000,
+            "kind": "maintenance",
+            "note": "link maintenance on ridge-a extended after carrier delay",
+            "sequence": 5,
+            "revisions": 1
+          }
+        ],
         "stats": {
-          "series": 4,
+          "series": 5,
           "blocks": 4,
-          "head": 1,
-          "decoded": 10,
-          "visible": 6,
+          "head": 2,
+          "decoded": 11,
+          "visible": 7,
           "tombstones": 1
         }
       }
@@ -832,9 +1505,9 @@
         ],
         "function": "avg"
       },
-      "source_sequence": 5,
+      "source_sequence": 9,
       "result": {
-        "sequence": 5,
+        "sequence": 9,
         "cells": [
           {
             "labels": {
@@ -851,8 +1524,8 @@
             },
             "start": 0,
             "end": 1000,
-            "value": 7.5,
-            "count": 2
+            "value": 6.666666666666667,
+            "count": 3
           },
           {
             "labels": {
@@ -873,12 +1546,55 @@
             "count": 1
           }
         ],
+        "annotations": [
+          {
+            "id": "00000000000000000003",
+            "matchers": [
+              {
+                "label": "zone",
+                "op": "=",
+                "value": "east"
+              }
+            ],
+            "series": [
+              "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+            ],
+            "start": -1000,
+            "end": 2500,
+            "kind": "calibration",
+            "note": "east analyzer recalibrated; expect offset drift",
+            "sequence": 3,
+            "revisions": 0
+          },
+          {
+            "id": "00000000000000000004",
+            "matchers": [
+              {
+                "label": "node",
+                "op": "=",
+                "value": "ridge-a"
+              }
+            ],
+            "series": [
+              "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+            ],
+            "start": 400,
+            "end": 2000,
+            "kind": "maintenance",
+            "note": "link maintenance on ridge-a extended after carrier delay",
+            "sequence": 5,
+            "revisions": 1
+          }
+        ],
         "stats": {
-          "series": 4,
+          "series": 5,
           "blocks": 4,
-          "head": 1,
-          "decoded": 10,
-          "visible": 6,
+          "head": 2,
+          "decoded": 11,
+          "visible": 7,
           "tombstones": 1
         }
       },
@@ -902,7 +1618,7 @@
       ]
     },
     "response": {
-      "sequence": 7,
+      "sequence": 11,
       "accepted": 1,
       "new_series": 0,
       "watermark": 1500
@@ -925,9 +1641,9 @@
         ],
         "function": "avg"
       },
-      "source_sequence": 5,
+      "source_sequence": 9,
       "result": {
-        "sequence": 5,
+        "sequence": 9,
         "cells": [
           {
             "labels": {
@@ -944,8 +1660,8 @@
             },
             "start": 0,
             "end": 1000,
-            "value": 7.5,
-            "count": 2
+            "value": 6.666666666666667,
+            "count": 3
           },
           {
             "labels": {
@@ -966,12 +1682,55 @@
             "count": 1
           }
         ],
+        "annotations": [
+          {
+            "id": "00000000000000000003",
+            "matchers": [
+              {
+                "label": "zone",
+                "op": "=",
+                "value": "east"
+              }
+            ],
+            "series": [
+              "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+            ],
+            "start": -1000,
+            "end": 2500,
+            "kind": "calibration",
+            "note": "east analyzer recalibrated; expect offset drift",
+            "sequence": 3,
+            "revisions": 0
+          },
+          {
+            "id": "00000000000000000004",
+            "matchers": [
+              {
+                "label": "node",
+                "op": "=",
+                "value": "ridge-a"
+              }
+            ],
+            "series": [
+              "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+            ],
+            "start": 400,
+            "end": 2000,
+            "kind": "maintenance",
+            "note": "link maintenance on ridge-a extended after carrier delay",
+            "sequence": 5,
+            "revisions": 1
+          }
+        ],
         "stats": {
-          "series": 4,
+          "series": 5,
           "blocks": 4,
-          "head": 1,
-          "decoded": 10,
-          "visible": 6,
+          "head": 2,
+          "decoded": 11,
+          "visible": 7,
           "tombstones": 1
         }
       },
@@ -985,7 +1744,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 7,
+      "sequence": 11,
       "floor": -4503599627370496,
       "series": [
         {
@@ -1007,6 +1766,23 @@
         },
         {
           "series": {
+            "id": "244906c32c40567a336e8df9d6c73ddd0f87f480c8ea292aed705e27c7175532",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-c",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 5,
+              "sequence": 9
+            }
+          ]
+        },
+        {
+          "series": {
             "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
             "labels": {
               "__name__": "pulse_total",
@@ -1023,7 +1799,7 @@
             {
               "time": 500,
               "value": 9,
-              "sequence": 7
+              "sequence": 11
             },
             {
               "time": 1500,
@@ -1055,12 +1831,55 @@
           ]
         }
       ],
+      "annotations": [
+        {
+          "id": "00000000000000000003",
+          "matchers": [
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "start": -1000,
+          "end": 2500,
+          "kind": "calibration",
+          "note": "east analyzer recalibrated; expect offset drift",
+          "sequence": 3,
+          "revisions": 0
+        },
+        {
+          "id": "00000000000000000004",
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "start": 400,
+          "end": 2000,
+          "kind": "maintenance",
+          "note": "link maintenance on ridge-a extended after carrier delay",
+          "sequence": 5,
+          "revisions": 1
+        }
+      ],
       "stats": {
-        "series": 4,
+        "series": 5,
         "blocks": 4,
-        "head": 1,
-        "decoded": 10,
-        "visible": 6,
+        "head": 2,
+        "decoded": 11,
+        "visible": 7,
         "tombstones": 1
       },
       "truncated": false
@@ -1070,9 +1889,9 @@
     "step": "compact",
     "request": {},
     "response": {
-      "sequence": 8,
-      "blocks": 3,
-      "points": 6,
+      "sequence": 12,
+      "blocks": 4,
+      "points": 7,
       "floor": -4503599627370496
     }
   },
@@ -1083,7 +1902,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 8,
+      "sequence": 12,
       "floor": -4503599627370496,
       "series": [
         {
@@ -1105,6 +1924,23 @@
         },
         {
           "series": {
+            "id": "244906c32c40567a336e8df9d6c73ddd0f87f480c8ea292aed705e27c7175532",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-c",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 5,
+              "sequence": 9
+            }
+          ]
+        },
+        {
+          "series": {
             "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
             "labels": {
               "__name__": "pulse_total",
@@ -1121,7 +1957,7 @@
             {
               "time": 500,
               "value": 9,
-              "sequence": 7
+              "sequence": 11
             },
             {
               "time": 1500,
@@ -1153,16 +1989,106 @@
           ]
         }
       ],
+      "annotations": [
+        {
+          "id": "00000000000000000003",
+          "matchers": [
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "start": -1000,
+          "end": 2500,
+          "kind": "calibration",
+          "note": "east analyzer recalibrated; expect offset drift",
+          "sequence": 3,
+          "revisions": 0
+        },
+        {
+          "id": "00000000000000000004",
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "start": 400,
+          "end": 2000,
+          "kind": "maintenance",
+          "note": "link maintenance on ridge-a extended after carrier delay",
+          "sequence": 5,
+          "revisions": 1
+        }
+      ],
       "stats": {
-        "series": 4,
-        "blocks": 3,
+        "series": 5,
+        "blocks": 4,
         "head": 0,
-        "decoded": 6,
-        "visible": 6,
+        "decoded": 7,
+        "visible": 7,
         "tombstones": 0
       },
       "truncated": false
     }
+  },
+  {
+    "step": "annotation inventory",
+    "request": null,
+    "response": [
+      {
+        "id": "00000000000000000003",
+        "matchers": [
+          {
+            "label": "zone",
+            "op": "=",
+            "value": "east"
+          }
+        ],
+        "series": [
+          "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+        ],
+        "start": -1000,
+        "end": 2500,
+        "kind": "calibration",
+        "note": "east analyzer recalibrated; expect offset drift",
+        "sequence": 3,
+        "revisions": 0
+      },
+      {
+        "id": "00000000000000000004",
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "ridge-a"
+          }
+        ],
+        "series": [
+          "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+        ],
+        "start": 400,
+        "end": 2000,
+        "kind": "maintenance",
+        "note": "link maintenance on ridge-a extended after carrier delay",
+        "sequence": 5,
+        "revisions": 1
+      }
+    ]
   },
   {
     "step": "explain",
@@ -1171,7 +2097,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 8,
+      "sequence": 12,
       "floor": -4503599627370496,
       "candidates": [
         {
@@ -1180,6 +2106,14 @@
             "__name__": "load_ratio",
             "node": "ridge-b",
             "zone": "west"
+          }
+        },
+        {
+          "id": "244906c32c40567a336e8df9d6c73ddd0f87f480c8ea292aed705e27c7175532",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c",
+            "zone": "east"
           }
         },
         {
@@ -1210,38 +2144,48 @@
       ],
       "blocks": [
         {
-          "id": "00000000000000000008-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "id": "00000000000000000012-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
           "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
           "start": 500,
           "end": 501,
           "count": 1,
-          "bytes": 64,
-          "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
           "format": 1
         },
         {
-          "id": "00000000000000000008-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "id": "00000000000000000012-244906c32c40567a336e8df9d6c73ddd0f87f480c8ea292aed705e27c7175532",
+          "series_id": "244906c32c40567a336e8df9d6c73ddd0f87f480c8ea292aed705e27c7175532",
+          "start": 500,
+          "end": 501,
+          "count": 1,
+          "bytes": 59,
+          "checksum": "83244675cfa447d10ee46be544f7678d25936f58c6a2872921f3ad7f6aa8f594",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000012-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
           "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
+          "bytes": 82,
+          "checksum": "6009a7f90d636cfbe0e2ec193fb74285c154f90961db97ab72ed322d26f9715e",
           "format": 1
         },
         {
-          "id": "00000000000000000008-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "id": "00000000000000000012-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
           "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
           "start": -1500,
           "end": 501,
           "count": 2,
-          "bytes": 100,
-          "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
           "format": 1
         }
       ],
       "max_decoded": 100000,
-      "source_point_hint": 6,
+      "source_point_hint": 7,
       "head_records": 0
     }
   },
@@ -1251,7 +2195,7 @@
       "now": 11000
     },
     "response": {
-      "sequence": 9,
+      "sequence": 13,
       "blocks": 1,
       "points": 1,
       "floor": 1000
@@ -1279,6 +2223,88 @@
     }
   },
   {
+    "step": "post-retention annotations",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 13,
+      "floor": 1000,
+      "series": [
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "00000000000000000003",
+          "matchers": [
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "start": -1000,
+          "end": 2500,
+          "kind": "calibration",
+          "note": "east analyzer recalibrated; expect offset drift",
+          "sequence": 3,
+          "revisions": 0
+        },
+        {
+          "id": "00000000000000000004",
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "start": 400,
+          "end": 2000,
+          "kind": "maintenance",
+          "note": "link maintenance on ridge-a extended after carrier delay",
+          "sequence": 5,
+          "revisions": 1
+        }
+      ],
+      "stats": {
+        "series": 5,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 1,
+        "visible": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
     "step": "read-only",
     "request": {
       "read_only": true
@@ -1295,7 +2321,7 @@
       "floor": 1000,
       "watermark": 1500,
       "has_watermark": true,
-      "last_sequence": 10
+      "last_sequence": 14
     }
   },
   {
@@ -1320,6 +2346,20 @@
     }
   },
   {
+    "step": "read-only annotation rejection",
+    "request": {
+      "start": 0,
+      "end": 10,
+      "kind": "audit",
+      "note": "rejected while read-only",
+      "matchers": []
+    },
+    "response": {
+      "code": "conflict",
+      "detail": "namespace is read-only"
+    }
+  },
+  {
     "step": "resume",
     "request": {
       "read_only": false
@@ -1336,7 +2376,7 @@
       "floor": 1000,
       "watermark": 1500,
       "has_watermark": true,
-      "last_sequence": 11
+      "last_sequence": 15
     }
   },
   {
@@ -1346,7 +2386,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 11,
+      "sequence": 15,
       "floor": 1000,
       "series": [
         {
@@ -1367,8 +2407,51 @@
           ]
         }
       ],
+      "annotations": [
+        {
+          "id": "00000000000000000003",
+          "matchers": [
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "start": -1000,
+          "end": 2500,
+          "kind": "calibration",
+          "note": "east analyzer recalibrated; expect offset drift",
+          "sequence": 3,
+          "revisions": 0
+        },
+        {
+          "id": "00000000000000000004",
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "start": 400,
+          "end": 2000,
+          "kind": "maintenance",
+          "note": "link maintenance on ridge-a extended after carrier delay",
+          "sequence": 5,
+          "revisions": 1
+        }
+      ],
       "stats": {
-        "series": 4,
+        "series": 5,
         "blocks": 1,
         "head": 0,
         "decoded": 1,
@@ -1380,14 +2463,14 @@
   },
   {
     "step": "backup",
-    "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sequence": "15",
+    "sha256": "2f1d8ba0f8aa7695bc683c33d7793960fe598e5ee14ff80e376a9004b8edcd38",
+    "bytes": 65536
   },
   {
     "step": "restored",
     "response": {
-      "sequence": 11,
+      "sequence": 15,
       "floor": 1000,
       "series": [
         {
@@ -1408,8 +2491,51 @@
           ]
         }
       ],
+      "annotations": [
+        {
+          "id": "00000000000000000003",
+          "matchers": [
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "start": -1000,
+          "end": 2500,
+          "kind": "calibration",
+          "note": "east analyzer recalibrated; expect offset drift",
+          "sequence": 3,
+          "revisions": 0
+        },
+        {
+          "id": "00000000000000000004",
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ],
+          "series": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "start": 400,
+          "end": 2000,
+          "kind": "maintenance",
+          "note": "link maintenance on ridge-a extended after carrier delay",
+          "sequence": 5,
+          "revisions": 1
+        }
+      ],
       "stats": {
-        "series": 4,
+        "series": 5,
         "blocks": 1,
         "head": 0,
         "decoded": 1,

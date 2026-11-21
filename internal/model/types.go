@@ -78,11 +78,12 @@ type ScanStats struct {
 }
 
 type RangeResult struct {
-	Sequence  uint64         `json:"sequence"`
-	Floor     int64          `json:"floor"`
-	Series    []SeriesPoints `json:"series"`
-	Stats     ScanStats      `json:"stats"`
-	Truncated bool           `json:"truncated"`
+	Sequence    uint64         `json:"sequence"`
+	Floor       int64          `json:"floor"`
+	Series      []SeriesPoints `json:"series"`
+	Annotations []Annotation   `json:"annotations"`
+	Stats       ScanStats      `json:"stats"`
+	Truncated   bool           `json:"truncated"`
 }
 
 type Cell struct {
@@ -94,9 +95,39 @@ type Cell struct {
 }
 
 type AggregateResult struct {
-	Sequence uint64    `json:"sequence"`
-	Cells    []Cell    `json:"cells"`
-	Stats    ScanStats `json:"stats"`
+	Sequence    uint64       `json:"sequence"`
+	Cells       []Cell       `json:"cells"`
+	Annotations []Annotation `json:"annotations"`
+	Stats       ScanStats    `json:"stats"`
+}
+
+type AnnotationInput struct {
+	Start    int64     `json:"start"`
+	End      int64     `json:"end"`
+	Kind     string    `json:"kind"`
+	Note     string    `json:"note"`
+	Matchers []Matcher `json:"matchers"`
+}
+
+type AnnotationCorrection struct {
+	Start int64  `json:"start"`
+	End   int64  `json:"end"`
+	Kind  string `json:"kind"`
+	Note  string `json:"note"`
+}
+
+// Annotation is a half-open interval note bound at creation to a fixed set
+// of source series. It never alters the measurements it describes.
+type Annotation struct {
+	ID        string    `json:"id"`
+	Matchers  []Matcher `json:"matchers"`
+	Series    []string  `json:"series"`
+	Start     int64     `json:"start"`
+	End       int64     `json:"end"`
+	Kind      string    `json:"kind"`
+	Note      string    `json:"note"`
+	Sequence  uint64    `json:"sequence"`
+	Revisions int       `json:"revisions"`
 }
 
 type Tombstone struct {

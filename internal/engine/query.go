@@ -41,7 +41,10 @@ func aggregate(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64
 		return model.AggregateResult{}, err
 	}
 	cells, err := window.Aggregate(raw.Series, q)
-	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats}, err
+	return model.AggregateResult{
+		Sequence: sequence, Cells: cells,
+		Annotations: raw.Annotations, Stats: raw.Stats,
+	}, err
 }
 
 func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, error) {

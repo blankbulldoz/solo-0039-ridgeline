@@ -81,3 +81,40 @@ func ValidateQuery(q Query) error {
 	}
 	return nil
 }
+
+func validateAnnotationInterval(start, end int64) error {
+	if !ValidTime(start) || end < MinTime || end > MaxTime+1 || start >= end {
+		return Bad("annotation requires a supported nonempty half-open interval")
+	}
+	return nil
+}
+
+func validateAnnotationText(kind, note string) error {
+	if !ValidName(kind) {
+		return Bad("invalid annotation kind")
+	}
+	if len(note) == 0 || len(note) > 1024 {
+		return Bad("annotation note must contain 1..1024 characters")
+	}
+	return nil
+}
+
+func ValidateAnnotationInput(a AnnotationInput) error {
+	if err := validateAnnotationInterval(a.Start, a.End); err != nil {
+		return err
+	}
+	if err := validateAnnotationText(a.Kind, a.Note); err != nil {
+		return err
+	}
+	if len(a.Matchers) > 32 {
+		return Bad("invalid matcher count")
+	}
+	return nil
+}
+
+func ValidateAnnotationCorrection(c AnnotationCorrection) error {
+	if err := validateAnnotationInterval(c.Start, c.End); err != nil {
+		return err
+	}
+	return validateAnnotationText(c.Kind, c.Note)
+}

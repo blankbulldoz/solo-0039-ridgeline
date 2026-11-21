@@ -118,6 +118,13 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 			result.Series = append(result.Series, model.SeriesPoints{Series: s, Points: points})
 		}
 	}
+	annotations, err := readAnnotations(b)
+	if err != nil {
+		return result, err
+	}
+	// Annotations are metadata, not measurements: the retention floor,
+	// deletions and the raw result limit never filter them out.
+	result.Annotations = covering(annotations, selected, q.Start, q.End)
 	return result, nil
 }
 

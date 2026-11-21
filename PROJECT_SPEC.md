@@ -6,7 +6,8 @@ millisecond timestamps and label sets. Query clients read corrected series,
 grouped fixed windows, reset-aware counter rates and materialized rollups.
 
 The database owns namespaces, series identities, samples, compressed blocks,
-deletion intervals, retention floors, rollup definitions and backup images.
+deletion intervals, interval annotations, retention floors, rollup definitions
+and backup images.
 It is a storage and query engine, not a monitoring presentation application.
 
 ## Core Contract
@@ -32,6 +33,20 @@ transaction. Exact label, inequality and regular-expression matchers are
 supported; absent labels behave as the empty string for matcher evaluation.
 Limits reject excessive source work rather than silently dropping points.
 Raw result limits are explicit and include a truncation indicator.
+
+Annotations record half-open interval notes, such as instrument calibration
+or link maintenance, without changing any measurement. Creation resolves the
+label selector once and binds the annotation to that fixed set of source
+series; series admitted later with matching labels are not covered.
+Annotations may overlap arbitrarily and may be corrected in place; a
+correction rewrites interval, kind and note but never the source series
+binding, and prior content is not retained. Range and aggregate reads return
+every annotation whose interval overlaps the query interval and that binds at
+least one selected series, alongside the unmodified measurements. Annotations
+are metadata, not measurements: sealing, compaction, deletions and the
+retention floor never hide or erase them. They remain visible after retention
+ages their samples out; the response floor still marks which measurements
+remain retrievable.
 
 Window aggregation supports count, sum, min, max, average, first and last.
 Buckets align to a caller-supplied origin, including before the Unix epoch.
@@ -70,6 +85,7 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Annotate calibration and maintenance intervals, then read covering notes.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.

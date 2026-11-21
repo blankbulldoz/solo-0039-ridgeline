@@ -71,6 +71,20 @@ func Handler(e *engine.Engine) http.Handler {
 		out, err := e.Deletions(r.PathValue("space"))
 		respond(w, out, err)
 	})
+	mux.HandleFunc("POST "+base+"/annotations", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input model.AnnotationInput) (any, error) {
+			return e.Annotate(r.PathValue("space"), input)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/annotations", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.Annotations(r.PathValue("space"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("PUT "+base+"/annotations/{annotation}", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input model.AnnotationCorrection) (any, error) {
+			return e.Correct(r.PathValue("space"), r.PathValue("annotation"), input)
+		})
+	})
 	mux.HandleFunc("POST "+base+"/retention", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(input struct {
 			Now int64 `json:"now"`

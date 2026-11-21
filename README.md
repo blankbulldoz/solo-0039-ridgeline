@@ -2,8 +2,8 @@
 
 A Go HTTP time-series database for signed millisecond measurements, correction
 merges, fixed windows and counter rates. Data lives in a bbolt database file;
-compressed blocks, deletion intervals and materialized aggregates share the
-same atomic storage boundary.
+compressed blocks, deletion intervals, interval annotations and materialized
+aggregates share the same atomic storage boundary.
 
 ## Run
 
@@ -53,6 +53,9 @@ All methods below return 200 on success.
 | GET | `/spaces/{space}/blocks` | physical block inventory |
 | POST | `/spaces/{space}/deletions` | interval and matchers |
 | GET | `/spaces/{space}/deletions` | deletion sequence inventory |
+| POST | `/spaces/{space}/annotations` | interval, kind, note, matchers |
+| GET | `/spaces/{space}/annotations` | annotation inventory |
+| PUT | `/spaces/{space}/annotations/{id}` | corrected interval, kind, note |
 | POST | `/spaces/{space}/retention` | `{"now":11000}` |
 | POST | `/spaces/{space}/compact` | empty object |
 | PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
@@ -73,12 +76,25 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+Annotations attach half-open interval notes (for example calibration or
+maintenance windows) to series without changing any measurement. The label
+selector resolves once at creation and the stored source series set never
+grows: series admitted later with matching labels are not covered. Annotations
+may overlap each other and may be corrected in place; a correction rewrites
+interval, kind and note but never the source series binding, and prior content
+is not retained. Range and aggregate responses list every annotation whose
+interval overlaps the query interval and that binds at least one selected
+series, next to the unmodified measurements. Annotations are metadata, not
+measurements: sealing, compaction, deletions and the retention floor never
+hide or erase them. They remain visible after retention ages their samples
+out; the response floor still marks which measurements remain retrievable.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
-deletes and rollups buckets. Numeric point keys encode signed time in
-lexicographic order. Blocks use format 1: a gzip stream containing an ordered
-JSON sample array, with SHA-256 over the compressed payload.
+deletes, rollups and annotations buckets. Numeric point keys encode signed
+time in lexicographic order. Blocks use format 1: a gzip stream containing an
+ordered JSON sample array, with SHA-256 over the compressed payload.
 
 Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with
