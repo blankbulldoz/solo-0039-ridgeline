@@ -44,7 +44,7 @@ All methods below return 200 on success.
 | POST | `/spaces` | namespace policy, as in input.json |
 | GET | `/spaces/{space}` | policy, watermark, floor, source sequence |
 | PUT | `/spaces/{space}/mode` | `{"read_only":true}` |
-| POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
+| POST | `/spaces/{space}/points` | `{"now":10000,"mode":"best_effort","points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
@@ -72,6 +72,39 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+## Ingestion Modes And Receipts
+
+Writes default to `atomic` (the `mode` field may be omitted or set to
+`"atomic"`): any point that violates policy rejects the whole request with no
+mutation. Set `"mode":"best_effort"` to admit each point independently. The
+HTTP call still returns 200; every input row is reported in `results` at its
+original zero-based `index` with one of these statuses:
+
+- `accepted` — the row created a new stored point.
+- `overwritten` — the row did not add a point: either a later row in the same
+  request targets the same series and timestamp (the detail names the winning
+  index), or the winning row replaced a previously committed value.
+- `rejected` — policy refused the row; `reason` is one of
+  `invalid_observation`, `before_retention_floor`, `future_skew_exceeded`,
+  `lateness_exceeded` or `series_quota_exceeded`.
+
+Receipt counters partition the input exactly:
+`requested = accepted + overwritten + rejected`. `accepted` counts newly
+stored points only, so request size is never reported as new point count.
+`new_series` counts series identities actually created. The watermark and
+series quota advance solely through stored data: rejected points never consume
+quota, and a best-effort request that stores nothing leaves the database
+sequence untouched. Read-only state, an invalid `now` and an oversize batch
+remain whole-request failures in both modes. Clients organize补发 from the
+receipt by replaying rejected rows whose reason is retriable (for example
+`future_skew_exceeded` once observation time advances); overwritten rows need
+no replay and quota/lateness rejections remain refused until policy changes.
+
+Run `python3 examples/walkthrough.py --workflow best_effort` for a mixed
+batch containing duplicate timestamps, an over-quota new series, a late point
+and a future point, followed by the receipt-driven replay and final range
+observations.
 
 ## Storage And Recovery
 

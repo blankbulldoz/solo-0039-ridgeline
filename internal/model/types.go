@@ -34,16 +34,52 @@ type Observation struct {
 	Value  float64 `json:"value"`
 }
 
+// Write modes. The empty string and WriteAtomic preserve the historical
+// all-or-nothing request semantics; WriteBestEffort admits each point on its
+// own merits and reports every rejected point in the receipt.
+const (
+	WriteAtomic     = "atomic"
+	WriteBestEffort = "best_effort"
+)
+
+// Per-point disposition codes used by best-effort receipts.
+const (
+	PointAccepted    = "accepted"
+	PointOverwritten = "overwritten"
+	PointRejected    = "rejected"
+)
+
 type WriteRequest struct {
 	Now    int64         `json:"now"`
+	Mode   string        `json:"mode,omitempty"`
 	Points []Observation `json:"points"`
 }
 
+// PointResult records the disposition of one input point at its original
+// position in the request. Reasons are stable machine-readable codes; Detail
+// carries the human-readable explanation.
+type PointResult struct {
+	Index  int    `json:"index"`
+	Status string `json:"status"`
+	Reason string `json:"reason,omitempty"`
+	Detail string `json:"detail,omitempty"`
+	Time   int64  `json:"time,omitempty"`
+	Series string `json:"series_id,omitempty"`
+}
+
 type WriteReceipt struct {
-	Sequence  uint64 `json:"sequence"`
-	Accepted  int    `json:"accepted"`
-	NewSeries int    `json:"new_series"`
-	Watermark int64  `json:"watermark"`
+	Sequence uint64 `json:"sequence"`
+	Mode     string `json:"mode"`
+	// Requested is the number of input points, distinct from Accepted which
+	// counts only points that became stored samples.
+	Requested    int           `json:"requested"`
+	Accepted     int           `json:"accepted"`
+	Overwritten  int           `json:"overwritten"`
+	Rejected     int           `json:"rejected"`
+	NewSeries    int           `json:"new_series"`
+	Watermark    int64         `json:"watermark"`
+	HasWatermark bool          `json:"has_watermark"`
+	Results      []PointResult `json:"results,omitempty"`
 }
 
 type Matcher struct {

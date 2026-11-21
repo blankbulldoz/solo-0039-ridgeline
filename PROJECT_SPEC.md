@@ -20,10 +20,22 @@ one request. A deletion hides samples committed at or before the deletion;
 new measurements at those timestamps may be admitted again. Retention is
 different: its monotonic floor prevents old measurements from returning.
 
-Ingestion is atomic per request. Namespace policy bounds point count, total
+Ingestion defaults to atomic per request: one non-admittable point rejects
+the entire batch. A request may instead select explicit best-effort mode
+(`"mode":"best_effort"`), where each point is admitted on its own merits and
+the receipt reports every input row at its original position as accepted,
+overwritten or rejected with a stable reason code. The last row wins for a
+repeated series/timestamp within one request; earlier rows are overwritten,
+and a winning row that replaces a previously committed sample is also an
+overwrite rather than a new point. Namespace policy bounds point count, total
 series, age relative to the newest previously accepted timestamp and future
 skew relative to an explicit caller-supplied observation time. Empty namespaces
-have no late-data watermark. Limits are evaluated before publishing a mutation.
+have no late-data watermark. In best-effort mode the series quota and the
+watermark advance only through points that are actually stored, so rejected
+points never consume capacity or push other points out of the lateness window;
+a request that stores nothing does not consume a database sequence. Read-only
+state, an invalid observation time and an oversize batch remain request-level
+failures in both modes. Limits are evaluated before publishing a mutation.
 Read-only namespaces reject ingestion but permit reads and physical maintenance.
 
 Raw queries merge mutable head points with immutable gzip blocks and then
@@ -57,7 +69,8 @@ the server with that image as RIDGE_DB restores that database directly.
 ## Workflows
 
 1. Create, inspect and toggle namespace read-only policy.
-2. Ingest ordered, late and corrective measurements atomically.
+2. Ingest ordered, late and corrective measurements atomically, or best
+   effort with position-accurate acceptance, overwrite and rejection receipts.
 3. Discover canonical series through label matchers.
 4. Read corrected points across head and sealed blocks.
 5. Aggregate groups into signed, origin-aligned time windows.

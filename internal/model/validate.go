@@ -42,6 +42,10 @@ func SeriesID(labels Labels) string {
 	return hex.EncodeToString(hash[:])
 }
 
+func ValidWriteMode(mode string) bool {
+	return mode == "" || mode == WriteAtomic || mode == WriteBestEffort
+}
+
 func ValidateObservation(p Observation) error {
 	if err := ValidateLabels(p.Labels); err != nil {
 		return err
