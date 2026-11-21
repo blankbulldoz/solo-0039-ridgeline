@@ -40,6 +40,26 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+A positive `width` selects sliding output with an independently specified
+window width and step. Output times `t` are origin aligned and lie in
+`[start, end)`; each `t` reduces the half-open window `[t-width, t)`. The first
+output may therefore read samples committed before `start`, so corrections or
+deletions inside that pre-roll change the first window while later windows are
+untouched. Window labels still come from the configured group-by labels and
+`count` remains the observation count. Empty windows are omitted, with the
+number of empty output times and per-group silent gaps reported separately.
+Sliding supports the non-rate reducers; widths must keep the window inside the
+supported time range.
+
+Sliding reduction work is proportional to the number of source observations,
+not to how many overlapping windows reuse each one. Each group is reduced with
+an associative sliding-window accumulator (two-stack SWAG) scanned once in
+`(time, series ID)` order, so a point reused by R windows still costs O(1)
+amortized. The response reports source observations, the naive membership
+count, the actual reduction count, the maximum reuse factor and the output
+span. Output and cell counts are bounded; exceeding a bound is rejected rather
+than truncated.
+
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
 deletions into one block per selected series; empty series retain their identity.
@@ -70,6 +90,7 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Reduce sliding windows over a dense replay with bounded work.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
@@ -87,6 +108,10 @@ runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
-exercise real API operations, process restart and failure responses. Formal
-automated tests are deferred. The walkthrough is a bounded production demo
-using temporary database files and synthetic infrastructure measurements.
+exercise real API operations, process restart and failure responses.
+`python3 examples/sliding.py` replays thirty devices at one sample per second
+for two hours through a one hour window advancing every ten seconds, and
+reports the observed reduction budget, a silent device, a negative-time
+boundary, seal stability and a pre-roll-only deletion. Formal automated tests
+are deferred. The demos are bounded and use temporary database files with
+synthetic infrastructure measurements.

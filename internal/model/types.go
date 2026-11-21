@@ -61,6 +61,9 @@ type Query struct {
 	Origin   int64     `json:"origin"`
 	GroupBy  []string  `json:"group_by"`
 	Function string    `json:"function"`
+	// Width selects sliding output: when positive each aligned output time t
+	// reports [t-Width, t). A zero width keeps tumbling [bucket, bucket+step).
+	Width int64 `json:"width,omitempty"`
 }
 
 type SeriesPoints struct {
@@ -93,10 +96,42 @@ type Cell struct {
 	Count  int     `json:"count"`
 }
 
+// SlidingStats describes the bounded reduction work of a sliding aggregation.
+// Observations is the source point count read once; Memberships is the number
+// of (observation, output) pairs the windows would contain if counted naively;
+// Reductions is the actual reduction work (equal to Observations).
+type SlidingStats struct {
+	Width        int64 `json:"width"`
+	Step         int64 `json:"step"`
+	Groups       int   `json:"groups"`
+	Outputs      int   `json:"outputs"`
+	Observations int64 `json:"observations"`
+	Memberships  int64 `json:"memberships"`
+	Reductions   int64 `json:"reductions"`
+	MaxReuse     int64 `json:"max_reuse"`
+	EmptyOutputs int   `json:"empty_outputs"`
+	GapCells     int   `json:"gap_cells"`
+	Cells        int   `json:"cells"`
+}
+
+// SlidingBounds previews the aligned output and source spans of a sliding
+// aggregate, including the pre-roll the first window may read.
+type SlidingBounds struct {
+	Width        int64 `json:"width"`
+	Step         int64 `json:"step"`
+	FirstOutput  int64 `json:"first_output"`
+	LastOutput   int64 `json:"last_output"`
+	Outputs      int64 `json:"outputs"`
+	ReadStart    int64 `json:"read_start"`
+	ReadEnd      int64 `json:"read_end"`
+	SourcePoints int64 `json:"source_points"`
+}
+
 type AggregateResult struct {
-	Sequence uint64    `json:"sequence"`
-	Cells    []Cell    `json:"cells"`
-	Stats    ScanStats `json:"stats"`
+	Sequence uint64        `json:"sequence"`
+	Cells    []Cell        `json:"cells"`
+	Stats    ScanStats     `json:"stats"`
+	Sliding  *SlidingStats `json:"sliding,omitempty"`
 }
 
 type Tombstone struct {

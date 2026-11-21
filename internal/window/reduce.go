@@ -20,12 +20,20 @@ type accumulator struct {
 	max      float64
 }
 
-func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error) {
+func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, *model.SlidingStats, error) {
 	if err := Validate(q); err != nil {
-		return nil, err
+		return nil, nil, err
+	}
+	if q.Width > 0 {
+		cells, stats, err := AggregateSliding(series, q, PlanSliding(q))
+		if err != nil {
+			return nil, nil, err
+		}
+		return cells, &stats, nil
 	}
 	if q.Function == "rate" {
-		return Rates(series, q)
+		cells, err := Rates(series, q)
+		return cells, nil, err
 	}
 	groups := map[string]*accumulator{}
 	for _, s := range series {
@@ -74,10 +82,10 @@ func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error)
 			a.cell.Value = a.last
 		}
 		if math.IsInf(a.cell.Value, 0) || math.IsNaN(a.cell.Value) {
-			return nil, model.Capacity("aggregation overflow")
+			return nil, nil, model.Capacity("aggregation overflow")
 		}
 		out = append(out, a.cell)
 	}
 	SortCells(out)
-	return out, nil
+	return out, nil, nil
 }

@@ -23,6 +23,7 @@ then closes the database. A second process cannot open the same database file.
 ```sh
 python3 examples/walkthrough.py --workflow all
 python3 examples/walkthrough.py --output var/observations.json
+python3 examples/sliding.py --output var/sliding.json
 ```
 
 The bounded walkthrough uses temporary volumes and an available ephemeral port.
@@ -47,7 +48,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
-| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/aggregate` | interval, step, origin, width, function, group_by |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -66,6 +67,16 @@ Sample query:
  "group_by":["zone"],"function":"avg",
  "matchers":[{"label":"__name__","op":"=","value":"load_ratio"}]}
 ```
+
+Add `"width":3600000` for sliding output. The step still controls how often an
+output time occurs; each origin-aligned output time `t` in `[start, end)`
+reduces `[t-width, t)`, so the first window may read samples from before
+`start`. Reductions are computed once per observation with a two-stack sliding
+accumulator, so work does not grow with the number of overlapping windows that
+reuse a point. The response's `sliding` object reports `observations`,
+`memberships` (the naive count), `reductions` (actual work), `outputs`,
+`max_reuse`, `empty_outputs` and `gap_cells`. Sliding is limited to count, sum,
+min, max, avg, first and last; `width` is omitted or zero for tumbling windows.
 
 Matchers are ANDed and regexes are fully anchored. Empty/missing labels match
 the same string, but series identity preserves their distinction. Raw results

@@ -14,6 +14,17 @@ func Validate(q model.Query) error {
 	if q.Step <= 0 || q.Step > model.MaxTime || !model.ValidTime(q.Origin) {
 		return model.Bad("window step and origin outside supported range")
 	}
+	if q.Width < 0 || q.Width > model.MaxTime || !model.ValidTime(q.Start-q.Width) {
+		return model.Bad("window width outside supported range")
+	}
+	if q.Width > 0 && q.Function == "rate" {
+		return model.Bad("sliding width is only supported for count, sum, min, max, avg, first and last")
+	}
+	if q.Width > 0 {
+		if outputs := int64(alignCeil(q.End, q.Origin, q.Step)-alignCeil(q.Start, q.Origin, q.Step)) / q.Step; outputs > MaxOutputs {
+			return model.Capacity("sliding window output count exceeds the supported limit")
+		}
+	}
 	switch q.Function {
 	case "count", "sum", "min", "max", "avg", "first", "last", "rate":
 		return nil

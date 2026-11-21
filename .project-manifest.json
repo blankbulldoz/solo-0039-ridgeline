@@ -318,6 +318,27 @@
         "select",
         "volume"
       ]
+    },
+    {
+      "id": "sliding",
+      "name": "Sliding window replay with bounded reduction",
+      "entry": "POST /spaces/spindle/aggregate with width",
+      "success": "Each aligned output t reduces [t-width, t) in O(1) per observation",
+      "failure": "invalid width, rate with width, or excess outputs",
+      "verification": "python3 examples/sliding.py",
+      "steps": [
+        "validate the public request",
+        "plan aligned outputs and the pre-roll read span",
+        "reduce each group once with a sliding accumulator",
+        "publish cells, empty-window counts and reduction budget"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "select",
+        "window",
+        "volume"
+      ]
     }
   ],
   "complexity": {
