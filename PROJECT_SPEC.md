@@ -33,6 +33,15 @@ supported; absent labels behave as the empty string for matcher evaluation.
 Limits reject excessive source work rather than silently dropping points.
 Raw result limits are explicit and include a truncation indicator.
 
+Reads are strict by default: one unreadable block or an exhausted scan budget
+fails the whole request. A range or aggregate request may opt into
+`partial:true`, which reports every selected series as `complete`, `failed` or
+`not_executed` and never emits a proper subset of a series' points. Aggregates
+reduce only complete series and withhold any grouping key that lost a source
+series, listing it separately; materialization, deletion and explain reject the
+partial flag because they require a complete source set. The scan budget still
+bounds total decoded points in either mode.
+
 Window aggregation supports count, sum, min, max, average, first and last.
 Buckets align to a caller-supplied origin, including before the Unix epoch.
 Only populated windows appear. An average weights observations, not series.

@@ -46,8 +46,8 @@ All methods below return 200 on success.
 | PUT | `/spaces/{space}/mode` | `{"read_only":true}` |
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
-| POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
-| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/range` | time interval, matchers, optional limit and partial |
+| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by, optional partial |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -92,6 +92,48 @@ write transaction and scans catalog entries before selecting series. Query
 source work is bounded by max_scan; maintenance shares that budget and may
 reject an oversized operation without changing the database. These are explicit
 single-node resource boundaries, not promises of unlimited ingestion.
+
+### Partial reads
+
+A range or aggregate request may set `"partial":true`. The default stays
+strict: one unreadable block, or a source set that exceeds `max_scan`, fails
+the whole request. In a partial read every selected series is reported with a
+status: `complete`, `failed` (stored bytes did not verify) or `not_executed`
+(the scan budget or raw limit stopped before the series was read). A series is
+never reported with only some of its points; incomplete series carry an empty
+point list and an error detail, so consumers can keep computing groups that do
+not depend on them.
+
+Aggregates in a partial read reduce only complete series. Any grouping key that
+lost a source series is withheld from `cells` and listed in `withheld` with its
+status and contributing series IDs, rather than being summed over an incomplete
+source. This applies even when other series in that same group read fine: a
+group is all-or-nothing. A single oversized series is skipped without hiding
+the remaining series; the budget still bounds total decoded points. `partial`
+is rejected for materialization, deletion and explain, which must treat their
+source as a complete set; a rollup is never published from a partial read.
+
+Sample response for healthy `zone=east` and `zone=west` series queried
+alongside an unreadable `zone=west` series:
+
+```json
+{"sequence":7,"floor":-4503599627370496,"partial":true,
+ "series":[
+  {"series":{"id":"28...","labels":{"__name__":"load_ratio","node":"ridge-a","zone":"east"}},
+   "points":[{"time":0,"value":1,"sequence":2},{"time":1000,"value":2,"sequence":2}],
+   "status":"complete"},
+  {"series":{"id":"0f...","labels":{"__name__":"load_ratio","node":"ridge-b","zone":"west"}},
+   "points":[], "status":"failed",
+   "error":"corrupt: block 00000000000000000003-0f... for series 0f... is unreadable: block 00000000000000000003-0f... checksum mismatch"}],
+ "stats":{"series":2,"blocks":1,"head":0,"decoded":2,"visible":2,"tombstones":0,"failed":1},
+ "truncated":false}
+```
+
+The same request with `"partial":true` and `"group_by":["zone"],"function":"sum"`
+returns the east cells and `"withheld":[{"labels":{"zone":"west"},"status":"failed","series_ids":["0f..."]}]`.
+`python3 examples/walkthrough.py --workflow partial` seeds a healthy and a
+deliberately damaged sealed series and shows the strict failure beside the
+partial response.
 
 See PROJECT_SPEC.md for exact arithmetic, late-data, counter and retention
 semantics. There is no background retention job; clients explicitly advance it.

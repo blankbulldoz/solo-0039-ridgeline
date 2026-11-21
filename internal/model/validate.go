@@ -81,3 +81,15 @@ func ValidateQuery(q Query) error {
 	}
 	return nil
 }
+
+// ValidateStrictQuery rejects the partial read flag for operations that must
+// treat their source as a complete set, such as materialization and deletion.
+func ValidateStrictQuery(q Query) error {
+	if err := ValidateQuery(q); err != nil {
+		return err
+	}
+	if q.Partial {
+		return Bad("partial reads apply only to range and aggregate")
+	}
+	return nil
+}

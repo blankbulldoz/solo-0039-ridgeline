@@ -12,7 +12,7 @@ import (
 
 func (e *Engine) Delete(name string, q model.Query) (model.Tombstone, error) {
 	var tomb model.Tombstone
-	if err := model.ValidateQuery(q); err != nil {
+	if err := model.ValidateStrictQuery(q); err != nil {
 		return tomb, err
 	}
 	selector, err := selectseries.Compile(q.Matchers)

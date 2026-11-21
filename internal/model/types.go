@@ -61,20 +61,52 @@ type Query struct {
 	Origin   int64     `json:"origin"`
 	GroupBy  []string  `json:"group_by"`
 	Function string    `json:"function"`
+	// Partial opts a read into per-series result reporting. It is off by
+	// default so a single unreadable physical block still fails the request.
+	Partial bool `json:"partial,omitempty"`
 }
+
+// Read statuses reported per selected series when a partial read is allowed.
+const (
+	ReadComplete    = "complete"
+	ReadFailed      = "failed"
+	ReadNotExecuted = "not_executed"
+)
 
 type SeriesPoints struct {
 	Series Series   `json:"series"`
 	Points []Sample `json:"points"`
+	// Status is only set by partial reads. A non-complete status always has
+	// an empty Points slice: a partial read never emits part of a series.
+	Status string `json:"status,omitempty"`
+	Error  string `json:"error,omitempty"`
+}
+
+// SeriesStatus reports one selected series' disposition without repeating its
+// points. Aggregate uses it because cells are grouped, not series shaped.
+type SeriesStatus struct {
+	Series Series `json:"series"`
+	Status string `json:"status"`
+	Error  string `json:"error,omitempty"`
+}
+
+// GroupIssue identifies a grouping key whose aggregate is withheld because at
+// least one contributing series could not be read completely.
+type GroupIssue struct {
+	Labels   Labels   `json:"labels"`
+	Status   string   `json:"status"`
+	SeriesID []string `json:"series_ids"`
 }
 
 type ScanStats struct {
-	Series     int `json:"series"`
-	Blocks     int `json:"blocks"`
-	Head       int `json:"head"`
-	Decoded    int `json:"decoded"`
-	Visible    int `json:"visible"`
-	Tombstones int `json:"tombstones"`
+	Series      int `json:"series"`
+	Blocks      int `json:"blocks"`
+	Head        int `json:"head"`
+	Decoded     int `json:"decoded"`
+	Visible     int `json:"visible"`
+	Tombstones  int `json:"tombstones"`
+	Failed      int `json:"failed,omitempty"`
+	NotExecuted int `json:"not_executed,omitempty"`
 }
 
 type RangeResult struct {
@@ -83,6 +115,9 @@ type RangeResult struct {
 	Series    []SeriesPoints `json:"series"`
 	Stats     ScanStats      `json:"stats"`
 	Truncated bool           `json:"truncated"`
+	// Partial is set only when some series were not read completely. It is
+	// never set merely because the request asked for a partial read.
+	Partial bool `json:"partial,omitempty"`
 }
 
 type Cell struct {
@@ -97,6 +132,14 @@ type AggregateResult struct {
 	Sequence uint64    `json:"sequence"`
 	Cells    []Cell    `json:"cells"`
 	Stats    ScanStats `json:"stats"`
+	// Partial marks a result that withheld some series or groups because their
+	// sources could not be read completely. Cells never mix a withheld series.
+	Partial bool `json:"partial,omitempty"`
+	// Withheld lists grouping keys omitted from Cells. Each carries the status
+	// of the contributing series that caused it.
+	Withheld []GroupIssue `json:"withheld,omitempty"`
+	// Series reports per-selected-series disposition in a partial read.
+	Series []SeriesStatus `json:"series,omitempty"`
 }
 
 type Tombstone struct {

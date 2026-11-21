@@ -25,6 +25,10 @@ func respond(w http.ResponseWriter, value any, err error) {
 				status = http.StatusConflict
 			case "capacity":
 				status = http.StatusUnprocessableEntity
+			case "corrupt":
+				// Stored bytes failed verification; the request itself was valid
+				// but the server cannot serve it. This is not a client error.
+				status = http.StatusInternalServerError
 			}
 		} else {
 			log.Printf("request error: %v", err)

@@ -12,6 +12,11 @@ func (e *Engine) Materialize(name, rollup string, q model.Query) (model.Material
 	if !model.ValidName(rollup) {
 		return out, model.Bad("invalid rollup name")
 	}
+	// A materialization is a durable claim about a complete source set, so it
+	// must never be built from a partial read.
+	if err := model.ValidateStrictQuery(q); err != nil {
+		return out, err
+	}
 	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
 		b, n, err := loadNamespace(tx, name)
 		if err != nil {

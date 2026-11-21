@@ -318,6 +318,27 @@
         "select",
         "volume"
       ]
+    },
+    {
+      "id": "partial",
+      "name": "Per-series partial read reporting",
+      "entry": "POST /spaces/ridge-partial/range with partial:true",
+      "success": "A healthy series stays readable while an unreadable series reports failed and its group is withheld",
+      "failure": "corrupt block, scan budget, or partial flag on materialization",
+      "verification": "python3 examples/walkthrough.py --workflow partial",
+      "steps": [
+        "validate the public request",
+        "derive domain facts inside one transaction",
+        "publish result or typed failure"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "chunk",
+        "model",
+        "window",
+        "volume"
+      ]
     }
   ],
   "complexity": {

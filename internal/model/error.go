@@ -26,3 +26,10 @@ func Conflict(s string) error {
 func Capacity(s string) error {
 	return &Error{Code: "capacity", Detail: s}
 }
+
+// Corrupt reports stored bytes that fail their own integrity check. Strict
+// reads surface it as a whole-request failure; partial reads attach it to the
+// affected series.
+func Corrupt(s string) error {
+	return &Error{Code: "corrupt", Detail: s}
+}
