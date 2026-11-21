@@ -54,7 +54,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/deletions` | interval and matchers |
 | GET | `/spaces/{space}/deletions` | deletion sequence inventory |
 | POST | `/spaces/{space}/retention` | `{"now":11000}` |
-| POST | `/spaces/{space}/compact` | empty object |
+| POST | `/spaces/{space}/compact` | optional `start`, `end`, `matchers`; whole namespace when omitted |
 | PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
 | GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
 | GET | `/image` | consistent binary image, SHA-256 and sequence headers |
@@ -66,6 +66,24 @@ Sample query:
  "group_by":["zone"],"function":"avg",
  "matchers":[{"label":"__name__","op":"=","value":"load_ratio"}]}
 ```
+
+Compaction accepts the same `matchers` plus an optional half-open `start`/`end`
+pair; omitting both keeps the whole-namespace behavior:
+
+```json
+{"start":-1000,"end":1000,
+ "matchers":[{"label":"__name__","op":"=","value":"pulse_total"}]}
+```
+
+Its receipt reports `requested`, one `processed` entry per rewritten series
+with stored coverage and removed/written block counts, resolved `hidden_points`,
+`expired_points` and `duplicate_points`, `preserved_points` for out-of-range
+data carried by a straddling block, and `remaining` (inventory plus
+`surviving_blocks` for the selected series). A deletion is dropped from the
+inventory (`tombstones_pruned`) only when its whole interval and series set
+were rewritten, because its effect is then already materialized. Blocks that
+straddle a boundary are read in full, so out-of-range points are preserved
+rather than dropped.
 
 Matchers are ANDed and regexes are fully anchored. Empty/missing labels match
 the same string, but series identity preserves their distinction. Raw results

@@ -39,11 +39,16 @@ func respond(w http.ResponseWriter, value any, err error) {
 	}
 }
 
+const emptyBody = "request body is empty"
+
 func decode(w http.ResponseWriter, r *http.Request, value any) error {
 	r.Body = http.MaxBytesReader(w, r.Body, 8<<20)
 	reader := json.NewDecoder(r.Body)
 	reader.DisallowUnknownFields()
 	if err := reader.Decode(value); err != nil {
+		if err == io.EOF {
+			return model.Bad(emptyBody)
+		}
 		return model.Bad("invalid or oversized JSON request")
 	}
 	var extra any

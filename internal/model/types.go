@@ -136,3 +136,64 @@ type Maintenance struct {
 	Points   int    `json:"points"`
 	Floor    int64  `json:"floor"`
 }
+
+// CompactRequest selects the series and half-open time interval to rewrite.
+// Omitting both bounds means the whole namespace; matchers are always ANDed.
+type CompactRequest struct {
+	Start    *int64    `json:"start"`
+	End      *int64    `json:"end"`
+	Matchers []Matcher `json:"matchers"`
+}
+
+type Interval struct {
+	Start int64 `json:"start"`
+	End   int64 `json:"end"`
+}
+
+// ProcessedSeries reports the physical interval a partial compaction rewrote
+// for one series. Start and End describe the stored coverage of the rewritten
+// block, which can extend beyond the requested interval when an edge block
+// carried points outside the selection; those carried points are counted in
+// PreservedPoints and are never dropped.
+type ProcessedSeries struct {
+	Series          Series `json:"series"`
+	Start           int64  `json:"start"`
+	End             int64  `json:"end"`
+	BlocksRemoved   int    `json:"blocks_removed"`
+	BlocksWritten   int    `json:"blocks_written"`
+	Points          int    `json:"points"`
+	PreservedPoints int    `json:"preserved_points"`
+	HeadPoints      int    `json:"head_points"`
+	HiddenPoints    int    `json:"hidden_points"`
+	ExpiredPoints   int    `json:"expired_points"`
+	DuplicatePoints int    `json:"duplicate_points"`
+}
+
+// Remaining describes what the compaction did not consume: the whole physical
+// inventory after the transaction, the subset this call left alone, and the
+// surviving blocks of the selected series so a caller can see what is left to
+// compact later.
+type Remaining struct {
+	Series               int     `json:"series"`
+	Blocks               int     `json:"blocks"`
+	HeadRecords          int     `json:"head_records"`
+	Tombstones           int     `json:"tombstones"`
+	UntouchedBlocks      int     `json:"untouched_blocks"`
+	UntouchedHeadRecords int     `json:"untouched_head_records"`
+	Surviving            []Block `json:"surviving_blocks"`
+}
+
+type Compaction struct {
+	Maintenance
+	Requested        Interval          `json:"requested"`
+	SelectedSeries   int               `json:"selected_series"`
+	Processed        []ProcessedSeries `json:"processed"`
+	BlocksRemoved    int               `json:"blocks_removed"`
+	PreservedPoints  int               `json:"preserved_points"`
+	HeadPoints       int               `json:"head_points"`
+	HiddenPoints     int               `json:"hidden_points"`
+	ExpiredPoints    int               `json:"expired_points"`
+	DuplicatePoints  int               `json:"duplicate_points"`
+	TombstonesPruned int               `json:"tombstones_pruned"`
+	Remaining        Remaining         `json:"remaining"`
+}

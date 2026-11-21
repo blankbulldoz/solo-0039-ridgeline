@@ -69,6 +69,70 @@ def stop(process):
         raise RuntimeError(f"service exit {process.returncode}")
 
 
+def partial_compaction(base, op):
+    """Compact one label selection and interval while a straddling block and an
+    overlapping deletion survive outside the selection, then prove that a
+    full-range read still sees every unchanged point plus the carried edges."""
+    space = "spaces/spindle"
+    q = {"start": -1000, "end": 1000}
+    full = {"start": -5000, "end": 10000}
+    pulse = [{"label": "__name__", "op": "=", "value": "pulse_total"}]
+    ridge = {"__name__": "pulse_total", "node": "ridge-a", "zone": "east"}
+    # The edge block of ridge-a spans -1500..1501, so the selected range
+    # [-1000, 1000) is nested inside it: the points at -1500 and 1500 lie out of
+    # range and must survive the rewrite. A correction and a head point inside
+    # the range are folded in, and the overlapping deletion hides -1500/-500.
+    op("partial correction", space + "/points", {
+        "now": 10000, "points": [{"labels": ridge, "time": -500, "value": 4}]})
+    tomb = op("overlapping delete", space + "/deletions", {
+        "start": -500, "end": 0,
+        "matchers": pulse + [{"label": "node", "op": "=", "value": "ridge-a"}]})
+    op("head correction after delete", space + "/points", {
+        "now": 10000, "points": [{"labels": ridge, "time": 0, "value": 5}]})
+    before = op("full range before partial compaction", space + "/range", full)
+    narrow_before = op("in-range read before partial compaction", space + "/range", q)
+    receipt = op("partial compact", space + "/compact",
+                 {"start": -1000, "end": 1000, "matchers": pulse})
+    if receipt["requested"] != {"start": -1000, "end": 1000}:
+        raise RuntimeError("compaction receipt lost the requested interval")
+    if receipt["selected_series"] != 2 or len(receipt["processed"]) != 1:
+        raise RuntimeError("partial compaction should only rewrite ridge-a")
+    entry = receipt["processed"][0]
+    if entry["series"]["labels"]["node"] != "ridge-a":
+        raise RuntimeError("partial compaction rewrote the wrong series")
+    if entry["start"] != -1500 or entry["end"] != 1501:
+        raise RuntimeError("partial compaction lost the straddling block edges")
+    if entry["preserved_points"] != 2 or entry["hidden_points"] != 1:
+        raise RuntimeError("partial compaction did not classify carried points")
+    if entry["head_points"] != 2:
+        raise RuntimeError("partial compaction did not fold the selected head")
+    if receipt["tombstones_pruned"] != 1 or receipt["remaining"]["tombstones"] != 0:
+        raise RuntimeError("compaction should prune the fully covered deletion")
+    untouched = [b for b in receipt["remaining"]["surviving_blocks"]
+                 if b["series_id"] != entry["series"]["id"]]
+    if not untouched:
+        raise RuntimeError("partial compaction should leave sibling blocks alone")
+    after = op("full range after partial compaction", space + "/range", full)
+    if after["series"] != before["series"]:
+        raise RuntimeError("partial compaction changed the full-range read")
+    if after["stats"]["head"] >= before["stats"]["head"]:
+        raise RuntimeError("partial compaction should fold head corrections")
+    again = op("repeat partial compact", space + "/compact",
+               {"start": -1000, "end": 1000, "matchers": pulse})
+    if again["processed"] or again["blocks_removed"]:
+        raise RuntimeError("repeated compaction should converge without rewrites")
+    if again["sequence"] != after["sequence"]:
+        raise RuntimeError("no-op compaction must not publish a new sequence")
+    surviving = op("blocks after partial compaction", space + "/blocks")
+    rewritten = [b for b in surviving if b["series_id"] == entry["series"]["id"]]
+    if len(rewritten) != 1 or rewritten[0]["start"] != -1500 or rewritten[0]["end"] != 1501:
+        raise RuntimeError("rewritten block dropped the carried edge points")
+    narrow = op("in-range read after partial compaction", space + "/range", q)
+    if narrow["series"] != narrow_before["series"]:
+        raise RuntimeError("compaction changed the in-range read")
+    return tomb
+
+
 def exercise(workflow, output):
     seed = json.loads((ROOT / "examples/input.json").read_text())
     observations = []
@@ -125,6 +189,7 @@ def exercise(workflow, output):
                 op("compact", space + "/compact", {})
                 if op("post-compaction", space + "/range", q)["series"] != logical:
                     raise RuntimeError("compaction changed logical samples")
+                partial_compaction(base, op)
                 op("explain", space + "/explain", q)
                 op("retention", space + "/retention", {"now": 11000})
                 op("retention no resurrection", space + "/points", replacement, status=409)

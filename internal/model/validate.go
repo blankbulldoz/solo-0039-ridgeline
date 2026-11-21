@@ -81,3 +81,23 @@ func ValidateQuery(q Query) error {
 	}
 	return nil
 }
+
+// CompactBounds normalizes the optional bounds of a compaction request.
+// Omitted bounds cover the whole namespace, so an empty request keeps the
+// historical whole-namespace behavior.
+func CompactBounds(r CompactRequest) (int64, int64, error) {
+	start, end := MinTime, MaxTime+1
+	if r.Start != nil {
+		start = *r.Start
+	}
+	if r.End != nil {
+		end = *r.End
+	}
+	if !ValidTime(start) || end < MinTime || end > MaxTime+1 || start >= end {
+		return 0, 0, Bad("compaction requires a supported nonempty half-open interval")
+	}
+	if len(r.Matchers) > 32 {
+		return 0, 0, Bad("invalid matcher count")
+	}
+	return start, end, nil
+}

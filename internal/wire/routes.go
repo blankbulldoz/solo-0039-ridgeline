@@ -1,6 +1,7 @@
 package wire
 
 import (
+	"errors"
 	"net/http"
 
 	"ridgeline/internal/engine"
@@ -79,7 +80,15 @@ func Handler(e *engine.Engine) http.Handler {
 		})
 	})
 	mux.HandleFunc("POST "+base+"/compact", func(w http.ResponseWriter, r *http.Request) {
-		out, err := e.Compact(r.PathValue("space"))
+		var input model.CompactRequest
+		// An absent or empty body keeps the historical whole-namespace request.
+		err := decode(w, r, &input)
+		var domain *model.Error
+		if err != nil && !(errors.As(err, &domain) && domain.Detail == emptyBody) {
+			respond(w, nil, err)
+			return
+		}
+		out, err := e.Compact(r.PathValue("space"), input)
 		respond(w, out, err)
 	})
 	mux.HandleFunc("PUT "+base+"/rollups/{rollup}", func(w http.ResponseWriter, r *http.Request) {

@@ -42,8 +42,21 @@ No extrapolation, interpolation or clock correction is implied.
 
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
-deletions into one block per selected series; empty series retain their identity.
-Retention advances an irreversible floor and compacts the namespace physically.
+deletions for the selected series and half-open time range into one block per
+selected series; empty series retain their identity. Selection without bounds
+covers the whole namespace. A block that merely straddles a range boundary is
+read in full, so points outside the range survive into the rewritten block and
+are reported as preserved. Sources outside the selection or range are not
+touched and remain readable. The receipt lists the requested range, each
+rewritten series with its stored coverage and removed/written counts, resolved
+hidden, expired and duplicate points, and the blocks, head records and
+tombstones that remain. A deletion whose entire interval and series set are
+rewritten is removed from the inventory, since its effect is already
+materialized; any deletion reaching outside the selection or range is kept.
+Repeating a compaction only removes redundancy that is
+still present; an already minimal series is not rewritten and no new sequence
+is published. Retention advances an irreversible floor and compacts the
+namespace physically.
 Deleting measurements does not erase catalog identity or promise to shrink the
 database file. bbolt reuses free pages; returning pages to the filesystem is
 outside the current API.
