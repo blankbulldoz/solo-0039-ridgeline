@@ -14,8 +14,8 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
-    "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "namespace", "ingest", "discovery", "range", "windows", "counters", "quantiles",
+    "seal", "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
 ]
 
 
@@ -101,6 +101,21 @@ def exercise(workflow, output):
                 rate = {**q, "step": 10000, "origin": -5000, "group_by": ["zone"],
                         "function": "rate", "matchers": [{"label": "__name__", "op": "=", "value": "pulse_total"}]}
                 op("counters", space + "/aggregate", rate)
+                quantile_q = {**q, "step": 1000, "origin": 0, "group_by": ["zone"],
+                              "epsilon": 0.02, "phis": [0.5, 0.95]}
+                qres = op("quantiles", space + "/quantiles", quantile_q)
+                for cell in qres["cells"]:
+                    for estimate in cell["estimates"]:
+                        if not (estimate["lower"] <= estimate["value"] <= estimate["upper"]):
+                            raise RuntimeError("quantile estimate outside its error bracket")
+                        if estimate["rank_error"] <= 0:
+                            raise RuntimeError("quantile estimate missing rank error")
+                op("materialize quantiles", space + "/quantiles/latency", quantile_q, method="PUT")
+                qview = op("quantile view", space + "/quantiles/latency")
+                if qview["stale"]:
+                    raise RuntimeError("new quantile materialization is stale")
+                if len(qview["summaries"]) != len(qres["cells"]):
+                    raise RuntimeError("quantile materialization summary count mismatch")
                 op("seal", space + "/seal", {})
                 sealed = op("sealed range", space + "/range", q)
                 if before["series"] != sealed["series"]:
@@ -121,10 +136,20 @@ def exercise(workflow, output):
                 stale = op("stale materialization", space + "/rollups/pulse")
                 if not stale["stale"]:
                     raise RuntimeError("changed namespace should mark materialization stale")
+                stale_q = op("stale quantile view", space + "/quantiles/latency")
+                if not stale_q["stale"]:
+                    raise RuntimeError("changed namespace should mark quantile view stale")
+                refreshed_q = op("refresh quantile view",
+                                 space + "/quantiles/latency/refresh", {}, method="POST")
+                if refreshed_q["stale"]:
+                    raise RuntimeError("refreshed quantile view must be current")
                 logical = op("pre-compaction", space + "/range", q)["series"]
                 op("compact", space + "/compact", {})
                 if op("post-compaction", space + "/range", q)["series"] != logical:
                     raise RuntimeError("compaction changed logical samples")
+                recomputed_q = op("quantile view after compaction", space + "/quantiles/latency")
+                if recomputed_q["stale"]:
+                    raise RuntimeError("compaction must recompute quantile views in place")
                 op("explain", space + "/explain", q)
                 op("retention", space + "/retention", {"now": 11000})
                 op("retention no resurrection", space + "/points", replacement, status=409)

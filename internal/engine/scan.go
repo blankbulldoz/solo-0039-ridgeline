@@ -136,3 +136,93 @@ func (e *Engine) Range(name string, q model.Query) (model.RangeResult, error) {
 	})
 	return result, err
 }
+
+// scanStream selects the same logical points as scan but, instead of holding
+// them, invokes emit for every visible sample after head/block corrections,
+// deletions and retention have been resolved. It keeps the max_scan budget and
+// is the entry point used by streaming approximate summaries so that no query
+// ever holds the full value set in memory.
+func scanStream(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64,
+	emit func(series model.Series, p model.Sample)) (model.ScanStats, error) {
+	stats := model.ScanStats{}
+	selector, err := selectseries.Compile(q.Matchers)
+	if err != nil {
+		return stats, err
+	}
+	allSeries, err := catalog(b)
+	if err != nil {
+		return stats, err
+	}
+	blocks, err := readBlocks(b)
+	if err != nil {
+		return stats, err
+	}
+	tombstones, err := readTombstones(b)
+	if err != nil {
+		return stats, err
+	}
+	stats.Tombstones = len(tombstones)
+	selected := selectseries.Pick(allSeries, selector)
+	stats.Series = len(selected)
+	for _, s := range selected {
+		merged := map[int64]model.Sample{}
+		for _, block := range blocks {
+			if block.SeriesID != s.ID || block.End <= q.Start ||
+				block.Start >= q.End || block.End <= n.Floor {
+				continue
+			}
+			if stats.Decoded+block.Count > n.MaxScan {
+				return stats, model.Capacity("query decoded point budget exceeded")
+			}
+			points, err := chunk.Decode(b.Bucket(volume.Payloads).Get([]byte(block.ID)), block)
+			if err != nil {
+				return stats, err
+			}
+			stats.Blocks++
+			stats.Decoded += len(points)
+			for _, p := range points {
+				if p.Time < q.Start || p.Time >= q.End || p.Time < n.Floor {
+					continue
+				}
+				old, ok := merged[p.Time]
+				if !ok || p.Sequence > old.Sequence {
+					merged[p.Time] = p
+				}
+			}
+		}
+		cursor := b.Bucket(volume.Head).Cursor()
+		for k, v := cursor.Seek(volume.PointKey(s.ID, q.Start)); k != nil && bytes.HasPrefix(k, []byte(s.ID)); k, v = cursor.Next() {
+			timestamp, err := volume.PointTime(k)
+			if err != nil {
+				return stats, err
+			}
+			if timestamp >= q.End {
+				break
+			}
+			stats.Head++
+			stats.Decoded++
+			if stats.Decoded > n.MaxScan {
+				return stats, model.Capacity("query decoded point budget exceeded")
+			}
+			var p model.Sample
+			if err := json.Unmarshal(v, &p); err != nil {
+				return stats, err
+			}
+			if p.Time < n.Floor {
+				continue
+			}
+			old, ok := merged[p.Time]
+			if !ok || p.Sequence >= old.Sequence {
+				merged[p.Time] = p
+			}
+		}
+		for _, p := range merged {
+			if hidden(s.ID, p, tombstones) {
+				continue
+			}
+			stats.Visible++
+			emit(s, p)
+		}
+	}
+	return stats, nil
+}

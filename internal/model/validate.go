@@ -81,3 +81,35 @@ func ValidateQuery(q Query) error {
 	}
 	return nil
 }
+
+// ValidateQuantileQuery validates the interval, windowing, label grouping and
+// precision parameters of an approximate quantile query.
+func ValidateQuantileQuery(q QuantileQuery) error {
+	if !ValidTime(q.Start) || q.End < MinTime || q.End > MaxTime+1 || q.Start >= q.End {
+		return Bad("query requires a supported nonempty half-open interval")
+	}
+	if len(q.Matchers) > 32 {
+		return Bad("invalid matcher count")
+	}
+	if q.Step <= 0 || q.Step > MaxTime || !ValidTime(q.Origin) {
+		return Bad("window step and origin outside supported range")
+	}
+	for _, label := range q.GroupBy {
+		if !ValidName(label) {
+			return Bad("invalid grouping label")
+		}
+	}
+	if math.IsNaN(q.Epsilon) || math.IsInf(q.Epsilon, 0) ||
+		q.Epsilon <= 0 || q.Epsilon >= 0.5 {
+		return Bad("epsilon must lie within (0, 0.5)")
+	}
+	if len(q.Phis) == 0 || len(q.Phis) > 64 {
+		return Bad("quantile query requires 1..64 phis")
+	}
+	for _, phi := range q.Phis {
+		if math.IsNaN(phi) || math.IsInf(phi, 0) || phi <= 0 || phi >= 1 {
+			return Bad("each phi must lie within (0, 1)")
+		}
+	}
+	return nil
+}

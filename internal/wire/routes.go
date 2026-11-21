@@ -49,6 +49,24 @@ func Handler(e *engine.Engine) http.Handler {
 			return e.Aggregate(r.PathValue("space"), q)
 		})
 	})
+	mux.HandleFunc("POST "+base+"/quantiles", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.QuantileQuery) (any, error) {
+			return e.Quantile(r.PathValue("space"), q)
+		})
+	})
+	mux.HandleFunc("PUT "+base+"/quantiles/{view}", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.QuantileQuery) (any, error) {
+			return e.MaterializeQuantile(r.PathValue("space"), r.PathValue("view"), q)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/quantiles/{view}", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.QuantileView(r.PathValue("space"), r.PathValue("view"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("POST "+base+"/quantiles/{view}/refresh", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.RefreshQuantile(r.PathValue("space"), r.PathValue("view"))
+		respond(w, out, err)
+	})
 	mux.HandleFunc("POST "+base+"/explain", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(q model.Query) (any, error) {
 			return e.Explain(r.PathValue("space"), q)

@@ -48,6 +48,10 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/quantiles` | interval, step, origin, epsilon, phis, group_by |
+| PUT | `/spaces/{space}/quantiles/{view}` | quantile query definition to materialize |
+| GET | `/spaces/{space}/quantiles/{view}` | stored summaries, estimates and stale flag |
+| POST | `/spaces/{space}/quantiles/{view}/refresh` | recompute a stale view |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -73,12 +77,44 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+## Approximate Quantiles
+
+The exact reducers on `/aggregate` keep their precise semantics. For tail
+latency-style questions such as p95, where holding every value to sort it is
+unbounded, use `/quantiles` or a materialized quantile view.
+
+```json
+{"start":-5000,"end":10000,"step":1000,"origin":0,
+ "group_by":["zone"],"epsilon":0.01,"phis":[0.5,0.95,0.99]}
+```
+
+`epsilon` is the caller-specified relative rank precision and must lie in
+`(0, 0.5)`; each `phi` is a quantile in `(0, 1)`. The engine streams selected
+points through bounded, mergeable Greenwald-Khanna summaries rather than
+materializing the value set. Every estimate returns `value`, a `lower`/`upper`
+bracket and a `rank_error`: the true quantile is an observed value whose rank
+lies within `rank_error` (= ceil(epsilon*n)) ranks of the requested rank, and
+the bracket is guaranteed to contain it. Smaller epsilon costs more tuples but
+never changes the exact aggregate path.
+
+A window can span several series and multiple compressed blocks. Per-block
+summaries tighten their internal precision to `epsilon/blockCount`, so merging
+them keeps the advertised epsilon over the union. `PUT .../quantiles/{name}`
+stores the serialized summaries with the source sequence. A later write, late
+overwrite, deletion or seal marks the view `stale`; the stored estimates do not
+change until an explicit `refresh`. Compaction and retention recompute stored
+views in the same maintenance transaction so a summary never outlives the
+blocks it summarized. Skewed distributions, heavily duplicated values and
+late corrections are covered by the test suite and the `quantiles` walkthrough.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
-deletes and rollups buckets. Numeric point keys encode signed time in
+deletes, rollups and quantiles buckets. Numeric point keys encode signed time in
 lexicographic order. Blocks use format 1: a gzip stream containing an ordered
-JSON sample array, with SHA-256 over the compressed payload.
+JSON sample array, with SHA-256 over the compressed payload. Quantile views
+store Greenwald-Khanna tuple snapshots plus their source sequence and are
+included verbatim in a backup image.
 
 Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with

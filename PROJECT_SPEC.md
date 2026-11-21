@@ -40,6 +40,24 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+Approximate quantiles (e.g. p95) never load all scalar values into memory to
+sort them. A query specifies a relative rank precision epsilon and a set of
+quantiles phi; the engine streams every selected point through a bounded,
+mergeable Greenwald-Khanna epsilon-summary per origin-aligned window and label
+group. Each estimate returns the value plus its error meaning: the true
+quantile has an observed rank within epsilon*n ranks of the requested rank, and
+a lower/upper value bracket derived from the summary's guaranteed rank bounds.
+The exact count/sum/min/max/avg/first/last reducers are unchanged and remain
+exact. Summaries built from disjoint compressed blocks are mergeable; block
+operands tighten their internal precision to epsilon/blockCount so the merged
+summary still honors the requested epsilon over the union. A materialized
+quantile view stores the serialized summaries and the source database sequence.
+Any write, late overwrite, deletion, seal or compaction that advances the
+namespace sequence marks the view stale; compaction and retention recompute
+stored views in the same transaction, and a stale view must be explicitly
+refreshed before its estimates are treated as current. Superseded summaries
+are never silently combined with newer data.
+
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
 deletions into one block per selected series; empty series retain their identity.
@@ -70,6 +88,8 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Build and query mergeable approximate quantile summaries, and recompute or
+    invalidate them when the underlying data is corrected or deleted.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
