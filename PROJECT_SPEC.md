@@ -40,6 +40,16 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+Resampling maps each matched series onto a caller-defined even grid (origin,
+interval, point count) for consumers that require uniform spacing. Every grid
+point is classified observed, interpolated or missing. Linear interpolation
+fills a grid point only when the two bracketing visible samples are at most
+max_gap apart; deletion holes, the retention floor and sampling gaps wider
+than max_gap stay missing. Corrections are resolved before interpolation, so
+recomputation reflects the latest committed values. The output shape is fixed
+by the request: grids over 100000 points or shapes over 150000 series×grid
+cells are rejected as capacity before source scanning, never truncated.
+
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
 deletions into one block per selected series; empty series retain their identity.
@@ -70,6 +80,7 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Resample corrected series onto an even analysis grid.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.

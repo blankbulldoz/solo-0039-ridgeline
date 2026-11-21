@@ -638,8 +638,8 @@
         "start": 500,
         "end": 501,
         "count": 1,
-        "bytes": 64,
-        "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+        "bytes": 63,
+        "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
         "format": 1
       },
       {
@@ -648,8 +648,8 @@
         "start": -500,
         "end": 501,
         "count": 2,
-        "bytes": 105,
-        "checksum": "4c2f12747df3833972d963a29b9b86b6225d2de929c6252543feb51e3c6ceb20",
+        "bytes": 73,
+        "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
         "format": 1
       },
       {
@@ -658,8 +658,8 @@
         "start": -1500,
         "end": 1501,
         "count": 4,
-        "bytes": 80,
-        "checksum": "f62effbef22081bacda4663b08c17e44f621f0135a4c07c22feb6b601c4c1d4a",
+        "bytes": 83,
+        "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
         "format": 1
       },
       {
@@ -668,8 +668,8 @@
         "start": -1500,
         "end": 501,
         "count": 2,
-        "bytes": 100,
-        "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+        "bytes": 71,
+        "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
         "format": 1
       }
     ]
@@ -1215,8 +1215,8 @@
           "start": 500,
           "end": 501,
           "count": 1,
-          "bytes": 64,
-          "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
           "format": 1
         },
         {
@@ -1225,8 +1225,8 @@
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
+          "bytes": 81,
+          "checksum": "b4466d94f2096f50dbddfb490d297e5d0c8c72b777bc6992b72dfdd2e62dd118",
           "format": 1
         },
         {
@@ -1235,8 +1235,8 @@
           "start": -1500,
           "end": 501,
           "count": 2,
-          "bytes": 100,
-          "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
           "format": 1
         }
       ],
@@ -1340,13 +1340,1249 @@
     }
   },
   {
+    "step": "resample namespace",
+    "request": {
+      "name": "spectra",
+      "retention_ms": 2500,
+      "lateness_ms": 10000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000
+    },
+    "response": {
+      "name": "spectra",
+      "read_only": false,
+      "retention_ms": 2500,
+      "lateness_ms": 10000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 12
+    }
+  },
+  {
+    "step": "resample ingest base",
+    "request": {
+      "now": 5000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 0,
+          "value": 0
+        },
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 400,
+          "value": 4
+        },
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 900,
+          "value": 9
+        },
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 2000,
+          "value": 2
+        },
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 2600,
+          "value": 6
+        },
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-d",
+            "zone": "north"
+          },
+          "time": 0,
+          "value": 1.5
+        },
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-d",
+            "zone": "north"
+          },
+          "time": 3600,
+          "value": 2.5
+        }
+      ]
+    },
+    "response": {
+      "sequence": 13,
+      "accepted": 7,
+      "new_series": 2,
+      "watermark": 3600
+    }
+  },
+  {
+    "step": "resample seal",
+    "request": {},
+    "response": {
+      "sequence": 14,
+      "blocks": 2,
+      "points": 7,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "resample ingest more",
+    "request": {
+      "now": 6000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 3100,
+          "value": 11
+        },
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 3900,
+          "value": 3
+        }
+      ]
+    },
+    "response": {
+      "sequence": 15,
+      "accepted": 2,
+      "new_series": 0,
+      "watermark": 3900
+    }
+  },
+  {
+    "step": "resample reseal",
+    "request": {},
+    "response": {
+      "sequence": 16,
+      "blocks": 1,
+      "points": 2,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "resample across blocks",
+    "request": {
+      "start": 0,
+      "step": 100,
+      "steps": 40,
+      "max_gap": 1000,
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-c"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 16,
+      "floor": -4503599627370496,
+      "start": 0,
+      "step": 100,
+      "steps": 40,
+      "max_gap": 1000,
+      "series": [
+        {
+          "series": {
+            "id": "c7bd603aca14d8616d6cdef012c17768fa4b8a091f0743df23439edaad908597",
+            "labels": {
+              "__name__": "strain",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "source": "observed",
+              "value": 0
+            },
+            {
+              "time": 100,
+              "source": "interpolated",
+              "value": 1
+            },
+            {
+              "time": 200,
+              "source": "interpolated",
+              "value": 2
+            },
+            {
+              "time": 300,
+              "source": "interpolated",
+              "value": 3
+            },
+            {
+              "time": 400,
+              "source": "observed",
+              "value": 4
+            },
+            {
+              "time": 500,
+              "source": "interpolated",
+              "value": 5
+            },
+            {
+              "time": 600,
+              "source": "interpolated",
+              "value": 6
+            },
+            {
+              "time": 700,
+              "source": "interpolated",
+              "value": 7
+            },
+            {
+              "time": 800,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 900,
+              "source": "observed",
+              "value": 9
+            },
+            {
+              "time": 1000,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1100,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1200,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1300,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1400,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1500,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1600,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1700,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1800,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1900,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2000,
+              "source": "observed",
+              "value": 2
+            },
+            {
+              "time": 2100,
+              "source": "interpolated",
+              "value": 2.6666666666666665
+            },
+            {
+              "time": 2200,
+              "source": "interpolated",
+              "value": 3.3333333333333335
+            },
+            {
+              "time": 2300,
+              "source": "interpolated",
+              "value": 4
+            },
+            {
+              "time": 2400,
+              "source": "interpolated",
+              "value": 4.666666666666666
+            },
+            {
+              "time": 2500,
+              "source": "interpolated",
+              "value": 5.333333333333334
+            },
+            {
+              "time": 2600,
+              "source": "observed",
+              "value": 6
+            },
+            {
+              "time": 2700,
+              "source": "interpolated",
+              "value": 7.000000000000001
+            },
+            {
+              "time": 2800,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 2900,
+              "source": "interpolated",
+              "value": 9
+            },
+            {
+              "time": 3000,
+              "source": "interpolated",
+              "value": 10
+            },
+            {
+              "time": 3100,
+              "source": "observed",
+              "value": 11
+            },
+            {
+              "time": 3200,
+              "source": "interpolated",
+              "value": 10
+            },
+            {
+              "time": 3300,
+              "source": "interpolated",
+              "value": 9
+            },
+            {
+              "time": 3400,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 3500,
+              "source": "interpolated",
+              "value": 7
+            },
+            {
+              "time": 3600,
+              "source": "interpolated",
+              "value": 6
+            },
+            {
+              "time": 3700,
+              "source": "interpolated",
+              "value": 5
+            },
+            {
+              "time": 3800,
+              "source": "interpolated",
+              "value": 4
+            },
+            {
+              "time": 3900,
+              "source": "observed",
+              "value": 3
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 2,
+        "head": 0,
+        "decoded": 7,
+        "visible": 7,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "resample correct",
+    "request": {
+      "now": 6000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "strain",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 2000,
+          "value": 12
+        }
+      ]
+    },
+    "response": {
+      "sequence": 17,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 3900
+    }
+  },
+  {
+    "step": "resample after correction",
+    "request": {
+      "start": 0,
+      "step": 100,
+      "steps": 40,
+      "max_gap": 1000,
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-c"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 17,
+      "floor": -4503599627370496,
+      "start": 0,
+      "step": 100,
+      "steps": 40,
+      "max_gap": 1000,
+      "series": [
+        {
+          "series": {
+            "id": "c7bd603aca14d8616d6cdef012c17768fa4b8a091f0743df23439edaad908597",
+            "labels": {
+              "__name__": "strain",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "source": "observed",
+              "value": 0
+            },
+            {
+              "time": 100,
+              "source": "interpolated",
+              "value": 1
+            },
+            {
+              "time": 200,
+              "source": "interpolated",
+              "value": 2
+            },
+            {
+              "time": 300,
+              "source": "interpolated",
+              "value": 3
+            },
+            {
+              "time": 400,
+              "source": "observed",
+              "value": 4
+            },
+            {
+              "time": 500,
+              "source": "interpolated",
+              "value": 5
+            },
+            {
+              "time": 600,
+              "source": "interpolated",
+              "value": 6
+            },
+            {
+              "time": 700,
+              "source": "interpolated",
+              "value": 7
+            },
+            {
+              "time": 800,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 900,
+              "source": "observed",
+              "value": 9
+            },
+            {
+              "time": 1000,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1100,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1200,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1300,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1400,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1500,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1600,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1700,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1800,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1900,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2000,
+              "source": "observed",
+              "value": 12
+            },
+            {
+              "time": 2100,
+              "source": "interpolated",
+              "value": 11
+            },
+            {
+              "time": 2200,
+              "source": "interpolated",
+              "value": 10
+            },
+            {
+              "time": 2300,
+              "source": "interpolated",
+              "value": 9
+            },
+            {
+              "time": 2400,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 2500,
+              "source": "interpolated",
+              "value": 7
+            },
+            {
+              "time": 2600,
+              "source": "observed",
+              "value": 6
+            },
+            {
+              "time": 2700,
+              "source": "interpolated",
+              "value": 7.000000000000001
+            },
+            {
+              "time": 2800,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 2900,
+              "source": "interpolated",
+              "value": 9
+            },
+            {
+              "time": 3000,
+              "source": "interpolated",
+              "value": 10
+            },
+            {
+              "time": 3100,
+              "source": "observed",
+              "value": 11
+            },
+            {
+              "time": 3200,
+              "source": "interpolated",
+              "value": 10
+            },
+            {
+              "time": 3300,
+              "source": "interpolated",
+              "value": 9
+            },
+            {
+              "time": 3400,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 3500,
+              "source": "interpolated",
+              "value": 7
+            },
+            {
+              "time": 3600,
+              "source": "interpolated",
+              "value": 6
+            },
+            {
+              "time": 3700,
+              "source": "interpolated",
+              "value": 5
+            },
+            {
+              "time": 3800,
+              "source": "interpolated",
+              "value": 4
+            },
+            {
+              "time": 3900,
+              "source": "observed",
+              "value": 3
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 2,
+        "head": 1,
+        "decoded": 8,
+        "visible": 7,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "resample delete",
+    "request": {
+      "start": 2000,
+      "end": 2601,
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-c"
+        }
+      ]
+    },
+    "response": {
+      "id": "00000000000000000018",
+      "series": [
+        "c7bd603aca14d8616d6cdef012c17768fa4b8a091f0743df23439edaad908597"
+      ],
+      "start": 2000,
+      "end": 2601,
+      "sequence": 18
+    }
+  },
+  {
+    "step": "resample deletion hole",
+    "request": {
+      "start": 0,
+      "step": 100,
+      "steps": 40,
+      "max_gap": 1000,
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-c"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 18,
+      "floor": -4503599627370496,
+      "start": 0,
+      "step": 100,
+      "steps": 40,
+      "max_gap": 1000,
+      "series": [
+        {
+          "series": {
+            "id": "c7bd603aca14d8616d6cdef012c17768fa4b8a091f0743df23439edaad908597",
+            "labels": {
+              "__name__": "strain",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "source": "observed",
+              "value": 0
+            },
+            {
+              "time": 100,
+              "source": "interpolated",
+              "value": 1
+            },
+            {
+              "time": 200,
+              "source": "interpolated",
+              "value": 2
+            },
+            {
+              "time": 300,
+              "source": "interpolated",
+              "value": 3
+            },
+            {
+              "time": 400,
+              "source": "observed",
+              "value": 4
+            },
+            {
+              "time": 500,
+              "source": "interpolated",
+              "value": 5
+            },
+            {
+              "time": 600,
+              "source": "interpolated",
+              "value": 6
+            },
+            {
+              "time": 700,
+              "source": "interpolated",
+              "value": 7
+            },
+            {
+              "time": 800,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 900,
+              "source": "observed",
+              "value": 9
+            },
+            {
+              "time": 1000,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1100,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1200,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1300,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1400,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1500,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1600,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1700,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1800,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1900,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2000,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2100,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2200,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2300,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2400,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2500,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2600,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2700,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2800,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2900,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 3000,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 3100,
+              "source": "observed",
+              "value": 11
+            },
+            {
+              "time": 3200,
+              "source": "interpolated",
+              "value": 10
+            },
+            {
+              "time": 3300,
+              "source": "interpolated",
+              "value": 9
+            },
+            {
+              "time": 3400,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 3500,
+              "source": "interpolated",
+              "value": 7
+            },
+            {
+              "time": 3600,
+              "source": "interpolated",
+              "value": 6
+            },
+            {
+              "time": 3700,
+              "source": "interpolated",
+              "value": 5
+            },
+            {
+              "time": 3800,
+              "source": "interpolated",
+              "value": 4
+            },
+            {
+              "time": 3900,
+              "source": "observed",
+              "value": 3
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 2,
+        "head": 1,
+        "decoded": 8,
+        "visible": 5,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "resample retention",
+    "request": {
+      "now": 5000
+    },
+    "response": {
+      "sequence": 19,
+      "blocks": 2,
+      "points": 3,
+      "floor": 2500
+    }
+  },
+  {
+    "step": "resample below floor",
+    "request": {
+      "start": 0,
+      "step": 100,
+      "steps": 40,
+      "max_gap": 1000,
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-c"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 19,
+      "floor": 2500,
+      "start": 0,
+      "step": 100,
+      "steps": 40,
+      "max_gap": 1000,
+      "series": [
+        {
+          "series": {
+            "id": "c7bd603aca14d8616d6cdef012c17768fa4b8a091f0743df23439edaad908597",
+            "labels": {
+              "__name__": "strain",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 100,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 200,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 300,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 400,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 500,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 600,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 700,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 800,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 900,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1000,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1100,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1200,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1300,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1400,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1500,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1600,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1700,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1800,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 1900,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2000,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2100,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2200,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2300,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2400,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2500,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2600,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2700,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2800,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 2900,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 3000,
+              "source": "missing",
+              "value": null
+            },
+            {
+              "time": 3100,
+              "source": "observed",
+              "value": 11
+            },
+            {
+              "time": 3200,
+              "source": "interpolated",
+              "value": 10
+            },
+            {
+              "time": 3300,
+              "source": "interpolated",
+              "value": 9
+            },
+            {
+              "time": 3400,
+              "source": "interpolated",
+              "value": 8
+            },
+            {
+              "time": 3500,
+              "source": "interpolated",
+              "value": 7
+            },
+            {
+              "time": 3600,
+              "source": "interpolated",
+              "value": 6
+            },
+            {
+              "time": 3700,
+              "source": "interpolated",
+              "value": 5
+            },
+            {
+              "time": 3800,
+              "source": "interpolated",
+              "value": 4
+            },
+            {
+              "time": 3900,
+              "source": "observed",
+              "value": 3
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 2,
+        "visible": 2,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "resample capacity",
+    "request": {
+      "start": 0,
+      "step": 1,
+      "steps": 100000,
+      "max_gap": 1000
+    },
+    "response": {
+      "code": "capacity",
+      "detail": "resample output cell budget exceeded"
+    }
+  },
+  {
+    "step": "resample capacity again",
+    "request": {
+      "start": 0,
+      "step": 1,
+      "steps": 100000,
+      "max_gap": 1000
+    },
+    "response": {
+      "code": "capacity",
+      "detail": "resample output cell budget exceeded"
+    }
+  },
+  {
+    "step": "resample invalid grid",
+    "request": {
+      "start": 0,
+      "step": 1,
+      "steps": 0,
+      "max_gap": 1000
+    },
+    "response": {
+      "code": "invalid",
+      "detail": "grid point count outside supported range"
+    }
+  },
+  {
     "step": "backup source",
     "request": {
       "start": -5000,
       "end": 10000
     },
     "response": {
-      "sequence": 11,
+      "sequence": 19,
       "floor": 1000,
       "series": [
         {
@@ -1380,14 +2616,14 @@
   },
   {
     "step": "backup",
-    "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sequence": "19",
+    "sha256": "6c97ec32fdbbd4924d043c6b62e1b673c179b12a4bafe1eceaff689b6d70a7e2",
+    "bytes": 57344
   },
   {
     "step": "restored",
     "response": {
-      "sequence": 11,
+      "sequence": 19,
       "floor": 1000,
       "series": [
         {

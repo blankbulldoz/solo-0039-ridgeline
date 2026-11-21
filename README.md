@@ -48,6 +48,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/resample` | grid start, step, steps, max_gap, matchers |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -72,6 +73,18 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+Resampling evaluates each matched series on an even grid `start + i*step` for
+`i` in `[0, steps)`, for downstream consumers that require uniform spacing. A
+grid point exactly on a visible sample is `observed`; a point between two
+neighboring visible samples is `interpolated` linearly, but only when their
+gap does not exceed `max_gap`; anything else is `missing` with a null value.
+Visibility already excludes deleted and pre-floor samples, so deletion holes
+and the retention floor are never interpolated across, and recomputation after
+a correction reflects the corrected values in the adjacent intervals. The
+output shape is fixed by the request at `series × steps` cells: grids over
+100000 points or shapes over 150000 cells are rejected with 422 before any
+source scanning, never truncated or partially emitted.
 
 ## Storage And Recovery
 

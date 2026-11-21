@@ -15,7 +15,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "compact", "backup",
+    "explain", "resample"
 ]
 
 
@@ -133,6 +134,75 @@ def exercise(workflow, output):
                     "now": 11000, "points": [{**seed["points"][0], "time": 1500}]
                 }, status=409)
                 op("resume", space + "/mode", {"read_only": False}, method="PUT")
+                spectra = "spaces/spectra"
+                op("resample namespace", "spaces", {
+                    "name": "spectra", "retention_ms": 2500, "lateness_ms": 10000,
+                    "future_ms": 1000, "max_series": 100, "max_write": 10000,
+                    "max_scan": 100000})
+                strain_c = {"__name__": "strain", "node": "ridge-c", "zone": "north"}
+                strain_d = {"__name__": "strain", "node": "ridge-d", "zone": "north"}
+                op("resample ingest base", spectra + "/points", {"now": 5000, "points": [
+                    {"labels": strain_c, "time": 0, "value": 0},
+                    {"labels": strain_c, "time": 400, "value": 4},
+                    {"labels": strain_c, "time": 900, "value": 9},
+                    {"labels": strain_c, "time": 2000, "value": 2},
+                    {"labels": strain_c, "time": 2600, "value": 6},
+                    {"labels": strain_d, "time": 0, "value": 1.5},
+                    {"labels": strain_d, "time": 3600, "value": 2.5}]})
+                op("resample seal", spectra + "/seal", {})
+                op("resample ingest more", spectra + "/points", {"now": 6000, "points": [
+                    {"labels": strain_c, "time": 3100, "value": 11},
+                    {"labels": strain_c, "time": 3900, "value": 3}]})
+                op("resample reseal", spectra + "/seal", {})
+                grid = {"start": 0, "step": 100, "steps": 40, "max_gap": 1000,
+                        "matchers": [{"label": "node", "op": "=", "value": "ridge-c"}]}
+                first = op("resample across blocks", spectra + "/resample", grid)
+                cells = first["series"][0]["points"]
+                if cells[0]["source"] != "observed" or cells[0]["value"] != 0:
+                    raise RuntimeError("grid point on a sample must be observed")
+                if cells[5]["source"] != "interpolated" or abs(cells[5]["value"] - 5.0) > 1e-9:
+                    raise RuntimeError("grid point inside a small gap must interpolate")
+                if cells[10]["source"] != "missing" or cells[10]["value"] is not None:
+                    raise RuntimeError("gap wider than max_gap must stay missing")
+                # Samples at 2600 and 3100 live in different sealed blocks.
+                if cells[28]["source"] != "interpolated" or abs(cells[28]["value"] - 8.0) > 1e-9:
+                    raise RuntimeError("interpolation must cross the sealed block boundary")
+                if cells[31]["source"] != "observed" or cells[39]["value"] != 3:
+                    raise RuntimeError("grid endpoints on samples must be observed")
+                op("resample correct", spectra + "/points", {
+                    "now": 6000, "points": [{"labels": strain_c, "time": 2000, "value": 12}]})
+                corrected = op("resample after correction", spectra + "/resample", grid)
+                updated = corrected["series"][0]["points"]
+                if updated[20]["source"] != "observed" or updated[20]["value"] != 12:
+                    raise RuntimeError("correction must replace the observed value")
+                if updated[22]["source"] != "interpolated" or \
+                        abs(updated[22]["value"] - 10.0) > 1e-9 or \
+                        updated[22]["value"] == cells[22]["value"]:
+                    raise RuntimeError("correction must change the adjacent intervals")
+                op("resample delete", spectra + "/deletions", {"start": 2000, "end": 2601,
+                   "matchers": [{"label": "node", "op": "=", "value": "ridge-c"}]})
+                holed = op("resample deletion hole", spectra + "/resample", grid)
+                hollow = holed["series"][0]["points"]
+                if any(c["source"] != "missing" for c in hollow[10:31]):
+                    raise RuntimeError("deletion hole wider than max_gap must not be filled")
+                if hollow[5]["source"] != "interpolated" or hollow[31]["source"] != "observed":
+                    raise RuntimeError("deletion must not disturb surviving intervals")
+                op("resample retention", spectra + "/retention", {"now": 5000})
+                faded = op("resample below floor", spectra + "/resample", grid)
+                below = faded["series"][0]["points"]
+                if any(c["source"] != "missing" for c in below[:31]):
+                    raise RuntimeError("retention floor must not be interpolated across")
+                if below[31]["source"] != "observed" or below[36]["source"] != "interpolated":
+                    raise RuntimeError("points above the floor must resample normally")
+                dense = {"start": 0, "step": 1, "steps": 100000, "max_gap": 1000}
+                rejected = op("resample capacity", spectra + "/resample", dense, status=422)
+                if rejected["code"] != "capacity":
+                    raise RuntimeError("oversized output shape must fail as capacity")
+                again = op("resample capacity again", spectra + "/resample", dense, status=422)
+                if again != rejected:
+                    raise RuntimeError("capacity rejection must be deterministic")
+                op("resample invalid grid", spectra + "/resample",
+                   {**dense, "steps": 0}, status=400)
                 source = op("backup source", space + "/range", q)
                 image, headers = request(base, "image")
                 if hashlib.sha256(image).hexdigest() != headers["X-Ridge-Sha256"]:

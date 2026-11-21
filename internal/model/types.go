@@ -85,6 +85,42 @@ type RangeResult struct {
 	Truncated bool           `json:"truncated"`
 }
 
+type ResampleQuery struct {
+	Start    int64     `json:"start"`
+	Step     int64     `json:"step"`
+	Steps    int       `json:"steps"`
+	MaxGap   int64     `json:"max_gap"`
+	Matchers []Matcher `json:"matchers"`
+}
+
+const (
+	GridObserved     = "observed"
+	GridInterpolated = "interpolated"
+	GridMissing      = "missing"
+)
+
+type GridPoint struct {
+	Time   int64    `json:"time"`
+	Source string   `json:"source"`
+	Value  *float64 `json:"value"`
+}
+
+type ResampleSeries struct {
+	Series Series      `json:"series"`
+	Points []GridPoint `json:"points"`
+}
+
+type ResampleResult struct {
+	Sequence uint64           `json:"sequence"`
+	Floor    int64            `json:"floor"`
+	Start    int64            `json:"start"`
+	Step     int64            `json:"step"`
+	Steps    int              `json:"steps"`
+	MaxGap   int64            `json:"max_gap"`
+	Series   []ResampleSeries `json:"series"`
+	Stats    ScanStats        `json:"stats"`
+}
+
 type Cell struct {
 	Labels Labels  `json:"labels"`
 	Start  int64   `json:"start"`

@@ -11,6 +11,11 @@ import (
 const MinTime int64 = -(1 << 52)
 const MaxTime int64 = 1 << 52
 
+// Resample output budgets. A request is rejected outright when its grid or
+// its series×grid output shape exceeds these bounds; results never truncate.
+const MaxResampleSteps = 100000
+const MaxResampleCells = 150000
+
 var identifier = regexp.MustCompile(`^[a-zA-Z_][a-zA-Z0-9_.:-]{0,95}$`)
 
 func ValidName(s string) bool {
@@ -63,6 +68,29 @@ func ValidateNamespace(n Namespace) error {
 	if n.MaxSeries < 1 || n.MaxSeries > 100000 || n.MaxWrite < 1 ||
 		n.MaxWrite > 50000 || n.MaxScan < n.MaxWrite || n.MaxScan > 2000000 {
 		return Bad("invalid capacity policy")
+	}
+	return nil
+}
+
+func ValidateResample(q ResampleQuery) error {
+	if !ValidTime(q.Start) {
+		return Bad("grid origin outside supported range")
+	}
+	if q.Step < 1 || q.Step > MaxTime {
+		return Bad("grid interval outside supported range")
+	}
+	if q.Steps < 1 || q.Steps > MaxResampleSteps {
+		return Bad("grid point count outside supported range")
+	}
+	// Overflow-safe: the final grid point must remain a supported timestamp.
+	if q.Steps > 1 && int64(q.Steps-1) > (MaxTime-q.Start)/q.Step {
+		return Bad("grid extends beyond supported time range")
+	}
+	if q.MaxGap < 0 || q.MaxGap > MaxTime {
+		return Bad("interpolation gap outside supported range")
+	}
+	if len(q.Matchers) > 32 {
+		return Bad("invalid matcher count")
 	}
 	return nil
 }
