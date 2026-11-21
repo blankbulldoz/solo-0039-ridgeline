@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"ridgeline/internal/model"
 	"ridgeline/internal/policy"
@@ -44,11 +45,34 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 				return err
 			}
 		}
-		for _, p := range request.Points {
+		exemplars := 0
+		for i, p := range request.Points {
+			seriesID := model.SeriesID(p.Labels)
 			s := model.Sample{Time: p.Time, Value: p.Value, Sequence: seq}
-			key := volume.PointKey(model.SeriesID(p.Labels), p.Time)
+			key := volume.PointKey(seriesID, p.Time)
 			if err := volume.PutJSON(b.Bucket(volume.Head), key, s); err != nil {
 				return err
+			}
+			if p.Exemplar != nil {
+				labels := model.Labels{}
+				for k, v := range p.Exemplar.Labels {
+					labels[k] = v
+				}
+				stored := model.StoredExemplar{
+					ID:        fmt.Sprintf("%020d-%06d", seq, i),
+					SeriesID:  seriesID,
+					Time:      p.Time,
+					TraceID:   p.Exemplar.TraceID,
+					Labels:    labels,
+					Sequence:  seq,
+					Offset:    i,
+					AnchorVal: p.Value,
+				}
+				exKey := volume.ExemplarKey(seriesID, p.Time, seq, i)
+				if err := volume.PutJSON(b.Bucket(volume.Exemplars), exKey, stored); err != nil {
+					return err
+				}
+				exemplars++
 			}
 			if !n.HasWatermark || p.Time > n.Watermark {
 				n.Watermark, n.HasWatermark = p.Time, true
@@ -57,7 +81,7 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 		n.LastSequence = seq
 		receipt = model.WriteReceipt{
 			Sequence: seq, Accepted: len(request.Points),
-			NewSeries: len(newSeries), Watermark: n.Watermark,
+			NewSeries: len(newSeries), Exemplars: exemplars, Watermark: n.Watermark,
 		}
 		return volume.PutJSON(b, volume.Config, n)
 	})

@@ -13,6 +13,17 @@ const MaxTime int64 = 1 << 52
 
 var identifier = regexp.MustCompile(`^[a-zA-Z_][a-zA-Z0-9_.:-]{0,95}$`)
 
+// traceID mirrors common trace identifier character classes while staying
+// bounded; exemplars are correlation pointers, so opaque strings are kept.
+var traceIdentifier = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,127}$`)
+
+const (
+	MaxExemplarLabels    = 8
+	MaxExemplarLabel     = 256
+	MaxExemplarLimit     = 1000
+	DefaultExemplarLimit = 100
+)
+
 func ValidName(s string) bool {
 	return identifier.MatchString(s)
 }
@@ -42,12 +53,48 @@ func SeriesID(labels Labels) string {
 	return hex.EncodeToString(hash[:])
 }
 
+func ValidateExemplar(ex *ExemplarInput) error {
+	if ex == nil {
+		return nil
+	}
+	if !traceIdentifier.MatchString(ex.TraceID) {
+		return Bad("exemplar trace_id is required and must be at most 128 safe characters")
+	}
+	if len(ex.Labels) > MaxExemplarLabels {
+		return Bad("exemplar context may contain at most 8 labels")
+	}
+	for k, v := range ex.Labels {
+		if !ValidName(k) || len(v) > MaxExemplarLabel {
+			return Bad("invalid exemplar context label name or value")
+		}
+	}
+	return nil
+}
+
 func ValidateObservation(p Observation) error {
 	if err := ValidateLabels(p.Labels); err != nil {
 		return err
 	}
 	if !ValidTime(p.Time) || math.IsNaN(p.Value) || math.IsInf(p.Value, 0) {
 		return Bad("time outside supported range or value is not finite")
+	}
+	if err := ValidateExemplar(p.Exemplar); err != nil {
+		return err
+	}
+	return nil
+}
+
+func ValidateExemplarQuery(q ExemplarQuery) error {
+	if !ValidTime(q.Start) || q.End < MinTime || q.End > MaxTime+1 || q.Start >= q.End {
+		return Bad("query requires a supported nonempty half-open interval")
+	}
+	if q.Limit < 0 || q.Limit > MaxExemplarLimit || len(q.Matchers) > 32 {
+		return Bad("invalid exemplar limit or matcher count")
+	}
+	for _, m := range q.Matchers {
+		if !ValidName(m.Label) {
+			return Bad("invalid matcher label")
+		}
 	}
 	return nil
 }

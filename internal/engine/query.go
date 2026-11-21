@@ -65,6 +65,7 @@ type Plan struct {
 	MaxDecoded      int            `json:"max_decoded"`
 	SourcePointHint int            `json:"source_point_hint"`
 	HeadRecords     int            `json:"head_records"`
+	ExemplarRecords int            `json:"exemplar_records"`
 }
 
 func (e *Engine) Explain(name string, q model.Query) (Plan, error) {
@@ -88,6 +89,7 @@ func (e *Engine) Explain(name string, q model.Query) (Plan, error) {
 		plan.Candidates = selectseries.Pick(all, selector)
 		plan.Sequence, plan.Floor, plan.MaxDecoded = volume.Current(tx), n.Floor, n.MaxScan
 		plan.HeadRecords = b.Bucket(volume.Head).Stats().KeyN
+		plan.ExemplarRecords = b.Bucket(volume.Exemplars).Stats().KeyN
 		plan.Blocks = []model.Block{}
 		blocks, err := readBlocks(b)
 		if err != nil {

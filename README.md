@@ -47,6 +47,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
+| POST | `/spaces/{space}/exemplars` | interval, matchers, optional bounded limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
@@ -73,12 +74,55 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+## Exemplars
+
+An exemplar attaches an observation to a trace at one series-time so a
+dashboard spike can jump into tracing. A point may carry an optional
+`exemplar` object:
+
+```json
+{"labels":{"__name__":"pulse_total","node":"ridge-a"},"time":1500,"value":96,
+ "exemplar":{"trace_id":"4bf92f3577b34da6a3ce929d0e0e4736",
+             "labels":{"route":"/checkout","shard":"a"}}}
+```
+
+Exemplars do not participate in series identity, head points, block payloads
+or any aggregation; they are stored in a separate bucket keyed by series,
+time, commit sequence and in-batch offset. One series-time therefore holds
+many exemplars, and a write without an exemplar changes nothing about
+attachments. `trace_id` is required (up to 128 safe characters) and context
+labels are bounded to eight entries of at most 256 characters; invalid
+exemplars reject the whole atomic request.
+
+`POST /spaces/{space}/exemplars` takes a half-open interval, the same label
+matchers as other queries and an optional `limit` (default 100, hard cap
+1000). Dense spikes cannot return without bound: when matches exceed the
+limit, deterministically spaced representatives are returned with
+`truncated:true`, and `stats.omitted` accounts for the rest. Every match is
+still classified in `stats` (`visible`, `hidden_tombstone`, `below_floor`,
+`detached`). Each returned exemplar reports `anchor_visible` and
+`anchor_sequence`, so association validity is directly inspectable:
+
+- a deletion hides exemplars committed at or before the tombstone sequence;
+  a later correction at the same time admits new, valid exemplars without
+  resurrecting old ones;
+- same-time corrections keep the exemplar attached while its `value` and
+  `anchor_sequence` track the newest visible point;
+- retention physically reclaims exemplars below the floor during the
+  retention compaction, and explicit compaction reclaims tombstoned or
+  detached associations; maintenance receipts count kept and dropped records;
+- sealing moves samples into blocks but leaves exemplars in place; anchors
+  resolve through head and blocks alike, and backup images include them.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
-deletes and rollups buckets. Numeric point keys encode signed time in
-lexicographic order. Blocks use format 1: a gzip stream containing an ordered
-JSON sample array, with SHA-256 over the compressed payload.
+deletes, rollups and exemplars buckets. Numeric point keys encode signed
+time in lexicographic order; exemplar keys append commit sequence and offset
+so one moment can carry many attachments. Blocks use format 1: a gzip stream
+containing an ordered JSON sample array, with SHA-256 over the compressed
+payload. Opening a database created before exemplars existed adds the new
+bucket automatically.
 
 Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with

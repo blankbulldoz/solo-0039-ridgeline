@@ -20,6 +20,7 @@ var Blocks = []byte("blocks")
 var Payloads = []byte("payloads")
 var Deletes = []byte("deletes")
 var Rollups = []byte("rollups")
+var Exemplars = []byte("exemplars")
 var Config = []byte("config")
 
 type DB struct {
@@ -39,8 +40,10 @@ func Open(path string) (*DB, error) {
 		if e != nil {
 			return e
 		}
-		_, e = root.CreateBucketIfNotExists(Spaces)
-		return e
+		if _, e = root.CreateBucketIfNotExists(Spaces); e != nil {
+			return e
+		}
+		return EnsureExemplarBuckets(tx)
 	})
 	if err != nil {
 		raw.Close()
@@ -62,12 +65,40 @@ func CreateNamespace(tx *bolt.Tx, name string) (*bolt.Bucket, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, bucket := range [][]byte{Catalog, Head, Blocks, Payloads, Deletes, Rollups} {
+	for _, bucket := range [][]byte{Catalog, Head, Blocks, Payloads, Deletes, Rollups, Exemplars} {
 		if _, err = ns.CreateBucket(bucket); err != nil {
 			return nil, err
 		}
 	}
 	return ns, nil
+}
+
+// EnsureExemplarBuckets upgrades namespaces created before exemplars existed.
+// Namespace names are collected first because bbolt forbids creating buckets
+// while iterating the parent bucket.
+func EnsureExemplarBuckets(tx *bolt.Tx) error {
+	spaces := tx.Bucket(Root).Bucket(Spaces)
+	if spaces == nil {
+		return nil
+	}
+	var names [][]byte
+	if err := spaces.ForEach(func(k, v []byte) error {
+		if v == nil {
+			names = append(names, append([]byte(nil), k...))
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	for _, name := range names {
+		ns := spaces.Bucket(name)
+		if ns != nil && ns.Bucket(Exemplars) == nil {
+			if _, err := ns.CreateBucket(Exemplars); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func Next(tx *bolt.Tx) (uint64, error) {

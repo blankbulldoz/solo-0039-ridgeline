@@ -33,6 +33,19 @@ supported; absent labels behave as the empty string for matcher evaluation.
 Limits reject excessive source work rather than silently dropping points.
 Raw result limits are explicit and include a truncation indicator.
 
+Exemplars attach trace identifiers and bounded context labels to one
+series-time without entering series identity, sample storage or ordinary
+aggregation. They live in a separate namespace bucket keyed by series, time,
+commit sequence and in-batch offset, so a single moment may carry many
+exemplars. Exemplar queries use the same half-open intervals and label
+matchers and resolve anchor visibility through the same correction,
+tombstone and retention rules as raw scans; every match is classified as
+visible, tombstone-hidden, below the retention floor or detached. Result
+limits are explicit and representative selection is deterministic, so a
+dense spike returns bounded samples plus truncation and omission
+accounting. Compaction and retention physically reclaim associations that
+can never be valid again; sealing and backup preserve them unchanged.
+
 Window aggregation supports count, sum, min, max, average, first and last.
 Buckets align to a caller-supplied origin, including before the Unix epoch.
 Only populated windows appear. An average weights observations, not series.
@@ -70,6 +83,9 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Attach trace exemplars to a spike and trace their validity through
+    aggregate windows, same-time corrections, deletion, compaction and
+    retention.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
@@ -85,6 +101,7 @@ revision queries, SQL, authentication or a background retention scheduler.
 Large raw scans are bounded by the namespace scan budget. Maintenance currently
 runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
+Exemplars are JSON records in their own bucket; they never alter block format 1.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
 exercise real API operations, process restart and failure responses. Formal

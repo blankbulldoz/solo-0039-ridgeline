@@ -28,10 +28,16 @@ type Sample struct {
 	Sequence uint64  `json:"sequence"`
 }
 
+type ExemplarInput struct {
+	TraceID string `json:"trace_id"`
+	Labels  Labels `json:"labels"`
+}
+
 type Observation struct {
-	Labels Labels  `json:"labels"`
-	Time   int64   `json:"time"`
-	Value  float64 `json:"value"`
+	Labels   Labels         `json:"labels"`
+	Time     int64          `json:"time"`
+	Value    float64        `json:"value"`
+	Exemplar *ExemplarInput `json:"exemplar,omitempty"`
 }
 
 type WriteRequest struct {
@@ -43,7 +49,63 @@ type WriteReceipt struct {
 	Sequence  uint64 `json:"sequence"`
 	Accepted  int    `json:"accepted"`
 	NewSeries int    `json:"new_series"`
+	Exemplars int    `json:"exemplars"`
 	Watermark int64  `json:"watermark"`
+}
+
+// StoredExemplar is the durable record. It never participates in series
+// identity, head points or block payloads; the anchor fields are provenance
+// for visibility checks rather than sample state.
+type StoredExemplar struct {
+	ID        string  `json:"id"`
+	SeriesID  string  `json:"series_id"`
+	Time      int64   `json:"time"`
+	TraceID   string  `json:"trace_id"`
+	Labels    Labels  `json:"labels"`
+	Sequence  uint64  `json:"sequence"`
+	Offset    int     `json:"offset"`
+	AnchorVal float64 `json:"anchor_value"`
+}
+
+// Exemplar is the query-facing attachment. Anchor fields describe the sample
+// at the same series-time at query time, so deletion, correction and
+// retention effects remain directly inspectable.
+type Exemplar struct {
+	ID             string  `json:"id"`
+	Series         Series  `json:"series"`
+	Time           int64   `json:"time"`
+	Value          float64 `json:"value"`
+	TraceID        string  `json:"trace_id"`
+	Labels         Labels  `json:"labels"`
+	Sequence       uint64  `json:"sequence"`
+	AnchorVisible  bool    `json:"anchor_visible"`
+	AnchorSequence *uint64 `json:"anchor_sequence,omitempty"`
+}
+
+type ExemplarQuery struct {
+	Start    int64     `json:"start"`
+	End      int64     `json:"end"`
+	Matchers []Matcher `json:"matchers"`
+	Limit    int       `json:"limit"`
+}
+
+type ExemplarStats struct {
+	Scanned         int `json:"scanned"`
+	Matched         int `json:"matched"`
+	Visible         int `json:"visible"`
+	Omitted         int `json:"omitted"`
+	HiddenTombstone int `json:"hidden_tombstone"`
+	BelowFloor      int `json:"below_floor"`
+	Detached        int `json:"detached"`
+}
+
+type ExemplarResult struct {
+	Sequence  uint64        `json:"sequence"`
+	Floor     int64         `json:"floor"`
+	Limit     int           `json:"limit"`
+	Truncated bool          `json:"truncated"`
+	Exemplars []Exemplar    `json:"exemplars"`
+	Stats     ExemplarStats `json:"stats"`
 }
 
 type Matcher struct {
@@ -131,8 +193,10 @@ type RollupView struct {
 }
 
 type Maintenance struct {
-	Sequence uint64 `json:"sequence"`
-	Blocks   int    `json:"blocks"`
-	Points   int    `json:"points"`
-	Floor    int64  `json:"floor"`
+	Sequence         uint64 `json:"sequence"`
+	Blocks           int    `json:"blocks"`
+	Points           int    `json:"points"`
+	ExemplarsKept    int    `json:"exemplars_kept"`
+	ExemplarsDropped int    `json:"exemplars_dropped"`
+	Floor            int64  `json:"floor"`
 }
