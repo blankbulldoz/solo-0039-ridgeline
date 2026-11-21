@@ -53,6 +53,10 @@ All methods below return 200 on success.
 | GET | `/spaces/{space}/blocks` | physical block inventory |
 | POST | `/spaces/{space}/deletions` | interval and matchers |
 | GET | `/spaces/{space}/deletions` | deletion sequence inventory |
+| POST | `/spaces/{space}/deletion-previews` | interval and matchers; freezes visible samples |
+| GET | `/spaces/{space}/deletion-previews/{preview}` | preview with coverage and current drift |
+| POST | `/spaces/{space}/deletion-previews/{preview}/confirm` | `{"fingerprint":"..."}` |
+| POST | `/spaces/{space}/deletion-previews/{preview}/cancel` | `{"fingerprint":"..."}` |
 | POST | `/spaces/{space}/retention` | `{"now":11000}` |
 | POST | `/spaces/{space}/compact` | empty object |
 | PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
@@ -73,12 +77,33 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+### Deletion Previews
+
+`POST /deletion-previews` stores a frozen selection without changing data or the
+namespace sequence. Each entry reports the canonical series identity, its
+visible point count in the interval and a half-open `coverage` from the first
+to the last visible timestamp; series with no visible points keep identity but
+omit coverage. A `fingerprint` binds the interval, matchers, identities and
+visible `(time, sequence)` pairs. Confirming with that fingerprint writes the
+same tombstone contract as `POST /deletions`; the immediate route remains.
+
+Reading a pending preview recomputes visibility. Adding, removing or replacing
+a visible point, an overlapping deletion, or confirmation invalidates or
+rejects it with 409 and names the reason and affected timestamps. A correction
+at an already deleted timestamp re-adds a point and is reported as added. A
+matching series created after the preview appears under `new_series` as a
+notice: it is not bound by the stored selection. Changes outside the previewed
+interval and series are notices only. Cancelling with the fingerprint rejects
+all later confirmation; cancel again is idempotent.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
-deletes and rollups buckets. Numeric point keys encode signed time in
+deletes, previews and rollups buckets. Numeric point keys encode signed time in
 lexicographic order. Blocks use format 1: a gzip stream containing an ordered
-JSON sample array, with SHA-256 over the compressed payload.
+JSON sample array, with SHA-256 over the compressed payload. A namespace
+created before previews existed gains the empty previews bucket on first
+preview, so older images still open.
 
 Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with

@@ -107,6 +107,93 @@ type Tombstone struct {
 	Sequence uint64   `json:"sequence"`
 }
 
+// Coverage is the half-open range from the first to the last visible point of
+// a previewed series. It is narrower than, or equal to, the requested interval.
+type Coverage struct {
+	Start int64 `json:"start"`
+	End   int64 `json:"end"`
+}
+
+type PreviewSeries struct {
+	Series   Series    `json:"series"`
+	Visible  int       `json:"visible"`
+	Coverage *Coverage `json:"coverage,omitempty"`
+}
+
+// PreviewPoint is the persisted visibility reference for one sample. Sequence
+// distinguishes a same-timestamp correction from the point the operator saw.
+type PreviewPoint struct {
+	Time     int64  `json:"time"`
+	Sequence uint64 `json:"sequence"`
+}
+
+type DriftSeries struct {
+	Series        Series  `json:"series"`
+	Added         int     `json:"added"`
+	Removed       int     `json:"removed"`
+	Replaced      int     `json:"replaced"`
+	AddedTimes    []int64 `json:"added_times,omitempty"`
+	RemovedTimes  []int64 `json:"removed_times,omitempty"`
+	ReplacedTimes []int64 `json:"replaced_times,omitempty"`
+}
+
+type NewDeletion struct {
+	ID             string `json:"id"`
+	Sequence       uint64 `json:"sequence"`
+	AffectsPreview bool   `json:"affects_preview"`
+}
+
+type PreviewDrift struct {
+	Invalidated       bool            `json:"invalidated"`
+	Reasons           []string        `json:"reasons"`
+	Notices           []string        `json:"notices"`
+	Series            []DriftSeries   `json:"series"`
+	NewSeries         []PreviewSeries `json:"new_series"`
+	NewDeletions      []NewDeletion   `json:"new_deletions"`
+	NamespaceSequence uint64          `json:"namespace_sequence"`
+	Floor             int64           `json:"floor"`
+}
+
+type PreviewSnapshot struct {
+	ID          string                    `json:"id"`
+	Start       int64                     `json:"start"`
+	End         int64                     `json:"end"`
+	Matchers    []Matcher                 `json:"matchers"`
+	Fingerprint string                    `json:"fingerprint"`
+	Sequence    uint64                    `json:"sequence"`
+	Floor       int64                     `json:"floor"`
+	Series      []PreviewSeries           `json:"series"`
+	Points      map[string][]PreviewPoint `json:"points"`
+	Tombstones  []string                  `json:"tombstones"`
+	Cancelled   bool                      `json:"cancelled"`
+	TombstoneID string                    `json:"tombstone_id,omitempty"`
+	ConfirmSeq  uint64                    `json:"confirm_sequence,omitempty"`
+}
+
+type PreviewView struct {
+	ID                string          `json:"id"`
+	Start             int64           `json:"start"`
+	End               int64           `json:"end"`
+	Matchers          []Matcher       `json:"matchers"`
+	Fingerprint       string          `json:"fingerprint"`
+	NamespaceSequence uint64          `json:"namespace_sequence"`
+	Floor             int64           `json:"floor"`
+	Series            []PreviewSeries `json:"series"`
+	Visible           int             `json:"visible"`
+	State             string          `json:"state"`
+	TombstoneID       string          `json:"tombstone_id,omitempty"`
+	ConfirmSequence   uint64          `json:"confirm_sequence,omitempty"`
+	Drift             *PreviewDrift   `json:"drift,omitempty"`
+}
+
+type DeleteConfirmation struct {
+	Preview     string    `json:"preview"`
+	Fingerprint string    `json:"fingerprint"`
+	Tombstone   Tombstone `json:"tombstone"`
+	Hidden      int       `json:"hidden"`
+	Notices     []string  `json:"notices,omitempty"`
+}
+
 type Block struct {
 	ID       string `json:"id"`
 	SeriesID string `json:"series_id"`

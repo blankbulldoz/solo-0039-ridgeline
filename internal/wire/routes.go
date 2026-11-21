@@ -67,6 +67,29 @@ func Handler(e *engine.Engine) http.Handler {
 			return e.Delete(r.PathValue("space"), q)
 		})
 	})
+	mux.HandleFunc("POST "+base+"/deletion-previews", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.Query) (any, error) {
+			return e.PreviewDelete(r.PathValue("space"), q)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/deletion-previews/{preview}", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.Preview(r.PathValue("space"), r.PathValue("preview"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("POST "+base+"/deletion-previews/{preview}/cancel", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input struct {
+			Fingerprint string `json:"fingerprint"`
+		}) (any, error) {
+			return e.CancelPreview(r.PathValue("space"), r.PathValue("preview"), input.Fingerprint)
+		})
+	})
+	mux.HandleFunc("POST "+base+"/deletion-previews/{preview}/confirm", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input struct {
+			Fingerprint string `json:"fingerprint"`
+		}) (any, error) {
+			return e.ConfirmDelete(r.PathValue("space"), r.PathValue("preview"), input.Fingerprint)
+		})
+	})
 	mux.HandleFunc("GET "+base+"/deletions", func(w http.ResponseWriter, r *http.Request) {
 		out, err := e.Deletions(r.PathValue("space"))
 		respond(w, out, err)

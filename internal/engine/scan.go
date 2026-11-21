@@ -26,28 +26,36 @@ func readBlocks(b *bolt.Bucket) ([]model.Block, error) {
 	return out, err
 }
 
-func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (model.RangeResult, error) {
-	result := model.RangeResult{Sequence: sequence, Floor: n.Floor, Series: []model.SeriesPoints{}}
+type visibleSeries struct {
+	Series model.Series
+	Points []model.Sample
+}
+
+// visiblePoints resolves the logical visibility of every selected series in the
+// query interval. Selected series without visible points are still returned so
+// callers such as deletion previews can bind catalog identity, not just rows.
+func visiblePoints(b *bolt.Bucket, n model.Namespace, q model.Query) ([]visibleSeries, model.ScanStats, error) {
+	stats := model.ScanStats{}
 	selector, err := selectseries.Compile(q.Matchers)
 	if err != nil {
-		return result, err
+		return nil, stats, err
 	}
 	allSeries, err := catalog(b)
 	if err != nil {
-		return result, err
+		return nil, stats, err
 	}
 	blocks, err := readBlocks(b)
 	if err != nil {
-		return result, err
+		return nil, stats, err
 	}
 	tombstones, err := readTombstones(b)
 	if err != nil {
-		return result, err
+		return nil, stats, err
 	}
-	result.Stats.Tombstones = len(tombstones)
+	stats.Tombstones = len(tombstones)
 	selected := selectseries.Pick(allSeries, selector)
-	result.Stats.Series = len(selected)
-	emitted := 0
+	stats.Series = len(selected)
+	out := make([]visibleSeries, 0, len(selected))
 	for _, s := range selected {
 		merged := map[int64]model.Sample{}
 		for _, block := range blocks {
@@ -55,15 +63,15 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 				block.Start >= q.End || block.End <= n.Floor {
 				continue
 			}
-			if result.Stats.Decoded+block.Count > n.MaxScan {
-				return result, model.Capacity("query decoded point budget exceeded")
+			if stats.Decoded+block.Count > n.MaxScan {
+				return nil, stats, model.Capacity("query decoded point budget exceeded")
 			}
 			points, err := chunk.Decode(b.Bucket(volume.Payloads).Get([]byte(block.ID)), block)
 			if err != nil {
-				return result, err
+				return nil, stats, err
 			}
-			result.Stats.Blocks++
-			result.Stats.Decoded += len(points)
+			stats.Blocks++
+			stats.Decoded += len(points)
 			for _, p := range points {
 				if p.Time < q.Start || p.Time >= q.End || p.Time < n.Floor {
 					continue
@@ -78,19 +86,19 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 		for k, v := cursor.Seek(volume.PointKey(s.ID, q.Start)); k != nil && bytes.HasPrefix(k, []byte(s.ID)); k, v = cursor.Next() {
 			timestamp, err := volume.PointTime(k)
 			if err != nil {
-				return result, err
+				return nil, stats, err
 			}
 			if timestamp >= q.End {
 				break
 			}
-			result.Stats.Head++
-			result.Stats.Decoded++
-			if result.Stats.Decoded > n.MaxScan {
-				return result, model.Capacity("query decoded point budget exceeded")
+			stats.Head++
+			stats.Decoded++
+			if stats.Decoded > n.MaxScan {
+				return nil, stats, model.Capacity("query decoded point budget exceeded")
 			}
 			var p model.Sample
 			if err := json.Unmarshal(v, &p); err != nil {
-				return result, err
+				return nil, stats, err
 			}
 			if p.Time < n.Floor {
 				continue
@@ -107,7 +115,22 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 			}
 		}
 		sort.Slice(points, func(i, j int) bool { return points[i].Time < points[j].Time })
-		result.Stats.Visible += len(points)
+		stats.Visible += len(points)
+		out = append(out, visibleSeries{Series: s, Points: points})
+	}
+	return out, stats, nil
+}
+
+func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (model.RangeResult, error) {
+	result := model.RangeResult{Sequence: sequence, Floor: n.Floor, Series: []model.SeriesPoints{}}
+	rows, stats, err := visiblePoints(b, n, q)
+	if err != nil {
+		return result, err
+	}
+	result.Stats = stats
+	emitted := 0
+	for _, row := range rows {
+		points := row.Points
 		if q.Limit > 0 && emitted+len(points) > q.Limit {
 			keep := q.Limit - emitted
 			points = points[:keep]
@@ -115,7 +138,7 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 		}
 		emitted += len(points)
 		if len(points) > 0 {
-			result.Series = append(result.Series, model.SeriesPoints{Series: s, Points: points})
+			result.Series = append(result.Series, model.SeriesPoints{Series: row.Series, Points: points})
 		}
 	}
 	return result, nil

@@ -54,6 +54,15 @@ it never silently presents stale materialization as current. Backup returns
 a consistent bbolt database image plus SHA-256 and sequence headers. Starting
 the server with that image as RIDGE_DB restores that database directly.
 
+A deletion preview freezes the canonical identities, visible point counts,
+time coverage and `(time, sequence)` references that a matcher-based deletion
+would hide. Publishing a preview never changes namespace data or its source
+sequence. Confirmation must present the preview fingerprint and is rejected
+when visible points were added, removed or replaced, when an overlapping
+deletion appeared, or when the preview was cancelled. Such rejection leaves the
+preview inspectable and cancellable. A series that starts matching after the
+preview was frozen is reported but is not part of the bound selection.
+
 ## Workflows
 
 1. Create, inspect and toggle namespace read-only policy.

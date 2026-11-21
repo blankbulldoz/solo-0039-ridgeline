@@ -69,6 +69,108 @@ def stop(process):
         raise RuntimeError(f"service exit {process.returncode}")
 
 
+def preview_workflow(seed, space, op):
+    """Show deletion previews bound to catalog identity and visible points.
+
+    The selector matches a present-empty label and an absent label at once:
+    rack="" is stored explicitly on ridge-a while ridge-b has no rack label.
+    Both canonical series match because absent labels compare as empty, yet
+    they remain distinct identities in the preview and the tombstone.
+    """
+    query = {"start": -5000, "end": 10000, "matchers": [
+        {"label": "__name__", "op": "=", "value": "load_ratio"},
+        {"label": "rack", "op": "=", "value": ""},
+    ]}
+    present_empty = {"__name__": "load_ratio", "node": "ridge-a", "zone": "east", "rack": ""}
+    absent = {"__name__": "load_ratio", "node": "ridge-b", "zone": "west"}
+    op("late load observations", space + "/points", {"now": 10000, "points": [
+        {"labels": present_empty, "time": 2500, "value": 0.4},
+        {"labels": present_empty, "time": 4000, "value": 0.6},
+        {"labels": absent, "time": 3000, "value": 0.5},
+    ]})
+
+    made = op("delete preview", space + "/deletion-previews", query)
+    if made["state"] != "pending" or made["visible"] != 4:
+        raise RuntimeError("preview should expose pending visibility")
+    if sorted(s["series"]["labels"]["node"] for s in made["series"]) != ["ridge-a", "ridge-b"]:
+        raise RuntimeError("absent and present-empty labels must both be selected")
+    labels_by_node = {s["series"]["labels"]["node"]: s["series"]["labels"] for s in made["series"]}
+    if "rack" not in labels_by_node["ridge-a"] or "rack" in labels_by_node["ridge-b"]:
+        raise RuntimeError("preview must preserve the absent label identity")
+    for entry in made["series"]:
+        if entry["visible"] and not entry["coverage"]:
+            raise RuntimeError("visible series require time coverage")
+    if op("preview before confirm", space + "/deletion-previews/" + made["id"])["state"] != "pending":
+        raise RuntimeError("unchanged preview should remain pending")
+    confirmed = op("confirm preview", space + "/deletion-previews/" + made["id"] + "/confirm",
+                   {"fingerprint": made["fingerprint"]})
+    if confirmed["hidden"] != 4 or len(confirmed["tombstone"]["series"]) != 2:
+        raise RuntimeError("confirmation must hide exactly the previewed samples")
+    done = op("confirmed preview view", space + "/deletion-previews/" + made["id"])
+    if done["state"] != "confirmed" or done["tombstone_id"] != confirmed["tombstone"]["id"]:
+        raise RuntimeError("confirmed preview must expose its tombstone binding")
+    op("re-report after confirmed delete", space + "/points", {"now": 10000, "points": [
+        {"labels": present_empty, "time": 2500, "value": 0.9},
+    ]})
+    visible = op("later report visible", space + "/range", query)
+    ridge_a = [row for row in visible["series"] if row["series"]["labels"]["node"] == "ridge-a"]
+    if len(ridge_a) != 1 or [p["time"] for p in ridge_a[0]["points"]] != [2500]:
+        raise RuntimeError("later report at a deleted timestamp should be visible")
+
+    cancelled = op("delete preview to cancel", space + "/deletion-previews", query)
+    op("cancel preview", space + "/deletion-previews/" + cancelled["id"] + "/cancel",
+       {"fingerprint": cancelled["fingerprint"]})
+    op("confirm cancelled preview", space + "/deletion-previews/" + cancelled["id"] + "/confirm",
+       {"fingerprint": cancelled["fingerprint"]}, status=409)
+    if op("cancelled preview view", space + "/deletion-previews/" + cancelled["id"])["state"] != "cancelled":
+        raise RuntimeError("cancelled preview must stay cancelled")
+
+    drifting = op("delete preview before correction", space + "/deletion-previews", query)
+    op("same-time correction", space + "/points", {"now": 10000, "points": [
+        {"labels": present_empty, "time": 2500, "value": 0.7},
+    ]})
+    drifted = op("drifted preview", space + "/deletion-previews/" + drifting["id"])
+    if drifted["state"] != "invalidated" or "visible_points_replaced" not in drifted["drift"]["reasons"]:
+        raise RuntimeError("same-time correction must invalidate the preview")
+    if not any(change["replaced_times"] == [2500] for change in drifted["drift"]["series"]):
+        raise RuntimeError("drift should name the corrected timestamp")
+    op("confirm drifted preview", space + "/deletion-previews/" + drifting["id"] + "/confirm",
+       {"fingerprint": drifting["fingerprint"]}, status=409)
+    op("cancel drifted preview", space + "/deletion-previews/" + drifting["id"] + "/cancel",
+       {"fingerprint": drifting["fingerprint"]})
+
+    growing = op("delete preview before new series", space + "/deletion-previews", query)
+    op("report new series", space + "/points", {"now": 10000, "points": [
+        {"labels": {"__name__": "load_ratio", "node": "ridge-c", "zone": "west"},
+         "time": 6000, "value": 0.3},
+    ]})
+    grown = op("preview with new series", space + "/deletion-previews/" + growing["id"])
+    if grown["state"] != "pending" or grown["drift"]["invalidated"]:
+        raise RuntimeError("unselected new series must not invalidate the preview")
+    if [entry["series"]["labels"]["node"] for entry in grown["drift"]["new_series"]] != ["ridge-c"]:
+        raise RuntimeError("new matching series should be reported separately")
+    grown_confirm = op("confirm preview with new series",
+                       space + "/deletion-previews/" + growing["id"] + "/confirm",
+                       {"fingerprint": growing["fingerprint"]})
+    if grown_confirm["hidden"] != 1:
+        raise RuntimeError("confirmation must ignore series outside the preview")
+    after = op("new series stays visible", space + "/range", query)
+    if [row["series"]["labels"]["node"] for row in after["series"]] != ["ridge-c"]:
+        raise RuntimeError("only the later reported series should remain visible")
+
+    shadowed = op("delete preview before legacy delete", space + "/deletion-previews", query)
+    op("legacy immediate delete", space + "/deletions", {
+        "start": 0, "end": 7000, "matchers": [{"label": "__name__", "op": "=", "value": "load_ratio"}],
+    })
+    overlap = op("preview after legacy delete", space + "/deletion-previews/" + shadowed["id"])
+    if overlap["state"] != "invalidated" or "overlapping_deletion" not in overlap["drift"]["reasons"]:
+        raise RuntimeError("overlapping deletion must invalidate the preview")
+    op("confirm shadowed preview", space + "/deletion-previews/" + shadowed["id"] + "/confirm",
+       {"fingerprint": shadowed["fingerprint"]}, status=409)
+    op("cancel shadowed preview", space + "/deletion-previews/" + shadowed["id"] + "/cancel",
+       {"fingerprint": shadowed["fingerprint"]})
+
+
 def exercise(workflow, output):
     seed = json.loads((ROOT / "examples/input.json").read_text())
     observations = []
@@ -125,6 +227,7 @@ def exercise(workflow, output):
                 op("compact", space + "/compact", {})
                 if op("post-compaction", space + "/range", q)["series"] != logical:
                     raise RuntimeError("compaction changed logical samples")
+                preview_workflow(seed, space, op)
                 op("explain", space + "/explain", q)
                 op("retention", space + "/retention", {"now": 11000})
                 op("retention no resurrection", space + "/points", replacement, status=409)
