@@ -638,8 +638,8 @@
         "start": 500,
         "end": 501,
         "count": 1,
-        "bytes": 64,
-        "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+        "bytes": 63,
+        "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
         "format": 1
       },
       {
@@ -648,8 +648,8 @@
         "start": -500,
         "end": 501,
         "count": 2,
-        "bytes": 105,
-        "checksum": "4c2f12747df3833972d963a29b9b86b6225d2de929c6252543feb51e3c6ceb20",
+        "bytes": 73,
+        "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
         "format": 1
       },
       {
@@ -658,8 +658,8 @@
         "start": -1500,
         "end": 1501,
         "count": 4,
-        "bytes": 80,
-        "checksum": "f62effbef22081bacda4663b08c17e44f621f0135a4c07c22feb6b601c4c1d4a",
+        "bytes": 83,
+        "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
         "format": 1
       },
       {
@@ -668,8 +668,8 @@
         "start": -1500,
         "end": 501,
         "count": 2,
-        "bytes": 100,
-        "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+        "bytes": 71,
+        "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
         "format": 1
       }
     ]
@@ -1215,8 +1215,8 @@
           "start": 500,
           "end": 501,
           "count": 1,
-          "bytes": 64,
-          "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
           "format": 1
         },
         {
@@ -1225,8 +1225,8 @@
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
+          "bytes": 81,
+          "checksum": "b4466d94f2096f50dbddfb490d297e5d0c8c72b777bc6992b72dfdd2e62dd118",
           "format": 1
         },
         {
@@ -1235,8 +1235,8 @@
           "start": -1500,
           "end": 501,
           "count": 2,
-          "bytes": 100,
-          "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
           "format": 1
         }
       ],
@@ -1340,13 +1340,1125 @@
     }
   },
   {
+    "step": "sessions namespace",
+    "request": {
+      "name": "handover",
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000
+    },
+    "response": {
+      "name": "handover",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 12
+    }
+  },
+  {
+    "step": "sessions pre-shift",
+    "request": {
+      "now": 0,
+      "points": [
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-carried",
+            "zone": "east"
+          },
+          "time": -800,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-late",
+            "zone": "east"
+          },
+          "time": -3000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-late",
+            "zone": "east"
+          },
+          "time": -1600,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-bridge",
+            "zone": "east"
+          },
+          "time": -500,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-reaped",
+            "zone": "east"
+          },
+          "time": -2000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-reaped",
+            "zone": "east"
+          },
+          "time": -500,
+          "value": 1
+        }
+      ]
+    },
+    "response": {
+      "sequence": 13,
+      "accepted": 6,
+      "new_series": 4,
+      "watermark": -500
+    }
+  },
+  {
+    "step": "sessions seal pre-shift",
+    "request": {},
+    "response": {
+      "sequence": 14,
+      "blocks": 4,
+      "points": 6,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "sessions early shift",
+    "request": {
+      "now": 2000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-carried",
+            "zone": "east"
+          },
+          "time": 700,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-new",
+            "zone": "east"
+          },
+          "time": 400,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-new",
+            "zone": "east"
+          },
+          "time": 1900,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-late",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-bridge",
+            "zone": "east"
+          },
+          "time": 800,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-reaped",
+            "zone": "east"
+          },
+          "time": 1000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-west",
+            "zone": "west"
+          },
+          "time": 100,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-west",
+            "zone": "west"
+          },
+          "time": 1600,
+          "value": 1
+        }
+      ]
+    },
+    "response": {
+      "sequence": 15,
+      "accepted": 8,
+      "new_series": 2,
+      "watermark": 1900
+    }
+  },
+  {
+    "step": "sessions seal early",
+    "request": {},
+    "response": {
+      "sequence": 16,
+      "blocks": 6,
+      "points": 8,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "sessions late shift",
+    "request": {
+      "now": 3900,
+      "points": [
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-carried",
+            "zone": "east"
+          },
+          "time": 2200,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-carried",
+            "zone": "east"
+          },
+          "time": 3700,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-late",
+            "zone": "east"
+          },
+          "time": 2000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-late",
+            "zone": "east"
+          },
+          "time": 3500,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-bridge",
+            "zone": "east"
+          },
+          "time": 2100,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-bridge",
+            "zone": "east"
+          },
+          "time": 3400,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-reaped",
+            "zone": "east"
+          },
+          "time": 2500,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-west",
+            "zone": "west"
+          },
+          "time": 3100,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-spanning",
+            "zone": "west"
+          },
+          "time": 2000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-spanning",
+            "zone": "west"
+          },
+          "time": 3000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-spanning",
+            "zone": "west"
+          },
+          "time": 4500,
+          "value": 1
+        }
+      ]
+    },
+    "response": {
+      "sequence": 17,
+      "accepted": 11,
+      "new_series": 1,
+      "watermark": 4500
+    }
+  },
+  {
+    "step": "sessions baseline",
+    "request": {
+      "start": 0,
+      "end": 4000,
+      "gap": 1500,
+      "as_of": 4000,
+      "group_by": [
+        "zone"
+      ],
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "collect_tick"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 17,
+      "floor": -4503599627370496,
+      "start": 0,
+      "end": 4000,
+      "gap": 1500,
+      "as_of": 4000,
+      "segments": [
+        {
+          "series": {
+            "id": "1fa8118dfc608506ec257172402643375c69e121b8c15188b402842ebcfdce60",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-bridge",
+              "zone": "east"
+            }
+          },
+          "first": 800,
+          "last": 3400,
+          "points": 3,
+          "left": "carried_in",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "26278e8ad8eccdfd6ece5f1442ab0fb911305f4e5986b48cc3b7bd82d4d39170",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-reaped",
+              "zone": "east"
+            }
+          },
+          "first": 1000,
+          "last": 2500,
+          "points": 2,
+          "left": "carried_in",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "5592282da3f8369424866b0df67235ded1b99167c0a70c48fc1e8a01124d768b",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-new",
+              "zone": "east"
+            }
+          },
+          "first": 400,
+          "last": 1900,
+          "points": 2,
+          "left": "started",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "aab43487916572ef1eb24f2c2708b069941098fdcb8f543de4edcd4e5204f351",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-spanning",
+              "zone": "west"
+            }
+          },
+          "first": 2000,
+          "last": 3000,
+          "points": 2,
+          "left": "started",
+          "right": "carried_out"
+        },
+        {
+          "series": {
+            "id": "b326014192d56eb3fab4bcb02eb70f8136faca336e46263c4f8ce0a8459f5425",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-late",
+              "zone": "east"
+            }
+          },
+          "first": 500,
+          "last": 3500,
+          "points": 3,
+          "left": "started",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "d6f9a691e7b406e9cf02444c7e19649726b84a8cc30a61182e4f66e03eff527e",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-west",
+              "zone": "west"
+            }
+          },
+          "first": 100,
+          "last": 3100,
+          "points": 3,
+          "left": "started",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "e62164c317c427ad8c4b6bf9a5533f6314b554646d6f220ea3dc8dc934266f7a",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-carried",
+              "zone": "east"
+            }
+          },
+          "first": 700,
+          "last": 3700,
+          "points": 3,
+          "left": "carried_in",
+          "right": "unknown_right"
+        }
+      ],
+      "groups": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "devices": 5,
+          "segments": 5,
+          "points": 13,
+          "started": 2,
+          "ended": 2,
+          "carried_in": 3,
+          "carried_out": 0,
+          "unknown_left": 0,
+          "unknown_right": 3
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "devices": 2,
+          "segments": 2,
+          "points": 5,
+          "started": 2,
+          "ended": 0,
+          "carried_in": 0,
+          "carried_out": 1,
+          "unknown_left": 0,
+          "unknown_right": 1
+        }
+      ],
+      "stats": {
+        "series": 7,
+        "blocks": 9,
+        "head": 11,
+        "decoded": 23,
+        "visible": 22,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "sessions invalid",
+    "request": {
+      "start": 0,
+      "end": 4000,
+      "gap": 0,
+      "as_of": 4000,
+      "group_by": [
+        "zone"
+      ],
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "collect_tick"
+        }
+      ]
+    },
+    "response": {
+      "code": "invalid",
+      "detail": "session gap outside supported range"
+    }
+  },
+  {
+    "step": "sessions late bridge",
+    "request": {
+      "now": 3900,
+      "points": [
+        {
+          "labels": {
+            "__name__": "collect_tick",
+            "device": "dev-late",
+            "zone": "east"
+          },
+          "time": -1000,
+          "value": 1
+        }
+      ]
+    },
+    "response": {
+      "sequence": 18,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 4500
+    }
+  },
+  {
+    "step": "sessions after late point",
+    "request": {
+      "start": 0,
+      "end": 4000,
+      "gap": 1500,
+      "as_of": 4000,
+      "group_by": [
+        "zone"
+      ],
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "collect_tick"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 18,
+      "floor": -4503599627370496,
+      "start": 0,
+      "end": 4000,
+      "gap": 1500,
+      "as_of": 4000,
+      "segments": [
+        {
+          "series": {
+            "id": "1fa8118dfc608506ec257172402643375c69e121b8c15188b402842ebcfdce60",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-bridge",
+              "zone": "east"
+            }
+          },
+          "first": 800,
+          "last": 3400,
+          "points": 3,
+          "left": "carried_in",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "26278e8ad8eccdfd6ece5f1442ab0fb911305f4e5986b48cc3b7bd82d4d39170",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-reaped",
+              "zone": "east"
+            }
+          },
+          "first": 1000,
+          "last": 2500,
+          "points": 2,
+          "left": "carried_in",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "5592282da3f8369424866b0df67235ded1b99167c0a70c48fc1e8a01124d768b",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-new",
+              "zone": "east"
+            }
+          },
+          "first": 400,
+          "last": 1900,
+          "points": 2,
+          "left": "started",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "aab43487916572ef1eb24f2c2708b069941098fdcb8f543de4edcd4e5204f351",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-spanning",
+              "zone": "west"
+            }
+          },
+          "first": 2000,
+          "last": 3000,
+          "points": 2,
+          "left": "started",
+          "right": "carried_out"
+        },
+        {
+          "series": {
+            "id": "b326014192d56eb3fab4bcb02eb70f8136faca336e46263c4f8ce0a8459f5425",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-late",
+              "zone": "east"
+            }
+          },
+          "first": 500,
+          "last": 3500,
+          "points": 3,
+          "left": "carried_in",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "d6f9a691e7b406e9cf02444c7e19649726b84a8cc30a61182e4f66e03eff527e",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-west",
+              "zone": "west"
+            }
+          },
+          "first": 100,
+          "last": 3100,
+          "points": 3,
+          "left": "started",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "e62164c317c427ad8c4b6bf9a5533f6314b554646d6f220ea3dc8dc934266f7a",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-carried",
+              "zone": "east"
+            }
+          },
+          "first": 700,
+          "last": 3700,
+          "points": 3,
+          "left": "carried_in",
+          "right": "unknown_right"
+        }
+      ],
+      "groups": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "devices": 5,
+          "segments": 5,
+          "points": 13,
+          "started": 1,
+          "ended": 2,
+          "carried_in": 4,
+          "carried_out": 0,
+          "unknown_left": 0,
+          "unknown_right": 3
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "devices": 2,
+          "segments": 2,
+          "points": 5,
+          "started": 2,
+          "ended": 0,
+          "carried_in": 0,
+          "carried_out": 1,
+          "unknown_left": 0,
+          "unknown_right": 1
+        }
+      ],
+      "stats": {
+        "series": 7,
+        "blocks": 9,
+        "head": 12,
+        "decoded": 24,
+        "visible": 23,
+        "tombstones": 0
+      }
+    }
+  },
+  {
+    "step": "sessions delete bridge",
+    "request": {
+      "start": 2100,
+      "end": 2101,
+      "matchers": [
+        {
+          "label": "device",
+          "op": "=",
+          "value": "dev-bridge"
+        }
+      ]
+    },
+    "response": {
+      "id": "00000000000000000019",
+      "series": [
+        "1fa8118dfc608506ec257172402643375c69e121b8c15188b402842ebcfdce60"
+      ],
+      "start": 2100,
+      "end": 2101,
+      "sequence": 19
+    }
+  },
+  {
+    "step": "sessions after bridge delete",
+    "request": {
+      "start": 0,
+      "end": 4000,
+      "gap": 1500,
+      "as_of": 4000,
+      "group_by": [
+        "zone"
+      ],
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "collect_tick"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 19,
+      "floor": -4503599627370496,
+      "start": 0,
+      "end": 4000,
+      "gap": 1500,
+      "as_of": 4000,
+      "segments": [
+        {
+          "series": {
+            "id": "1fa8118dfc608506ec257172402643375c69e121b8c15188b402842ebcfdce60",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-bridge",
+              "zone": "east"
+            }
+          },
+          "first": 800,
+          "last": 800,
+          "points": 1,
+          "left": "carried_in",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "1fa8118dfc608506ec257172402643375c69e121b8c15188b402842ebcfdce60",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-bridge",
+              "zone": "east"
+            }
+          },
+          "first": 3400,
+          "last": 3400,
+          "points": 1,
+          "left": "started",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "26278e8ad8eccdfd6ece5f1442ab0fb911305f4e5986b48cc3b7bd82d4d39170",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-reaped",
+              "zone": "east"
+            }
+          },
+          "first": 1000,
+          "last": 2500,
+          "points": 2,
+          "left": "carried_in",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "5592282da3f8369424866b0df67235ded1b99167c0a70c48fc1e8a01124d768b",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-new",
+              "zone": "east"
+            }
+          },
+          "first": 400,
+          "last": 1900,
+          "points": 2,
+          "left": "started",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "aab43487916572ef1eb24f2c2708b069941098fdcb8f543de4edcd4e5204f351",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-spanning",
+              "zone": "west"
+            }
+          },
+          "first": 2000,
+          "last": 3000,
+          "points": 2,
+          "left": "started",
+          "right": "carried_out"
+        },
+        {
+          "series": {
+            "id": "b326014192d56eb3fab4bcb02eb70f8136faca336e46263c4f8ce0a8459f5425",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-late",
+              "zone": "east"
+            }
+          },
+          "first": 500,
+          "last": 3500,
+          "points": 3,
+          "left": "carried_in",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "d6f9a691e7b406e9cf02444c7e19649726b84a8cc30a61182e4f66e03eff527e",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-west",
+              "zone": "west"
+            }
+          },
+          "first": 100,
+          "last": 3100,
+          "points": 3,
+          "left": "started",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "e62164c317c427ad8c4b6bf9a5533f6314b554646d6f220ea3dc8dc934266f7a",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-carried",
+              "zone": "east"
+            }
+          },
+          "first": 700,
+          "last": 3700,
+          "points": 3,
+          "left": "carried_in",
+          "right": "unknown_right"
+        }
+      ],
+      "groups": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "devices": 5,
+          "segments": 6,
+          "points": 12,
+          "started": 2,
+          "ended": 3,
+          "carried_in": 4,
+          "carried_out": 0,
+          "unknown_left": 0,
+          "unknown_right": 3
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "devices": 2,
+          "segments": 2,
+          "points": 5,
+          "started": 2,
+          "ended": 0,
+          "carried_in": 0,
+          "carried_out": 1,
+          "unknown_left": 0,
+          "unknown_right": 1
+        }
+      ],
+      "stats": {
+        "series": 7,
+        "blocks": 9,
+        "head": 12,
+        "decoded": 24,
+        "visible": 22,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "sessions retention",
+    "request": {
+      "now": 10500
+    },
+    "response": {
+      "sequence": 20,
+      "blocks": 7,
+      "points": 16,
+      "floor": 500
+    }
+  },
+  {
+    "step": "sessions after retention",
+    "request": {
+      "start": 0,
+      "end": 4000,
+      "gap": 1500,
+      "as_of": 4000,
+      "group_by": [
+        "zone"
+      ],
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "collect_tick"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 20,
+      "floor": 500,
+      "start": 0,
+      "end": 4000,
+      "gap": 1500,
+      "as_of": 4000,
+      "segments": [
+        {
+          "series": {
+            "id": "1fa8118dfc608506ec257172402643375c69e121b8c15188b402842ebcfdce60",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-bridge",
+              "zone": "east"
+            }
+          },
+          "first": 800,
+          "last": 800,
+          "points": 1,
+          "left": "unknown_left",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "1fa8118dfc608506ec257172402643375c69e121b8c15188b402842ebcfdce60",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-bridge",
+              "zone": "east"
+            }
+          },
+          "first": 3400,
+          "last": 3400,
+          "points": 1,
+          "left": "started",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "26278e8ad8eccdfd6ece5f1442ab0fb911305f4e5986b48cc3b7bd82d4d39170",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-reaped",
+              "zone": "east"
+            }
+          },
+          "first": 1000,
+          "last": 2500,
+          "points": 2,
+          "left": "unknown_left",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "5592282da3f8369424866b0df67235ded1b99167c0a70c48fc1e8a01124d768b",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-new",
+              "zone": "east"
+            }
+          },
+          "first": 1900,
+          "last": 1900,
+          "points": 1,
+          "left": "unknown_left",
+          "right": "ended"
+        },
+        {
+          "series": {
+            "id": "aab43487916572ef1eb24f2c2708b069941098fdcb8f543de4edcd4e5204f351",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-spanning",
+              "zone": "west"
+            }
+          },
+          "first": 2000,
+          "last": 3000,
+          "points": 2,
+          "left": "started",
+          "right": "carried_out"
+        },
+        {
+          "series": {
+            "id": "b326014192d56eb3fab4bcb02eb70f8136faca336e46263c4f8ce0a8459f5425",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-late",
+              "zone": "east"
+            }
+          },
+          "first": 500,
+          "last": 3500,
+          "points": 3,
+          "left": "unknown_left",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "d6f9a691e7b406e9cf02444c7e19649726b84a8cc30a61182e4f66e03eff527e",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-west",
+              "zone": "west"
+            }
+          },
+          "first": 1600,
+          "last": 3100,
+          "points": 2,
+          "left": "unknown_left",
+          "right": "unknown_right"
+        },
+        {
+          "series": {
+            "id": "e62164c317c427ad8c4b6bf9a5533f6314b554646d6f220ea3dc8dc934266f7a",
+            "labels": {
+              "__name__": "collect_tick",
+              "device": "dev-carried",
+              "zone": "east"
+            }
+          },
+          "first": 700,
+          "last": 3700,
+          "points": 3,
+          "left": "unknown_left",
+          "right": "unknown_right"
+        }
+      ],
+      "groups": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "devices": 5,
+          "segments": 6,
+          "points": 11,
+          "started": 1,
+          "ended": 3,
+          "carried_in": 0,
+          "carried_out": 0,
+          "unknown_left": 5,
+          "unknown_right": 3
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "devices": 2,
+          "segments": 2,
+          "points": 4,
+          "started": 1,
+          "ended": 0,
+          "carried_in": 0,
+          "carried_out": 1,
+          "unknown_left": 1,
+          "unknown_right": 1
+        }
+      ],
+      "stats": {
+        "series": 7,
+        "blocks": 7,
+        "head": 0,
+        "decoded": 16,
+        "visible": 16,
+        "tombstones": 0
+      }
+    }
+  },
+  {
     "step": "backup source",
     "request": {
       "start": -5000,
       "end": 10000
     },
     "response": {
-      "sequence": 11,
+      "sequence": 20,
       "floor": 1000,
       "series": [
         {
@@ -1380,14 +2492,14 @@
   },
   {
     "step": "backup",
-    "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sequence": "20",
+    "sha256": "4d6bc7cd149bf979e43781b17e795e31b70f6ffa344874cd71546d5e721ba077",
+    "bytes": 77824
   },
   {
     "step": "restored",
     "response": {
-      "sequence": 11,
+      "sequence": 20,
       "floor": 1000,
       "series": [
         {

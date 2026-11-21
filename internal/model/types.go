@@ -99,6 +99,49 @@ type AggregateResult struct {
 	Stats    ScanStats `json:"stats"`
 }
 
+type SessionQuery struct {
+	Start    int64     `json:"start"`
+	End      int64     `json:"end"`
+	Gap      int64     `json:"gap"`
+	AsOf     int64     `json:"as_of"`
+	GroupBy  []string  `json:"group_by"`
+	Matchers []Matcher `json:"matchers"`
+}
+
+type Segment struct {
+	Series Series `json:"series"`
+	First  int64  `json:"first"`
+	Last   int64  `json:"last"`
+	Points int    `json:"points"`
+	Left   string `json:"left"`
+	Right  string `json:"right"`
+}
+
+type SessionGroup struct {
+	Labels       Labels `json:"labels"`
+	Devices      int    `json:"devices"`
+	Segments     int    `json:"segments"`
+	Points       int    `json:"points"`
+	Started      int    `json:"started"`
+	Ended        int    `json:"ended"`
+	CarriedIn    int    `json:"carried_in"`
+	CarriedOut   int    `json:"carried_out"`
+	UnknownLeft  int    `json:"unknown_left"`
+	UnknownRight int    `json:"unknown_right"`
+}
+
+type SessionResult struct {
+	Sequence uint64         `json:"sequence"`
+	Floor    int64          `json:"floor"`
+	Start    int64          `json:"start"`
+	End      int64          `json:"end"`
+	Gap      int64          `json:"gap"`
+	AsOf     int64          `json:"as_of"`
+	Segments []Segment      `json:"segments"`
+	Groups   []SessionGroup `json:"groups"`
+	Stats    ScanStats      `json:"stats"`
+}
+
 type Tombstone struct {
 	ID       string   `json:"id"`
 	Series   []string `json:"series"`

@@ -40,6 +40,26 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+Session reports segment each selected series into collection sessions:
+adjacent visible points farther apart than a caller-supplied gap break the
+session. Detail rows count only points inside the half-open report window,
+but each segment edge is classified with the nearest visible neighbor outside
+the window, the retention floor and a caller-supplied confirmation deadline
+as_of. A left edge is carried_in when a visible predecessor lies within gap,
+started when the whole lookback interval [first-gap, first) is both readable
+(at or above the floor) and arrived (at or before as_of), and unknown_left
+otherwise; missing readable history is never reported as a new start. A right
+edge is carried_out when a visible successor lies within gap, ended when the
+whole gap interval after the last point is at or before as_of, and
+unknown_right otherwise; data past the confirmation deadline that has not
+fully arrived is never reported as an end. Recorded deletions are
+authoritative visibility, so a gap opened by a deletion is confirmable;
+retention-reaped history is not auditable, so a floor inside the lookback
+interval makes the edge unconfirmable. Summaries group segments by label and
+count confirmed starts, confirmed ends, boundary-crossing segments and
+unconfirmable edges separately; the three left-edge counts and the three
+right-edge counts each sum to the segment count.
+
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
 deletions into one block per selected series; empty series retain their identity.
@@ -70,12 +90,14 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Report collection sessions per machine room with confirmable boundaries.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
 The engine coordinates transaction ownership; volume owns durable publication;
 chunk owns encoding; select owns matching; window owns numerical semantics;
-policy owns admission and retention decisions; model owns identities and types.
+session owns segmentation and boundary classification; policy owns admission
+and retention decisions; model owns identities and types.
 
 ## Boundaries
 

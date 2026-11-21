@@ -15,7 +15,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "compact", "backup",
+    "explain", "sessions"
 ]
 
 
@@ -133,6 +134,116 @@ def exercise(workflow, output):
                     "now": 11000, "points": [{**seed["points"][0], "time": 1500}]
                 }, status=409)
                 op("resume", space + "/mode", {"read_only": False}, method="PUT")
+                handover = "spaces/handover"
+                op("sessions namespace", "spaces", {
+                    "name": "handover", "retention_ms": 10000, "lateness_ms": 30000,
+                    "future_ms": 1000, "max_series": 100, "max_write": 10000,
+                    "max_scan": 100000})
+
+                def tick(device, zone, t):
+                    return {"labels": {"__name__": "collect_tick", "device": device,
+                                       "zone": zone}, "time": t, "value": 1}
+
+                op("sessions pre-shift", handover + "/points", {"now": 0, "points": [
+                    tick("dev-carried", "east", -800),
+                    tick("dev-late", "east", -3000), tick("dev-late", "east", -1600),
+                    tick("dev-bridge", "east", -500),
+                    tick("dev-reaped", "east", -2000), tick("dev-reaped", "east", -500)]})
+                op("sessions seal pre-shift", handover + "/seal", {})
+                op("sessions early shift", handover + "/points", {"now": 2000, "points": [
+                    tick("dev-carried", "east", 700),
+                    tick("dev-new", "east", 400), tick("dev-new", "east", 1900),
+                    tick("dev-late", "east", 500),
+                    tick("dev-bridge", "east", 800),
+                    tick("dev-reaped", "east", 1000),
+                    tick("dev-west", "west", 100), tick("dev-west", "west", 1600)]})
+                op("sessions seal early", handover + "/seal", {})
+                op("sessions late shift", handover + "/points", {"now": 3900, "points": [
+                    tick("dev-carried", "east", 2200), tick("dev-carried", "east", 3700),
+                    tick("dev-late", "east", 2000), tick("dev-late", "east", 3500),
+                    tick("dev-bridge", "east", 2100), tick("dev-bridge", "east", 3400),
+                    tick("dev-reaped", "east", 2500),
+                    tick("dev-west", "west", 3100),
+                    tick("dev-spanning", "west", 2000), tick("dev-spanning", "west", 3000),
+                    tick("dev-spanning", "west", 4500)]})
+                report = {"start": 0, "end": 4000, "gap": 1500, "as_of": 4000,
+                          "group_by": ["zone"],
+                          "matchers": [{"label": "__name__", "op": "=", "value": "collect_tick"}]}
+
+                def group_of(result, zone):
+                    for group in result["groups"]:
+                        if group["labels"].get("zone") == zone:
+                            return group
+                    raise RuntimeError(f"missing session group for {zone}")
+
+                def segment_of(result, device, first):
+                    for segment in result["segments"]:
+                        if segment["series"]["labels"].get("device") == device \
+                                and segment["first"] == first:
+                            return segment
+                    raise RuntimeError(f"missing segment {device}@{first}")
+
+                def check_invariant(result):
+                    for group in result["groups"]:
+                        left = group["started"] + group["carried_in"] + group["unknown_left"]
+                        right = group["ended"] + group["carried_out"] + group["unknown_right"]
+                        if left != group["segments"] or right != group["segments"]:
+                            raise RuntimeError(f"session counts do not reconcile: {group}")
+
+                baseline = op("sessions baseline", handover + "/sessions", report)
+                check_invariant(baseline)
+                east = group_of(baseline, "east")
+                if (east["devices"], east["segments"], east["started"], east["carried_in"],
+                        east["ended"], east["unknown_right"]) != (5, 5, 2, 3, 2, 3):
+                    raise RuntimeError(f"baseline east summary mismatch: {east}")
+                carried = segment_of(baseline, "dev-carried", 700)
+                if carried["left"] != "carried_in" or carried["points"] != 3:
+                    raise RuntimeError("sealed-block neighbor must carry the pre-shift session in")
+                if carried["right"] != "unknown_right":
+                    raise RuntimeError("tail past the confirmation deadline is not an end")
+                fresh = segment_of(baseline, "dev-new", 400)
+                if (fresh["left"], fresh["right"]) != ("started", "ended"):
+                    raise RuntimeError("in-shift device must show confirmed start and end")
+                spanning = segment_of(baseline, "dev-spanning", 2000)
+                if (spanning["left"], spanning["right"]) != ("started", "carried_out"):
+                    raise RuntimeError("visible successor must carry the session past the shift")
+                op("sessions invalid", handover + "/sessions", {**report, "gap": 0}, status=400)
+                op("sessions late bridge", handover + "/points",
+                   {"now": 3900, "points": [tick("dev-late", "east", -1000)]})
+                joined = op("sessions after late point", handover + "/sessions", report)
+                check_invariant(joined)
+                east_joined = group_of(joined, "east")
+                if (east_joined["started"], east_joined["carried_in"]) != \
+                        (east["started"] - 1, east["carried_in"] + 1):
+                    raise RuntimeError("late point must join the pre-shift session")
+                late = segment_of(joined, "dev-late", 500)
+                if late["left"] != "carried_in" or late["points"] != 3:
+                    raise RuntimeError("late bridge reclassifies the edge, not the point count")
+                op("sessions delete bridge", handover + "/deletions", {
+                    "start": 2100, "end": 2101,
+                    "matchers": [{"label": "device", "op": "=", "value": "dev-bridge"}]})
+                split = op("sessions after bridge delete", handover + "/sessions", report)
+                check_invariant(split)
+                east_split = group_of(split, "east")
+                if (east_split["segments"], east_split["started"], east_split["ended"]) != \
+                        (east_joined["segments"] + 1, east_joined["started"] + 1,
+                         east_joined["ended"] + 1):
+                    raise RuntimeError("deleted bridge must split one session into two")
+                if segment_of(split, "dev-bridge", 800)["right"] != "ended" or \
+                        segment_of(split, "dev-bridge", 3400)["left"] != "started":
+                    raise RuntimeError("recorded deletion opens a real, confirmable gap")
+                op("sessions retention", handover + "/retention", {"now": 10500})
+                reaped = op("sessions after retention", handover + "/sessions", report)
+                check_invariant(reaped)
+                east_reaped = group_of(reaped, "east")
+                if (east_reaped["started"], east_reaped["carried_in"],
+                        east_reaped["unknown_left"]) != (1, 0, 5):
+                    raise RuntimeError("reaped history must not become new starts")
+                if segment_of(reaped, "dev-reaped", 1000)["left"] != "unknown_left":
+                    raise RuntimeError("floor inside the lookback interval is unconfirmable")
+                spanning = segment_of(reaped, "dev-spanning", 2000)
+                if (spanning["left"], spanning["right"]) != ("started", "carried_out"):
+                    raise RuntimeError("readable lookback and successor survive retention")
                 source = op("backup source", space + "/range", q)
                 image, headers = request(base, "image")
                 if hashlib.sha256(image).hexdigest() != headers["X-Ridge-Sha256"]:

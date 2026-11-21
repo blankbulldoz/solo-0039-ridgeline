@@ -27,6 +27,11 @@
       "responsibility": "Origin aligned reductions and reset-aware counter rates"
     },
     {
+      "id": "session",
+      "path": "internal/session",
+      "responsibility": "Session segmentation and boundary classification"
+    },
+    {
       "id": "policy",
       "path": "internal/policy",
       "responsibility": "Event time admission and monotonic retention floor"
@@ -316,6 +321,27 @@
         "wire",
         "engine",
         "select",
+        "volume"
+      ]
+    },
+    {
+      "id": "sessions",
+      "name": "Shift session report with confirmable boundaries",
+      "entry": "POST /spaces/spindle/sessions",
+      "success": "Confirmed starts and ends, boundary-crossing segments and unconfirmable edges are counted separately per machine room",
+      "failure": "invalid gap or confirmation deadline",
+      "verification": "python3 examples/walkthrough.py --workflow sessions",
+      "steps": [
+        "validate the public request",
+        "derive domain facts inside one transaction",
+        "publish result or typed failure"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "session",
+        "select",
+        "window",
         "volume"
       ]
     }

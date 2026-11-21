@@ -48,6 +48,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/sessions` | interval, gap, as_of, group_by, matchers |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -72,6 +73,26 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+Session reports answer "which collection sessions started or ended during a
+shift" per machine room:
+
+```json
+{"start":0,"end":4000,"gap":1500,"as_of":4000,"group_by":["zone"],
+ "matchers":[{"label":"__name__","op":"=","value":"collect_tick"}]}
+```
+
+Adjacent visible points of one series farther than `gap` apart break a
+session. Detail rows count only points inside `[start,end)`, but each segment
+edge is classified with the nearest visible neighbor outside the window
+(found across head and sealed blocks), the retention floor and the
+caller-confirmed collection deadline `as_of`: `started`/`ended` are confirmed
+counts, `carried_in`/`carried_out` cross the shift boundary, and
+`unknown_left`/`unknown_right` mark boundaries that cannot be confirmed
+because history was reaped or tail data has not fully arrived. Missing
+readable history is never a new start, and data past the confirmation
+deadline is never an end. Per-group summaries keep the three left-edge and
+three right-edge counts separately; each triple sums to the segment count.
 
 ## Storage And Recovery
 

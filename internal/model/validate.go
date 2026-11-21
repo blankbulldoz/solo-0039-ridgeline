@@ -81,3 +81,24 @@ func ValidateQuery(q Query) error {
 	}
 	return nil
 }
+
+func ValidateSessionQuery(q SessionQuery) error {
+	if !ValidTime(q.Start) || q.End < MinTime || q.End > MaxTime+1 || q.Start >= q.End {
+		return Bad("query requires a supported nonempty half-open interval")
+	}
+	if q.Gap <= 0 || q.Gap > MaxTime {
+		return Bad("session gap outside supported range")
+	}
+	if !ValidTime(q.AsOf) {
+		return Bad("invalid confirmation deadline")
+	}
+	if len(q.Matchers) > 32 {
+		return Bad("invalid matcher count")
+	}
+	for _, label := range q.GroupBy {
+		if !ValidName(label) {
+			return Bad("invalid grouping label")
+		}
+	}
+	return nil
+}

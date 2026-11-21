@@ -49,6 +49,11 @@ func Handler(e *engine.Engine) http.Handler {
 			return e.Aggregate(r.PathValue("space"), q)
 		})
 	})
+	mux.HandleFunc("POST "+base+"/sessions", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.SessionQuery) (any, error) {
+			return e.Sessions(r.PathValue("space"), q)
+		})
+	})
 	mux.HandleFunc("POST "+base+"/explain", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(q model.Query) (any, error) {
 			return e.Explain(r.PathValue("space"), q)
