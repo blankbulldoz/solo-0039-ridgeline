@@ -57,6 +57,14 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/compact` | empty object |
 | PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
 | GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
+| PUT | `/spaces/{space}/rules/{rule}` | new rule revision, source or derived |
+| GET | `/spaces/{space}/rules` | current rules, geometry and dependents |
+| GET | `/spaces/{space}/rules/{rule}` | current revision and direct dependents |
+| GET | `/spaces/{space}/rules/{rule}/revisions` | every stored revision |
+| DELETE | `/spaces/{space}/rules/{rule}` | retire an unreferenced rule |
+| POST | `/spaces/{space}/rules/{rule}/runs` | execute the dependency chain |
+| GET | `/spaces/{space}/rules/{rule}/runs` | recorded runs for that root |
+| GET | `/spaces/{space}/runs` · `/runs/{run}` | run summaries · stored run provenance |
 | GET | `/image` | consistent binary image, SHA-256 and sequence headers |
 
 Sample query:
@@ -72,6 +80,39 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+## Recording Rules
+
+A recording rule names either a source definition — matchers, a reducer, a
+window step and origin, and grouping labels — or a derived definition that
+combines the cells of other rules. Rules are versioned: every `PUT` appends an
+immutable revision and revisions are never rewritten.
+
+```json
+{"kind":"source","source":{"matchers":[{"label":"__name__","op":"=","value":"cpu"}],
+ "function":"sum","step":1000,"origin":0,"group_by":["node"]}}
+{"kind":"derived","inputs":["per_node_rules","total_rules"],"combine":"max"}
+```
+
+Executing a root rule (`POST /rules/{rule}/runs` with `start`, `end` and an
+optional `max_points`) resolves the whole dependency closure before reading
+data and then evaluates it inside one bbolt read transaction. Every node sees
+one sequence and one set of visible samples, so a single execution cannot mix
+data from different ingestion batches. A source rule referenced by several
+derived rules is computed and decoded once; `order` lists the closure in
+dependency order, and each node reports `references` and `shared`. Cycles,
+missing references, mismatched window geometry and a decoded-point budget
+overrun fail the whole run with a typed error instead of a partial result.
+
+`record:true` stores the run with the revision, the frozen definition and the
+output cells of every node. `GET /runs/{run}` compares the executed revisions
+with the current ones and reports `data_stale` and `definition_stale`
+separately, so an old result always names the definitions it actually used,
+even after a rule is changed or retired. Derived rules must share the window
+step and origin of their inputs and declare `combine` as `sum`, `min`, `max`,
+`avg` or `count`; with an empty `group_by` the input cell labels are preserved.
+Deleting a rule that is still referenced is a conflict, and a reintroduced
+name continues its revision numbering.
 
 ## Storage And Recovery
 

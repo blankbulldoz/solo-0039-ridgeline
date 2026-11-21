@@ -54,6 +54,18 @@ it never silently presents stale materialization as current. Backup returns
 a consistent bbolt database image plus SHA-256 and sequence headers. Starting
 the server with that image as RIDGE_DB restores that database directly.
 
+Recording rules extend this with reuse. A rule revision is either a source
+definition (matchers, reducer, step, origin and grouping) or a derived
+definition combining the cells of other rules. Revisions are immutable.
+Executing one root rule resolves the dependency closure first, then evaluates
+it in a single read transaction so every node observes one data view. A rule
+referenced more than once is computed once and its decoded points are counted
+once against the run budget. Cycles, missing references, mismatched window
+geometry and budget exhaustion fail the complete run. A recorded run stores
+the executed revision, the frozen definition and the output of every node, and
+inspection reports data staleness and definition staleness separately, so an
+old result remains explainable after its rule is updated or retired.
+
 ## Workflows
 
 1. Create, inspect and toggle namespace read-only policy.
@@ -70,12 +82,15 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Execute a shared rule dependency chain and record its provenance.
+16. Explain an old recorded result after its definition changed.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
 The engine coordinates transaction ownership; volume owns durable publication;
 chunk owns encoding; select owns matching; window owns numerical semantics;
-policy owns admission and retention decisions; model owns identities and types.
+policy owns admission and retention decisions; rule owns revision validation,
+cycle detection and derived combination; model owns identities and types.
 
 ## Boundaries
 
@@ -85,6 +100,8 @@ revision queries, SQL, authentication or a background retention scheduler.
 Large raw scans are bounded by the namespace scan budget. Maintenance currently
 runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
+Rule execution is synchronous inside one read transaction; there is no
+background rule scheduler and recording a run never refreshes raw data.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
 exercise real API operations, process restart and failure responses. Formal

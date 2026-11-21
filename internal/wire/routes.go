@@ -91,6 +91,44 @@ func Handler(e *engine.Engine) http.Handler {
 		out, err := e.Rollup(r.PathValue("space"), r.PathValue("rollup"))
 		respond(w, out, err)
 	})
+	mux.HandleFunc("GET "+base+"/rules", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.Rules(r.PathValue("space"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("PUT "+base+"/rules/{rule}", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(in model.RuleInput) (any, error) {
+			return e.PutRule(r.PathValue("space"), r.PathValue("rule"), in)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/rules/{rule}", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.Rule(r.PathValue("space"), r.PathValue("rule"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("DELETE "+base+"/rules/{rule}", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.DeleteRule(r.PathValue("space"), r.PathValue("rule"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("GET "+base+"/rules/{rule}/revisions", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.RuleRevisions(r.PathValue("space"), r.PathValue("rule"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("POST "+base+"/rules/{rule}/runs", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(in model.RuleRunRequest) (any, error) {
+			return e.RunRules(r.PathValue("space"), r.PathValue("rule"), in)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/rules/{rule}/runs", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.RuleRunsFor(r.PathValue("space"), r.PathValue("rule"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("GET "+base+"/runs", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.RuleRunsFor(r.PathValue("space"), "")
+		respond(w, out, err)
+	})
+	mux.HandleFunc("GET "+base+"/runs/{run}", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.RuleRun(r.PathValue("space"), r.PathValue("run"))
+		respond(w, out, err)
+	})
 	mux.HandleFunc("GET /ridge/v1/image", func(w http.ResponseWriter, r *http.Request) {
 		serveImage(e, w, r)
 	})

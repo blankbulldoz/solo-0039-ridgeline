@@ -32,6 +32,11 @@
       "responsibility": "Event time admission and monotonic retention floor"
     },
     {
+      "id": "rule",
+      "path": "internal/rule",
+      "responsibility": "Recording rule revisions, dependency graph and derived combination"
+    },
+    {
       "id": "engine",
       "path": "internal/engine",
       "responsibility": "Transaction coordination and query/maintenance execution"
@@ -316,6 +321,47 @@
         "wire",
         "engine",
         "select",
+        "volume"
+      ]
+    },
+    {
+      "id": "rules",
+      "name": "Shared rule dependency execution",
+      "entry": "PUT /spaces/spindle/rules/*; POST /spaces/spindle/rules/fleet_rules/runs",
+      "success": "One root execution evaluates each shared sub-rule once on one data view and records the executed revisions",
+      "failure": "cycle, missing reference or run budget rejection",
+      "verification": "python3 examples/walkthrough.py --workflow rules",
+      "steps": [
+        "validate the public request",
+        "resolve the dependency closure before reading data",
+        "publish result or typed failure"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "model",
+        "rule",
+        "window",
+        "volume"
+      ]
+    },
+    {
+      "id": "rule-provenance",
+      "name": "Explain an old result after a definition update",
+      "entry": "GET /spaces/spindle/runs/{run}",
+      "success": "Stored run keeps the revision it executed and reports definition staleness",
+      "failure": "missing run or missing recorded revision",
+      "verification": "python3 examples/walkthrough.py --workflow rules",
+      "steps": [
+        "load the recorded dependency chain",
+        "compare executed revisions with current revisions",
+        "report data and definition freshness separately"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "model",
+        "rule",
         "volume"
       ]
     }

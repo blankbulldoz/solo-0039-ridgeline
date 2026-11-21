@@ -15,7 +15,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain",
+    "rules"
 ]
 
 
@@ -126,6 +127,7 @@ def exercise(workflow, output):
                 if op("post-compaction", space + "/range", q)["series"] != logical:
                     raise RuntimeError("compaction changed logical samples")
                 op("explain", space + "/explain", q)
+                exercise_rules(space, op)
                 op("retention", space + "/retention", {"now": 11000})
                 op("retention no resurrection", space + "/points", replacement, status=409)
                 op("read-only", space + "/mode", {"read_only": True}, method="PUT")
@@ -155,6 +157,81 @@ def exercise(workflow, output):
         output.write_text(json.dumps(observations, indent=2) + "\n")
     print(json.dumps({"workflow": workflow, "operations": len(observations), "state": "complete",
                       "coverage": FLOW_NAMES}))
+
+
+def source_rule(matchers, function, group_by):
+    return {"kind": "source", "source": {
+        "matchers": matchers, "function": function,
+        "step": 1000, "origin": 0, "group_by": group_by,
+    }}
+
+
+def exercise_rules(space, op):
+    """Show one shared sub-rule and a definition update over the same data view."""
+    window = {"start": -5000, "end": 10000}
+
+    op("rule ingest", space + "/points", {
+        "now": 10000, "points": [
+            {"labels": {"__name__": "cpu", "node": "ridge-a"}, "time": 100, "value": 4},
+            {"labels": {"__name__": "cpu", "node": "ridge-b"}, "time": 100, "value": 6},
+            {"labels": {"__name__": "memory", "node": "ridge-a"}, "time": 1000, "value": 2},
+            {"labels": {"__name__": "memory", "node": "ridge-b"}, "time": 1000, "value": 8},
+        ]})
+    op("rule cpu", space + "/rules/cpu_rules",
+       source_rule([{"label": "__name__", "op": "=", "value": "cpu"}], "sum", ["node"]),
+       method="PUT")
+    op("rule usage", space + "/rules/usage_rules",
+       source_rule([{"label": "__name__", "op": "=", "value": "memory"}], "sum", ["node"]),
+       method="PUT")
+    # Two derived rules reference the same source rule. The shared node must be
+    # computed once and decoded once, not once per referencing rule.
+    op("rule per node", space + "/rules/per_node_rules",
+       {"kind": "derived", "inputs": ["cpu_rules"], "combine": "sum"}, method="PUT")
+    op("rule total", space + "/rules/total_rules",
+       {"kind": "derived", "inputs": ["cpu_rules", "usage_rules"], "combine": "sum"},
+       method="PUT")
+    # The fleet root reaches cpu_rules through two branches, so cpu_rules is a
+    # shared dependency of a single requested view.
+    op("rule fleet", space + "/rules/fleet_rules",
+       {"kind": "derived", "inputs": ["per_node_rules", "total_rules"], "combine": "max"},
+       method="PUT")
+    op("rule dependents", space + "/rules/cpu_rules")
+    first = op("rule run", space + "/rules/fleet_rules/runs", {**window, "record": True},
+               method="POST")
+    if first["definition_stale"] or first["data_stale"]:
+        raise RuntimeError("a fresh rule run should not be stale")
+    order = first["order"]
+    if order[-1] != "fleet_rules" or order.count("cpu_rules") != 1:
+        raise RuntimeError("a shared sub-rule must appear exactly once in the run")
+    shared = next(n for n in first["nodes"] if n["name"] == "cpu_rules")
+    if not shared["shared"] or shared["references"] != 2:
+        raise RuntimeError("the shared sub-rule should be marked shared and referenced twice")
+    if first["decoded"] != 2 * shared["decoded"]:
+        raise RuntimeError("shared work must be decoded once per run")
+    op("rule cycle", space + "/rules/cpu_rules",
+       {"kind": "derived", "inputs": ["total_rules"], "combine": "sum"},
+       method="PUT", status=409)
+    op("rule missing input", space + "/rules/dangling",
+       {"kind": "derived", "inputs": ["absent_rules"], "combine": "sum"},
+       method="PUT", status=404)
+    op("rule budget", space + "/rules/fleet_rules/runs", {**window, "max_points": 1},
+       method="POST", status=422)
+    # Redefine the shared source rule. The recorded run must keep executing
+    # revision 1 and explain that revision 2 has since replaced it.
+    op("rule update", space + "/rules/cpu_rules",
+       source_rule([{"label": "__name__", "op": "=", "value": "cpu"}], "max", ["node"]),
+       method="PUT")
+    stored = op("rule run provenance", space + "/runs/" + first["run"])
+    changed = {s["name"]: s for s in stored["revisions"]}
+    if not changed["cpu_rules"]["changed"] or not stored["definition_stale"]:
+        raise RuntimeError("the stored run should report its rule definition changed")
+    if changed["cpu_rules"]["executed"] != 1 or changed["cpu_rules"]["current"] != 2:
+        raise RuntimeError("the stored run must keep the revision it actually executed")
+    frozen = next(d for d in stored["definitions"] if d["name"] == "cpu_rules")
+    if frozen["revision"] != 1 or frozen["rule"]["source"]["function"] != "sum":
+        raise RuntimeError("the stored run must embed the executed definition")
+    op("rule revisions", space + "/rules/cpu_rules/revisions")
+    op("rule delete referenced", space + "/rules/cpu_rules", method="DELETE", status=409)
 
 
 if __name__ == "__main__":

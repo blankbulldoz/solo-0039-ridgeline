@@ -3,3 +3,7 @@
 *.db
 *.db.lock
 __pycache__/
+
+/.toolchain/
+/.gocache/
+/.gopath/

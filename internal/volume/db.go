@@ -21,6 +21,10 @@ var Payloads = []byte("payloads")
 var Deletes = []byte("deletes")
 var Rollups = []byte("rollups")
 var Config = []byte("config")
+var Rules = []byte("rules")
+var RuleRevisions = []byte("rule_revisions")
+var RuleRuns = []byte("rule_runs")
+var RuleDeletes = []byte("rule_deletes")
 
 type DB struct {
 	Raw *bolt.DB
