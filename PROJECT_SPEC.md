@@ -54,6 +54,18 @@ it never silently presents stale materialization as current. Backup returns
 a consistent bbolt database image plus SHA-256 and sequence headers. Starting
 the server with that image as RIDGE_DB restores that database directly.
 
+Federated range and aggregate reads evaluate one query shape across an
+explicit namespace list inside a single bbolt read transaction. One response
+therefore reflects one committed database sequence across every requested
+space; that sequence is the response's consistency boundary, and no guarantee
+extends across separate responses. Source space is part of every result
+identity: identical label sets in different namespaces never merge into one
+series or one aggregation cell, and aggregate cells carry their source space.
+Each space applies its own retention floor, scan budget and read-only policy.
+A space that is missing, empty or over budget is reported with an explicit
+per-space status and publishes no partial series, while the remaining spaces
+still answer in the same snapshot.
+
 ## Workflows
 
 1. Create, inspect and toggle namespace read-only policy.
@@ -70,6 +82,7 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Read ranges and grouped aggregates across namespaces at one sequence.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.

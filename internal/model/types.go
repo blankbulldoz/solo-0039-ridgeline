@@ -86,6 +86,7 @@ type RangeResult struct {
 }
 
 type Cell struct {
+	Space  string  `json:"space,omitempty"`
 	Labels Labels  `json:"labels"`
 	Start  int64   `json:"start"`
 	End    int64   `json:"end"`
@@ -97,6 +98,49 @@ type AggregateResult struct {
 	Sequence uint64    `json:"sequence"`
 	Cells    []Cell    `json:"cells"`
 	Stats    ScanStats `json:"stats"`
+}
+
+// FederatedQuery evaluates one query shape across an explicit namespace list.
+type FederatedQuery struct {
+	Query
+	Spaces []string `json:"spaces"`
+}
+
+// SpaceStatus reports how one namespace contributed to a federated read.
+// Status is "ok" or the stable failure code of the space ("missing",
+// "capacity", ...). Policy fields are populated whenever the namespace
+// exists, including when its scan budget rejected the read.
+type SpaceStatus struct {
+	Space    string    `json:"space"`
+	Status   string    `json:"status"`
+	Detail   string    `json:"detail,omitempty"`
+	ReadOnly bool      `json:"read_only"`
+	Floor    int64     `json:"floor"`
+	MaxScan  int       `json:"max_scan"`
+	Stats    ScanStats `json:"stats"`
+}
+
+// SpaceRangeResult keeps one namespace's series nested under its status so
+// identical label sets in different spaces never share one series entry.
+type SpaceRangeResult struct {
+	SpaceStatus
+	Series    []SeriesPoints `json:"series"`
+	Truncated bool           `json:"truncated"`
+}
+
+// FederatedRangeResult is one consistent snapshot: Sequence is the single
+// database sequence every space was read at.
+type FederatedRangeResult struct {
+	Sequence uint64             `json:"sequence"`
+	Spaces   []SpaceRangeResult `json:"spaces"`
+}
+
+// FederatedAggregateResult carries grouped cells tagged with their source
+// space plus one status entry per requested space.
+type FederatedAggregateResult struct {
+	Sequence uint64        `json:"sequence"`
+	Cells    []Cell        `json:"cells"`
+	Spaces   []SpaceStatus `json:"spaces"`
 }
 
 type Tombstone struct {

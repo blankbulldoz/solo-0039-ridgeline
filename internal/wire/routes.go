@@ -49,6 +49,16 @@ func Handler(e *engine.Engine) http.Handler {
 			return e.Aggregate(r.PathValue("space"), q)
 		})
 	})
+	mux.HandleFunc("POST /ridge/v1/federation/range", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.FederatedQuery) (any, error) {
+			return e.FederatedRange(q)
+		})
+	})
+	mux.HandleFunc("POST /ridge/v1/federation/aggregate", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.FederatedQuery) (any, error) {
+			return e.FederatedAggregate(q)
+		})
+	})
 	mux.HandleFunc("POST "+base+"/explain", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(q model.Query) (any, error) {
 			return e.Explain(r.PathValue("space"), q)

@@ -49,6 +49,8 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
 | POST | `/spaces/{space}/explain` | interval and matchers |
+| POST | `/federation/range` | `spaces` list plus a range query shape |
+| POST | `/federation/aggregate` | `spaces` list plus an aggregate query shape |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
 | POST | `/spaces/{space}/deletions` | interval and matchers |
@@ -72,6 +74,30 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+## Federation
+
+`POST /ridge/v1/federation/range` and `/federation/aggregate` evaluate one
+query shape across an explicit `spaces` list in the same database file. The
+whole read runs in one bbolt read transaction, so every space in a response
+reflects the same committed database sequence; the response `sequence` field
+is that consistency boundary. Writes committed afterwards are not visible and
+there is no consistency promise across separate responses.
+
+Series identity stays (namespace, labels): identical label sets in different
+spaces never merge into one series or one aggregation group. Range results
+nest each space's series under its own entry; aggregate cells are grouped
+within one space and then tagged with their source `space`, so `group_by`
+never blends measurements across spaces. Each space applies its own retention
+floor, `max_scan` budget and, for range, its own result limit with a per-space
+truncation flag.
+
+Every requested space reports a `status`: `ok` (possibly with zero visible
+points), or the stable failure code such as `missing` or `capacity` with a
+`detail` message. An unreadable space publishes no partial series and never
+fails the joint read; the remaining spaces still answer. Per-space
+`read_only`, `floor` and `max_scan` are echoed so different policies are
+visible next to the results they produced.
 
 ## Storage And Recovery
 

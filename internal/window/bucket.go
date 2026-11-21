@@ -52,3 +52,19 @@ func SortCells(cells []model.Cell) {
 		return string(a) < string(b)
 	})
 }
+
+// SortFederatedCells orders joint output by source space first so groups
+// with identical labels from different spaces stay adjacent but distinct.
+func SortFederatedCells(cells []model.Cell) {
+	sort.Slice(cells, func(i, j int) bool {
+		if cells[i].Space != cells[j].Space {
+			return cells[i].Space < cells[j].Space
+		}
+		a, _ := json.Marshal(cells[i].Labels)
+		b, _ := json.Marshal(cells[j].Labels)
+		if string(a) == string(b) {
+			return cells[i].Start < cells[j].Start
+		}
+		return string(a) < string(b)
+	})
+}

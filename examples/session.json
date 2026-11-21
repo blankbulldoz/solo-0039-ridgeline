@@ -638,8 +638,8 @@
         "start": 500,
         "end": 501,
         "count": 1,
-        "bytes": 64,
-        "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+        "bytes": 63,
+        "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
         "format": 1
       },
       {
@@ -648,8 +648,8 @@
         "start": -500,
         "end": 501,
         "count": 2,
-        "bytes": 105,
-        "checksum": "4c2f12747df3833972d963a29b9b86b6225d2de929c6252543feb51e3c6ceb20",
+        "bytes": 73,
+        "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
         "format": 1
       },
       {
@@ -658,8 +658,8 @@
         "start": -1500,
         "end": 1501,
         "count": 4,
-        "bytes": 80,
-        "checksum": "f62effbef22081bacda4663b08c17e44f621f0135a4c07c22feb6b601c4c1d4a",
+        "bytes": 83,
+        "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
         "format": 1
       },
       {
@@ -668,8 +668,8 @@
         "start": -1500,
         "end": 501,
         "count": 2,
-        "bytes": 100,
-        "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+        "bytes": 71,
+        "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
         "format": 1
       }
     ]
@@ -1215,8 +1215,8 @@
           "start": 500,
           "end": 501,
           "count": 1,
-          "bytes": 64,
-          "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
           "format": 1
         },
         {
@@ -1225,8 +1225,8 @@
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
+          "bytes": 81,
+          "checksum": "b4466d94f2096f50dbddfb490d297e5d0c8c72b777bc6992b72dfdd2e62dd118",
           "format": 1
         },
         {
@@ -1235,8 +1235,8 @@
           "start": -1500,
           "end": 501,
           "count": 2,
-          "bytes": 100,
-          "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
           "format": 1
         }
       ],
@@ -1340,13 +1340,907 @@
     }
   },
   {
+    "step": "federation space team-ops",
+    "request": {
+      "name": "team-ops",
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000
+    },
+    "response": {
+      "name": "team-ops",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 12
+    }
+  },
+  {
+    "step": "federation space team-platform",
+    "request": {
+      "name": "team-platform",
+      "retention_ms": 9500,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000
+    },
+    "response": {
+      "name": "team-platform",
+      "read_only": false,
+      "retention_ms": 9500,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 13
+    }
+  },
+  {
+    "step": "federation space team-archive",
+    "request": {
+      "name": "team-archive",
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000
+    },
+    "response": {
+      "name": "team-archive",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 14
+    }
+  },
+  {
+    "step": "federation space team-idle",
+    "request": {
+      "name": "team-idle",
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000
+    },
+    "response": {
+      "name": "team-idle",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 15
+    }
+  },
+  {
+    "step": "federation space team-burst",
+    "request": {
+      "name": "team-burst",
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 4,
+      "max_scan": 6
+    },
+    "response": {
+      "name": "team-burst",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 4,
+      "max_scan": 6,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 16
+    }
+  },
+  {
+    "step": "federation ingest ops",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -1500,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -500,
+          "value": 2
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 3
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 1500,
+          "value": 4
+        }
+      ]
+    },
+    "response": {
+      "sequence": 17,
+      "accepted": 4,
+      "new_series": 1,
+      "watermark": 1500
+    }
+  },
+  {
+    "step": "federation ingest platform",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -1500,
+          "value": 10
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -500,
+          "value": 20
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 30
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 1500,
+          "value": 40
+        }
+      ]
+    },
+    "response": {
+      "sequence": 18,
+      "accepted": 4,
+      "new_series": 1,
+      "watermark": 1500
+    }
+  },
+  {
+    "step": "federation ingest archive",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -500,
+          "value": 5
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 7
+        }
+      ]
+    },
+    "response": {
+      "sequence": 19,
+      "accepted": 2,
+      "new_series": 1,
+      "watermark": 500
+    }
+  },
+  {
+    "step": "federation ingest burst",
+    "request": {
+      "now": 10,
+      "points": [
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 0,
+          "value": 0
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 1,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 2,
+          "value": 2
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 3,
+          "value": 3
+        }
+      ]
+    },
+    "response": {
+      "sequence": 20,
+      "accepted": 4,
+      "new_series": 1,
+      "watermark": 3
+    }
+  },
+  {
+    "step": "federation ingest burst",
+    "request": {
+      "now": 10,
+      "points": [
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 4,
+          "value": 4
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 5,
+          "value": 5
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 6,
+          "value": 6
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 7,
+          "value": 7
+        }
+      ]
+    },
+    "response": {
+      "sequence": 21,
+      "accepted": 4,
+      "new_series": 0,
+      "watermark": 7
+    }
+  },
+  {
+    "step": "federation seal archive",
+    "request": {},
+    "response": {
+      "sequence": 22,
+      "blocks": 1,
+      "points": 2,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "federation archive read-only",
+    "request": {
+      "read_only": true
+    },
+    "response": {
+      "name": "team-archive",
+      "read_only": true,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 500,
+      "has_watermark": true,
+      "last_sequence": 23
+    }
+  },
+  {
+    "step": "federation archive write rejected",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 1500,
+          "value": 9
+        }
+      ]
+    },
+    "response": {
+      "code": "conflict",
+      "detail": "namespace is read-only"
+    }
+  },
+  {
+    "step": "federation platform retention",
+    "request": {
+      "now": 10000
+    },
+    "response": {
+      "sequence": 24,
+      "blocks": 1,
+      "points": 2,
+      "floor": 500
+    }
+  },
+  {
+    "step": "federated range no spaces",
+    "request": {
+      "spaces": [],
+      "start": -5000,
+      "end": 10000,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "load_ratio"
+        }
+      ]
+    },
+    "response": {
+      "code": "invalid",
+      "detail": "federated query requires 1..32 namespaces"
+    }
+  },
+  {
+    "step": "federated range duplicate space",
+    "request": {
+      "spaces": [
+        "team-ops",
+        "team-ops"
+      ],
+      "start": -5000,
+      "end": 10000,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "load_ratio"
+        }
+      ]
+    },
+    "response": {
+      "code": "invalid",
+      "detail": "duplicate namespace in federated query"
+    }
+  },
+  {
+    "step": "federated range",
+    "request": {
+      "spaces": [
+        "team-ops",
+        "team-platform",
+        "team-archive",
+        "team-idle",
+        "team-burst",
+        "team-ghost"
+      ],
+      "start": -5000,
+      "end": 10000,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "load_ratio"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 24,
+      "spaces": [
+        {
+          "space": "team-ops",
+          "status": "ok",
+          "read_only": false,
+          "floor": -4503599627370496,
+          "max_scan": 100000,
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 4,
+            "decoded": 4,
+            "visible": 4,
+            "tombstones": 0
+          },
+          "series": [
+            {
+              "series": {
+                "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+                "labels": {
+                  "__name__": "load_ratio",
+                  "node": "ridge-a",
+                  "zone": "east"
+                }
+              },
+              "points": [
+                {
+                  "time": -1500,
+                  "value": 1,
+                  "sequence": 17
+                },
+                {
+                  "time": -500,
+                  "value": 2,
+                  "sequence": 17
+                },
+                {
+                  "time": 500,
+                  "value": 3,
+                  "sequence": 17
+                },
+                {
+                  "time": 1500,
+                  "value": 4,
+                  "sequence": 17
+                }
+              ]
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "space": "team-platform",
+          "status": "ok",
+          "read_only": false,
+          "floor": 500,
+          "max_scan": 100000,
+          "stats": {
+            "series": 1,
+            "blocks": 1,
+            "head": 0,
+            "decoded": 2,
+            "visible": 2,
+            "tombstones": 0
+          },
+          "series": [
+            {
+              "series": {
+                "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+                "labels": {
+                  "__name__": "load_ratio",
+                  "node": "ridge-a",
+                  "zone": "east"
+                }
+              },
+              "points": [
+                {
+                  "time": 500,
+                  "value": 30,
+                  "sequence": 18
+                },
+                {
+                  "time": 1500,
+                  "value": 40,
+                  "sequence": 18
+                }
+              ]
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "space": "team-archive",
+          "status": "ok",
+          "read_only": true,
+          "floor": -4503599627370496,
+          "max_scan": 100000,
+          "stats": {
+            "series": 1,
+            "blocks": 1,
+            "head": 0,
+            "decoded": 2,
+            "visible": 2,
+            "tombstones": 0
+          },
+          "series": [
+            {
+              "series": {
+                "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+                "labels": {
+                  "__name__": "load_ratio",
+                  "node": "ridge-a",
+                  "zone": "east"
+                }
+              },
+              "points": [
+                {
+                  "time": -500,
+                  "value": 5,
+                  "sequence": 19
+                },
+                {
+                  "time": 500,
+                  "value": 7,
+                  "sequence": 19
+                }
+              ]
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "space": "team-idle",
+          "status": "ok",
+          "read_only": false,
+          "floor": -4503599627370496,
+          "max_scan": 100000,
+          "stats": {
+            "series": 0,
+            "blocks": 0,
+            "head": 0,
+            "decoded": 0,
+            "visible": 0,
+            "tombstones": 0
+          },
+          "series": [],
+          "truncated": false
+        },
+        {
+          "space": "team-burst",
+          "status": "capacity",
+          "detail": "query decoded point budget exceeded",
+          "read_only": false,
+          "floor": -4503599627370496,
+          "max_scan": 6,
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 7,
+            "decoded": 7,
+            "visible": 0,
+            "tombstones": 0
+          },
+          "series": [],
+          "truncated": false
+        },
+        {
+          "space": "team-ghost",
+          "status": "missing",
+          "detail": "namespace does not exist",
+          "read_only": false,
+          "floor": 0,
+          "max_scan": 0,
+          "stats": {
+            "series": 0,
+            "blocks": 0,
+            "head": 0,
+            "decoded": 0,
+            "visible": 0,
+            "tombstones": 0
+          },
+          "series": [],
+          "truncated": false
+        }
+      ]
+    }
+  },
+  {
+    "step": "federated aggregate",
+    "request": {
+      "spaces": [
+        "team-ops",
+        "team-platform",
+        "team-archive",
+        "team-idle",
+        "team-burst",
+        "team-ghost"
+      ],
+      "start": -5000,
+      "end": 10000,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "load_ratio"
+        }
+      ],
+      "step": 15000,
+      "origin": -5000,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "sequence": 24,
+      "cells": [
+        {
+          "space": "team-archive",
+          "labels": {
+            "zone": "east"
+          },
+          "start": -5000,
+          "end": 10000,
+          "value": 6,
+          "count": 2
+        },
+        {
+          "space": "team-ops",
+          "labels": {
+            "zone": "east"
+          },
+          "start": -5000,
+          "end": 10000,
+          "value": 2.5,
+          "count": 4
+        },
+        {
+          "space": "team-platform",
+          "labels": {
+            "zone": "east"
+          },
+          "start": -5000,
+          "end": 10000,
+          "value": 35,
+          "count": 2
+        }
+      ],
+      "spaces": [
+        {
+          "space": "team-ops",
+          "status": "ok",
+          "read_only": false,
+          "floor": -4503599627370496,
+          "max_scan": 100000,
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 4,
+            "decoded": 4,
+            "visible": 4,
+            "tombstones": 0
+          }
+        },
+        {
+          "space": "team-platform",
+          "status": "ok",
+          "read_only": false,
+          "floor": 500,
+          "max_scan": 100000,
+          "stats": {
+            "series": 1,
+            "blocks": 1,
+            "head": 0,
+            "decoded": 2,
+            "visible": 2,
+            "tombstones": 0
+          }
+        },
+        {
+          "space": "team-archive",
+          "status": "ok",
+          "read_only": true,
+          "floor": -4503599627370496,
+          "max_scan": 100000,
+          "stats": {
+            "series": 1,
+            "blocks": 1,
+            "head": 0,
+            "decoded": 2,
+            "visible": 2,
+            "tombstones": 0
+          }
+        },
+        {
+          "space": "team-idle",
+          "status": "ok",
+          "read_only": false,
+          "floor": -4503599627370496,
+          "max_scan": 100000,
+          "stats": {
+            "series": 0,
+            "blocks": 0,
+            "head": 0,
+            "decoded": 0,
+            "visible": 0,
+            "tombstones": 0
+          }
+        },
+        {
+          "space": "team-burst",
+          "status": "capacity",
+          "detail": "query decoded point budget exceeded",
+          "read_only": false,
+          "floor": -4503599627370496,
+          "max_scan": 6,
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 7,
+            "decoded": 7,
+            "visible": 0,
+            "tombstones": 0
+          }
+        },
+        {
+          "space": "team-ghost",
+          "status": "missing",
+          "detail": "namespace does not exist",
+          "read_only": false,
+          "floor": 0,
+          "max_scan": 0,
+          "stats": {
+            "series": 0,
+            "blocks": 0,
+            "head": 0,
+            "decoded": 0,
+            "visible": 0,
+            "tombstones": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "step": "single-space sequence",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "load_ratio"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 24,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 1,
+              "sequence": 17
+            },
+            {
+              "time": -500,
+              "value": 2,
+              "sequence": 17
+            },
+            {
+              "time": 500,
+              "value": 3,
+              "sequence": 17
+            },
+            {
+              "time": 1500,
+              "value": 4,
+              "sequence": 17
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 4,
+        "decoded": 4,
+        "visible": 4,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
     "step": "backup source",
     "request": {
       "start": -5000,
       "end": 10000
     },
     "response": {
-      "sequence": 11,
+      "sequence": 24,
       "floor": 1000,
       "series": [
         {
@@ -1380,14 +2274,14 @@
   },
   {
     "step": "backup",
-    "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sequence": "24",
+    "sha256": "06e5fad6d4f5087c849bd13c2a8027bfa69d3951608fc7469918a829e3b46e8e",
+    "bytes": 69632
   },
   {
     "step": "restored",
     "response": {
-      "sequence": 11,
+      "sequence": 24,
       "floor": 1000,
       "series": [
         {
