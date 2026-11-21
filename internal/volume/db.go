@@ -20,6 +20,7 @@ var Blocks = []byte("blocks")
 var Payloads = []byte("payloads")
 var Deletes = []byte("deletes")
 var Rollups = []byte("rollups")
+var Watermarks = []byte("watermarks")
 var Config = []byte("config")
 
 type DB struct {
@@ -62,12 +63,20 @@ func CreateNamespace(tx *bolt.Tx, name string) (*bolt.Bucket, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, bucket := range [][]byte{Catalog, Head, Blocks, Payloads, Deletes, Rollups} {
+	for _, bucket := range [][]byte{Catalog, Head, Blocks, Payloads, Deletes, Rollups, Watermarks} {
 		if _, err = ns.CreateBucket(bucket); err != nil {
 			return nil, err
 		}
 	}
 	return ns, nil
+}
+
+// EnsureWatermarks adds the per-series watermark bucket to namespaces created
+// before per-series lateness existed. It is additive and preserves every
+// existing entry, so reopening an older image does not discard data.
+func EnsureWatermarks(ns *bolt.Bucket) error {
+	_, err := ns.CreateBucketIfNotExists(Watermarks)
+	return err
 }
 
 func Next(tx *bolt.Tx) (uint64, error) {

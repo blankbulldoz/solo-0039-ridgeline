@@ -16,6 +16,10 @@
       "command": "python3 examples/walkthrough.py --workflow ingest"
     },
     {
+      "workflow_id": "lateness",
+      "command": "python3 examples/walkthrough.py --workflow lateness"
+    },
+    {
       "workflow_id": "discovery",
       "command": "python3 examples/walkthrough.py --workflow discovery"
     },

@@ -2,12 +2,22 @@ package model
 
 type Labels map[string]string
 
+const (
+	// LateModeNamespace compares every observation with one namespace-wide
+	// watermark. It is the original behavior and the default.
+	LateModeNamespace = "namespace"
+	// LateModeSeries compares an observation with the watermark of its own
+	// series, so one high-frequency producer cannot age out another series.
+	LateModeSeries = "series"
+)
+
 type Namespace struct {
 	Name         string `json:"name"`
 	ReadOnly     bool   `json:"read_only"`
 	RetentionMS  int64  `json:"retention_ms"`
 	LatenessMS   int64  `json:"lateness_ms"`
 	FutureMS     int64  `json:"future_ms"`
+	LateMode     string `json:"late_mode"`
 	MaxSeries    int    `json:"max_series"`
 	MaxWrite     int    `json:"max_write"`
 	MaxScan      int    `json:"max_scan"`
@@ -15,6 +25,12 @@ type Namespace struct {
 	Watermark    int64  `json:"watermark"`
 	HasWatermark bool   `json:"has_watermark"`
 	LastSequence uint64 `json:"last_sequence"`
+}
+
+type SeriesWatermark struct {
+	SeriesID string `json:"series_id"`
+	Time     int64  `json:"time"`
+	Sequence uint64 `json:"sequence"`
 }
 
 type Series struct {
@@ -40,10 +56,12 @@ type WriteRequest struct {
 }
 
 type WriteReceipt struct {
-	Sequence  uint64 `json:"sequence"`
-	Accepted  int    `json:"accepted"`
-	NewSeries int    `json:"new_series"`
-	Watermark int64  `json:"watermark"`
+	Sequence   uint64            `json:"sequence"`
+	Accepted   int               `json:"accepted"`
+	NewSeries  int               `json:"new_series"`
+	Watermark  int64             `json:"watermark"`
+	LateMode   string            `json:"late_mode"`
+	Watermarks []SeriesWatermark `json:"series_watermarks"`
 }
 
 type Matcher struct {

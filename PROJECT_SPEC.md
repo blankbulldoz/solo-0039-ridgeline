@@ -26,6 +26,23 @@ skew relative to an explicit caller-supplied observation time. Empty namespaces
 have no late-data watermark. Limits are evaluated before publishing a mutation.
 Read-only namespaces reject ingestion but permit reads and physical maintenance.
 
+Lateness has two selectable modes. `namespace` is the original behavior: every
+point is compared with one namespace-wide watermark. `series` compares a point
+with the watermark of its own series, so a high-frequency producer cannot age
+out an intermittently reporting device. A per-series watermark is the newest
+timestamp committed for that series and only moves forward. It is recorded in
+both modes, so switching modes later does not depend on when the switch
+happened. All points in one request are judged against state before the
+request. A series absent from the catalog is new and has no previous
+timestamp; its first batch is bounded only by retention and future skew. A
+series present in the catalog but missing a per-series record (for example
+after restoring an image created before this feature) falls back to the
+namespace watermark rather than being treated as new, and switching to series
+mode seeds such records from the namespace watermark. A deletion removes
+visible samples but not catalog identity or the watermark, so later reports
+are judged as if the series had never been emptied; retention remains the
+irreversible bound in both modes.
+
 Raw queries merge mutable head points with immutable gzip blocks and then
 resolve corrections, deletions and retention. A query runs in one bbolt read
 transaction. Exact label, inequality and regular-expression matchers are
@@ -58,18 +75,19 @@ the server with that image as RIDGE_DB restores that database directly.
 
 1. Create, inspect and toggle namespace read-only policy.
 2. Ingest ordered, late and corrective measurements atomically.
-3. Discover canonical series through label matchers.
-4. Read corrected points across head and sealed blocks.
-5. Aggregate groups into signed, origin-aligned time windows.
-6. Calculate rates across counter resets.
-7. Seal mutable measurements into verified compressed blocks.
-8. Delete a range without hiding later corrections.
-9. Advance retention and reject resurrection.
-10. Materialize a rollup with source-sequence provenance.
-11. Inspect materialization freshness after later writes.
-12. Compact physical blocks while preserving query results.
-13. Export a consistent image and restart from it.
-14. Explain candidate series, physical blocks and query budgets.
+3. Select namespace-wide or per-series lateness and switch between them.
+4. Discover canonical series through label matchers.
+5. Read corrected points across head and sealed blocks.
+6. Aggregate groups into signed, origin-aligned time windows.
+7. Calculate rates across counter resets.
+8. Seal mutable measurements into verified compressed blocks.
+9. Delete a range without hiding later corrections.
+10. Advance retention and reject resurrection.
+11. Materialize a rollup with source-sequence provenance.
+12. Inspect materialization freshness after later writes.
+13. Compact physical blocks while preserving query results.
+14. Export a consistent image and restart from it.
+15. Explain candidate series, physical blocks and query budgets.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.

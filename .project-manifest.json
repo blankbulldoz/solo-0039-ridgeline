@@ -88,6 +88,26 @@
       ]
     },
     {
+      "id": "lateness",
+      "name": "Namespace and per-series late admission",
+      "entry": "PUT /spaces/spindle/late-mode; POST /spaces/spindle/points",
+      "success": "Per-series lateness admits a slow device's backlog while namespace mode still rejects it",
+      "failure": "history, missing-watermark, retention and future-skew rejection",
+      "verification": "python3 examples/walkthrough.py --workflow lateness",
+      "steps": [
+        "validate the public request",
+        "derive domain facts inside one transaction",
+        "publish result or typed failure"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "model",
+        "policy",
+        "volume"
+      ]
+    },
+    {
       "id": "discovery",
       "name": "Matcher based series discovery",
       "entry": "POST /spaces/spindle/series",

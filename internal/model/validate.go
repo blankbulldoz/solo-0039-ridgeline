@@ -52,6 +52,15 @@ func ValidateObservation(p Observation) error {
 	return nil
 }
 
+func ValidateLateMode(mode string) error {
+	switch mode {
+	case LateModeNamespace, LateModeSeries:
+		return nil
+	default:
+		return Bad(`late_mode must be "namespace" or "series"`)
+	}
+}
+
 func ValidateNamespace(n Namespace) error {
 	if !ValidName(n.Name) {
 		return Bad("invalid namespace name")
@@ -59,6 +68,11 @@ func ValidateNamespace(n Namespace) error {
 	if n.RetentionMS <= 0 || n.RetentionMS > MaxTime || n.LatenessMS < 0 ||
 		n.LatenessMS > MaxTime || n.FutureMS < 0 || n.FutureMS > MaxTime {
 		return Bad("invalid time policy")
+	}
+	if n.LateMode != "" {
+		if err := ValidateLateMode(n.LateMode); err != nil {
+			return err
+		}
 	}
 	if n.MaxSeries < 1 || n.MaxSeries > 100000 || n.MaxWrite < 1 ||
 		n.MaxWrite > 50000 || n.MaxScan < n.MaxWrite || n.MaxScan > 2000000 {

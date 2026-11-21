@@ -44,6 +44,8 @@ All methods below return 200 on success.
 | POST | `/spaces` | namespace policy, as in input.json |
 | GET | `/spaces/{space}` | policy, watermark, floor, source sequence |
 | PUT | `/spaces/{space}/mode` | `{"read_only":true}` |
+| PUT | `/spaces/{space}/late-mode` | `{"late_mode":"series"}` (`namespace` restores the default) |
+| GET | `/spaces/{space}/watermarks` | late mode, namespace watermark and per-series watermarks |
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
@@ -72,6 +74,36 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+### Late-data modes
+
+`late_mode` defaults to `namespace`: every point is checked against the newest
+timestamp accepted anywhere in the namespace. A busy series can therefore make
+a quieter series' ordinary backlog late. `late_mode: "series"` checks each
+point against that series' own newest accepted timestamp instead.
+
+- The per-series watermark is the newest committed timestamp for the series
+  and never decreases. It is maintained in both modes, so switches are
+  repeatable and do not depend on the moment they happen.
+- A point is late when `series_watermark - point_time > lateness_ms`. A batch is
+  evaluated against state before the batch, so it cannot make itself late.
+- A series that is not in the catalog yet is new and has no previous
+  timestamp; its first batch is bounded only by `retention_ms` and `future_ms`.
+- A catalog series without a per-series record (for example a namespace
+  restored from an image written before this feature) falls back to the
+  namespace watermark. It is never silently treated as new, so switching to
+  series mode cannot admit history. Switching also seeds missing records from
+  the namespace watermark.
+- Deleting a series' samples does not clear its identity or watermark; after
+  emptying, reports older than the lateness window stay rejected.
+- `retention_ms` and `future_ms` are unchanged by the mode and still apply.
+
+The `lateness` walkthrough interleaves a fast and a slow device across a mode
+switch and records each accept or reject:
+
+```sh
+python3 examples/walkthrough.py --workflow lateness
+```
 
 ## Storage And Recovery
 

@@ -27,6 +27,17 @@ func Handler(e *engine.Engine) http.Handler {
 			return e.ReadOnly(r.PathValue("space"), input.ReadOnly)
 		})
 	})
+	mux.HandleFunc("PUT "+base+"/late-mode", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input struct {
+			LateMode string `json:"late_mode"`
+		}) (any, error) {
+			return e.SetLateMode(r.PathValue("space"), input.LateMode)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/watermarks", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.Watermarks(r.PathValue("space"))
+		respond(w, out, err)
+	})
 	mux.HandleFunc("POST "+base+"/points", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(input model.WriteRequest) (any, error) {
 			return e.Write(r.PathValue("space"), input)
