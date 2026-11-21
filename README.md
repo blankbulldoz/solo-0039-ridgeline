@@ -22,6 +22,8 @@ then closes the database. A second process cannot open the same database file.
 
 ```sh
 python3 examples/walkthrough.py --workflow all
+python3 examples/walkthrough.py --workflow relabel
+python3 examples/relabel_migration.py
 python3 examples/walkthrough.py --output var/observations.json
 ```
 
@@ -57,6 +59,10 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/compact` | empty object |
 | PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
 | GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
+| POST | `/spaces/{space}/relabel/preview` | read-only migration plan for one renamed label |
+| POST | `/spaces/{space}/relabel` | execute the plan, or record a refusal |
+| GET | `/spaces/{space}/relabel/jobs` | migration attempt inventory |
+| GET | `/spaces/{space}/relabel/jobs/{job}` | one attempt and whether it completed |
 | GET | `/image` | consistent binary image, SHA-256 and sequence headers |
 
 Sample query:
@@ -73,11 +79,71 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+## Label Migration
+
+A namespace can rename one label key across its stored history; the shipped
+example moves `host` to `node`. New ingestion alone cannot do this, because
+existing series identities, blocks, deletion intervals and rollups all persist
+the old key. `POST /spaces/{space}/relabel/preview` resolves the whole namespace
+and reports, without writing:
+
+- `changes`: each source series and the identity it becomes;
+- `merges`: targets reached by more than one source identity;
+- `collisions`: timestamps where a merge would put two committed values on one
+  identity, with every candidate value and commit sequence;
+- `label_conflicts`: series that already carry the target key with a different
+  value;
+- `rollups`: stored definitions that reference the renamed key.
+
+A series without the source key keeps its identity and samples unchanged; it
+never gains an empty target label. A source value that is explicitly empty is a
+present label and moves as empty. Two series that become one identity are a
+merge. If a merged identity collides at a timestamp, the job is refused unless a
+`value_conflict` policy is supplied:
+
+| `value_conflict` | Behavior |
+| --- | --- |
+| `reject` (default) | refuse the whole job |
+| `keep_first` | oldest commit sequence wins |
+| `keep_last` | newest commit sequence wins |
+| `deduplicate_identical` | accept only repeated equal values |
+
+`label_conflict` handles a series whose target key already holds a different
+value: `reject` (default), `keep_target`, or `prefer_source`.
+
+Execution takes the namespace offline in two committed phases. The first records
+a `running` job and a pause marker; from that commit, ingestion, sealing,
+deletion, retention, compaction and rollup publication are rejected with 409.
+The second rewrites the namespace and replaces the running record with the
+completed one in the same bbolt transaction. A process that dies between the
+phases leaves a pause marker and a running record; opening the database marks
+that attempt `failed`, clears the pause, and admits writes again, and no data
+was rewritten. A refused plan writes a terminal `failed` record and changes
+nothing. Repeating a completed job returns its recorded result.
+
+Deletion intervals and rollups are resolved rather than left dangling.
+Samples hidden by a deletion at migration time stay hidden (they are dropped
+from the rewritten output), and the interval is detached from series identities
+that no longer exist, so it cannot later hide a merged series' unrelated
+samples. Rollup definitions and stored cell labels are repointed at the new key;
+a cell that already has a conflicting target value is left alone and reported.
+The migration advances the namespace sequence, so every stored rollup result
+reads as stale until it is rematerialized. Blocks are republished under the new
+identities from visible samples, preserving commit sequences; retention floors
+are unchanged.
+
+`examples/relabel_migration.py` runs the absent-label, explicit-empty and
+merge-collision scenarios against the real API, including a database image
+written by the pre-migration release. `cmd/relabel-drill` reproduces the paused
+state of an interrupted job for recovery drills; it must not run while a server
+holds the file.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
-deletes and rollups buckets. Numeric point keys encode signed time in
-lexicographic order. Blocks use format 1: a gzip stream containing an ordered
+deletes, rollups and jobs buckets. The jobs bucket is created on open when an
+older image lacks it, so pre-migration images keep working. Numeric point keys
+encode signed time in lexicographic order. Blocks use format 1: a gzip stream containing an ordered
 JSON sample array, with SHA-256 over the compressed payload.
 
 Keep a downloaded image and its response hash together. Verify the bytes,

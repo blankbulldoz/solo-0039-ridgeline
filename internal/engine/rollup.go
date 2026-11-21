@@ -20,6 +20,9 @@ func (e *Engine) Materialize(name, rollup string, q model.Query) (model.Material
 		if n.ReadOnly {
 			return model.Conflict("namespace is read-only")
 		}
+		if n.Maintenance != "" {
+			return model.Conflict("namespace is paused for label maintenance")
+		}
 		result, err := aggregate(b, n, q, volume.Current(tx))
 		if err != nil {
 			return err

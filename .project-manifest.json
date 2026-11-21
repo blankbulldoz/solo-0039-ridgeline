@@ -318,6 +318,28 @@
         "select",
         "volume"
       ]
+    },
+    {
+      "id": "relabel",
+      "name": "Namespace label rewrite",
+      "entry": "POST /spaces/regroup/relabel/preview; POST /spaces/regroup/relabel",
+      "success": "Absent and empty labels keep their meaning, merges resolve explicitly, and deletions and rollups follow the rewritten identity",
+      "failure": "unresolved timestamp collision or label conflict",
+      "verification": "python3 examples/walkthrough.py --workflow relabel",
+      "steps": [
+        "preview identity changes, merges and collisions in one read transaction",
+        "pause namespace mutations and record job intent",
+        "rewrite catalog, samples, deletions and rollup references atomically",
+        "publish the completed job record in the same transaction"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "model",
+        "select",
+        "volume",
+        "policy"
+      ]
     }
   ],
   "complexity": {

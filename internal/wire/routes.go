@@ -91,6 +91,24 @@ func Handler(e *engine.Engine) http.Handler {
 		out, err := e.Rollup(r.PathValue("space"), r.PathValue("rollup"))
 		respond(w, out, err)
 	})
+	mux.HandleFunc("POST "+base+"/relabel/preview", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input model.RelabelRequest) (any, error) {
+			return e.PreviewRelabel(r.PathValue("space"), input)
+		})
+	})
+	mux.HandleFunc("POST "+base+"/relabel", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input model.RelabelRequest) (any, error) {
+			return e.ExecuteRelabel(r.PathValue("space"), input)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/relabel/jobs", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.RelabelJobs(r.PathValue("space"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("GET "+base+"/relabel/jobs/{job}", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.RelabelJob(r.PathValue("space"), r.PathValue("job"))
+		respond(w, out, err)
+	})
 	mux.HandleFunc("GET /ridge/v1/image", func(w http.ResponseWriter, r *http.Request) {
 		serveImage(e, w, r)
 	})

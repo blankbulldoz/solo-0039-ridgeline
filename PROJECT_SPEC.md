@@ -54,6 +54,40 @@ it never silently presents stale materialization as current. Backup returns
 a consistent bbolt database image plus SHA-256 and sequence headers. Starting
 the server with that image as RIDGE_DB restores that database directly.
 
+## Label Migration
+
+A namespace can rewrite one label key across existing history; renaming a label
+on new writes alone cannot change series identity already published. A migration
+plan is resolved in one read transaction and reports every source series, the
+identity it becomes, merge groups, timestamp collisions with their candidate
+values and commit sequences, existing target-key conflicts, and materialized
+rollups that reference the key. A series without the source key keeps its
+identity; an explicitly empty source value is present and moves as empty.
+
+A merge is two or more source identities becoming one. A collision is two
+committed values for one target identity at one timestamp; the default plan
+refuses it. Execution requires an explicit collision policy: reject, keep first
+or last commit sequence, or accept only identical values. A series that already
+carries the target key with another value requires a label conflict policy.
+Refusal publishes no data change.
+
+Execution commits twice. The first transaction records intent and pauses
+namespace mutations: ingestion, sealing, deletion, retention, compaction and
+rollup publication are rejected while paused. The second rewrites catalog,
+head, blocks, deletion intervals and rollup references, then commits the
+completed job record in the same transaction. A crash before the second commit
+therefore leaves the namespace unchanged; reopening records the attempt as
+failed and clears the pause. A completed job is idempotent by identifier.
+
+Deletion intervals and rollups never keep pointing at removed identities.
+Samples hidden at migration time are dropped from the rewritten output and the
+interval is detached from identities that no longer exist, so it cannot hide a
+merged series' unrelated samples. Stored rollup queries and cell labels move to
+the new key; the sequence advance marks results stale. Blocks are republished
+from visible samples with their original commit sequences, and retention floors
+are unchanged. An older image without the job bucket opens without modification
+beyond creating that empty bucket.
+
 ## Workflows
 
 1. Create, inspect and toggle namespace read-only policy.
@@ -70,6 +104,8 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Preview and execute a scoped label rewrite, resolving merges and
+    collisions and repointing deletions and rollups.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
@@ -87,6 +123,8 @@ runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
-exercise real API operations, process restart and failure responses. Formal
+exercise real API operations, process restart and failure responses.
+`python3 examples/relabel_migration.py` demonstrates absent-label, explicit-empty
+and merge-collision migrations plus recovery and an old-format image. Formal
 automated tests are deferred. The walkthrough is a bounded production demo
 using temporary database files and synthetic infrastructure measurements.

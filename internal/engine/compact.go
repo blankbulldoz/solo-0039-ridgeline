@@ -42,6 +42,9 @@ func (e *Engine) Compact(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
+		if n.Maintenance != "" {
+			return model.Conflict("namespace is paused for label maintenance")
+		}
 		receipt, err = compact(tx, b, n)
 		return err
 	})
@@ -57,6 +60,9 @@ func (e *Engine) Retain(name string, now int64) (model.Maintenance, error) {
 		}
 		if n.ReadOnly {
 			return model.Conflict("namespace is read-only")
+		}
+		if n.Maintenance != "" {
+			return model.Conflict("namespace is paused for label maintenance")
 		}
 		n.Floor, err = policy.RetentionFloor(n, now)
 		if err != nil {

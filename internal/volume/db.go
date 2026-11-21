@@ -20,6 +20,7 @@ var Blocks = []byte("blocks")
 var Payloads = []byte("payloads")
 var Deletes = []byte("deletes")
 var Rollups = []byte("rollups")
+var Jobs = []byte("jobs")
 var Config = []byte("config")
 
 type DB struct {
@@ -39,8 +40,21 @@ func Open(path string) (*DB, error) {
 		if e != nil {
 			return e
 		}
-		_, e = root.CreateBucketIfNotExists(Spaces)
-		return e
+		spaces, e := root.CreateBucketIfNotExists(Spaces)
+		if e != nil {
+			return e
+		}
+		// Images written before the relabel feature lack the jobs bucket in
+		// every namespace. Adding it on open keeps older images usable while
+		// leaving their existing data untouched.
+		return spaces.ForEach(func(name, _ []byte) error {
+			ns := spaces.Bucket(name)
+			if ns == nil {
+				return nil
+			}
+			_, err := ns.CreateBucketIfNotExists(Jobs)
+			return err
+		})
 	})
 	if err != nil {
 		raw.Close()
@@ -62,7 +76,7 @@ func CreateNamespace(tx *bolt.Tx, name string) (*bolt.Bucket, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, bucket := range [][]byte{Catalog, Head, Blocks, Payloads, Deletes, Rollups} {
+	for _, bucket := range [][]byte{Catalog, Head, Blocks, Payloads, Deletes, Rollups, Jobs} {
 		if _, err = ns.CreateBucket(bucket); err != nil {
 			return nil, err
 		}

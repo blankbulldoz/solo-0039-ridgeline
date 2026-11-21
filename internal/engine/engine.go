@@ -18,7 +18,58 @@ func Open(path string) (*Engine, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Engine{DB: db}, nil
+	e := &Engine{DB: db}
+	if err := recoverMaintenance(e); err != nil {
+		db.Close()
+		return nil, err
+	}
+	return e, nil
+}
+
+// recoverMaintenance resolves a pause marker left by a process that died while a
+// relabel job was in flight. The data rewrite and its completed record publish in
+// one transaction, so a committed pause marker without a completed record proves
+// the rewrite never applied. The attempt is recorded as failed and writes resume.
+func recoverMaintenance(e *Engine) error {
+	return e.DB.Raw.Update(func(tx *bolt.Tx) error {
+		spaces := tx.Bucket(volume.Root).Bucket(volume.Spaces)
+		return spaces.ForEach(func(name, _ []byte) error {
+			ns := spaces.Bucket(name)
+			if ns == nil {
+				return nil
+			}
+			var n model.Namespace
+			if err := volume.GetJSON(ns, volume.Config, &n); err != nil {
+				return err
+			}
+			if n.Maintenance == "" {
+				return nil
+			}
+			jobID := n.MaintenanceJob
+			n.Maintenance, n.MaintenanceJob = "", ""
+			if err := volume.PutJSON(ns, volume.Config, n); err != nil {
+				return err
+			}
+			if jobID == "" {
+				return nil
+			}
+			jobs := ns.Bucket(volume.Jobs)
+			if jobs == nil || jobs.Get([]byte(jobID)) == nil {
+				return nil
+			}
+			var job model.RelabelJob
+			if err := volume.GetJSON(jobs, []byte(jobID), &job); err != nil {
+				return err
+			}
+			if job.State == jobCompleted {
+				return nil
+			}
+			job.State = jobFailed
+			job.Completed = false
+			job.Detail = "interrupted before publication; no data was rewritten"
+			return volume.PutJSON(jobs, []byte(jobID), job)
+		})
+	})
 }
 
 func (e *Engine) Close() error {
@@ -88,6 +139,9 @@ func (e *Engine) ReadOnly(name string, readOnly bool) (model.Namespace, error) {
 		b, loaded, err := loadNamespace(tx, name)
 		if err != nil {
 			return err
+		}
+		if loaded.Maintenance != "" {
+			return model.Conflict("namespace is paused for label maintenance")
 		}
 		n = loaded
 		n.ReadOnly = readOnly

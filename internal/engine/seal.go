@@ -36,6 +36,9 @@ func (e *Engine) Seal(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
+		if n.Maintenance != "" {
+			return model.Conflict("namespace is paused for label maintenance")
+		}
 		grouped := map[string][]model.Sample{}
 		err = b.Bucket(volume.Head).ForEach(func(k, v []byte) error {
 			if len(k) != 72 {

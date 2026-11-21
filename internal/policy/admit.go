@@ -6,6 +6,9 @@ func Admit(n model.Namespace, request model.WriteRequest) error {
 	if n.ReadOnly {
 		return model.Conflict("namespace is read-only")
 	}
+	if n.Maintenance != "" {
+		return model.Conflict("namespace is paused for label maintenance")
+	}
 	if !model.ValidTime(request.Now) {
 		return model.Bad("invalid observation time")
 	}

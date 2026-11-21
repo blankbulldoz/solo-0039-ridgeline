@@ -15,8 +15,53 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "compact", "backup",
+    "explain", "relabel"
 ]
+
+
+def relabel_workflow(op, base, space):
+    """Preview and run a scoped host->node migration on a separate namespace."""
+    target = "spaces/regroup"
+    policy = {"name": "regroup", "retention_ms": 100000, "lateness_ms": 100000,
+              "future_ms": 100000, "max_series": 100, "max_write": 1000, "max_scan": 10000}
+    op("relabel namespace", "spaces", policy)
+    points = [
+        # absent: no host label, identity must not change
+        {"labels": {"__name__": "disk"}, "time": 1000, "value": 3},
+        # empty: present but empty host value, must move as empty
+        {"labels": {"__name__": "cpu", "host": ""}, "time": 1000, "value": 4},
+        # plain rename
+        {"labels": {"__name__": "cpu", "host": "ridge-a"}, "time": 1000, "value": 5},
+        {"labels": {"__name__": "cpu", "host": "ridge-a"}, "time": 2000, "value": 6},
+        # merge collision: same identity as ridge-a after the rename, same time
+        {"labels": {"__name__": "cpu", "node": "ridge-a"}, "time": 1000, "value": 50},
+    ]
+    op("relabel points", target + "/points", {"now": 100000, "points": points})
+    op("relabel rollup", target + "/rollups/by_host", {
+        "start": 0, "end": 10000, "step": 5000, "origin": 0, "group_by": ["host"],
+        "function": "sum", "limit": 0,
+        "matchers": [{"label": "__name__", "op": "=", "value": "cpu"}],
+    }, method="PUT")
+    rename = {"from": "host", "to": "node"}
+    preview = op("relabel preview", target + "/relabel/preview", {"rename": rename})
+    if not preview["blocked"] or not preview["collisions"]:
+        raise RuntimeError("collision must block the default preview")
+    op("relabel refused", target + "/relabel", {"rename": rename}, status=409)
+    job = op("relabel execute", target + "/relabel",
+             {"rename": rename, "job": "host-to-node", "value_conflict": "keep_last"})
+    if not job["completed"]:
+        raise RuntimeError("relabel job did not complete")
+    series = op("relabel discovery", target + "/series", {"matchers": []})
+    labels = [s["labels"] for s in series]
+    if not any(set(l) == {"__name__"} for l in labels):
+        raise RuntimeError("series without host must keep its identity")
+    if not any(l.get("node") == "" for l in labels):
+        raise RuntimeError("explicit empty host must move to node")
+    if any("host" in l for l in labels):
+        raise RuntimeError("renamed label must not remain")
+    op("relabel jobs", target + "/relabel/jobs")
+    op("relabel rollup freshness", target + "/rollups/by_host")
 
 
 def request(base, route, payload=None, method=None, status=200):
@@ -126,6 +171,8 @@ def exercise(workflow, output):
                 if op("post-compaction", space + "/range", q)["series"] != logical:
                     raise RuntimeError("compaction changed logical samples")
                 op("explain", space + "/explain", q)
+                if workflow in ("relabel", "all"):
+                    relabel_workflow(op, base, space)
                 op("retention", space + "/retention", {"now": 11000})
                 op("retention no resurrection", space + "/points", replacement, status=409)
                 op("read-only", space + "/mode", {"read_only": True}, method="PUT")

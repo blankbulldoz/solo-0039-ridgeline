@@ -27,6 +27,9 @@ func (e *Engine) Delete(name string, q model.Query) (model.Tombstone, error) {
 		if n.ReadOnly {
 			return model.Conflict("namespace is read-only")
 		}
+		if n.Maintenance != "" {
+			return model.Conflict("namespace is paused for label maintenance")
+		}
 		all, err := catalog(b)
 		if err != nil {
 			return err
