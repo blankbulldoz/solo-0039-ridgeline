@@ -136,3 +136,44 @@ type Maintenance struct {
 	Points   int    `json:"points"`
 	Floor    int64  `json:"floor"`
 }
+
+type SettleRequest struct {
+	Start         int64     `json:"start"`
+	End           int64     `json:"end"`
+	CountMatchers []Matcher `json:"count_matchers"`
+	BootMatchers  []Matcher `json:"boot_matchers"`
+	Join          []string  `json:"join"`
+	Modulus       int64     `json:"modulus"`
+	MaxRate       float64   `json:"max_rate"`
+	Reconcile     *int64    `json:"reconcile,omitempty"`
+}
+
+type SettleInterval struct {
+	Start          int64    `json:"start"`
+	End            int64    `json:"end"`
+	From           int64    `json:"from"`
+	To             int64    `json:"to"`
+	Status         string   `json:"status"`
+	Increment      *int64   `json:"increment,omitempty"`
+	Min            *int64   `json:"min,omitempty"`
+	Max            *int64   `json:"max,omitempty"`
+	BootBefore     *float64 `json:"boot_before,omitempty"`
+	BootAfter      *float64 `json:"boot_after,omitempty"`
+	ReconcileMatch *bool    `json:"reconcile_match,omitempty"`
+}
+
+type SettleGroup struct {
+	Labels       Labels           `json:"labels"`
+	CountSeries  string           `json:"count_series"`
+	BootSeries   string           `json:"boot_series,omitempty"`
+	Intervals    []SettleInterval `json:"intervals"`
+	SettledTotal int64            `json:"settled_total"`
+	Statuses     map[string]int   `json:"statuses"`
+}
+
+type SettleResult struct {
+	Sequence uint64        `json:"sequence"`
+	Floor    int64         `json:"floor"`
+	Groups   []SettleGroup `json:"groups"`
+	Stats    ScanStats     `json:"stats"`
+}

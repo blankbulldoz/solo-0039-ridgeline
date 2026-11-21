@@ -48,6 +48,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/settle` | boot-aware counter settlement |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -72,6 +73,16 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+Settlement answers whether an adjacent counter interval can be settled
+exactly. The caller selects count and boot-identifier series, joins them on
+device labels, and bounds wrap candidates with a counter modulus and a
+maximum growth rate. Only intervals covered by observations of one boot
+identifier settle: one plausible increment is exact, several report a
+minimum/maximum range and test an optional reconciliation difference for
+membership. Reboots and missing boot evidence are reported as distinct
+statuses and never carry increments or reconciliation judgements. Both
+selectors read the same corrected view at one database sequence.
 
 ## Storage And Recovery
 

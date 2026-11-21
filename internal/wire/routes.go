@@ -49,6 +49,11 @@ func Handler(e *engine.Engine) http.Handler {
 			return e.Aggregate(r.PathValue("space"), q)
 		})
 	})
+	mux.HandleFunc("POST "+base+"/settle", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input model.SettleRequest) (any, error) {
+			return e.Settle(r.PathValue("space"), input)
+		})
+	})
 	mux.HandleFunc("POST "+base+"/explain", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(q model.Query) (any, error) {
 			return e.Explain(r.PathValue("space"), q)

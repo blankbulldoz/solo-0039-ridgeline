@@ -15,7 +15,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain",
+    "settle"
 ]
 
 
@@ -133,6 +134,101 @@ def exercise(workflow, output):
                     "now": 11000, "points": [{**seed["points"][0], "time": 1500}]
                 }, status=409)
                 op("resume", space + "/mode", {"read_only": False}, method="PUT")
+                # Settlement: 16-bit link counters settled against boot evidence.
+                links = "spaces/links"
+                op("settle namespace", "spaces", {
+                    "name": "links", "retention_ms": 4000000, "lateness_ms": 4000000,
+                    "future_ms": 1000, "max_series": 100, "max_write": 10000,
+                    "max_scan": 100000})
+                counts, boots = [], []
+
+                def sample(store, name, device, at, value):
+                    store.append({"labels": {"__name__": name, "device": device},
+                                  "time": at, "value": value})
+
+                # Identical 65530 -> 4 transitions under different boot evidence.
+                for device in ("alpha", "beta", "gamma"):
+                    sample(counts, "if_octets_total", device, 10000, 65530)
+                    sample(counts, "if_octets_total", device, 20000, 4)
+                sample(boots, "boot_id", "alpha", 0, 7)
+                sample(boots, "boot_id", "alpha", 30000, 7)    # continuous run
+                sample(boots, "boot_id", "beta", 0, 7)
+                sample(boots, "boot_id", "beta", 30000, 8)     # rebooted
+                # gamma reports no boot identifier at all.
+                # A long interval where several wraps fit the growth rate.
+                sample(counts, "if_octets_total", "delta", 0, 100)
+                sample(counts, "if_octets_total", "delta", 100000, 200)
+                sample(boots, "boot_id", "delta", 0, 5)
+                sample(boots, "boot_id", "delta", 100000, 5)
+                # A jump even the minimum wrap cannot explain under the rate limit.
+                sample(counts, "if_octets_total", "epsilon", 10000, 0)
+                sample(counts, "if_octets_total", "epsilon", 20000, 60000)
+                sample(boots, "boot_id", "epsilon", 0, 3)
+                sample(boots, "boot_id", "epsilon", 30000, 3)
+                receipt = op("settle ingest", links + "/points",
+                             {"now": 100000, "points": counts + boots})
+                view = op("settle namespace view", links)
+                settle_q = {
+                    "start": 0, "end": 100001,
+                    "count_matchers": [{"label": "__name__", "op": "=",
+                                        "value": "if_octets_total"}],
+                    "boot_matchers": [{"label": "__name__", "op": "=", "value": "boot_id"}],
+                    "join": ["device"], "modulus": 65536, "max_rate": 1500,
+                    "reconcile": 131172}
+                first = op("settle contrast", links + "/settle", settle_q)
+                if first["sequence"] != view["last_sequence"] or \
+                        first["sequence"] != receipt["sequence"]:
+                    raise RuntimeError("settlement must read one committed view")
+
+                def interval(device, result):
+                    found = {g["labels"]["device"]: g for g in result["groups"]}
+                    intervals = found[device]["intervals"]
+                    if len(intervals) != 1:
+                        raise RuntimeError(f"{device}: expected one interval: {intervals}")
+                    return intervals[0]
+
+                alpha, beta, gamma = (interval(d, first) for d in ("alpha", "beta", "gamma"))
+                delta, epsilon = interval("delta", first), interval("epsilon", first)
+                if (alpha["status"], alpha["increment"]) != ("settled", 10):
+                    raise RuntimeError(f"continuous boot must settle one wrap: {alpha}")
+                if alpha["reconcile_match"] is not False:
+                    raise RuntimeError(f"131172 is not the settled increment: {alpha}")
+                if beta["status"] != "rebooted" or "reconcile_match" in beta:
+                    raise RuntimeError(f"boot change must not settle: {beta}")
+                if gamma["status"] != "unknown" or "reconcile_match" in gamma:
+                    raise RuntimeError(f"missing boot evidence must not settle: {gamma}")
+                if (delta["status"], delta["min"], delta["max"]) != ("ambiguous", 100, 131172):
+                    raise RuntimeError(f"long interval must bound wraps: {delta}")
+                if delta["reconcile_match"] is not True:
+                    raise RuntimeError(f"131172 is a plausible wrap candidate: {delta}")
+                if epsilon["status"] != "exceeded" or "reconcile_match" in epsilon:
+                    raise RuntimeError(f"rate violation must not settle: {epsilon}")
+                by_device = {g["labels"]["device"]: g for g in first["groups"]}
+                if by_device["alpha"]["settled_total"] != 10 or \
+                        by_device["delta"]["settled_total"] != 0:
+                    raise RuntimeError("settled totals only include unique increments")
+                miss = op("settle reconcile miss", links + "/settle",
+                          {**settle_q, "reconcile": 50000})
+                if interval("delta", miss)["reconcile_match"] is not False:
+                    raise RuntimeError("50000 is not a plausible wrap candidate")
+                op("settle boot correction", links + "/points", {"now": 100000, "points": [
+                    {"labels": {"__name__": "boot_id", "device": "beta"},
+                     "time": 30000, "value": 7}]})
+                corrected = op("settle corrected", links + "/settle", settle_q)
+                if (interval("beta", corrected)["status"],
+                        interval("beta", corrected)["increment"]) != ("settled", 10):
+                    raise RuntimeError("corrected boot identifier did not settle")
+                op("settle boot deletion", links + "/deletions", {
+                    "start": 25000, "end": 35000,
+                    "matchers": [{"label": "__name__", "op": "=", "value": "boot_id"},
+                                 {"label": "device", "op": "=", "value": "alpha"}]})
+                deleted = op("settle deleted evidence", links + "/settle", settle_q)
+                if interval("alpha", deleted)["status"] != "unknown":
+                    raise RuntimeError("deleted boot evidence must read as unknown")
+                op("settle seal", links + "/seal", {})
+                sealed = op("settle sealed", links + "/settle", settle_q)
+                if sealed["groups"] != deleted["groups"]:
+                    raise RuntimeError("sealing changed settlement results")
                 source = op("backup source", space + "/range", q)
                 image, headers = request(base, "image")
                 if hashlib.sha256(image).hexdigest() != headers["X-Ridge-Sha256"]:

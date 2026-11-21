@@ -11,6 +11,10 @@ import (
 const MinTime int64 = -(1 << 52)
 const MaxTime int64 = 1 << 52
 
+// MaxModulus keeps counter values and candidate increments exactly
+// representable as float64 samples and int64 arithmetic.
+const MaxModulus int64 = 1 << 53
+
 var identifier = regexp.MustCompile(`^[a-zA-Z_][a-zA-Z0-9_.:-]{0,95}$`)
 
 func ValidName(s string) bool {
@@ -78,6 +82,39 @@ func ValidateQuery(q Query) error {
 		if !ValidName(label) {
 			return Bad("invalid grouping label")
 		}
+	}
+	return nil
+}
+
+func ValidateSettle(r SettleRequest) error {
+	if !ValidTime(r.Start) || r.End < MinTime || r.End > MaxTime+1 || r.Start >= r.End {
+		return Bad("settlement requires a supported nonempty half-open interval")
+	}
+	if len(r.CountMatchers) == 0 || len(r.CountMatchers) > 32 ||
+		len(r.BootMatchers) == 0 || len(r.BootMatchers) > 32 {
+		return Bad("settlement requires 1..32 count and boot matchers")
+	}
+	if len(r.Join) == 0 || len(r.Join) > 8 {
+		return Bad("settlement requires 1..8 device join labels")
+	}
+	seen := map[string]bool{}
+	for _, label := range r.Join {
+		if !ValidName(label) || label == "__name__" {
+			return Bad("invalid device join label")
+		}
+		if seen[label] {
+			return Bad("duplicate device join label")
+		}
+		seen[label] = true
+	}
+	if r.Modulus < 2 || r.Modulus > MaxModulus {
+		return Bad("counter modulus outside supported range")
+	}
+	if math.IsNaN(r.MaxRate) || math.IsInf(r.MaxRate, 0) || r.MaxRate <= 0 {
+		return Bad("maximum growth rate must be positive and finite")
+	}
+	if r.Reconcile != nil && *r.Reconcile < 0 {
+		return Bad("reconciliation difference must be nonnegative")
 	}
 	return nil
 }
