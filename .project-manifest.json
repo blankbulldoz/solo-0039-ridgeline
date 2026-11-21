@@ -88,6 +88,27 @@
       ]
     },
     {
+      "id": "quality",
+      "name": "Observation quality and correction",
+      "entry": "POST /spaces/spindle/points; POST /spaces/spindle/aggregate",
+      "success": "Quality is sample-level, correctable and explained in reductions",
+      "failure": "unknown quality or invalid observation rejection",
+      "verification": "python3 examples/walkthrough.py --workflow quality",
+      "steps": [
+        "validate the public request",
+        "derive domain facts inside one transaction",
+        "publish result or typed failure"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "model",
+        "window",
+        "chunk",
+        "volume"
+      ]
+    },
+    {
       "id": "discovery",
       "name": "Matcher based series discovery",
       "entry": "POST /spaces/spindle/series",

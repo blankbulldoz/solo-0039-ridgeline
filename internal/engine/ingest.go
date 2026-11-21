@@ -45,7 +45,13 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 			}
 		}
 		for _, p := range request.Points {
-			s := model.Sample{Time: p.Time, Value: p.Value, Sequence: seq}
+			quality, err := model.ParseQuality(string(p.Quality))
+			if err != nil {
+				return err
+			}
+			// A correction replaces the whole observation, so its quality is
+			// written with the same commit as its value.
+			s := model.Sample{Time: p.Time, Value: p.Value, Sequence: seq, Quality: quality}
 			key := volume.PointKey(model.SeriesID(p.Labels), p.Time)
 			if err := volume.PutJSON(b.Bucket(volume.Head), key, s); err != nil {
 				return err

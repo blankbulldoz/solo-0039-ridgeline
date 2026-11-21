@@ -127,14 +127,90 @@
             "zone": "west"
           },
           "time": 500,
-          "value": 0.5
+          "value": 0.5,
+          "quality": "estimated"
+        },
+        {
+          "labels": {
+            "__name__": "gauge_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -500,
+          "value": 4
+        },
+        {
+          "labels": {
+            "__name__": "gauge_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -100,
+          "value": 6,
+          "quality": "estimated"
+        },
+        {
+          "labels": {
+            "__name__": "gauge_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 300,
+          "value": 99,
+          "quality": "invalid"
+        },
+        {
+          "labels": {
+            "__name__": "gauge_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 700,
+          "value": 8
+        },
+        {
+          "labels": {
+            "__name__": "cycle_total",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 100,
+          "value": 0
+        },
+        {
+          "labels": {
+            "__name__": "cycle_total",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 200,
+          "value": 100,
+          "quality": "invalid"
+        },
+        {
+          "labels": {
+            "__name__": "cycle_total",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 300,
+          "value": 5
+        },
+        {
+          "labels": {
+            "__name__": "cycle_total",
+            "node": "ridge-c",
+            "zone": "north"
+          },
+          "time": 900,
+          "value": 9
         }
       ]
     },
     "response": {
       "sequence": 2,
-      "accepted": 9,
-      "new_series": 4,
+      "accepted": 17,
+      "new_series": 6,
       "watermark": 1500
     }
   },
@@ -169,6 +245,1098 @@
     }
   },
   {
+    "step": "unknown quality rejection",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -1500,
+          "value": 10,
+          "quality": "guessed"
+        }
+      ]
+    },
+    "response": {
+      "code": "invalid",
+      "detail": "unknown observation quality"
+    }
+  },
+  {
+    "step": "scalar quality default",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 2,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "sequence": 2
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "sequence": 2
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 0.25,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 0.75,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": -500,
+              "value": 14,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 2,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 6,
+        "blocks": 0,
+        "head": 17,
+        "decoded": 17,
+        "visible": 17,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "quality report",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "report_quality": true
+    },
+    "response": {
+      "sequence": 2,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2,
+              "quality": "estimated"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "sequence": 2,
+              "quality": "estimated"
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "sequence": 2,
+              "quality": "invalid"
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 0.25,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 0.75,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2,
+              "quality": "invalid"
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": -500,
+              "value": 14,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 2,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 6,
+        "blocks": 0,
+        "head": 17,
+        "decoded": 17,
+        "visible": 17,
+        "tombstones": 0
+      },
+      "truncated": false,
+      "quality": {
+        "included": {
+          "trusted": 13,
+          "estimated": 2,
+          "invalid": 2
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      },
+      "qualities": [
+        {
+          "series_id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "quality": "estimated",
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "quality": "invalid",
+              "sequence": 2
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series_id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "quality": "invalid",
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "step": "quality filtered range",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "include_qualities": [
+        "trusted",
+        "estimated"
+      ],
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "gauge_ratio"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 2,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "sequence": 2,
+              "quality": "estimated"
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 4,
+        "decoded": 4,
+        "visible": 3,
+        "tombstones": 0
+      },
+      "truncated": false,
+      "quality": {
+        "included": {
+          "trusted": 2,
+          "estimated": 1,
+          "invalid": 0
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 1
+        },
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      },
+      "qualities": [
+        {
+          "series_id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "quality": "estimated",
+              "sequence": 2
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "step": "average excludes invalid",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 20000,
+      "origin": -5000,
+      "function": "avg",
+      "report_quality": true,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "gauge_ratio"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 2,
+      "cells": [
+        {
+          "labels": {},
+          "start": -5000,
+          "end": 15000,
+          "value": 6,
+          "count": 3,
+          "quality": {
+            "included": {
+              "trusted": 2,
+              "estimated": 1,
+              "invalid": 0
+            },
+            "excluded": {
+              "trusted": 0,
+              "estimated": 0,
+              "invalid": 1
+            },
+            "contributions": [
+              {
+                "quality": "trusted",
+                "observations": 2,
+                "sum": 12
+              },
+              {
+                "quality": "estimated",
+                "observations": 1,
+                "sum": 6
+              }
+            ],
+            "excluded_between": 1,
+            "spans_excluded": true,
+            "suppressed": 0
+          }
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 4,
+        "decoded": 4,
+        "visible": 4,
+        "tombstones": 0
+      },
+      "quality": {
+        "included": {
+          "trusted": 2,
+          "estimated": 1,
+          "invalid": 0
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 1
+        },
+        "contributions": [
+          {
+            "quality": "trusted",
+            "observations": 2,
+            "sum": 12
+          },
+          {
+            "quality": "estimated",
+            "observations": 1,
+            "sum": 6
+          }
+        ],
+        "excluded_between": 1,
+        "spans_excluded": true,
+        "suppressed": 0
+      }
+    }
+  },
+  {
+    "step": "average includes all qualities",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 20000,
+      "origin": -5000,
+      "function": "avg",
+      "report_quality": true,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "gauge_ratio"
+        }
+      ],
+      "include_qualities": [
+        "trusted",
+        "estimated",
+        "invalid"
+      ]
+    },
+    "response": {
+      "sequence": 2,
+      "cells": [
+        {
+          "labels": {},
+          "start": -5000,
+          "end": 15000,
+          "value": 29.25,
+          "count": 4,
+          "quality": {
+            "included": {
+              "trusted": 2,
+              "estimated": 1,
+              "invalid": 1
+            },
+            "excluded": {
+              "trusted": 0,
+              "estimated": 0,
+              "invalid": 0
+            },
+            "contributions": [
+              {
+                "quality": "trusted",
+                "observations": 2,
+                "sum": 12
+              },
+              {
+                "quality": "estimated",
+                "observations": 1,
+                "sum": 6
+              },
+              {
+                "quality": "invalid",
+                "observations": 1,
+                "sum": 99
+              }
+            ],
+            "excluded_between": 0,
+            "spans_excluded": false,
+            "suppressed": 0
+          }
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 4,
+        "decoded": 4,
+        "visible": 4,
+        "tombstones": 0
+      },
+      "quality": {
+        "included": {
+          "trusted": 2,
+          "estimated": 1,
+          "invalid": 1
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "contributions": [
+          {
+            "quality": "trusted",
+            "observations": 2,
+            "sum": 12
+          },
+          {
+            "quality": "estimated",
+            "observations": 1,
+            "sum": 6
+          },
+          {
+            "quality": "invalid",
+            "observations": 1,
+            "sum": 99
+          }
+        ],
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      }
+    }
+  },
+  {
+    "step": "counter spans excluded",
+    "request": {
+      "start": 0,
+      "end": 10000,
+      "step": 10000,
+      "origin": 0,
+      "function": "rate",
+      "report_quality": true,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "cycle_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 2,
+      "cells": [
+        {
+          "labels": {},
+          "start": 0,
+          "end": 10000,
+          "value": 11.25,
+          "count": 3,
+          "quality": {
+            "included": {
+              "trusted": 3,
+              "estimated": 0,
+              "invalid": 0
+            },
+            "excluded": {
+              "trusted": 0,
+              "estimated": 0,
+              "invalid": 1
+            },
+            "contributions": [
+              {
+                "quality": "trusted",
+                "observations": 3,
+                "sum": 9
+              }
+            ],
+            "excluded_between": 1,
+            "spans_excluded": true,
+            "suppressed": 0
+          }
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 4,
+        "decoded": 4,
+        "visible": 4,
+        "tombstones": 0
+      },
+      "quality": {
+        "included": {
+          "trusted": 3,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 1
+        },
+        "contributions": [
+          {
+            "quality": "trusted",
+            "observations": 3,
+            "sum": 9
+          }
+        ],
+        "excluded_between": 1,
+        "spans_excluded": true,
+        "suppressed": 0
+      }
+    }
+  },
+  {
+    "step": "counter includes invalid",
+    "request": {
+      "start": 0,
+      "end": 10000,
+      "step": 10000,
+      "origin": 0,
+      "function": "rate",
+      "report_quality": true,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "cycle_total"
+        }
+      ],
+      "include_qualities": [
+        "trusted",
+        "estimated",
+        "invalid"
+      ]
+    },
+    "response": {
+      "sequence": 2,
+      "cells": [
+        {
+          "labels": {},
+          "start": 0,
+          "end": 10000,
+          "value": 136.25,
+          "count": 4,
+          "quality": {
+            "included": {
+              "trusted": 3,
+              "estimated": 0,
+              "invalid": 1
+            },
+            "excluded": {
+              "trusted": 0,
+              "estimated": 0,
+              "invalid": 0
+            },
+            "contributions": [
+              {
+                "quality": "trusted",
+                "observations": 3,
+                "sum": 9
+              },
+              {
+                "quality": "invalid",
+                "observations": 1,
+                "sum": 100
+              }
+            ],
+            "excluded_between": 0,
+            "spans_excluded": false,
+            "suppressed": 0
+          }
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 4,
+        "decoded": 4,
+        "visible": 4,
+        "tombstones": 0
+      },
+      "quality": {
+        "included": {
+          "trusted": 3,
+          "estimated": 0,
+          "invalid": 1
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "contributions": [
+          {
+            "quality": "trusted",
+            "observations": 3,
+            "sum": 9
+          },
+          {
+            "quality": "invalid",
+            "observations": 1,
+            "sum": 100
+          }
+        ],
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      }
+    }
+  },
+  {
+    "step": "quality correction",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "gauge_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 300,
+          "value": 99,
+          "quality": "trusted"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 3,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 1500
+    }
+  },
+  {
+    "step": "quality correction visible",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "report_quality": true,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "gauge_ratio"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 3,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "sequence": 2,
+              "quality": "estimated"
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "sequence": 3,
+              "quality": "trusted"
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 4,
+        "decoded": 4,
+        "visible": 4,
+        "tombstones": 0
+      },
+      "truncated": false,
+      "quality": {
+        "included": {
+          "trusted": 3,
+          "estimated": 1,
+          "invalid": 0
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      },
+      "qualities": [
+        {
+          "series_id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "quality": "estimated",
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "quality": "trusted",
+              "sequence": 3
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "step": "discovery",
     "request": {
       "matchers": [
@@ -189,12 +1357,28 @@
         }
       },
       {
+        "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+        "labels": {
+          "__name__": "gauge_ratio",
+          "node": "ridge-a",
+          "zone": "east"
+        }
+      },
+      {
         "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
         "labels": {
           "__name__": "load_ratio",
           "node": "ridge-a",
           "rack": "",
           "zone": "east"
+        }
+      },
+      {
+        "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+        "labels": {
+          "__name__": "cycle_total",
+          "node": "ridge-c",
+          "zone": "north"
         }
       },
       {
@@ -222,7 +1406,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 2,
+      "sequence": 3,
       "floor": -4503599627370496,
       "series": [
         {
@@ -238,6 +1422,38 @@
             {
               "time": 500,
               "value": 0.5,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "sequence": 2
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "sequence": 3
+            },
+            {
+              "time": 700,
+              "value": 8,
               "sequence": 2
             }
           ]
@@ -261,6 +1477,38 @@
             {
               "time": 500,
               "value": 0.75,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
               "sequence": 2
             }
           ]
@@ -321,11 +1569,11 @@
         }
       ],
       "stats": {
-        "series": 4,
+        "series": 6,
         "blocks": 0,
-        "head": 9,
-        "decoded": 9,
-        "visible": 9,
+        "head": 17,
+        "decoded": 17,
+        "visible": 17,
         "tombstones": 0
       },
       "truncated": false
@@ -339,7 +1587,7 @@
       "limit": 2
     },
     "response": {
-      "sequence": 2,
+      "sequence": 3,
       "floor": -4503599627370496,
       "series": [
         {
@@ -361,29 +1609,28 @@
         },
         {
           "series": {
-            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
             "labels": {
-              "__name__": "load_ratio",
+              "__name__": "gauge_ratio",
               "node": "ridge-a",
-              "rack": "",
               "zone": "east"
             }
           },
           "points": [
             {
               "time": -500,
-              "value": 0.25,
+              "value": 4,
               "sequence": 2
             }
           ]
         }
       ],
       "stats": {
-        "series": 4,
+        "series": 6,
         "blocks": 0,
-        "head": 9,
-        "decoded": 9,
-        "visible": 9,
+        "head": 17,
+        "decoded": 17,
+        "visible": 17,
         "tombstones": 0
       },
       "truncated": true
@@ -402,7 +1649,7 @@
       "function": "avg"
     },
     "response": {
-      "sequence": 2,
+      "sequence": 3,
       "cells": [
         {
           "labels": {
@@ -419,8 +1666,8 @@
           },
           "start": -1000,
           "end": 0,
-          "value": 7.125,
-          "count": 2
+          "value": 6.0625,
+          "count": 4
         },
         {
           "labels": {
@@ -428,8 +1675,8 @@
           },
           "start": 0,
           "end": 1000,
-          "value": 3.25,
-          "count": 3
+          "value": 23.35,
+          "count": 5
         },
         {
           "labels": {
@@ -442,6 +1689,15 @@
         },
         {
           "labels": {
+            "zone": "north"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 4.666666666666667,
+          "count": 3
+        },
+        {
+          "labels": {
             "zone": "west"
           },
           "start": 0,
@@ -451,12 +1707,27 @@
         }
       ],
       "stats": {
-        "series": 4,
+        "series": 6,
         "blocks": 0,
-        "head": 9,
-        "decoded": 9,
-        "visible": 9,
+        "head": 17,
+        "decoded": 17,
+        "visible": 17,
         "tombstones": 0
+      },
+      "quality": {
+        "included": {
+          "trusted": 14,
+          "estimated": 2,
+          "invalid": 0
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 1
+        },
+        "excluded_between": 1,
+        "spans_excluded": true,
+        "suppressed": 0
       }
     }
   },
@@ -480,7 +1751,7 @@
       ]
     },
     "response": {
-      "sequence": 2,
+      "sequence": 3,
       "cells": [
         {
           "labels": {
@@ -503,20 +1774,11 @@
     }
   },
   {
-    "step": "seal",
-    "request": {},
-    "response": {
-      "sequence": 3,
-      "blocks": 4,
-      "points": 9,
-      "floor": -4503599627370496
-    }
-  },
-  {
-    "step": "sealed range",
+    "step": "quality before seal",
     "request": {
       "start": -5000,
-      "end": 10000
+      "end": 10000,
+      "report_quality": true
     },
     "response": {
       "sequence": 3,
@@ -535,6 +1797,320 @@
             {
               "time": 500,
               "value": 0.5,
+              "sequence": 2,
+              "quality": "estimated"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "sequence": 2,
+              "quality": "estimated"
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "sequence": 3,
+              "quality": "trusted"
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 0.25,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 0.75,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2,
+              "quality": "invalid"
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": -500,
+              "value": 14,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 2,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 6,
+        "blocks": 0,
+        "head": 17,
+        "decoded": 17,
+        "visible": 17,
+        "tombstones": 0
+      },
+      "truncated": false,
+      "quality": {
+        "included": {
+          "trusted": 14,
+          "estimated": 2,
+          "invalid": 1
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      },
+      "qualities": [
+        {
+          "series_id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "quality": "estimated",
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "quality": "trusted",
+              "sequence": 3
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series_id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "quality": "invalid",
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "step": "seal",
+    "request": {},
+    "response": {
+      "sequence": 4,
+      "blocks": 6,
+      "points": 17,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "sealed range",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 4,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "sequence": 2
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "sequence": 3
+            },
+            {
+              "time": 700,
+              "value": 8,
               "sequence": 2
             }
           ]
@@ -558,6 +2134,38 @@
             {
               "time": 500,
               "value": 0.75,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
               "sequence": 2
             }
           ]
@@ -618,14 +2226,287 @@
         }
       ],
       "stats": {
-        "series": 4,
-        "blocks": 4,
+        "series": 6,
+        "blocks": 6,
         "head": 0,
-        "decoded": 9,
-        "visible": 9,
+        "decoded": 17,
+        "visible": 17,
         "tombstones": 0
       },
       "truncated": false
+    }
+  },
+  {
+    "step": "sealed quality",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "report_quality": true
+    },
+    "response": {
+      "sequence": 4,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2,
+              "quality": "estimated"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "sequence": 2,
+              "quality": "estimated"
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "sequence": 3,
+              "quality": "trusted"
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 0.25,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 0.75,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2,
+              "quality": "invalid"
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": -500,
+              "value": 14,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 2,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 6,
+        "blocks": 6,
+        "head": 0,
+        "decoded": 17,
+        "visible": 17,
+        "tombstones": 0
+      },
+      "truncated": false,
+      "quality": {
+        "included": {
+          "trusted": 14,
+          "estimated": 2,
+          "invalid": 1
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      },
+      "qualities": [
+        {
+          "series_id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+          "points": [
+            {
+              "time": -500,
+              "value": 4,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": -100,
+              "value": 6,
+              "quality": "estimated",
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 99,
+              "quality": "trusted",
+              "sequence": 3
+            },
+            {
+              "time": 700,
+              "value": 8,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series_id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "quality": "invalid",
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        }
+      ]
     }
   },
   {
@@ -633,43 +2514,63 @@
     "request": null,
     "response": [
       {
-        "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "id": "00000000000000000004-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
         "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
         "start": 500,
         "end": 501,
         "count": 1,
-        "bytes": 64,
-        "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+        "bytes": 85,
+        "checksum": "4111ea037414fe1810bec60079f1a9eb1ecccae16fb845f2d951760f80c3883e",
         "format": 1
       },
       {
-        "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "id": "00000000000000000004-1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+        "series_id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+        "start": -500,
+        "end": 701,
+        "count": 4,
+        "bytes": 117,
+        "checksum": "ac6e2bfe236158bebecdf85076cc6a756226b6c1f49c35e8701871016f835fd2",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000004-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
         "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
         "start": -500,
         "end": 501,
         "count": 2,
-        "bytes": 105,
-        "checksum": "4c2f12747df3833972d963a29b9b86b6225d2de929c6252543feb51e3c6ceb20",
+        "bytes": 94,
+        "checksum": "a170b86adf234a8a9bcd730233f014656652e13bcc0661c2a05daabaa11b34f0",
         "format": 1
       },
       {
-        "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "id": "00000000000000000004-6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+        "series_id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+        "start": 100,
+        "end": 901,
+        "count": 4,
+        "bytes": 113,
+        "checksum": "558471595ab9fee99ad4217694429685d00f6ef52c70e5bec032dfcbae8e732f",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000004-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
         "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
         "start": -1500,
         "end": 1501,
         "count": 4,
-        "bytes": 80,
-        "checksum": "f62effbef22081bacda4663b08c17e44f621f0135a4c07c22feb6b601c4c1d4a",
+        "bytes": 104,
+        "checksum": "fb737d7101321126cea47c58f9b75629ba54fbe5a9eb2761ebf96fbced64f0e1",
         "format": 1
       },
       {
-        "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "id": "00000000000000000004-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
         "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
         "start": -1500,
         "end": 501,
         "count": 2,
-        "bytes": 100,
-        "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+        "bytes": 91,
+        "checksum": "568d65c7ac9a958d5ff3f72cb73807e43c9b10f10acb854754fb1a1727eb1392",
         "format": 1
       }
     ]
@@ -688,14 +2589,15 @@
       ]
     },
     "response": {
-      "id": "00000000000000000004",
+      "id": "00000000000000000005",
       "series": [
+        "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
         "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
         "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
       ],
       "start": -600,
       "end": 600,
-      "sequence": 4
+      "sequence": 5
     }
   },
   {
@@ -703,14 +2605,15 @@
     "request": null,
     "response": [
       {
-        "id": "00000000000000000004",
+        "id": "00000000000000000005",
         "series": [
+          "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
           "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
           "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
         ],
         "start": -600,
         "end": 600,
-        "sequence": 4
+        "sequence": 5
       }
     ]
   },
@@ -731,7 +2634,7 @@
       ]
     },
     "response": {
-      "sequence": 5,
+      "sequence": 6,
       "accepted": 1,
       "new_series": 0,
       "watermark": 1500
@@ -747,7 +2650,8 @@
       "group_by": [
         "zone"
       ],
-      "function": "avg"
+      "function": "avg",
+      "report_quality": true
     },
     "response": {
       "name": "pulse",
@@ -761,11 +2665,12 @@
         "group_by": [
           "zone"
         ],
-        "function": "avg"
+        "function": "avg",
+        "report_quality": true
       },
-      "source_sequence": 5,
+      "source_sequence": 6,
       "result": {
-        "sequence": 5,
+        "sequence": 6,
         "cells": [
           {
             "labels": {
@@ -774,7 +2679,29 @@
             "start": -2000,
             "end": -1000,
             "value": 6.5,
-            "count": 2
+            "count": 2,
+            "quality": {
+              "included": {
+                "trusted": 2,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 2,
+                  "sum": 13
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
           },
           {
             "labels": {
@@ -782,8 +2709,30 @@
             },
             "start": 0,
             "end": 1000,
-            "value": 7.5,
-            "count": 2
+            "value": 7.666666666666667,
+            "count": 3,
+            "quality": {
+              "included": {
+                "trusted": 3,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 3,
+                  "sum": 23
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
           },
           {
             "labels": {
@@ -792,7 +2741,60 @@
             "start": 1000,
             "end": 2000,
             "value": 6,
-            "count": 1
+            "count": 1,
+            "quality": {
+              "included": {
+                "trusted": 1,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 1,
+                  "sum": 6
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
+          },
+          {
+            "labels": {
+              "zone": "north"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 4.666666666666667,
+            "count": 3,
+            "quality": {
+              "included": {
+                "trusted": 3,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 1
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 3,
+                  "sum": 14
+                }
+              ],
+              "excluded_between": 1,
+              "spans_excluded": true,
+              "suppressed": 0
+            }
           },
           {
             "labels": {
@@ -801,16 +2803,65 @@
             "start": 0,
             "end": 1000,
             "value": 0.5,
-            "count": 1
+            "count": 1,
+            "quality": {
+              "included": {
+                "trusted": 0,
+                "estimated": 1,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "estimated",
+                  "observations": 1,
+                  "sum": 0.5
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
           }
         ],
         "stats": {
-          "series": 4,
-          "blocks": 4,
+          "series": 6,
+          "blocks": 6,
           "head": 1,
-          "decoded": 10,
-          "visible": 6,
+          "decoded": 18,
+          "visible": 11,
           "tombstones": 1
+        },
+        "quality": {
+          "included": {
+            "trusted": 9,
+            "estimated": 1,
+            "invalid": 0
+          },
+          "excluded": {
+            "trusted": 0,
+            "estimated": 0,
+            "invalid": 1
+          },
+          "contributions": [
+            {
+              "quality": "trusted",
+              "observations": 9,
+              "sum": 56
+            },
+            {
+              "quality": "estimated",
+              "observations": 1,
+              "sum": 0.5
+            }
+          ],
+          "excluded_between": 1,
+          "spans_excluded": true,
+          "suppressed": 0
         }
       }
     }
@@ -830,11 +2881,12 @@
         "group_by": [
           "zone"
         ],
-        "function": "avg"
+        "function": "avg",
+        "report_quality": true
       },
-      "source_sequence": 5,
+      "source_sequence": 6,
       "result": {
-        "sequence": 5,
+        "sequence": 6,
         "cells": [
           {
             "labels": {
@@ -843,7 +2895,29 @@
             "start": -2000,
             "end": -1000,
             "value": 6.5,
-            "count": 2
+            "count": 2,
+            "quality": {
+              "included": {
+                "trusted": 2,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 2,
+                  "sum": 13
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
           },
           {
             "labels": {
@@ -851,8 +2925,30 @@
             },
             "start": 0,
             "end": 1000,
-            "value": 7.5,
-            "count": 2
+            "value": 7.666666666666667,
+            "count": 3,
+            "quality": {
+              "included": {
+                "trusted": 3,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 3,
+                  "sum": 23
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
           },
           {
             "labels": {
@@ -861,7 +2957,60 @@
             "start": 1000,
             "end": 2000,
             "value": 6,
-            "count": 1
+            "count": 1,
+            "quality": {
+              "included": {
+                "trusted": 1,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 1,
+                  "sum": 6
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
+          },
+          {
+            "labels": {
+              "zone": "north"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 4.666666666666667,
+            "count": 3,
+            "quality": {
+              "included": {
+                "trusted": 3,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 1
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 3,
+                  "sum": 14
+                }
+              ],
+              "excluded_between": 1,
+              "spans_excluded": true,
+              "suppressed": 0
+            }
           },
           {
             "labels": {
@@ -870,16 +3019,65 @@
             "start": 0,
             "end": 1000,
             "value": 0.5,
-            "count": 1
+            "count": 1,
+            "quality": {
+              "included": {
+                "trusted": 0,
+                "estimated": 1,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "estimated",
+                  "observations": 1,
+                  "sum": 0.5
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
           }
         ],
         "stats": {
-          "series": 4,
-          "blocks": 4,
+          "series": 6,
+          "blocks": 6,
           "head": 1,
-          "decoded": 10,
-          "visible": 6,
+          "decoded": 18,
+          "visible": 11,
           "tombstones": 1
+        },
+        "quality": {
+          "included": {
+            "trusted": 9,
+            "estimated": 1,
+            "invalid": 0
+          },
+          "excluded": {
+            "trusted": 0,
+            "estimated": 0,
+            "invalid": 1
+          },
+          "contributions": [
+            {
+              "quality": "trusted",
+              "observations": 9,
+              "sum": 56
+            },
+            {
+              "quality": "estimated",
+              "observations": 1,
+              "sum": 0.5
+            }
+          ],
+          "excluded_between": 1,
+          "spans_excluded": true,
+          "suppressed": 0
         }
       },
       "stale": false
@@ -902,7 +3100,7 @@
       ]
     },
     "response": {
-      "sequence": 7,
+      "sequence": 8,
       "accepted": 1,
       "new_series": 0,
       "watermark": 1500
@@ -923,11 +3121,12 @@
         "group_by": [
           "zone"
         ],
-        "function": "avg"
+        "function": "avg",
+        "report_quality": true
       },
-      "source_sequence": 5,
+      "source_sequence": 6,
       "result": {
-        "sequence": 5,
+        "sequence": 6,
         "cells": [
           {
             "labels": {
@@ -936,7 +3135,29 @@
             "start": -2000,
             "end": -1000,
             "value": 6.5,
-            "count": 2
+            "count": 2,
+            "quality": {
+              "included": {
+                "trusted": 2,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 2,
+                  "sum": 13
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
           },
           {
             "labels": {
@@ -944,8 +3165,30 @@
             },
             "start": 0,
             "end": 1000,
-            "value": 7.5,
-            "count": 2
+            "value": 7.666666666666667,
+            "count": 3,
+            "quality": {
+              "included": {
+                "trusted": 3,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 3,
+                  "sum": 23
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
           },
           {
             "labels": {
@@ -954,7 +3197,60 @@
             "start": 1000,
             "end": 2000,
             "value": 6,
-            "count": 1
+            "count": 1,
+            "quality": {
+              "included": {
+                "trusted": 1,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 1,
+                  "sum": 6
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
+          },
+          {
+            "labels": {
+              "zone": "north"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 4.666666666666667,
+            "count": 3,
+            "quality": {
+              "included": {
+                "trusted": 3,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 1
+              },
+              "contributions": [
+                {
+                  "quality": "trusted",
+                  "observations": 3,
+                  "sum": 14
+                }
+              ],
+              "excluded_between": 1,
+              "spans_excluded": true,
+              "suppressed": 0
+            }
           },
           {
             "labels": {
@@ -963,16 +3259,65 @@
             "start": 0,
             "end": 1000,
             "value": 0.5,
-            "count": 1
+            "count": 1,
+            "quality": {
+              "included": {
+                "trusted": 0,
+                "estimated": 1,
+                "invalid": 0
+              },
+              "excluded": {
+                "trusted": 0,
+                "estimated": 0,
+                "invalid": 0
+              },
+              "contributions": [
+                {
+                  "quality": "estimated",
+                  "observations": 1,
+                  "sum": 0.5
+                }
+              ],
+              "excluded_between": 0,
+              "spans_excluded": false,
+              "suppressed": 0
+            }
           }
         ],
         "stats": {
-          "series": 4,
-          "blocks": 4,
+          "series": 6,
+          "blocks": 6,
           "head": 1,
-          "decoded": 10,
-          "visible": 6,
+          "decoded": 18,
+          "visible": 11,
           "tombstones": 1
+        },
+        "quality": {
+          "included": {
+            "trusted": 9,
+            "estimated": 1,
+            "invalid": 0
+          },
+          "excluded": {
+            "trusted": 0,
+            "estimated": 0,
+            "invalid": 1
+          },
+          "contributions": [
+            {
+              "quality": "trusted",
+              "observations": 9,
+              "sum": 56
+            },
+            {
+              "quality": "estimated",
+              "observations": 1,
+              "sum": 0.5
+            }
+          ],
+          "excluded_between": 1,
+          "spans_excluded": true,
+          "suppressed": 0
         }
       },
       "stale": true
@@ -985,7 +3330,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 7,
+      "sequence": 8,
       "floor": -4503599627370496,
       "series": [
         {
@@ -1001,6 +3346,55 @@
             {
               "time": 500,
               "value": 0.5,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
               "sequence": 2
             }
           ]
@@ -1023,7 +3417,7 @@
             {
               "time": 500,
               "value": 9,
-              "sequence": 7
+              "sequence": 8
             },
             {
               "time": 1500,
@@ -1056,23 +3450,218 @@
         }
       ],
       "stats": {
-        "series": 4,
-        "blocks": 4,
+        "series": 6,
+        "blocks": 6,
         "head": 1,
-        "decoded": 10,
-        "visible": 6,
+        "decoded": 18,
+        "visible": 11,
         "tombstones": 1
       },
       "truncated": false
     }
   },
   {
+    "step": "pre-compaction quality",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "report_quality": true
+    },
+    "response": {
+      "sequence": 8,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2,
+              "quality": "estimated"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2,
+              "quality": "invalid"
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 9,
+              "sequence": 8,
+              "quality": "trusted"
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 6,
+        "blocks": 6,
+        "head": 1,
+        "decoded": 18,
+        "visible": 11,
+        "tombstones": 1
+      },
+      "truncated": false,
+      "quality": {
+        "included": {
+          "trusted": 9,
+          "estimated": 1,
+          "invalid": 1
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      },
+      "qualities": [
+        {
+          "series_id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "quality": "invalid",
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "step": "compact",
     "request": {},
     "response": {
-      "sequence": 8,
-      "blocks": 3,
-      "points": 6,
+      "sequence": 9,
+      "blocks": 5,
+      "points": 11,
       "floor": -4503599627370496
     }
   },
@@ -1083,7 +3672,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 8,
+      "sequence": 9,
       "floor": -4503599627370496,
       "series": [
         {
@@ -1099,6 +3688,55 @@
             {
               "time": 500,
               "value": 0.5,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
               "sequence": 2
             }
           ]
@@ -1121,7 +3759,7 @@
             {
               "time": 500,
               "value": 9,
-              "sequence": 7
+              "sequence": 8
             },
             {
               "time": 1500,
@@ -1154,14 +3792,209 @@
         }
       ],
       "stats": {
-        "series": 4,
-        "blocks": 3,
+        "series": 6,
+        "blocks": 5,
         "head": 0,
-        "decoded": 6,
-        "visible": 6,
+        "decoded": 11,
+        "visible": 11,
         "tombstones": 0
       },
       "truncated": false
+    }
+  },
+  {
+    "step": "post-compaction quality",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "report_quality": true
+    },
+    "response": {
+      "sequence": 9,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2,
+              "quality": "estimated"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+            "labels": {
+              "__name__": "gauge_ratio",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 700,
+              "value": 8,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+            "labels": {
+              "__name__": "cycle_total",
+              "node": "ridge-c",
+              "zone": "north"
+            }
+          },
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "sequence": 2,
+              "quality": "invalid"
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 9,
+              "sequence": 8,
+              "quality": "trusted"
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2,
+              "quality": "trusted"
+            },
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 6,
+        "blocks": 5,
+        "head": 0,
+        "decoded": 11,
+        "visible": 11,
+        "tombstones": 0
+      },
+      "truncated": false,
+      "quality": {
+        "included": {
+          "trusted": 9,
+          "estimated": 1,
+          "invalid": 1
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      },
+      "qualities": [
+        {
+          "series_id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+          "points": [
+            {
+              "time": 100,
+              "value": 0,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 200,
+              "value": 100,
+              "quality": "invalid",
+              "sequence": 2
+            },
+            {
+              "time": 300,
+              "value": 5,
+              "quality": "trusted",
+              "sequence": 2
+            },
+            {
+              "time": 900,
+              "value": 9,
+              "quality": "trusted",
+              "sequence": 2
+            }
+          ]
+        }
+      ]
     }
   },
   {
@@ -1171,7 +4004,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 8,
+      "sequence": 9,
       "floor": -4503599627370496,
       "candidates": [
         {
@@ -1183,12 +4016,28 @@
           }
         },
         {
+          "id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+          "labels": {
+            "__name__": "gauge_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          }
+        },
+        {
           "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
           "labels": {
             "__name__": "load_ratio",
             "node": "ridge-a",
             "rack": "",
             "zone": "east"
+          }
+        },
+        {
+          "id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+          "labels": {
+            "__name__": "cycle_total",
+            "node": "ridge-c",
+            "zone": "north"
           }
         },
         {
@@ -1210,38 +4059,58 @@
       ],
       "blocks": [
         {
-          "id": "00000000000000000008-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "id": "00000000000000000009-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
           "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
           "start": 500,
           "end": 501,
           "count": 1,
-          "bytes": 64,
-          "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+          "bytes": 85,
+          "checksum": "4111ea037414fe1810bec60079f1a9eb1ecccae16fb845f2d951760f80c3883e",
           "format": 1
         },
         {
-          "id": "00000000000000000008-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "id": "00000000000000000009-1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+          "series_id": "1041caaf067d62a2d8f820ffeefdcf22c7ca1ce83fdb59586c5c5cfef397a282",
+          "start": 700,
+          "end": 701,
+          "count": 1,
+          "bytes": 81,
+          "checksum": "5f26710f8675ca731951108755155a39f683bcca4412164bcf1db4edbcf595c5",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000009-6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+          "series_id": "6c06f40220dfbcb31b48ec23f7244b6fc9cfede9d96fafa2581697d6baf587e0",
+          "start": 100,
+          "end": 901,
+          "count": 4,
+          "bytes": 113,
+          "checksum": "558471595ab9fee99ad4217694429685d00f6ef52c70e5bec032dfcbae8e732f",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000009-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
           "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
+          "bytes": 101,
+          "checksum": "94588915c9f1e1a48c19661720b315cd64590795b55ac80fcdfe687050df3adb",
           "format": 1
         },
         {
-          "id": "00000000000000000008-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "id": "00000000000000000009-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
           "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
           "start": -1500,
           "end": 501,
           "count": 2,
-          "bytes": 100,
-          "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+          "bytes": 91,
+          "checksum": "568d65c7ac9a958d5ff3f72cb73807e43c9b10f10acb854754fb1a1727eb1392",
           "format": 1
         }
       ],
       "max_decoded": 100000,
-      "source_point_hint": 6,
+      "source_point_hint": 11,
       "head_records": 0
     }
   },
@@ -1251,7 +4120,7 @@
       "now": 11000
     },
     "response": {
-      "sequence": 9,
+      "sequence": 10,
       "blocks": 1,
       "points": 1,
       "floor": 1000
@@ -1295,7 +4164,7 @@
       "floor": 1000,
       "watermark": 1500,
       "has_watermark": true,
-      "last_sequence": 10
+      "last_sequence": 11
     }
   },
   {
@@ -1336,7 +4205,7 @@
       "floor": 1000,
       "watermark": 1500,
       "has_watermark": true,
-      "last_sequence": 11
+      "last_sequence": 12
     }
   },
   {
@@ -1346,7 +4215,7 @@
       "end": 10000
     },
     "response": {
-      "sequence": 11,
+      "sequence": 12,
       "floor": 1000,
       "series": [
         {
@@ -1368,7 +4237,7 @@
         }
       ],
       "stats": {
-        "series": 4,
+        "series": 6,
         "blocks": 1,
         "head": 0,
         "decoded": 1,
@@ -1379,15 +4248,71 @@
     }
   },
   {
+    "step": "backup source quality",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "report_quality": true
+    },
+    "response": {
+      "sequence": 12,
+      "floor": 1000,
+      "series": [
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 6,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 1,
+        "visible": 1,
+        "tombstones": 0
+      },
+      "truncated": false,
+      "quality": {
+        "included": {
+          "trusted": 1,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      }
+    }
+  },
+  {
     "step": "backup",
-    "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sequence": "12",
+    "sha256": "6650a562f77b41ceffd4dc54b417f2219228e9ef9a62f28f53ed8d47a0b0881a",
+    "bytes": 69632
   },
   {
     "step": "restored",
     "response": {
-      "sequence": 11,
+      "sequence": 12,
       "floor": 1000,
       "series": [
         {
@@ -1409,7 +4334,7 @@
         }
       ],
       "stats": {
-        "series": 4,
+        "series": 6,
         "blocks": 1,
         "head": 0,
         "decoded": 1,
@@ -1417,6 +4342,57 @@
         "tombstones": 0
       },
       "truncated": false
+    }
+  },
+  {
+    "step": "restored quality",
+    "response": {
+      "sequence": 12,
+      "floor": 1000,
+      "series": [
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2,
+              "quality": "trusted"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 6,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 1,
+        "visible": 1,
+        "tombstones": 0
+      },
+      "truncated": false,
+      "quality": {
+        "included": {
+          "trusted": 1,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded": {
+          "trusted": 0,
+          "estimated": 0,
+          "invalid": 0
+        },
+        "excluded_between": 0,
+        "spans_excluded": false,
+        "suppressed": 0
+      }
     }
   }
 ]

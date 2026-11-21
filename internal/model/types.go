@@ -26,12 +26,14 @@ type Sample struct {
 	Time     int64   `json:"time"`
 	Value    float64 `json:"value"`
 	Sequence uint64  `json:"sequence"`
+	Quality  Quality `json:"quality,omitempty"`
 }
 
 type Observation struct {
-	Labels Labels  `json:"labels"`
-	Time   int64   `json:"time"`
-	Value  float64 `json:"value"`
+	Labels  Labels  `json:"labels"`
+	Time    int64   `json:"time"`
+	Value   float64 `json:"value"`
+	Quality Quality `json:"quality,omitempty"`
 }
 
 type WriteRequest struct {
@@ -61,11 +63,33 @@ type Query struct {
 	Origin   int64     `json:"origin"`
 	GroupBy  []string  `json:"group_by"`
 	Function string    `json:"function"`
+	// IncludeQualities selects which observation qualities participate in a
+	// reduction. Omitted means trusted and estimated, preserving scalar
+	// behavior; invalid observations are excluded by default.
+	IncludeQualities []Quality `json:"include_qualities,omitempty"`
+	// ReportQuality asks reductions to attach a per-cell quality summary.
+	ReportQuality bool `json:"report_quality,omitempty"`
 }
 
 type SeriesPoints struct {
 	Series Series   `json:"series"`
 	Points []Sample `json:"points"`
+}
+
+// QualityPoint is one element of a mixed-quality timeline: the quality carried
+// by the visible observation at a timestamp and the sequence that committed it.
+type QualityPoint struct {
+	Time     int64   `json:"time"`
+	Value    float64 `json:"value"`
+	Quality  Quality `json:"quality"`
+	Sequence uint64  `json:"sequence"`
+}
+
+// QualityTimeline reports the ordered quality of every visible observation for
+// one series when that series mixes more than one quality in the queried range.
+type QualityTimeline struct {
+	SeriesID string         `json:"series_id"`
+	Points   []QualityPoint `json:"points"`
 }
 
 type ScanStats struct {
@@ -78,25 +102,32 @@ type ScanStats struct {
 }
 
 type RangeResult struct {
-	Sequence  uint64         `json:"sequence"`
-	Floor     int64          `json:"floor"`
-	Series    []SeriesPoints `json:"series"`
-	Stats     ScanStats      `json:"stats"`
-	Truncated bool           `json:"truncated"`
+	Sequence  uint64          `json:"sequence"`
+	Floor     int64           `json:"floor"`
+	Series    []SeriesPoints  `json:"series"`
+	Stats     ScanStats       `json:"stats"`
+	Truncated bool            `json:"truncated"`
+	Quality   *QualitySummary `json:"quality,omitempty"`
+	// Qualities reports the ordered quality of every visible observation for
+	// each series that mixes more than one quality in the queried range. It is
+	// present only when the request sets report_quality.
+	Qualities []QualityTimeline `json:"qualities,omitempty"`
 }
 
 type Cell struct {
-	Labels Labels  `json:"labels"`
-	Start  int64   `json:"start"`
-	End    int64   `json:"end"`
-	Value  float64 `json:"value"`
-	Count  int     `json:"count"`
+	Labels  Labels          `json:"labels"`
+	Start   int64           `json:"start"`
+	End     int64           `json:"end"`
+	Value   float64         `json:"value"`
+	Count   int             `json:"count"`
+	Quality *QualitySummary `json:"quality,omitempty"`
 }
 
 type AggregateResult struct {
-	Sequence uint64    `json:"sequence"`
-	Cells    []Cell    `json:"cells"`
-	Stats    ScanStats `json:"stats"`
+	Sequence uint64          `json:"sequence"`
+	Cells    []Cell          `json:"cells"`
+	Stats    ScanStats       `json:"stats"`
+	Quality  *QualitySummary `json:"quality,omitempty"`
 }
 
 type Tombstone struct {

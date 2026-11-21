@@ -60,6 +60,12 @@ func Decode(payload []byte, block model.Block) ([]model.Sample, error) {
 			(i > 0 && points[i-1].Time >= p.Time) {
 			return nil, fmt.Errorf("block %s invalid point order or bounds", block.ID)
 		}
+		quality, err := model.ParseQuality(string(p.Quality))
+		if err != nil {
+			return nil, fmt.Errorf("block %s carries an unknown quality", block.ID)
+		}
+		// Blocks written before observation quality existed read as trusted.
+		points[i].Quality = quality
 	}
 	return points, nil
 }

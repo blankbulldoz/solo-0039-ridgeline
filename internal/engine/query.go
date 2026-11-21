@@ -36,12 +36,21 @@ func aggregate(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64
 	}
 	// A raw result limit must not bias reducers.
 	q.Limit = 0
-	raw, err := scan(b, n, q, sequence)
+	// The reducer must see every visible observation, including excluded
+	// qualities, so that it can report what filtering removed. Only the raw
+	// range path filters during the scan.
+	scanQuery := q
+	scanQuery.IncludeQualities = nil
+	scanQuery.ReportQuality = false
+	raw, err := scan(b, n, scanQuery, sequence)
 	if err != nil {
 		return model.AggregateResult{}, err
 	}
-	cells, err := window.Aggregate(raw.Series, q)
-	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats}, err
+	cells, quality, err := window.Aggregate(raw.Series, q)
+	if err != nil {
+		return model.AggregateResult{}, err
+	}
+	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats, Quality: quality}, nil
 }
 
 func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, error) {

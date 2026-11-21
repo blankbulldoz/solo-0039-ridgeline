@@ -32,6 +32,13 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 	if err != nil {
 		return result, err
 	}
+	include, err := model.NewQualitySet(q.IncludeQualities)
+	if err != nil {
+		return result, err
+	}
+	// Raw reads report quality when asked explicitly or when they filter by it.
+	reportQuality := q.ReportQuality || len(q.IncludeQualities) > 0
+	excluded := model.QualityTally{}
 	allSeries, err := catalog(b)
 	if err != nil {
 		return result, err
@@ -101,10 +108,24 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 			}
 		}
 		points := make([]model.Sample, 0, len(merged))
+		var tally model.QualityTally
 		for _, p := range merged {
-			if !hidden(s.ID, p, tombstones) {
-				points = append(points, p)
+			if hidden(s.ID, p, tombstones) {
+				continue
 			}
+			// Blocks written before observation quality existed read as trusted.
+			if p.Quality == "" {
+				p.Quality = model.QualityTrusted
+			}
+			// A raw read has no reduction, so it filters only when the caller
+			// explicitly selects qualities. Without that selection every visible
+			// observation is returned and nothing is counted as excluded.
+			if len(q.IncludeQualities) > 0 && !include.Has(p.Quality) {
+				excluded.Add(p.Quality)
+				continue
+			}
+			tally.Add(p.Quality)
+			points = append(points, p)
 		}
 		sort.Slice(points, func(i, j int) bool { return points[i].Time < points[j].Time })
 		result.Stats.Visible += len(points)
@@ -117,8 +138,48 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 		if len(points) > 0 {
 			result.Series = append(result.Series, model.SeriesPoints{Series: s, Points: points})
 		}
+		if reportQuality {
+			if result.Quality == nil {
+				result.Quality = &model.QualitySummary{}
+			}
+			result.Quality.Included.Merge(tally)
+			// The timeline belongs to raw reads; aggregate uses the same scan
+			// only to obtain points and builds its own cell-level explanation.
+			if q.Function == "" {
+				if timeline := mixedTimeline(s.ID, points); timeline != nil {
+					result.Qualities = append(result.Qualities, *timeline)
+				}
+			}
+		}
+	}
+	if reportQuality {
+		if result.Quality == nil {
+			result.Quality = &model.QualitySummary{}
+		}
+		result.Quality.Excluded = excluded
 	}
 	return result, nil
+}
+
+// mixedTimeline returns the ordered visible observations of a series when that
+// series carries more than one distinct quality in the requested range. It
+// therefore shows exactly where quality changes across the timeline, after
+// corrections, sealing and restore.
+func mixedTimeline(seriesID string, points []model.Sample) *model.QualityTimeline {
+	distinct := map[model.Quality]bool{}
+	for _, p := range points {
+		distinct[p.Quality] = true
+	}
+	if len(distinct) < 2 {
+		return nil
+	}
+	timeline := &model.QualityTimeline{SeriesID: seriesID, Points: make([]model.QualityPoint, 0, len(points))}
+	for _, p := range points {
+		timeline.Points = append(timeline.Points, model.QualityPoint{
+			Time: p.Time, Value: p.Value, Quality: p.Quality, Sequence: p.Sequence,
+		})
+	}
+	return timeline
 }
 
 func (e *Engine) Range(name string, q model.Query) (model.RangeResult, error) {
@@ -134,5 +195,19 @@ func (e *Engine) Range(name string, q model.Query) (model.RangeResult, error) {
 		result, err = scan(b, n, q, volume.Current(tx))
 		return err
 	})
-	return result, err
+	if err != nil {
+		return result, err
+	}
+	// A raw read without any quality request keeps the pre-existing scalar
+	// response shape. Selecting qualities explicitly is itself a quality
+	// request, so the per-point quality is then reported even without
+	// report_quality.
+	if !q.ReportQuality && len(q.IncludeQualities) == 0 {
+		for i := range result.Series {
+			for j := range result.Series[i].Points {
+				result.Series[i].Points[j].Quality = ""
+			}
+		}
+	}
+	return result, nil
 }

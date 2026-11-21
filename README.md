@@ -27,9 +27,11 @@ python3 examples/walkthrough.py --output var/observations.json
 
 The bounded walkthrough uses temporary volumes and an available ephemeral port.
 Each named workflow runs the entire related stateful scenario so its required
-preconditions and recovery remain reproducible. Formal tests are deferred.
-`examples/input.json` contains the original measurements; a recorded production
-session is in `examples/session.json`. These are synthetic, non-sensitive inputs.
+preconditions and recovery remain reproducible. The window package carries
+focused unit tests (`go test ./...`) for quality filtering and rate accounting;
+the walkthrough remains the end-to-end check. `examples/input.json` contains the
+original measurements; a recorded production session is in
+`examples/session.json`. These are synthetic, non-sensitive inputs.
 
 ## API
 
@@ -47,7 +49,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
-| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by, qualities |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -72,6 +74,36 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+## Observation Quality
+
+Each observation has a quality of `trusted`, `estimated` or `invalid`. It is
+stored with the sample, not in labels, so a series stays one identity as its
+quality varies. An omitted quality means `trusted`. A correction sets value and
+quality together, and quality survives seal, compaction and image restore.
+
+Reductions use trusted and estimated observations and exclude invalid ones
+unless the query is explicit:
+
+```json
+{"start":0,"end":10000,"step":10000,"origin":0,"function":"rate",
+ "report_quality":true,
+ "include_qualities":["trusted","estimated","invalid"],
+ "matchers":[{"label":"__name__","op":"=","value":"cycle_total"}]}
+```
+
+`include_qualities` chooses the admitted set; `report_quality` adds the quality
+explanation for the default set. When observations are excluded, each cell and
+the result report included/excluded tallies, each included quality's
+contribution, `excluded_between` (excluded points sitting between included ones
+for the same series) and `suppressed` (would-be cells starved of observations).
+A counter rate with an invalid point between two counter points skips it,
+accounts for it and sets `spans_excluded`; it never interpolates. Without any
+quality field a query keeps the original scalar response.
+
+A raw `range` request with `report_quality` returns a `qualities` timeline for
+each series that mixes qualities, listing value, quality and commit sequence at
+every visible timestamp.
 
 ## Storage And Recovery
 

@@ -46,6 +46,9 @@ func ValidateObservation(p Observation) error {
 	if err := ValidateLabels(p.Labels); err != nil {
 		return err
 	}
+	if _, err := ParseQuality(string(p.Quality)); err != nil {
+		return err
+	}
 	if !ValidTime(p.Time) || math.IsNaN(p.Value) || math.IsInf(p.Value, 0) {
 		return Bad("time outside supported range or value is not finite")
 	}
@@ -78,6 +81,9 @@ func ValidateQuery(q Query) error {
 		if !ValidName(label) {
 			return Bad("invalid grouping label")
 		}
+	}
+	if _, err := NewQualitySet(q.IncludeQualities); err != nil {
+		return err
 	}
 	return nil
 }
