@@ -136,3 +136,49 @@ type Maintenance struct {
 	Points   int    `json:"points"`
 	Floor    int64  `json:"floor"`
 }
+
+// SealProgress splits pending and sealed work into the points that were in
+// the head when the job started and points written while it is running.
+// Remaining* counts are derived live from the head; correction writes reuse
+// an existing or previously sealed initial key and never inflate the totals.
+type SealProgress struct {
+	Total             int `json:"total"`
+	Sealed            int `json:"sealed"`
+	Remaining         int `json:"remaining"`
+	InitialTotal      int `json:"initial_total"`
+	InitialSealed     int `json:"initial_sealed"`
+	InitialPending    int `json:"initial_pending"`
+	AddedSealed       int `json:"added_sealed"`
+	AddedPending      int `json:"added_pending"`
+	CorrectionsSealed int `json:"corrections_sealed"`
+}
+
+type SealJob struct {
+	ID                string       `json:"id"`
+	State             string       `json:"state"`
+	BatchPoints       int          `json:"batch_points"`
+	CreatedSequence   uint64       `json:"created_sequence"`
+	FinishedSequence  uint64       `json:"finished_sequence"`
+	Batches           int          `json:"batches"`
+	Blocks            int          `json:"blocks"`
+	PointsSealed      int          `json:"points_sealed"`
+	InitialTotal      int          `json:"initial_total"`
+	InitialSealed     int          `json:"initial_sealed"`
+	AddedSealed       int          `json:"added_sealed"`
+	AddedPending      int          `json:"added_pending"`
+	CorrectionsSealed int          `json:"corrections_sealed"`
+	Progress          SealProgress `json:"progress"`
+}
+
+type SealJobView struct {
+	Active bool     `json:"active"`
+	Job    *SealJob `json:"job"`
+}
+
+type BatchReceipt struct {
+	Sequence uint64      `json:"sequence"`
+	Blocks   int         `json:"blocks"`
+	Points   int         `json:"points"`
+	Floor    int64       `json:"floor"`
+	Job      SealJobView `json:"job"`
+}

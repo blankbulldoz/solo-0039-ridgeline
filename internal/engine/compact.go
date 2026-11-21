@@ -19,6 +19,9 @@ func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance,
 			return model.Maintenance{}, err
 		}
 	}
+	if err := volume.AdjustHeadCount(b, -volume.ReadHeadCount(b)); err != nil {
+		return model.Maintenance{}, err
+	}
 	seq, err := volume.Next(tx)
 	if err != nil {
 		return model.Maintenance{}, err
@@ -42,6 +45,9 @@ func (e *Engine) Compact(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
+		if err := ensureNoSealJob(b); err != nil {
+			return err
+		}
 		receipt, err = compact(tx, b, n)
 		return err
 	})
@@ -57,6 +63,9 @@ func (e *Engine) Retain(name string, now int64) (model.Maintenance, error) {
 		}
 		if n.ReadOnly {
 			return model.Conflict("namespace is read-only")
+		}
+		if err := ensureNoSealJob(b); err != nil {
+			return err
 		}
 		n.Floor, err = policy.RetentionFloor(n, now)
 		if err != nil {

@@ -38,6 +38,20 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 		if err != nil {
 			return err
 		}
+		// While a seal job runs, keys absent from the head are work added
+		// after the job snapshot; mark them so progress keeps initial backlog
+		// and in-flight additions separate. Corrections reuse existing keys.
+		var markers *bolt.Bucket
+		active, err := loadSealJob(b)
+		if err != nil {
+			return err
+		}
+		if active != nil && active.State == sealStateRunning {
+			markers, err = addedKeyBucket(b, active)
+			if err != nil {
+				return err
+			}
+		}
 		for id, labels := range newSeries {
 			if err := volume.PutJSON(b.Bucket(volume.Catalog), []byte(id),
 				model.Series{ID: id, Labels: labels}); err != nil {
@@ -47,11 +61,32 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 		for _, p := range request.Points {
 			s := model.Sample{Time: p.Time, Value: p.Value, Sequence: seq}
 			key := volume.PointKey(model.SeriesID(p.Labels), p.Time)
-			if err := volume.PutJSON(b.Bucket(volume.Head), key, s); err != nil {
+			head := b.Bucket(volume.Head)
+			isNewKey := head.Get(key) == nil
+			if err := volume.PutJSON(head, key, s); err != nil {
 				return err
+			}
+			if isNewKey {
+				if err := volume.AdjustHeadCount(b, 1); err != nil {
+					return err
+				}
+			}
+			// Only a key that was never part of the job's initial snapshot is
+			// "added work". A key missing because an earlier batch already
+			// sealed it is a correction to initial backlog and stays unmarked.
+			if markers != nil && isNewKey && !isSealedKey(b, key) {
+				if err := markers.Put(key, []byte{1}); err != nil {
+					return err
+				}
+				active.AddedPending++
 			}
 			if !n.HasWatermark || p.Time > n.Watermark {
 				n.Watermark, n.HasWatermark = p.Time, true
+			}
+		}
+		if markers != nil {
+			if err := saveSealJob(b, active); err != nil {
+				return err
 			}
 		}
 		n.LastSequence = seq

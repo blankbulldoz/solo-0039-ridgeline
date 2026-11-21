@@ -49,7 +49,8 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
 | POST | `/spaces/{space}/explain` | interval and matchers |
-| POST | `/spaces/{space}/seal` | empty object |
+| POST | `/spaces/{space}/seal` | empty object, or `{"batch_points":N}` for a resumable job |
+| GET | `/spaces/{space}/seal` | persistent seal-job status and progress |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
 | POST | `/spaces/{space}/deletions` | interval and matchers |
 | GET | `/spaces/{space}/deletions` | deletion sequence inventory |
@@ -73,12 +74,44 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+### Batched seal jobs
+
+An empty-object `seal` call keeps the original one-shot, whole-head
+transaction. Posting `{"batch_points":N}` instead runs seal as a persistent,
+resumable **job**: the first call snapshots the current head as the job's
+initial backlog and moves at most N points into blocks, and every later call
+advances the job by one more batch. The job record lives in the database's
+`sealjobs` bucket, so a process restart loses no progress; repeat calls simply
+continue. Each batch is one bbolt transaction — a crash either commits the
+whole batch or none of it, so no point is lost or duplicated.
+
+Writes remain allowed between batches. Progress separates the points present
+at job start (`initial_total`, `initial_sealed`, `initial_pending`) from data
+added while the job runs (`added_sealed`, `added_pending`); same-timestamp
+corrections, including to points already sealed, never inflate the new-work
+count and are reported separately as `corrections_sealed`. A correction always
+keeps its newer sequence, so an older sealed value can never override it;
+queries keep merging head and blocks in one read transaction with unchanged
+visibility semantics throughout. Compaction and retention refuse to run while
+a seal job is active, and finish by leaving no dangling job.
+
+```sh
+python3 examples/walkthrough.py --workflow seal-job
+```
+
+The workflow interleaves batches with process restarts, a late correction and
+a backfill, then asserts the block inventory and range results after the job
+completes and after compaction.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
-deletes and rollups buckets. Numeric point keys encode signed time in
-lexicographic order. Blocks use format 1: a gzip stream containing an ordered
-JSON sample array, with SHA-256 over the compressed payload.
+deletes, rollups and sealjobs buckets. Numeric point keys encode signed time in
+lexicographic order. A namespace-level head counter tracks the live head key
+count inside each transaction; the sealjobs bucket holds the active batched-seal
+job record together with its added-key marker bucket and progress counters.
+Blocks use format 1: a gzip stream containing an ordered JSON sample array,
+with SHA-256 over the compressed payload.
 
 Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with

@@ -41,8 +41,18 @@ its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
 Sealing moves all current head points into compressed per-series blocks in
-one transaction. Compaction resolves overlapping blocks, corrections and
-deletions into one block per selected series; empty series retain their identity.
+one transaction. A batched seal instead runs as a persistent, resumable job:
+the job snapshots an initial head backlog, and each request moves at most the
+configured number of points as one transactional batch. Job state is durable,
+so restart or repeated advancement loses and duplicates no points; an
+uncommitted batch leaves the database untouched. Writes continue between
+batches; progress reports initial backlog and running additions separately,
+with same-timestamp corrections counted apart from new work. Blocks retain
+each sample's original sequence, so the head/block merge always favors a
+newer correction over an older sealed value, and reads keep their existing
+visibility semantics while a job runs. Compaction resolves overlapping
+blocks, corrections and deletions into one block per selected series; empty
+series retain their identity.
 Retention advances an irreversible floor and compacts the namespace physically.
 Deleting measurements does not erase catalog identity or promise to shrink the
 database file. bbolt reuses free pages; returning pages to the filesystem is
@@ -62,7 +72,7 @@ the server with that image as RIDGE_DB restores that database directly.
 4. Read corrected points across head and sealed blocks.
 5. Aggregate groups into signed, origin-aligned time windows.
 6. Calculate rates across counter resets.
-7. Seal mutable measurements into verified compressed blocks.
+7. Seal mutable measurements into verified compressed blocks, in one shot or as a resumable batched job with durable progress.
 8. Delete a range without hiding later corrections.
 9. Advance retention and reject resurrection.
 10. Materialize a rollup with source-sequence provenance.

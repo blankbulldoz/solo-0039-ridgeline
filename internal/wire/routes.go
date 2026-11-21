@@ -55,7 +55,38 @@ func Handler(e *engine.Engine) http.Handler {
 		})
 	})
 	mux.HandleFunc("POST "+base+"/seal", func(w http.ResponseWriter, r *http.Request) {
-		out, err := e.Seal(r.PathValue("space"))
+		var input struct {
+			BatchPoints int `json:"batch_points"`
+		}
+		// The legacy one-shot seal posts an empty object; a batch cap turns
+		// the call into persistent, resumable seal-job work.
+		if r.ContentLength != 0 {
+			if err := decode(w, r, &input); err != nil {
+				respond(w, nil, err)
+				return
+			}
+		}
+		space := r.PathValue("space")
+		if input.BatchPoints == 0 {
+			out, err := e.Seal(space)
+			respond(w, out, err)
+			return
+		}
+		view, err := e.SealJobStatus(space)
+		if err != nil {
+			respond(w, nil, err)
+			return
+		}
+		if view.Active {
+			out, err := e.SealBatch(space, input.BatchPoints)
+			respond(w, out, err)
+		} else {
+			out, err := e.StartSealJob(space, input.BatchPoints)
+			respond(w, out, err)
+		}
+	})
+	mux.HandleFunc("GET "+base+"/seal", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.SealJobStatus(r.PathValue("space"))
 		respond(w, out, err)
 	})
 	mux.HandleFunc("GET "+base+"/blocks", func(w http.ResponseWriter, r *http.Request) {

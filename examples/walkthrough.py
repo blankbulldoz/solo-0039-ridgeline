@@ -15,7 +15,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "seal-job", "delete", "retention", "materialize", "freshness", "compact",
+    "backup", "explain",
 ]
 
 
@@ -157,9 +158,165 @@ def exercise(workflow, output):
                       "coverage": FLOW_NAMES}))
 
 
+def point_map(series_result):
+    """Flatten a range result into {(series_id, time): value}."""
+    out = {}
+    for group in series_result["series"]:
+        sid = group["series"]["id"]
+        for sample in group["points"]:
+            out[(sid, sample["time"])] = sample["value"]
+    return out
+
+
+def exercise_seal_job(workflow, output):
+    """Demonstrate a persistent, batched seal job across a process restart.
+
+    The job snapshots an initial backlog, moves at most ``batch_points`` head
+    points per call, keeps running while corrections and new points arrive, and
+    resumes from durable state after the process is interrupted. Queries keep
+    their head+block merge semantics at every step, so corrections win and no
+    point is ever lost or duplicated.
+    """
+    seed = json.loads((ROOT / "examples/input.json").read_text())
+    observations = []
+    with tempfile.TemporaryDirectory(prefix="ridgeline-sealjob-") as scratch:
+        scratch = Path(scratch)
+        binary = scratch / "ridgeline"
+        subprocess.run(["go", "build", "-o", str(binary), "./cmd/ridgeline"], cwd=ROOT, check=True)
+        database = scratch / "sealjob.db"
+        with (scratch / "service.log").open("wb") as log:
+            process, base = launch(binary, database, log)
+            try:
+                space = "spaces/sealdemo"
+                interval = {"start": -5000, "end": 20000}
+
+                def op(label, route, payload=None, **options):
+                    out = request(base, route, payload, **options)
+                    observations.append({"step": label, "request": payload, "response": out})
+                    return out
+
+                op("create namespace", "spaces", {**seed["namespace"], "name": "sealdemo"})
+                labels = {"__name__": "pulse_total", "node": "ridge-a", "zone": "east"}
+                # Twelve initial points: the backlog the seal job snapshots.
+                initial = [
+                    {"labels": labels, "time": t, "value": float(t)}
+                    for t in range(0, 12000, 1000)
+                ]
+                op("initial ingest", space + "/points", {"now": 12000, "points": initial})
+                before = op("range before seal", space + "/range", interval)
+                expected = point_map(before)
+                assert len(expected) == 12
+
+                # Start the persistent job with a cap of five points per batch.
+                first = op("start seal job", space + "/seal", {"batch_points": 5})
+                job = first["job"]["job"]
+                assert first["job"]["active"] and first["points"] == 5
+                assert job["state"] == "running"
+                assert job["progress"]["initial_total"] == 12
+                assert job["progress"]["initial_pending"] == 7
+                assert job["progress"]["added_pending"] == 0
+                assert job["progress"]["remaining"] == 7
+
+                status = op("job status", space + "/seal")
+                assert status["active"]
+                assert status["job"]["progress"]["initial_pending"] == 7
+
+                # Reads remain identical while sealing is partially complete.
+                mid = op("range mid seal", space + "/range", interval)
+                assert point_map(mid) == expected
+
+                # Interrupt the process: no in-memory job state may be required.
+            finally:
+                stop(process)
+            process, base = launch(binary, database, log)
+            try:
+                resumed = op("status after restart", space + "/seal")
+                assert resumed["active"], "seal job must survive process restart"
+                assert resumed["job"]["progress"]["initial_pending"] == 7
+                assert resumed["job"]["batches"] == 1
+
+                # A repeated/duplicate batch advance simply continues the job.
+                second = op("second batch", space + "/seal", {"batch_points": 5})
+                assert second["points"] == 5
+                assert second["job"]["job"]["progress"]["initial_pending"] == 2
+
+                # Writes continue between batches: a same-timestamp correction
+                # plus a brand-new point (backfill and new work at once).
+                correction = {"labels": labels, "time": 5000, "value": 999.0}
+                new_point = {"labels": labels, "time": 12500, "value": 77.0}
+                op("correction and backfill", space + "/points",
+                   {"now": 13000, "points": [correction, new_point]})
+            finally:
+                stop(process)
+
+            # Restart again before finishing, proving progress is fully durable.
+            process, base = launch(binary, database, log)
+            try:
+                progress = op("status with in-flight additions", space + "/seal")
+                p = progress["job"]["progress"]
+                # Two untouched initial keys remain, plus the correction to an
+                # already-sealed initial key: three initial-family head keys.
+                # The backfill at a brand-new timestamp is the only added key.
+                assert p["initial_pending"] == 3
+                assert p["added_pending"] == 1
+                assert p["remaining"] == 4
+                assert p["initial_total"] == 12
+                assert p["corrections_sealed"] == 0
+
+                # Final batch drains the head and completes the job.
+                final = op("final batch", space + "/seal", {"batch_points": 5})
+                assert final["points"] == 4
+                assert final["job"]["active"] is False
+                assert final["job"]["job"]["state"] == "complete"
+                assert final["job"]["job"]["progress"]["initial_sealed"] == 12
+                assert final["job"]["job"]["progress"]["added_sealed"] == 1
+                assert final["job"]["job"]["progress"]["corrections_sealed"] == 1
+
+                done = op("status after completion", space + "/seal")
+                assert done["active"] is False and done["job"] is None
+
+                # A batch call on an empty head starts a job that completes in
+                # the same call: zero points, no error and no dangling job.
+                idle = op("batch on empty head", space + "/seal", {"batch_points": 5})
+                assert idle["points"] == 0 and idle["job"]["active"] is False
+                assert op("idle status", space + "/seal")["active"] is False
+
+                # Blocks exist per series/batch; the logical view is unchanged
+                # except the corrected value, which must beat the sealed old one.
+                blocks = op("block inventory", space + "/blocks")
+                assert len(blocks) >= 2
+                after = op("range after seal", space + "/range", interval)
+                actual = point_map(after)
+                # Rebuild the expected map: correction at 5000, new point at 12500.
+                sid = before["series"][0]["series"]["id"]
+                expected[(sid, 5000)] = 999.0
+                expected[(sid, 12500)] = 77.0
+                assert actual == expected, "sealed view lost, duplicated or overwrote a point"
+
+                # A later correction to a now-sealed timestamp still wins.
+                op("post-seal correction", space + "/points",
+                   {"now": 14000, "points": [{"labels": labels, "time": 1000, "value": -5.0}]})
+                op("one-shot seal of new head", space + "/seal", {})
+                verify = point_map(op("range after second seal", space + "/range", interval))
+                assert verify[(sid, 1000)] == -5.0
+                assert verify == {**expected, (sid, 1000): -5.0}
+                op("compaction while idle", space + "/compact", {})
+                assert point_map(op("range after compaction", space + "/range", interval)) == verify
+            finally:
+                stop(process)
+    if output:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(observations, indent=2) + "\n")
+    print(json.dumps({"workflow": workflow, "operations": len(observations), "state": "complete",
+                      "coverage": ["seal-job"]}))
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--workflow", choices=["all", *FLOW_NAMES], default="all")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    exercise(args.workflow, args.output)
+    if args.workflow == "seal-job":
+        exercise_seal_job(args.workflow, args.output)
+    else:
+        exercise(args.workflow, args.output)

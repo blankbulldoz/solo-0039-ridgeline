@@ -87,7 +87,7 @@ func (e *Engine) Explain(name string, q model.Query) (Plan, error) {
 		}
 		plan.Candidates = selectseries.Pick(all, selector)
 		plan.Sequence, plan.Floor, plan.MaxDecoded = volume.Current(tx), n.Floor, n.MaxScan
-		plan.HeadRecords = b.Bucket(volume.Head).Stats().KeyN
+		plan.HeadRecords = volume.ReadHeadCount(b)
 		plan.Blocks = []model.Block{}
 		blocks, err := readBlocks(b)
 		if err != nil {
