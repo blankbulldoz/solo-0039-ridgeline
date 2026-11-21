@@ -136,3 +136,68 @@ type Maintenance struct {
 	Points   int    `json:"points"`
 	Floor    int64  `json:"floor"`
 }
+
+// RetentionSeriesImpact is one series whose currently visible points fall
+// below the floor a retention preview would advance to.
+type RetentionSeriesImpact struct {
+	Series  Series `json:"series"`
+	Removed int    `json:"removed"`
+	Kept    int    `json:"kept"`
+}
+
+// RetentionRollupImpact describes a stored materialization whose definition
+// overlaps the interval a retention preview would drop.
+type RetentionRollupImpact struct {
+	Name      string `json:"name"`
+	Start     int64  `json:"start"`
+	End       int64  `json:"end"`
+	Overlaps  bool   `json:"overlaps"`
+	Stale     bool   `json:"stale"`
+	Remaining int    `json:"remaining"`
+}
+
+// RetentionPreview is the read-only effect estimate of advancing retention.
+type RetentionPreview struct {
+	Namespace       string                  `json:"namespace"`
+	Now             int64                   `json:"now"`
+	CurrentFloor    int64                   `json:"current_floor"`
+	ProposedFloor   int64                   `json:"proposed_floor"`
+	Advances        bool                    `json:"advances"`
+	SourceSequence  uint64                  `json:"source_sequence"`
+	AffectedPoints  int                     `json:"affected_points"`
+	VisiblePoints   int                     `json:"visible_points"`
+	Series          []RetentionSeriesImpact `json:"series"`
+	Rollups         []RetentionRollupImpact `json:"rollups"`
+	Blocks          int                     `json:"blocks"`
+	HeadRecords     int                     `json:"head_records"`
+	Decoded         int                     `json:"decoded"`
+	MaxScan         int                     `json:"max_scan"`
+	BudgetExhausted bool                    `json:"budget_exhausted"`
+	Token           string                  `json:"token"`
+}
+
+// RetentionResult is the receipt of a confirmed retention advancement.
+type RetentionResult struct {
+	Maintenance
+	Removed        int  `json:"removed"`
+	AffectedSeries int  `json:"affected_series"`
+	NoOp           bool `json:"no_op"`
+	StalePreview   bool `json:"stale_preview"`
+}
+
+// RetentionConfirm carries the preview token an operator wants to commit.
+type RetentionConfirm struct {
+	Token   string `json:"token"`
+	OnStale string `json:"on_stale"`
+}
+
+// RetentionToken is the signed, stateless snapshot embedded in a preview.
+type RetentionToken struct {
+	Namespace       string `json:"namespace"`
+	Now             int64  `json:"now"`
+	CurrentFloor    int64  `json:"current_floor"`
+	ProposedFloor   int64  `json:"proposed_floor"`
+	SourceSequence  uint64 `json:"source_sequence"`
+	RollupSignature string `json:"rollup_signature"`
+	Digest          string `json:"digest"`
+}

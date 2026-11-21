@@ -53,7 +53,9 @@ All methods below return 200 on success.
 | GET | `/spaces/{space}/blocks` | physical block inventory |
 | POST | `/spaces/{space}/deletions` | interval and matchers |
 | GET | `/spaces/{space}/deletions` | deletion sequence inventory |
-| POST | `/spaces/{space}/retention` | `{"now":11000}` |
+| POST | `/spaces/{space}/retention/preview` | `{"now":11000}` — read-only effect preview |
+| POST | `/spaces/{space}/retention/confirm` | `{"token":"...","on_stale":"reject"}` |
+| POST | `/spaces/{space}/retention` | `{"now":11000}` immediate advance |
 | POST | `/spaces/{space}/compact` | empty object |
 | PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
 | GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
@@ -72,6 +74,39 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+### Retention preview and confirmation
+
+Advancing retention permanently forbids old measurements from returning, so the
+operation is split into a read-only preview and a signed confirmation.
+
+`POST /spaces/{space}/retention/preview` with `{"now":...}` performs no writes
+and returns the current floor, the proposed floor, whether the floor actually
+advances, the visible points and series that would be removed (with per-series
+kept counts), every stored rollup whose query interval overlaps the dropped
+range (including its current stale flag and how many points would remain inside
+its interval), the scan budget used, and an opaque `token`. The token signs the
+namespace, observation time, current/proposed floors, source sequence and a
+fingerprint of the rollup set.
+
+`POST /spaces/{space}/retention/confirm` with `{"token":"...","on_stale":...}`
+commits the preview. On confirm the server recomputes the floor from the same
+observation time and rejects the token (409, with the reasons) when the source
+sequence, floor, recomputed floor or rollup fingerprint changed after the
+preview — for example when an old point was ingested while the operator was
+reviewing. `on_stale` is `reject` (default) or `continue`; the response carries
+`stale_preview` so a continued operation is still auditable. The confirm scans
+current data, never the preview snapshot, so points admitted during the review
+are counted and removed correctly. A regressing `now` cannot lower the floor:
+the floor is clamped to its existing value and the confirmation becomes a
+no-op that consumes no sequence. Tampered, empty or foreign-namespace tokens
+are refused before any write.
+
+Previews share the namespace `max_scan` budget with ordinary maintenance: an
+oversized preview or immediate retention returns 422 without mutating that
+namespace and never touches any other namespace. The legacy immediate
+`/retention` route remains available for callers that do not need the
+two-phase flow.
 
 ## Storage And Recovery
 

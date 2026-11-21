@@ -78,6 +78,18 @@ func Handler(e *engine.Engine) http.Handler {
 			return e.Retain(r.PathValue("space"), input.Now)
 		})
 	})
+	mux.HandleFunc("POST "+base+"/retention/preview", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input struct {
+			Now int64 `json:"now"`
+		}) (any, error) {
+			return e.RetentionPreview(r.PathValue("space"), input.Now)
+		})
+	})
+	mux.HandleFunc("POST "+base+"/retention/confirm", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input model.RetentionConfirm) (any, error) {
+			return e.RetentionConfirm(r.PathValue("space"), input.Token, input.OnStale)
+		})
+	})
 	mux.HandleFunc("POST "+base+"/compact", func(w http.ResponseWriter, r *http.Request) {
 		out, err := e.Compact(r.PathValue("space"))
 		respond(w, out, err)

@@ -64,7 +64,7 @@ the server with that image as RIDGE_DB restores that database directly.
 6. Calculate rates across counter resets.
 7. Seal mutable measurements into verified compressed blocks.
 8. Delete a range without hiding later corrections.
-9. Advance retention and reject resurrection.
+9. Preview retention impact, detect a stale preview and confirm the advance.
 10. Materialize a rollup with source-sequence provenance.
 11. Inspect materialization freshness after later writes.
 12. Compact physical blocks while preserving query results.
