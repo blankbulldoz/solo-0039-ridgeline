@@ -15,7 +15,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "compact", "continuous",
+    "backup", "explain"
 ]
 
 
@@ -133,6 +134,83 @@ def exercise(workflow, output):
                     "now": 11000, "points": [{**seed["points"][0], "time": 1500}]
                 }, status=409)
                 op("resume", space + "/mode", {"read_only": False}, method="PUT")
+
+                # Continuous aggregate: a defined window query that follows
+                # late data through a durable per-window invalidation log.
+                cagg_space = "spaces/cagg"
+                op("continuous namespace", "spaces", {
+                    "name": "cagg", "retention_ms": 20000, "lateness_ms": 100000,
+                    "future_ms": 10000, "max_series": 100, "max_write": 10000,
+                    "max_scan": 100000,
+                })
+                load = lambda zone, t, v: {"labels": {"__name__": "load", "zone": zone},
+                                           "time": t, "value": v}
+                op("continuous ingest", cagg_space + "/points", {"now": 10000, "points": [
+                    *[load("east", t, t // 1000) for t in (1000, 2000, 3000, 4000, 5000)],
+                    *[load("west", t, t // 100) for t in (1000, 2000, 3000, 4000, 5000)],
+                ]})
+                cagg_query = {"start": 0, "end": 10000, "step": 1000, "origin": 0,
+                              "group_by": ["zone"], "function": "avg",
+                              "matchers": [{"label": "__name__", "op": "=", "value": "load"}]}
+                defined = op("continuous define", cagg_space + "/continuous/load_avg",
+                             cagg_query, method="PUT")
+                if defined["pending_windows"] != 0 or len(defined["windows"]) != 5:
+                    raise RuntimeError("initial continuous materialization is not current")
+                op("continuous duplicate", cagg_space + "/continuous/load_avg",
+                   cagg_query, method="PUT", status=409)
+                op("continuous missing", cagg_space + "/continuous/absent", status=404)
+                op("continuous negative limit",
+                   cagg_space + "/continuous/load_avg/refresh", {"max_windows": -1}, status=400)
+                # Backfill an old window, overwrite an existing timestamp and
+                # report the first point of a not-yet-materialized window.
+                op("continuous backfill", cagg_space + "/points", {"now": 10000, "points": [
+                    load("east", 1500, 100), load("east", 2000, 200), load("east", 6500, 6),
+                ]})
+                # A delete and a retention advance invalidate further windows.
+                op("continuous delete", cagg_space + "/deletions", {
+                    "start": 2500, "end": 3500,
+                    "matchers": [{"label": "zone", "op": "=", "value": "east"}]})
+                op("continuous retention", cagg_space + "/retention", {"now": 22000})
+                lagging = op("continuous pending", cagg_space + "/continuous/load_avg")
+                if lagging["pending"] != [1000, 2000, 3000, 6000]:
+                    raise RuntimeError("mutations did not invalidate the expected windows")
+                flags = {w["start"]: w["pending"] for w in lagging["windows"]}
+                if flags != {1000: True, 2000: True, 3000: True, 4000: False, 5000: False}:
+                    raise RuntimeError("read view must separate usable from pending windows")
+                # Invalidations are committed with each mutation, so a restart
+                # cannot lose them.
+                stop(process)
+                process, base = launch(binary, scratch / "source.db", log)
+                resumed = op("continuous pending after restart",
+                             cagg_space + "/continuous/load_avg")
+                if resumed["pending"] != lagging["pending"]:
+                    raise RuntimeError("restart lost invalidated windows")
+                # Bounded refresh repairs the backlog oldest first, two
+                # windows per call: batch one drops the window the retention
+                # floor passed and applies the correction, batch two applies
+                # the delete and materializes the brand-new window.
+                batch = op("continuous refresh batch 1",
+                           cagg_space + "/continuous/load_avg/refresh", {"max_windows": 2})
+                if batch["dropped"] != [1000] or batch["remaining"] != 2:
+                    raise RuntimeError("first bounded refresh repaired the wrong windows")
+                east2000 = [c for w in batch["refreshed"] for c in w["cells"]
+                            if w["start"] == 2000 and c["labels"].get("zone") == "east"]
+                if east2000 != [{"labels": {"zone": "east"}, "start": 2000, "end": 3000,
+                                 "value": 200, "count": 1}]:
+                    raise RuntimeError("correction was not applied by refresh")
+                batch = op("continuous refresh batch 2",
+                           cagg_space + "/continuous/load_avg/refresh", {"max_windows": 2})
+                if batch["remaining"] != 0 or len(batch["refreshed"]) != 2:
+                    raise RuntimeError("second bounded refresh did not finish the backlog")
+                recovered = op("continuous recovered", cagg_space + "/continuous/load_avg")
+                if recovered["pending_windows"] != 0:
+                    raise RuntimeError("continuous aggregate still pending after refresh")
+                direct = op("continuous crosscheck", cagg_space + "/aggregate", cagg_query)
+                key = lambda c: (json.dumps(c["labels"], sort_keys=True), c["start"])
+                stored = sorted((c for w in recovered["windows"] for c in w["cells"]), key=key)
+                if stored != sorted(direct["cells"], key=key):
+                    raise RuntimeError("continuous result differs from full aggregation")
+
                 source = op("backup source", space + "/range", q)
                 image, headers = request(base, "image")
                 if hashlib.sha256(image).hexdigest() != headers["X-Ridge-Sha256"]:

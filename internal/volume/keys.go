@@ -18,3 +18,17 @@ func PointTime(key []byte) (int64, error) {
 	}
 	return int64(binary.BigEndian.Uint64(key[64:]) ^ (1 << 63)), nil
 }
+
+// WindowKey encodes a signed window start so keys sort chronologically.
+func WindowKey(start int64) []byte {
+	key := make([]byte, 8)
+	binary.BigEndian.PutUint64(key, uint64(start)^(1<<63))
+	return key
+}
+
+func WindowStart(key []byte) (int64, error) {
+	if len(key) != 8 {
+		return 0, fmt.Errorf("invalid window key length %d", len(key))
+	}
+	return int64(binary.BigEndian.Uint64(key) ^ (1 << 63)), nil
+}

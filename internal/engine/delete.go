@@ -45,6 +45,9 @@ func (e *Engine) Delete(name string, q model.Query) (model.Tombstone, error) {
 		if err := volume.PutJSON(b.Bucket(volume.Deletes), []byte(tomb.ID), tomb); err != nil {
 			return err
 		}
+		if err := invalidateDelete(b, q.Start, q.End, seq); err != nil {
+			return err
+		}
 		n.LastSequence = seq
 		return volume.PutJSON(b, volume.Config, n)
 	})

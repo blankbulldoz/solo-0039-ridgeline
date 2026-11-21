@@ -56,6 +56,10 @@
       "command": "python3 examples/walkthrough.py --workflow compact"
     },
     {
+      "workflow_id": "continuous",
+      "command": "python3 examples/walkthrough.py --workflow continuous"
+    },
+    {
       "workflow_id": "backup",
       "command": "python3 examples/walkthrough.py --workflow backup"
     },

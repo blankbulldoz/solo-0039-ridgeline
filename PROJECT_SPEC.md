@@ -54,6 +54,19 @@ it never silently presents stale materialization as current. Backup returns
 a consistent bbolt database image plus SHA-256 and sequence headers. Starting
 the server with that image as RIDGE_DB restores that database directly.
 
+Continuous aggregates keep a defined window query current without full
+rematerialization. Definition stores the query and materializes one record
+per populated window. Every mutation that can change a produced window —
+late or corrective writes, deletions and retention floor advances — records
+a per-window invalidation entry in the same committing transaction, so a
+restart cannot lose pending repairs. Reads separate usable windows from
+pending ones and list the invalidated window starts in chronological order,
+including starts with no materialized record yet. Refresh recomputes
+invalidated windows oldest first, bounded per call by an explicit work
+limit, clipping each window to the definition range so repaired cells match
+a full aggregation. Windows whose source points are no longer visible, for
+example below the retention floor, are dropped from the materialization.
+
 ## Workflows
 
 1. Create, inspect and toggle namespace read-only policy.
@@ -70,6 +83,8 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Define a continuous aggregate, invalidate windows through late data,
+    deletes and retention, then repair the backlog with bounded refreshes.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
@@ -84,9 +99,13 @@ the service does not implement distributed consensus, replication, historical
 revision queries, SQL, authentication or a background retention scheduler.
 Large raw scans are bounded by the namespace scan budget. Maintenance currently
 runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
+Continuous aggregates repair per-window invalidations, likewise only on
+explicit caller-driven refreshes; no background worker advances either.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
 exercise real API operations, process restart and failure responses. Formal
 automated tests are deferred. The walkthrough is a bounded production demo
-using temporary database files and synthetic infrastructure measurements.
+using temporary database files and synthetic infrastructure measurements;
+its continuous workflow backfills an old window, restarts the service and
+repairs the invalidation backlog batch by batch.

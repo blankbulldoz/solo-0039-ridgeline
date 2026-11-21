@@ -91,6 +91,20 @@ func Handler(e *engine.Engine) http.Handler {
 		out, err := e.Rollup(r.PathValue("space"), r.PathValue("rollup"))
 		respond(w, out, err)
 	})
+	mux.HandleFunc("PUT "+base+"/continuous/{agg}", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.Query) (any, error) {
+			return e.DefineContinuous(r.PathValue("space"), r.PathValue("agg"), q)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/continuous/{agg}", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.Continuous(r.PathValue("space"), r.PathValue("agg"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("POST "+base+"/continuous/{agg}/refresh", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(input model.RefreshRequest) (any, error) {
+			return e.RefreshContinuous(r.PathValue("space"), r.PathValue("agg"), input.MaxWindows)
+		})
+	})
 	mux.HandleFunc("GET /ridge/v1/image", func(w http.ResponseWriter, r *http.Request) {
 		serveImage(e, w, r)
 	})

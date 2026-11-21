@@ -63,7 +63,10 @@ func (e *Engine) Retain(name string, now int64) (model.Maintenance, error) {
 			return err
 		}
 		receipt, err = compact(tx, b, n)
-		return err
+		if err != nil {
+			return err
+		}
+		return invalidateBelowFloor(b, n.Floor, receipt.Sequence)
 	})
 	return receipt, err
 }

@@ -54,6 +54,9 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 				n.Watermark, n.HasWatermark = p.Time, true
 			}
 		}
+		if err := invalidatePoints(b, request.Points, seq); err != nil {
+			return err
+		}
 		n.LastSequence = seq
 		receipt = model.WriteReceipt{
 			Sequence: seq, Accepted: len(request.Points),

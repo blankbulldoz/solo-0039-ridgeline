@@ -57,6 +57,9 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/compact` | empty object |
 | PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
 | GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
+| PUT | `/spaces/{space}/continuous/{agg}` | define continuous aggregate |
+| GET | `/spaces/{space}/continuous/{agg}` | windows with per-window pending flags |
+| POST | `/spaces/{space}/continuous/{agg}/refresh` | `{"max_windows":2}` bounded repair |
 | GET | `/image` | consistent binary image, SHA-256 and sequence headers |
 
 Sample query:
@@ -73,12 +76,33 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+## Continuous Aggregates
+
+A continuous aggregate stores a window aggregate definition and materializes
+its output as one record per window, so late data does not force a full
+rematerialization. Writes (including same-timestamp corrections), deletions
+and retention advances each record a per-window invalidation entry in the
+same transaction as the mutation; the backlog therefore survives restarts.
+The read view reports materialized windows with a per-window `pending` flag
+plus the chronological list of invalidated window starts, separating usable
+results from windows awaiting refresh. A pending start without a window
+record is a window whose first points arrived after the last refresh.
+
+Refresh repairs the backlog oldest first. `max_windows` bounds the work of
+one call (zero or omitted means no limit) and the response reports how many
+invalidations remain. Each window is recomputed clipped to the definition
+range, so repaired cells match a full aggregation of the same query. Windows
+whose source points are no longer visible, for example below the retention
+floor, are dropped from the materialization.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
-deletes and rollups buckets. Numeric point keys encode signed time in
-lexicographic order. Blocks use format 1: a gzip stream containing an ordered
-JSON sample array, with SHA-256 over the compressed payload.
+deletes, rollups and continuous buckets. Numeric point keys encode signed
+time in lexicographic order; continuous window records and invalidation
+entries share that encoding per window start. Blocks use format 1: a gzip
+stream containing an ordered JSON sample array, with SHA-256 over the
+compressed payload.
 
 Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with

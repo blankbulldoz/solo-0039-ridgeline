@@ -136,3 +136,57 @@ type Maintenance struct {
 	Points   int    `json:"points"`
 	Floor    int64  `json:"floor"`
 }
+
+// Continuous is a named window aggregation that follows source mutations.
+// Its output is materialized per window and repaired incrementally.
+type Continuous struct {
+	Name           string `json:"name"`
+	Query          Query  `json:"query"`
+	SourceSequence uint64 `json:"source_sequence"`
+}
+
+// WindowRecord is the materialized output of one time window.
+type WindowRecord struct {
+	Start    int64  `json:"start"`
+	End      int64  `json:"end"`
+	Sequence uint64 `json:"sequence"`
+	Cells    []Cell `json:"cells"`
+}
+
+// Invalidation records that one window must be recomputed. Entries are
+// written in the same transaction as the mutation that caused them.
+type Invalidation struct {
+	Start    int64  `json:"start"`
+	Sequence uint64 `json:"sequence"`
+}
+
+type WindowView struct {
+	WindowRecord
+	Pending bool `json:"pending"`
+}
+
+// ContinuousView separates usable windows from windows awaiting refresh.
+// Pending lists window starts with a recorded invalidation, including
+// windows that have no materialized record yet.
+type ContinuousView struct {
+	Continuous
+	Sequence     uint64       `json:"sequence"`
+	Windows      []WindowView `json:"windows"`
+	Pending      []int64      `json:"pending"`
+	PendingCount int          `json:"pending_windows"`
+}
+
+type RefreshRequest struct {
+	MaxWindows int `json:"max_windows"`
+}
+
+// RefreshResult reports one bounded repair batch: windows recomputed and
+// stored, windows dropped because they no longer have visible source
+// points, and the invalidation backlog still remaining.
+type RefreshResult struct {
+	Name      string         `json:"name"`
+	Sequence  uint64         `json:"sequence"`
+	Refreshed []WindowRecord `json:"refreshed"`
+	Dropped   []int64        `json:"dropped"`
+	Remaining int            `json:"remaining"`
+}
