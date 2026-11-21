@@ -40,6 +40,25 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+The `rate_gap` function keeps that reset rule but bounds trusted sampling:
+the query carries `max_gap_ms`, and only adjacent samples whose interval is at
+most that bound contribute an increment and their interval to covered time.
+A longer interval reads as a device disconnect: no increment crosses it, no
+time is covered across it, and the trusted run breaks. A single isolated
+sample forms no run, so a residual single point stays visible in the point
+count but contributes zero coverage and zero rate. Per-series trusted
+increases and covered milliseconds are resolved before grouping; the grouped
+value is the sum of each series' trusted rate, preserving the `rate` group
+semantics. Each returned cell additionally reports `coverage_ms`, the summed
+trusted covered time, and `series_coverage` naming every contributing device
+with its own covered milliseconds, trusted increase, half-open trusted
+segments and observed point count, including zero-coverage devices. Callers
+comparing adjacent group windows for alerting apply their own coverage policy
+to those records: missing measurements are never treated as zero, and equal
+group coverage totals do not make two windows comparable when the per-device
+coverage shapes differ. The legacy `rate` function is unchanged and rejects
+`max_gap_ms`; `rate_gap` requires a positive `max_gap_ms`.
+
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
 deletions into one block per selected series; empty series retain their identity.
@@ -61,7 +80,7 @@ the server with that image as RIDGE_DB restores that database directly.
 3. Discover canonical series through label matchers.
 4. Read corrected points across head and sealed blocks.
 5. Aggregate groups into signed, origin-aligned time windows.
-6. Calculate rates across counter resets.
+6. Calculate rates across counter resets and trusted sampling gaps.
 7. Seal mutable measurements into verified compressed blocks.
 8. Delete a range without hiding later corrections.
 9. Advance retention and reject resurrection.

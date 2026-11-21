@@ -14,9 +14,92 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
-    "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
+    "namespace", "ingest", "discovery", "range", "windows", "counters",
+    "gap_rate", "seal",
     "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
 ]
+
+
+def counter_points(node, schedule):
+    """Build monotonic counter samples for one device from (time, value) pairs."""
+    return [
+        {"labels": {"__name__": "events_total", "group": "watch", "node": node},
+         "time": t, "value": v}
+        for t, v in schedule
+    ]
+
+
+def gap_rate_demo(base, space, op):
+    """Controlled disconnect comparison through the HTTP API.
+
+    Two adjacent windows hold the same two devices and the same per-device
+    total increase. Window A concentrates one 5000 ms disconnect on device d2;
+    window B makes both devices disconnect together for 4000 ms. Both windows
+    end up with identical summed trusted coverage (12000 ms), so group totals
+    alone cannot decide whether a window is fit for alert comparison.
+    """
+    policy = {"name": "gapwatch", "retention_ms": 1000000, "lateness_ms": 300000,
+              "future_ms": 1000, "max_series": 100, "max_write": 10000, "max_scan": 100000}
+    op("gap namespace", "spaces", policy)
+    # Window A: d1 online for 9000 ms; d2 covers 3000 ms over two short runs.
+    window_a = (
+        counter_points("d1", [(0, 0), (1000, 10), (2000, 20), (3000, 30), (4000, 40),
+                              (5000, 50), (6000, 60), (7000, 70), (8000, 80), (9000, 90)])
+        + counter_points("d2", [(0, 0), (1000, 20), (6000, 20), (7000, 40), (8000, 60)]))
+    # Window B occupies [11000, 22000); both devices are offline together
+    # between relative 2000 and 6000, and counters stay frozen at reconnect so
+    # each device's total increase is the same as in window A (d1: 90, d2: 60).
+    window_b = (
+        counter_points("d1", [(11000, 0), (12000, 10), (13000, 20),
+                              (17000, 20), (18000, 40), (19000, 60), (20000, 75), (21000, 90)])
+        + counter_points("d2", [(11000, 0), (12000, 20), (13000, 40),
+                                (17000, 40), (18000, 45), (19000, 50),
+                                (20000, 55), (21000, 60)]))
+    op("gap ingest", space + "/points", {"now": 22000, "points": window_a + window_b})
+
+    def gap_query(function, max_gap=None):
+        query = {"start": 0, "end": 22000, "step": 11000, "origin": 0,
+                 "group_by": ["group"], "function": function,
+                 "matchers": [{"label": "__name__", "op": "=", "value": "events_total"}]}
+        if max_gap is not None:
+            query["max_gap_ms"] = max_gap
+        return op(function, space + "/aggregate", query)
+
+    legacy = {cell["start"]: cell for cell in gap_query("rate")["cells"]}
+    # The old caliber keeps disconnect time in the first-to-last denominator:
+    # window A reports 90/9 + 60/8 = 17.5/s, diluting d2's 5000 ms outage into
+    # a stable-looking low rate instead of excluding the unmeasured interval.
+    if abs(legacy[0]["value"] - 17.5) > 1e-9:
+        raise RuntimeError("legacy rate window A did not keep downtime in denominator")
+
+    gap = {cell["start"]: cell for cell in gap_query("rate_gap", 3500)["cells"]}
+    a, b = gap[0], gap[11000]
+    # Summed trusted coverage is identical (12000 ms) even though only A has a
+    # single short-reporting device, so group totals alone cannot judge them.
+    if a["coverage_ms"] != 12000 or b["coverage_ms"] != 12000:
+        raise RuntimeError("controlled windows must share 12000 ms summed coverage")
+    coverage = {cell["start"]: {entry["series"]["labels"]["node"]: entry
+                                for entry in cell["series_coverage"]}
+                for cell in (a, b)}
+    if coverage[0]["d2"]["coverage_ms"] != 3000 or coverage[11000]["d2"]["coverage_ms"] != 6000:
+        raise RuntimeError("per-device coverage must expose the different disconnect shapes")
+    # Per-series trusted rates summed: A = 90/9 + 60/3 = 30/s;
+    # B = 90/6 + 60/6 = 25/s.
+    if abs(a["value"] - 30) > 1e-9 or abs(b["value"] - 25) > 1e-9:
+        raise RuntimeError("gap-aware group rate mismatch")
+    # Alerting policy decided by the caller: every device must cover >= 6000 ms.
+    # Equal group totals do not help; only per-device coverage separates them.
+    def comparable(cell):
+        return all(entry["coverage_ms"] >= 6000 for entry in cell["series_coverage"])
+    if comparable(a) or not comparable(b):
+        raise RuntimeError("coverage policy must reject window A and accept window B")
+    # max_gap_ms is only valid for rate_gap, and rate_gap requires it.
+    op("gap rejected on legacy rate", space + "/aggregate",
+       {"start": 0, "end": 11000, "step": 11000, "origin": 0, "group_by": ["group"],
+        "function": "rate", "max_gap_ms": 3500}, status=400)
+    op("rate_gap requires max_gap_ms", space + "/aggregate",
+       {"start": 0, "end": 11000, "step": 11000, "origin": 0, "group_by": ["group"],
+        "function": "rate_gap"}, status=400)
 
 
 def request(base, route, payload=None, method=None, status=200):
@@ -101,6 +184,7 @@ def exercise(workflow, output):
                 rate = {**q, "step": 10000, "origin": -5000, "group_by": ["zone"],
                         "function": "rate", "matchers": [{"label": "__name__", "op": "=", "value": "pulse_total"}]}
                 op("counters", space + "/aggregate", rate)
+                gap_rate_demo(base, "spaces/gapwatch", op)
                 op("seal", space + "/seal", {})
                 sealed = op("sealed range", space + "/range", q)
                 if before["series"] != sealed["series"]:

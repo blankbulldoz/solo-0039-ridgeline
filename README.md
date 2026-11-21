@@ -47,7 +47,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
-| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by; `rate_gap` also takes `max_gap_ms` |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -72,6 +72,34 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+### Gap-aware counter rates
+
+`function: "rate"` keeps the original caliber: the denominator spans the
+first to the last observed point in a window, so a multi-hour disconnect
+stays inside the denominator and can read as a stable low rate. Use
+`function: "rate_gap"` with `max_gap_ms` to exclude untrusted intervals. An
+adjacent sample pair is trusted only when its gap is at most `max_gap_ms`;
+longer gaps break the trusted run, contribute no increment and cover no time.
+Counter decreases inside a trusted pair still reset to zero. A lone point has
+no trusted neighbor and therefore contributes no coverage.
+
+A `rate_gap` cell keeps the summed per-series rate in `value`, and explains
+what that value represents: `coverage_ms` is the group's summed trusted
+covered time, while `series_coverage` lists each contributing device with its
+own `coverage_ms`, measured `increase`, half-open trusted `segments` and
+observed `points` count (zero-coverage devices are listed, not dropped, so
+missing data is never confused with measured zero load). Alerting dashboards
+apply their own coverage policy to those records before comparing adjacent
+windows — two windows with the same group coverage are not equivalent when
+one device only reported a short run or the whole group disconnected
+together. `max_gap_ms` is rejected for every other function.
+
+```json
+{"start":0,"end":11000,"step":11000,"origin":0,
+ "group_by":["group"],"function":"rate_gap","max_gap_ms":3500,
+ "matchers":[{"label":"__name__","op":"=","value":"events_total"}]}
+```
 
 ## Storage And Recovery
 

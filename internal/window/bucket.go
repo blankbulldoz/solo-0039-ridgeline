@@ -16,6 +16,14 @@ func Validate(q model.Query) error {
 	}
 	switch q.Function {
 	case "count", "sum", "min", "max", "avg", "first", "last", "rate":
+		if q.MaxGapMS != 0 {
+			return model.Bad("max_gap_ms is only valid with function rate_gap")
+		}
+		return nil
+	case "rate_gap":
+		if q.MaxGapMS <= 0 || q.MaxGapMS > model.MaxTime {
+			return model.Bad("rate_gap requires max_gap_ms within supported range")
+		}
 		return nil
 	default:
 		return model.Bad("unknown aggregation function")

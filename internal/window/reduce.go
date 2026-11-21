@@ -27,6 +27,9 @@ func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error)
 	if q.Function == "rate" {
 		return Rates(series, q)
 	}
+	if q.Function == "rate_gap" {
+		return GapRates(series, q)
+	}
 	groups := map[string]*accumulator{}
 	for _, s := range series {
 		key, labels := Group(s.Series.Labels, q.GroupBy)

@@ -61,6 +61,11 @@ type Query struct {
 	Origin   int64     `json:"origin"`
 	GroupBy  []string  `json:"group_by"`
 	Function string    `json:"function"`
+	// MaxGapMS selects the largest trusted interval between two adjacent
+	// samples for the gap-aware "rate_gap" function. Longer intervals are
+	// treated as device disconnects and contribute neither increments nor
+	// covered time. It is only valid with function "rate_gap".
+	MaxGapMS int64 `json:"max_gap_ms,omitempty"`
 }
 
 type SeriesPoints struct {
@@ -85,12 +90,40 @@ type RangeResult struct {
 	Truncated bool           `json:"truncated"`
 }
 
+// TrustedSegment is one continuous run of adjacent samples whose intervals
+// were all within the configured maximum trusted sampling gap. Intervals of a
+// segment are half-open [Start, End); a single isolated sample cannot form a
+// segment and therefore never covers any time.
+type TrustedSegment struct {
+	Start int64 `json:"start"`
+	End   int64 `json:"end"`
+}
+
+// SeriesCoverage states which device one contribution to a rate_gap cell came
+// from and over which trusted time that contribution was actually measured.
+// A device that reported in the window but never had a trusted adjacent pair
+// appears with CoverageMS and Increase equal to zero and no segments, so
+// missing measurements stay distinguishable from measured zero load.
+type SeriesCoverage struct {
+	Series     Series           `json:"series"`
+	CoverageMS int64            `json:"coverage_ms"`
+	Increase   float64          `json:"increase"`
+	Segments   []TrustedSegment `json:"segments"`
+	Points     int              `json:"points"`
+}
+
 type Cell struct {
 	Labels Labels  `json:"labels"`
 	Start  int64   `json:"start"`
 	End    int64   `json:"end"`
 	Value  float64 `json:"value"`
 	Count  int     `json:"count"`
+	// The following fields are populated only by function "rate_gap".
+	// CoverageMS sums the trusted covered time of every contributing series;
+	// SeriesCoverage explains which devices and time spans that covers.
+	MaxGapMS       int64            `json:"max_gap_ms,omitempty"`
+	CoverageMS     int64            `json:"coverage_ms,omitempty"`
+	SeriesCoverage []SeriesCoverage `json:"series_coverage,omitempty"`
 }
 
 type AggregateResult struct {
