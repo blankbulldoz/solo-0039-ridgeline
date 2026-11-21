@@ -20,12 +20,12 @@ type accumulator struct {
 	max      float64
 }
 
-func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error) {
+func Aggregate(series []model.SeriesPoints, q model.Query, floor int64) ([]model.Cell, error) {
 	if err := Validate(q); err != nil {
 		return nil, err
 	}
 	if q.Function == "rate" {
-		return Rates(series, q)
+		return Rates(series, q, floor)
 	}
 	groups := map[string]*accumulator{}
 	for _, s := range series {
@@ -73,6 +73,7 @@ func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error)
 		case "last":
 			a.cell.Value = a.last
 		}
+		a.cell.Coverage = model.CellScopeFor(a.cell.Start, a.cell.End, q.Start, q.End, floor)
 		if math.IsInf(a.cell.Value, 0) || math.IsNaN(a.cell.Value) {
 			return nil, model.Capacity("aggregation overflow")
 		}

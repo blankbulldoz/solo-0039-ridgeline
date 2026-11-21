@@ -33,6 +33,24 @@ supported; absent labels behave as the empty string for matcher evaluation.
 Limits reject excessive source work rather than silently dropping points.
 Raw result limits are explicit and include a truncation indicator.
 
+Every range and aggregate response carries a request-level `coverage` object
+that separates the `requested` half-open interval, the `retained` part still
+readable under the floor, and the `expired` part that can never be read again.
+`status` is `intact`, `partial` or `expired`; a request may straddle the floor
+(including with negative timestamps) or lie wholly before it, and an empty
+result is always explained. The floor is only an admission boundary: it never
+proves that the retained region once held data, so emptiness there still means
+no visible admitted sample. Deletions also hide samples inside the retained
+region. Expired history cannot be distinguished from history that was never
+measured.
+
+Each aggregate cell additionally carries a `coverage` object for its aligned
+window with `window`, `retained`, `covered`, `expired` and a boolean `complete`.
+`complete` is true only when the value covers the whole window, and only then
+is it comparable with other complete windows. A window may retain only its
+latter part (or be clipped by the requested interval), which is reported per
+window rather than hidden behind one label for the whole request.
+
 Window aggregation supports count, sum, min, max, average, first and last.
 Buckets align to a caller-supplied origin, including before the Unix epoch.
 Only populated windows appear. An average weights observations, not series.
@@ -50,9 +68,16 @@ outside the current API.
 
 Rollups store a query definition and its output at a database sequence.
 Inspection reports whether the namespace has changed since materialization;
-it never silently presents stale materialization as current. Backup returns
-a consistent bbolt database image plus SHA-256 and sequence headers. Starting
-the server with that image as RIDGE_DB restores that database directly.
+it never silently presents stale materialization as current. Inspection also
+reports `source`, which states whether the materialized source interval is
+still readable and re-verifiable at the current floor, the `expired_since`
+slice that has fallen below it, and whether the stored result was `complete`
+when written. A complete statistic formed before retention is distinguished
+from a current-floor recomputation, whose windows may now cover only part of
+the requested range; the two are not interchangeable even though the stored
+bytes are unchanged. Backup returns a consistent bbolt database image plus
+SHA-256 and sequence headers. Starting the server with that image as RIDGE_DB
+restores that database directly.
 
 ## Workflows
 

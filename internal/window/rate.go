@@ -7,7 +7,7 @@ import (
 	"ridgeline/internal/model"
 )
 
-func Rates(series []model.SeriesPoints, q model.Query) ([]model.Cell, error) {
+func Rates(series []model.SeriesPoints, q model.Query, floor int64) ([]model.Cell, error) {
 	cells := map[string]*model.Cell{}
 	for _, s := range series {
 		key, labels := Group(s.Series.Labels, q.GroupBy)
@@ -36,7 +36,10 @@ func Rates(series []model.SeriesPoints, q model.Query) ([]model.Cell, error) {
 			k := fmt.Sprintf("%s/%d", key, start)
 			cell := cells[k]
 			if cell == nil {
-				cell = &model.Cell{Labels: labels, Start: start, End: start + q.Step}
+				cell = &model.Cell{
+					Labels: labels, Start: start, End: start + q.Step,
+					Coverage: model.CellScopeFor(start, start+q.Step, q.Start, q.End, floor),
+				}
 				cells[k] = cell
 			}
 			cell.Value += value

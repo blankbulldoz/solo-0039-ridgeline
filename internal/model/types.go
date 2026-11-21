@@ -80,21 +80,25 @@ type ScanStats struct {
 type RangeResult struct {
 	Sequence  uint64         `json:"sequence"`
 	Floor     int64          `json:"floor"`
+	Coverage  Coverage       `json:"coverage"`
 	Series    []SeriesPoints `json:"series"`
 	Stats     ScanStats      `json:"stats"`
 	Truncated bool           `json:"truncated"`
 }
 
 type Cell struct {
-	Labels Labels  `json:"labels"`
-	Start  int64   `json:"start"`
-	End    int64   `json:"end"`
-	Value  float64 `json:"value"`
-	Count  int     `json:"count"`
+	Labels   Labels    `json:"labels"`
+	Start    int64     `json:"start"`
+	End      int64     `json:"end"`
+	Value    float64   `json:"value"`
+	Count    int       `json:"count"`
+	Coverage CellScope `json:"coverage"`
 }
 
 type AggregateResult struct {
 	Sequence uint64    `json:"sequence"`
+	Floor    int64     `json:"floor"`
+	Coverage Coverage  `json:"coverage"`
 	Cells    []Cell    `json:"cells"`
 	Stats    ScanStats `json:"stats"`
 }
@@ -127,7 +131,8 @@ type Materialization struct {
 
 type RollupView struct {
 	Materialization
-	Stale bool `json:"stale"`
+	Stale  bool         `json:"stale"`
+	Source RollupSource `json:"source"`
 }
 
 type Maintenance struct {

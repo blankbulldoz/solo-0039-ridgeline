@@ -40,8 +40,11 @@ func aggregate(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64
 	if err != nil {
 		return model.AggregateResult{}, err
 	}
-	cells, err := window.Aggregate(raw.Series, q)
-	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats}, err
+	cells, err := window.Aggregate(raw.Series, q, n.Floor)
+	return model.AggregateResult{
+		Sequence: sequence, Floor: n.Floor, Coverage: raw.Coverage,
+		Cells: cells, Stats: raw.Stats,
+	}, err
 }
 
 func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, error) {
@@ -60,6 +63,7 @@ func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, e
 type Plan struct {
 	Sequence        uint64         `json:"sequence"`
 	Floor           int64          `json:"floor"`
+	Coverage        model.Coverage `json:"coverage"`
 	Candidates      []model.Series `json:"candidates"`
 	Blocks          []model.Block  `json:"blocks"`
 	MaxDecoded      int            `json:"max_decoded"`
@@ -87,6 +91,7 @@ func (e *Engine) Explain(name string, q model.Query) (Plan, error) {
 		}
 		plan.Candidates = selectseries.Pick(all, selector)
 		plan.Sequence, plan.Floor, plan.MaxDecoded = volume.Current(tx), n.Floor, n.MaxScan
+		plan.Coverage = model.CoverageFor(q.Start, q.End, n.Floor)
 		plan.HeadRecords = b.Bucket(volume.Head).Stats().KeyN
 		plan.Blocks = []model.Block{}
 		blocks, err := readBlocks(b)

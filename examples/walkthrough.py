@@ -126,8 +126,78 @@ def exercise(workflow, output):
                 if op("post-compaction", space + "/range", q)["series"] != logical:
                     raise RuntimeError("compaction changed logical samples")
                 op("explain", space + "/explain", q)
+
+                # Retention scope: hold the same requests constant and show how
+                # the explanation and the visible results change once the floor moves.
+                span_before = op("scope before retention", space + "/range", q)
+                crossed_before = op("negative window before retention", space + "/aggregate",
+                                    {**agg, "start": -2000, "end": -1000})
+                rollup_before = op("rollup source before retention", space + "/rollups/pulse")
+                if span_before["coverage"]["status"] != "intact":
+                    raise RuntimeError("an empty floor must leave the request intact")
+                if not crossed_before["cells"] or not crossed_before["cells"][0]["coverage"]["complete"]:
+                    raise RuntimeError("a fully requested window should be complete before retention")
+                if not rollup_before["source"]["verifiable"] or not rollup_before["source"]["complete"]:
+                    raise RuntimeError("pre-retention materialization should be verifiable and complete")
+
                 op("retention", space + "/retention", {"now": 11000})
+                span_after = op("scope after retention", space + "/range", q)
+                crossed_after = op("negative window after retention", space + "/aggregate",
+                                   {**agg, "start": -2000, "end": -1000})
+                op("expired range", space + "/range", {**q, "start": -5000, "end": 0})
+                recompute = op("recompute at current floor", space + "/aggregate", agg)
+                rollup_after = op("rollup source after retention", space + "/rollups/pulse")
+
+                if span_after["coverage"]["status"] != "partial":
+                    raise RuntimeError("a floor inside the request must be partial")
+                if span_after["coverage"]["retained"] != {"start": 1000, "end": 10000}:
+                    raise RuntimeError("retained interval does not match the floor")
+                if span_after["coverage"]["expired"] != {"start": -5000, "end": 1000}:
+                    raise RuntimeError("expired interval does not match the floor")
+                if crossed_after["coverage"]["status"] != "expired" or crossed_after["cells"]:
+                    raise RuntimeError("a request wholly below the floor must be expired and empty")
+                if rollup_after["source"]["verifiable"]:
+                    raise RuntimeError("expired source must not be reported as verifiable")
+                if not rollup_after["source"]["complete"]:
+                    raise RuntimeError("the stored pre-retention statistic was complete")
+                if not rollup_after["source"]["recompute_shrinks_source"]:
+                    raise RuntimeError("recompute should cover less than the stored source")
+                stored_windows = {(c["labels"].get("zone"), c["start"]) for c in
+                                  rollup_after["result"]["cells"]}
+                fresh_windows = {(c["labels"].get("zone"), c["start"]) for c in recompute["cells"]}
+                if not fresh_windows < stored_windows:
+                    raise RuntimeError("a current-floor recompute should lose expired windows")
+                observations.append({
+                    "step": "retention scope comparison",
+                    "requested": span_before["coverage"]["requested"],
+                    "before": {"status": span_before["coverage"]["status"],
+                               "rollup_verifiable": rollup_before["source"]["verifiable"],
+                               "negative_window_cells": len(crossed_before["cells"])},
+                    "after": {"status": span_after["coverage"]["status"],
+                              "retained": span_after["coverage"]["retained"],
+                              "expired": span_after["coverage"]["expired"],
+                              "rollup_verifiable": rollup_after["source"]["verifiable"],
+                              "expired_since": rollup_after["source"]["expired_since"],
+                              "negative_window_cells": len(crossed_after["cells"]),
+                              "stored_windows": len(stored_windows),
+                              "recomputed_windows": len(fresh_windows)},
+                })
+
                 op("retention no resurrection", space + "/points", replacement, status=409)
+                op("post-retention correction", space + "/points", {
+                    "now": 11000, "points": [{**seed["points"][0], "time": 1200, "value": 4}]
+                })
+                partial = op("partial window after retention", space + "/aggregate", {
+                    "start": -5000, "end": 10000, "step": 1500, "origin": 0,
+                    "group_by": ["zone"], "function": "sum",
+                })
+                partial_cells = [c for c in partial["cells"] if c["start"] == 0 and c["end"] == 1500]
+                if len(partial_cells) != 1:
+                    raise RuntimeError("a retained point must populate the straddling window")
+                if partial_cells[0]["coverage"]["complete"]:
+                    raise RuntimeError("a window cut by the floor must not be marked complete")
+                if partial_cells[0]["coverage"]["covered"] != {"start": 1000, "end": 1500}:
+                    raise RuntimeError("a partial window must report its retained covered slice")
                 op("read-only", space + "/mode", {"read_only": True}, method="PUT")
                 op("read-only rejection", space + "/points", {
                     "now": 11000, "points": [{**seed["points"][0], "time": 1500}]

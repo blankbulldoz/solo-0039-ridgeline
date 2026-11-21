@@ -27,7 +27,11 @@ func readBlocks(b *bolt.Bucket) ([]model.Block, error) {
 }
 
 func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (model.RangeResult, error) {
-	result := model.RangeResult{Sequence: sequence, Floor: n.Floor, Series: []model.SeriesPoints{}}
+	result := model.RangeResult{
+		Sequence: sequence, Floor: n.Floor,
+		Coverage: model.CoverageFor(q.Start, q.End, n.Floor),
+		Series:   []model.SeriesPoints{},
+	}
 	selector, err := selectseries.Compile(q.Matchers)
 	if err != nil {
 		return result, err

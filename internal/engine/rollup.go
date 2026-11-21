@@ -50,6 +50,7 @@ func (e *Engine) Rollup(name, rollup string) (model.RollupView, error) {
 			return err
 		}
 		out.Stale = out.SourceSequence != n.LastSequence
+		out.Source = model.RollupSourceFor(out.Materialization, n.Floor)
 		return nil
 	})
 	return out, err

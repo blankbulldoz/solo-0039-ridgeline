@@ -71,7 +71,30 @@ Matchers are ANDed and regexes are fully anchored. Empty/missing labels match
 the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
-Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+Explain is an estimate of candidate blocks, not a guarantee of visible rows;
+it reports the same request-level `coverage` as range.
+
+Range and aggregate responses include a `coverage` object with the `requested`
+interval, the `retained` remainder still readable above the floor, the
+`expired` remainder that is permanently gone, and a `status` of `intact`,
+`partial` or `expired`. Each aggregate cell has its own `coverage` with a
+`complete` flag; a value is comparable to other windows only when `complete`
+is true. The floor is an admission boundary, not evidence that data existed,
+so an empty `expired` or `retained` region cannot confirm whether measurements
+were ever submitted. Rollup reads add `source`, which says whether the
+materialized source is still verifiable at the current floor and whether the
+stored result was complete before retention.
+
+```sh
+# The same request before and after advancing retention.
+curl -s -X POST localhost:8399/ridge/v1/spaces/spindle/aggregate -d '{
+  "start":-5000,"end":10000,"step":1500,"origin":0,"group_by":["zone"],"function":"sum"}'
+curl -s -X POST localhost:8399/ridge/v1/spaces/spindle/retention -d '{"now":11000}'
+# Repeat the aggregate: coverage.status becomes partial, windows crossing
+# time 1000 report complete=false, and earlier windows disappear.
+curl -s localhost:8399/ridge/v1/spaces/spindle/rollups/pulse
+# The stored rollup is unchanged, but source.verifiable is now false.
+```
 
 ## Storage And Recovery
 
