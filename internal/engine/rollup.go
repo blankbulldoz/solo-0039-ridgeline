@@ -20,16 +20,22 @@ func (e *Engine) Materialize(name, rollup string, q model.Query) (model.Material
 		if n.ReadOnly {
 			return model.Conflict("namespace is read-only")
 		}
-		result, err := aggregate(b, n, q, volume.Current(tx))
+		var result model.AggregateResult
+		if q.Calibration != "" {
+			result, err = calibratedAggregate(b, n, q, volume.Current(tx))
+		} else {
+			result, err = aggregate(b, n, q, volume.Current(tx))
+		}
 		if err != nil {
 			return err
-		}
-		out = model.Materialization{
-			Name: rollup, Query: q, SourceSequence: n.LastSequence, Result: result,
 		}
 		// Rollup metadata does not change the source namespace sequence.
 		if _, err := volume.Next(tx); err != nil {
 			return err
+		}
+		out = model.Materialization{
+			Name: rollup, Query: q, Calibration: q.Calibration,
+			SourceSequence: n.LastSequence, Result: result,
 		}
 		return volume.PutJSON(b.Bucket(volume.Rollups), []byte(rollup), out)
 	})
@@ -49,6 +55,7 @@ func (e *Engine) Rollup(name, rollup string) (model.RollupView, error) {
 		if err := volume.GetJSON(b.Bucket(volume.Rollups), []byte(rollup), &out.Materialization); err != nil {
 			return err
 		}
+		// Per-namespace sequence isolates freshness from other namespaces.
 		out.Stale = out.SourceSequence != n.LastSequence
 		return nil
 	})

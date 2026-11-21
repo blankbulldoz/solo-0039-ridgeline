@@ -20,6 +20,7 @@ var Blocks = []byte("blocks")
 var Payloads = []byte("payloads")
 var Deletes = []byte("deletes")
 var Rollups = []byte("rollups")
+var Calibrations = []byte("calibrations")
 var Config = []byte("config")
 
 type DB struct {
@@ -62,12 +63,21 @@ func CreateNamespace(tx *bolt.Tx, name string) (*bolt.Bucket, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, bucket := range [][]byte{Catalog, Head, Blocks, Payloads, Deletes, Rollups} {
+	for _, bucket := range [][]byte{Catalog, Head, Blocks, Payloads, Deletes, Rollups, Calibrations} {
 		if _, err = ns.CreateBucket(bucket); err != nil {
 			return nil, err
 		}
 	}
 	return ns, nil
+}
+
+// NamespaceBucket returns a namespace sub-bucket, creating it on demand so
+// images written before the bucket existed keep working after an upgrade.
+func NamespaceBucket(ns *bolt.Bucket, name []byte) (*bolt.Bucket, error) {
+	if b := ns.Bucket(name); b != nil {
+		return b, nil
+	}
+	return ns.CreateBucket(name)
 }
 
 func Next(tx *bolt.Tx) (uint64, error) {

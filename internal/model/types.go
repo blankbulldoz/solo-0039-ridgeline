@@ -53,14 +53,15 @@ type Matcher struct {
 }
 
 type Query struct {
-	Start    int64     `json:"start"`
-	End      int64     `json:"end"`
-	Matchers []Matcher `json:"matchers"`
-	Limit    int       `json:"limit"`
-	Step     int64     `json:"step"`
-	Origin   int64     `json:"origin"`
-	GroupBy  []string  `json:"group_by"`
-	Function string    `json:"function"`
+	Start       int64     `json:"start"`
+	End         int64     `json:"end"`
+	Matchers    []Matcher `json:"matchers"`
+	Limit       int       `json:"limit"`
+	Step        int64     `json:"step"`
+	Origin      int64     `json:"origin"`
+	GroupBy     []string  `json:"group_by"`
+	Function    string    `json:"function"`
+	Calibration string    `json:"calibration,omitempty"`
 }
 
 type SeriesPoints struct {
@@ -121,6 +122,7 @@ type Block struct {
 type Materialization struct {
 	Name           string          `json:"name"`
 	Query          Query           `json:"query"`
+	Calibration    string          `json:"calibration,omitempty"`
 	SourceSequence uint64          `json:"source_sequence"`
 	Result         AggregateResult `json:"result"`
 }
@@ -135,4 +137,59 @@ type Maintenance struct {
 	Blocks   int    `json:"blocks"`
 	Points   int    `json:"points"`
 	Floor    int64  `json:"floor"`
+}
+
+// CalibrationSegment is one effective interval of a linear calibration:
+// calibrated = factor*raw + offset. Intervals are half-open [Start, End).
+type CalibrationSegment struct {
+	Start  int64   `json:"start"`
+	End    int64   `json:"end"`
+	Factor float64 `json:"factor"`
+	Offset float64 `json:"offset"`
+}
+
+// CalibrationRule binds a series selector to the coefficient intervals that
+// apply to every series matching the selector.
+type CalibrationRule struct {
+	Matchers []Matcher            `json:"matchers"`
+	Segments []CalibrationSegment `json:"segments"`
+}
+
+// Calibration is a named, revisioned read-only view definition. It never
+// rewrites samples; calibrated reads apply the view at query time.
+type Calibration struct {
+	Name     string            `json:"name"`
+	Rules    []CalibrationRule `json:"rules"`
+	Sequence uint64            `json:"sequence"`
+	Revision int               `json:"revision"`
+}
+
+// CalibratedPoint keeps the raw observation alongside the calibrated value
+// and the exact coefficient that produced it, so every reading is traceable.
+// Calibrated is false when no segment covers the observation time: the value
+// is passed through unchanged with identity coefficients.
+type CalibratedPoint struct {
+	Time       int64   `json:"time"`
+	Value      float64 `json:"value"`
+	RawValue   float64 `json:"raw_value"`
+	Factor     float64 `json:"factor"`
+	Offset     float64 `json:"offset"`
+	Calibrated bool    `json:"calibrated"`
+	Sequence   uint64  `json:"sequence"`
+}
+
+type CalibratedSeriesPoints struct {
+	Series Series            `json:"series"`
+	Points []CalibratedPoint `json:"points"`
+}
+
+// CalibratedRangeResult mirrors RangeResult but every point carries raw value
+// and coefficient provenance for the named view.
+type CalibratedRangeResult struct {
+	Sequence    uint64                   `json:"sequence"`
+	Floor       int64                    `json:"floor"`
+	Calibration string                   `json:"calibration"`
+	Series      []CalibratedSeriesPoints `json:"series"`
+	Stats       ScanStats                `json:"stats"`
+	Truncated   bool                     `json:"truncated"`
 }

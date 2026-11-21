@@ -17,6 +17,9 @@ FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
     "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
 ]
+# Calibration is an independent workflow with its own namespace and database.
+CALIBRATION_FLOW = "calibration"
+ALL_FLOW_NAMES = FLOW_NAMES + [CALIBRATION_FLOW]
 
 
 def request(base, route, payload=None, method=None, status=200):
@@ -159,7 +162,22 @@ def exercise(workflow, output):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--workflow", choices=["all", *FLOW_NAMES], default="all")
+    parser.add_argument("--workflow", choices=["all", *ALL_FLOW_NAMES], default="all")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    exercise(args.workflow, args.output)
+    if args.workflow == CALIBRATION_FLOW:
+        import sys
+
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import calibration_walkthrough
+
+        calibration_walkthrough.exercise_calibration([])
+    else:
+        exercise(args.workflow, args.output)
+        if args.workflow == "all":
+            import sys
+
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            import calibration_walkthrough
+
+            calibration_walkthrough.exercise_calibration([])

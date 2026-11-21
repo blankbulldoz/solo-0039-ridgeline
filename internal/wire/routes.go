@@ -91,6 +91,25 @@ func Handler(e *engine.Engine) http.Handler {
 		out, err := e.Rollup(r.PathValue("space"), r.PathValue("rollup"))
 		respond(w, out, err)
 	})
+	mux.HandleFunc("PUT "+base+"/calibrations/{calibration}", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(view model.Calibration) (any, error) {
+			view.Name = r.PathValue("calibration")
+			return e.PutCalibration(r.PathValue("space"), view)
+		})
+	})
+	mux.HandleFunc("GET "+base+"/calibrations/{calibration}", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.GetCalibration(r.PathValue("space"), r.PathValue("calibration"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("GET "+base+"/calibrations", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.ListCalibrations(r.PathValue("space"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("POST "+base+"/calibrated-range", func(w http.ResponseWriter, r *http.Request) {
+		handleBody(w, r, func(q model.Query) (any, error) {
+			return e.CalibratedRange(r.PathValue("space"), q)
+		})
+	})
 	mux.HandleFunc("GET /ridge/v1/image", func(w http.ResponseWriter, r *http.Request) {
 		serveImage(e, w, r)
 	})

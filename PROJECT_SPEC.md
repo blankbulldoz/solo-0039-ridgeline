@@ -54,6 +54,21 @@ it never silently presents stale materialization as current. Backup returns
 a consistent bbolt database image plus SHA-256 and sequence headers. Starting
 the server with that image as RIDGE_DB restores that database directly.
 
+Calibration views are named, revisioned, read-only projections over a
+namespace's series. Each view binds series selectors to ordered coefficient
+intervals; at read time every visible raw sample is transformed by
+`factor * raw + offset` using the segment whose half-open `[start, end)`
+interval contains the sample's observation timestamp. The view layer never
+mutates head points, blocks or catalog identity. Ordinary reads ignore views
+completely; a read, aggregate or rollup must name a view explicitly to use it.
+Coefficient lookup depends only on observation time, so late and reordered
+ingestion calibrate identically to on-time data. An observation time outside
+every segment passes through unchanged with an explicit uncalibrated marker
+and identity coefficients; an unknown view name fails instead of falling back
+to raw data. Replacing a view advances the namespace sequence and records a
+new revision, so rollups built against prior coefficients report stale and
+calibrated history recomputes while the raw range stays identical.
+
 ## Workflows
 
 1. Create, inspect and toggle namespace read-only policy.
@@ -70,6 +85,9 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Define a piecewise calibration view, read traceable calibrated points,
+    feed a view to aggregation and rollups, and correct an old coefficient
+    while proving the raw observations never change.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
@@ -84,7 +102,9 @@ the service does not implement distributed consensus, replication, historical
 revision queries, SQL, authentication or a background retention scheduler.
 Large raw scans are bounded by the namespace scan budget. Maintenance currently
 runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
-Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
+Calibration is a query-time projection: coefficients are stored as view
+metadata, never folded into samples, so correcting a coefficient needs no data
+rewrite. Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
 exercise real API operations, process restart and failure responses. Formal

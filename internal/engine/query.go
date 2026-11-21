@@ -44,6 +44,50 @@ func aggregate(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64
 	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats}, err
 }
 
+// calibratedAggregate projects the same raw source points through a named
+// calibration view before reducing. Windows therefore see calibrated values
+// while the stored samples stay untouched.
+func calibratedAggregate(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (model.AggregateResult, error) {
+	if err := window.Validate(q); err != nil {
+		return model.AggregateResult{}, err
+	}
+	if q.Calibration == "" {
+		return model.AggregateResult{}, model.Bad("calibrated aggregate requires a calibration view name")
+	}
+	view, err := loadCalibration(b, q.Calibration)
+	if err != nil {
+		return model.AggregateResult{}, err
+	}
+	resolver, err := compileCalibration(b, view)
+	if err != nil {
+		return model.AggregateResult{}, err
+	}
+	q.Limit = 0
+	raw, err := scan(b, n, q, sequence)
+	if err != nil {
+		return model.AggregateResult{}, err
+	}
+	source := make([]model.SeriesPoints, 0, len(raw.Series))
+	for _, sp := range raw.Series {
+		projected := model.SeriesPoints{Series: sp.Series, Points: make([]model.Sample, 0, len(sp.Points))}
+		for _, p := range sp.Points {
+			cp, err := resolver.apply(sp.Series.ID, p)
+			if err != nil {
+				return model.AggregateResult{}, err
+			}
+			projected.Points = append(projected.Points, model.Sample{
+				Time: cp.Time, Value: cp.Value, Sequence: cp.Sequence,
+			})
+		}
+		source = append(source, projected)
+	}
+	cells, err := window.Aggregate(source, q)
+	if err != nil {
+		return model.AggregateResult{}, err
+	}
+	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats}, nil
+}
+
 func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, error) {
 	var out model.AggregateResult
 	err := e.DB.Raw.View(func(tx *bolt.Tx) error {
@@ -51,7 +95,11 @@ func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, e
 		if err != nil {
 			return err
 		}
-		out, err = aggregate(b, n, q, volume.Current(tx))
+		if q.Calibration != "" {
+			out, err = calibratedAggregate(b, n, q, volume.Current(tx))
+		} else {
+			out, err = aggregate(b, n, q, volume.Current(tx))
+		}
 		return err
 	})
 	return out, err

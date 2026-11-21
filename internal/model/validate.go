@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"math"
 	"regexp"
 )
@@ -77,6 +78,58 @@ func ValidateQuery(q Query) error {
 	for _, label := range q.GroupBy {
 		if !ValidName(label) {
 			return Bad("invalid grouping label")
+		}
+	}
+	if len(q.Calibration) > 96 {
+		return Bad("invalid calibration view name")
+	}
+	return nil
+}
+
+// ValidateCalibration checks view structure independently of the stored
+// catalog: finite coefficients, supported half-open intervals and no
+// overlapping effective intervals inside one rule's selector.
+func ValidateCalibration(c Calibration) error {
+	if !ValidName(c.Name) {
+		return Bad("invalid calibration view name")
+	}
+	if len(c.Rules) == 0 || len(c.Rules) > 32 {
+		return Bad("calibration view must contain 1..32 rules")
+	}
+	for ri, rule := range c.Rules {
+		if len(rule.Matchers) == 0 || len(rule.Matchers) > 32 {
+			return Bad("calibration rule requires 1..32 matchers")
+		}
+		for _, m := range rule.Matchers {
+			if !ValidName(m.Label) || len(m.Op) > 2 || len(m.Value) > 512 {
+				return Bad("calibration rule has an invalid matcher")
+			}
+		}
+		if len(rule.Segments) == 0 || len(rule.Segments) > 1024 {
+			return Bad("calibration rule requires 1..1024 segments")
+		}
+		prevEnd := int64(0)
+		prevStart := int64(0)
+		for si, seg := range rule.Segments {
+			if !ValidTime(seg.Start) || seg.End < MinTime || seg.End > MaxTime+1 ||
+				seg.Start >= seg.End {
+				return Bad("calibration segment requires a supported nonempty half-open interval")
+			}
+			if math.IsNaN(seg.Factor) || math.IsInf(seg.Factor, 0) ||
+				math.IsNaN(seg.Offset) || math.IsInf(seg.Offset, 0) {
+				return Bad("calibration coefficients must be finite")
+			}
+			if si > 0 {
+				if seg.Start < prevStart {
+					return Bad(fmt.Sprintf(
+						"calibration rule %d segments must be ordered by ascending start", ri))
+				}
+				if seg.Start < prevEnd {
+					return Bad(fmt.Sprintf(
+						"calibration rule %d has overlapping segments; half-open intervals must not overlap", ri))
+				}
+			}
+			prevStart, prevEnd = seg.Start, seg.End
 		}
 	}
 	return nil
