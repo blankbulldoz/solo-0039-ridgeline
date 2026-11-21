@@ -28,10 +28,40 @@ type Sample struct {
 	Sequence uint64  `json:"sequence"`
 }
 
+// Expectation states the observation version a correction was prepared
+// against. State defaults to "present"; sequence and value optionally refine
+// the comparison. An observation may be present, absent, hidden by a deletion
+// or below the retention floor.
+type Expectation struct {
+	State    string   `json:"state,omitempty"`
+	Sequence *uint64  `json:"sequence,omitempty"`
+	Value    *float64 `json:"value,omitempty"`
+}
+
 type Observation struct {
-	Labels Labels  `json:"labels"`
-	Time   int64   `json:"time"`
-	Value  float64 `json:"value"`
+	Labels Labels       `json:"labels"`
+	Time   int64        `json:"time"`
+	Value  float64      `json:"value"`
+	Expect *Expectation `json:"expect,omitempty"`
+}
+
+// ObservationState is the state a correction check observed for one series
+// and timestamp. Sequence and Value describe the winning stored sample when
+// one exists; Source records whether it lived in the head or a sealed block.
+type ObservationState struct {
+	State     string   `json:"state"`
+	Sequence  uint64   `json:"sequence,omitempty"`
+	Value     *float64 `json:"value,omitempty"`
+	Source    string   `json:"source,omitempty"`
+	Tombstone string   `json:"tombstone,omitempty"`
+}
+
+type ConflictEvidence struct {
+	Index    int              `json:"index"`
+	Labels   Labels           `json:"labels"`
+	Time     int64            `json:"time"`
+	Expected Expectation      `json:"expected"`
+	Actual   ObservationState `json:"actual"`
 }
 
 type WriteRequest struct {

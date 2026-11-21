@@ -42,6 +42,43 @@ func SeriesID(labels Labels) string {
 	return hex.EncodeToString(hash[:])
 }
 
+const (
+	StatePresent = "present"
+	StateAbsent  = "absent"
+	StateDeleted = "deleted"
+	StateExpired = "expired"
+)
+
+func ValidateExpectation(e *Expectation) error {
+	if e == nil {
+		return nil
+	}
+	switch e.State {
+	case "", StatePresent:
+	case StateAbsent:
+		if e.Sequence != nil {
+			return Bad("absent expectation must not name a sequence")
+		}
+		if e.Value != nil {
+			return Bad("absent expectation must not name a value")
+		}
+	case StateDeleted:
+		if e.Sequence != nil {
+			return Bad("deleted expectation must not name a sample sequence")
+		}
+		if e.Value != nil {
+			return Bad("deleted expectation must not name a value")
+		}
+	case StateExpired:
+		if e.Value != nil {
+			return Bad("expired expectation must not name a value")
+		}
+	default:
+		return Bad("unknown observation expectation state")
+	}
+	return nil
+}
+
 func ValidateObservation(p Observation) error {
 	if err := ValidateLabels(p.Labels); err != nil {
 		return err
@@ -49,7 +86,7 @@ func ValidateObservation(p Observation) error {
 	if !ValidTime(p.Time) || math.IsNaN(p.Value) || math.IsInf(p.Value, 0) {
 		return Bad("time outside supported range or value is not finite")
 	}
-	return nil
+	return ValidateExpectation(p.Expect)
 }
 
 func ValidateNamespace(n Namespace) error {

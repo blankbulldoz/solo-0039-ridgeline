@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"ridgeline/internal/model"
 	"ridgeline/internal/policy"
@@ -10,11 +11,55 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
+// corrections re-evaluates every expected observation against the committed
+// namespace state inside the write transaction. All mismatches are reported at
+// once so a caller can re-observe the whole set before retrying; nothing is
+// published for a request that fails this check.
+func corrections(b *bolt.Bucket, n model.Namespace, request model.WriteRequest) error {
+	blocks, err := readBlocks(b)
+	if err != nil {
+		return err
+	}
+	conflicts := make([]model.ConflictEvidence, 0)
+	stats, cache := model.ScanStats{}, map[string][]model.Sample{}
+	for index, p := range request.Points {
+		if p.Expect == nil {
+			continue
+		}
+		state, err := observe(b, n, model.SeriesID(p.Labels), p.Time, blocks, &stats, cache)
+		if err != nil {
+			return err
+		}
+		if policy.Matches(p.Expect, state) {
+			continue
+		}
+		conflicts = append(conflicts, model.ConflictEvidence{
+			Index: index, Labels: p.Labels, Time: p.Time,
+			Expected: *p.Expect, Actual: state,
+		})
+	}
+	if len(conflicts) == 0 {
+		return nil
+	}
+	return model.CorrectionConflict(fmt.Sprintf(
+		"%d of %d observations no longer match the expected version",
+		len(conflicts), len(request.Points)), conflicts)
+}
+
 func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteReceipt, error) {
 	var receipt model.WriteReceipt
 	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
 		b, n, err := loadNamespace(tx, name)
 		if err != nil {
+			return err
+		}
+		if err := policy.Validate(n, request); err != nil {
+			return err
+		}
+		// Expectations are resolved before event-time admission so an expired
+		// observation is reported as expired rather than as an ordinary
+		// policy rejection or as absent.
+		if err := corrections(b, n, request); err != nil {
 			return err
 		}
 		if err := policy.Admit(n, request); err != nil {

@@ -26,6 +26,20 @@ skew relative to an explicit caller-supplied observation time. Empty namespaces
 have no late-data watermark. Limits are evaluated before publishing a mutation.
 Read-only namespaces reject ingestion but permit reads and physical maintenance.
 
+A correction may state the observation version it was prepared against with
+`expect` on each point: `present` (optionally pinning the stored sample
+`sequence` and/or `value`), `absent`, `deleted` or `expired`. The check compares
+the expectation with the newest committed value and its deletion and retention
+state. All expectations in a request are evaluated before publishing; if any
+observation no longer matches, the complete request is rejected with a
+`conflict` whose `conflicts` array reports the index, labels, timestamp,
+expectation and current `actual` state of every mismatch. A point that retention
+expired or that a deletion hides is reported as `expired` or `deleted` rather
+than `absent`, so the author can distinguish "never reported" from "removed".
+Points without `expect` keep the unconditional newest-committed-wins path.
+Expectations are not carried across a transaction: a writer that observed an
+older state retries with the newly reported version or re-observes.
+
 Raw queries merge mutable head points with immutable gzip blocks and then
 resolve corrections, deletions and retention. A query runs in one bbolt read
 transaction. Exact label, inequality and regular-expression matchers are

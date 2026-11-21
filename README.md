@@ -44,7 +44,7 @@ All methods below return 200 on success.
 | POST | `/spaces` | namespace policy, as in input.json |
 | GET | `/spaces/{space}` | policy, watermark, floor, source sequence |
 | PUT | `/spaces/{space}/mode` | `{"read_only":true}` |
-| POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
+| POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}`; optional per-point `expect` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
@@ -72,6 +72,29 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+## Conditional Corrections
+
+A correction can pin the observation it replaces so a concurrent correction is
+not silently overwritten. Each point may carry `expect`:
+
+```json
+{"now":10000,"points":[
+  {"labels":{"__name__":"load_ratio","node":"ridge-a","zone":"east","rack":""},
+   "time":500,"value":0.9,
+   "expect":{"state":"present","value":0.75,"sequence":7}}]}
+```
+
+`state` is `present`, `absent`, `deleted` or `expired`; `sequence` and `value`
+are optional refinements of `present`. Every expectation in one request is
+checked inside the same write transaction against the newest committed value,
+its deletion intervals and the retention floor. The request publishes only if
+all of them match. Otherwise the response is a 409 `conflict` with no mutation
+and a `conflicts` array, each entry naming the point index, labels, time,
+expected version and the `actual` state (`present` with its sequence and value,
+`absent`, `deleted` with the hiding tombstone, or `expired`). The caller can
+re-observe and resubmit the whole group, or resend without `expect` to keep the
+unconditional behaviour.
 
 ## Storage And Recovery
 

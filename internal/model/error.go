@@ -3,8 +3,9 @@ package model
 import "fmt"
 
 type Error struct {
-	Code   string `json:"code"`
-	Detail string `json:"detail"`
+	Code      string             `json:"code"`
+	Detail    string             `json:"detail"`
+	Conflicts []ConflictEvidence `json:"conflicts,omitempty"`
 }
 
 func (e *Error) Error() string {
@@ -21,6 +22,14 @@ func Missing(s string) error {
 
 func Conflict(s string) error {
 	return &Error{Code: "conflict", Detail: s}
+}
+
+// CorrectionConflict reports that at least one observation in a correction no
+// longer matches the version its author observed. The whole request is
+// rejected without publishing; evidence carries the current states so the
+// caller can re-observe and decide again.
+func CorrectionConflict(detail string, evidence []ConflictEvidence) error {
+	return &Error{Code: "conflict", Detail: detail, Conflicts: evidence}
 }
 
 func Capacity(s string) error {

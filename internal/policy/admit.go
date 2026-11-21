@@ -2,7 +2,10 @@ package policy
 
 import "ridgeline/internal/model"
 
-func Admit(n model.Namespace, request model.WriteRequest) error {
+// Validate rejects a structurally inadmissible request before any observation
+// state is resolved. It covers read-only policy, observation time, point count
+// and per-observation shape.
+func Validate(n model.Namespace, request model.WriteRequest) error {
 	if n.ReadOnly {
 		return model.Conflict("namespace is read-only")
 	}
@@ -16,6 +19,15 @@ func Admit(n model.Namespace, request model.WriteRequest) error {
 		if err := model.ValidateObservation(p); err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+// Admit applies event-time admission windows. It runs after conditional
+// corrections so an expectation can report a retention-expired observation
+// distinctly from an absent one.
+func Admit(n model.Namespace, request model.WriteRequest) error {
+	for _, p := range request.Points {
 		if p.Time < n.Floor {
 			return model.Conflict("point precedes retention floor")
 		}

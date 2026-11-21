@@ -111,6 +111,43 @@ def exercise(workflow, output):
                 op("deletion inventory", space + "/deletions")
                 replacement = {"now": 10000, "points": [{**seed["points"][0], "time": 500, "value": 8}]}
                 op("correct after delete", space + "/points", replacement)
+                observed = op("observe before correction", space + "/range", {
+                    **q, "start": -2000, "end": 2000,
+                    "matchers": [{"label": "__name__", "op": "=", "value": "pulse_total"}],
+                })
+                versions = {(sp["series"]["labels"]["node"], p["time"]): p["sequence"]
+                            for sp in observed["series"] for p in sp["points"]}
+                correction = {
+                    "now": 10000,
+                    "points": [
+                        {**seed["points"][0], "time": 500, "value": 12,
+                         "expect": {"state": "present", "sequence": versions[("ridge-a", 500)]}},
+                        {**seed["points"][4], "time": -1500, "value": 4,
+                         "expect": {"state": "present", "sequence": versions[("ridge-b", -1500)]}},
+                    ],
+                }
+                late = {**seed["points"][4], "time": -1500, "value": 5}
+                op("later producer re-report", space + "/points", {"now": 10000, "points": [late]})
+                guard = op("stale expectation rejected", space + "/points", correction, status=409)
+                claims = guard["conflicts"]
+                if [claim["index"] for claim in claims] != [1]:
+                    raise RuntimeError("correction must report only the superseded observation")
+                if claims[0]["actual"]["state"] != "present" or claims[0]["actual"]["value"] != 5:
+                    raise RuntimeError("conflict evidence lost the winning observation")
+                after_guard = {(sp["series"]["labels"]["node"], p["time"]): p["value"]
+                               for sp in op("group did not partially publish", space + "/range", q)["series"]
+                               for p in sp["points"]}
+                if after_guard[("ridge-a", 500)] != 8 or after_guard[("ridge-b", -1500)] != 5:
+                    raise RuntimeError("rejected correction must not partially publish")
+                invisible = op("deleted observation rejected", space + "/points", {
+                    "now": 10000,
+                    "points": [{**seed["points"][1], "time": -500, "value": 12,
+                                "expect": {"state": "absent"}}],
+                }, status=409)
+                if invisible["conflicts"][0]["actual"]["state"] != "deleted":
+                    raise RuntimeError("hidden observation must report deleted, not absent")
+                correction["points"][1]["expect"] = {"state": "present", "value": 5}
+                op("re-observe and resubmit group", space + "/points", correction)
                 op("materialize", space + "/rollups/pulse", agg, method="PUT")
                 fresh = op("freshness", space + "/rollups/pulse")
                 if fresh["stale"]:
