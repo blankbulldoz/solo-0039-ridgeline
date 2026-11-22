@@ -1,0 +1,159 @@
+{
+  "go_version": "go1.25.0",
+  "findings": [
+    {
+      "id": "F1-sum-a",
+      "class": "rounding",
+      "description": "live sum cell vs big.Float sum of the same visible points",
+      "cell_value": 99.9999999999986,
+      "reference_value": 100,
+      "abs_err": 1.4068746168049984e-12,
+      "rel_err": 1.4068746168049984e-14,
+      "ulp": 99,
+      "detail": ""
+    },
+    {
+      "id": "F1-sum-b",
+      "class": "rounding",
+      "description": "live sum cell vs big.Float sum of the same visible points",
+      "cell_value": 300.0000000000056,
+      "reference_value": 300,
+      "abs_err": 5.6274984672199935e-12,
+      "rel_err": 1.8758328224066646e-14,
+      "ulp": 99,
+      "detail": ""
+    },
+    {
+      "id": "F1-avg-a",
+      "class": "rounding",
+      "description": "live avg cell (observation-weighted) vs exact mean of the same points",
+      "cell_value": 0.09999999999999859,
+      "reference_value": 0.1,
+      "abs_err": 1.4155343563970746e-15,
+      "rel_err": 1.4155343563970746e-14,
+      "ulp": 102,
+      "detail": ""
+    },
+    {
+      "id": "F1-avg-b",
+      "class": "rounding",
+      "description": "live avg cell (observation-weighted) vs exact mean of the same points",
+      "cell_value": 0.30000000000000565,
+      "reference_value": 0.3,
+      "abs_err": 5.662137425588298e-15,
+      "rel_err": 1.887379141862766e-14,
+      "ulp": 102,
+      "detail": ""
+    },
+    {
+      "id": "F2-avg-weighting",
+      "class": "business_definition",
+      "description": "avg weights observations (sum/count=2010), not series; the equal-series-weight mean is a different metric",
+      "cell_value": 0.2039800995024918,
+      "reference_value": 0.46666666666666806,
+      "abs_err": 0.26268656716417627,
+      "rel_err": 0.562899786780376,
+      "ulp": null,
+      "detail": "sum cell=410.0000000000085 avg cell=0.2039800995024918 count=2010"
+    },
+    {
+      "id": "F3-rate-reset-rule",
+      "class": "business_definition",
+      "description": "rate treats a decrease as reset-to-zero (adds current value); plain end-minus-start quotient would report a negative rate",
+      "cell_value": 73.33333333333333,
+      "reference_value": -293.3333333333333,
+      "abs_err": 366.66666666666663,
+      "rel_err": null,
+      "ulp": null,
+      "detail": "production increase=220.0 / 3s; negative value would 400 the rate call"
+    },
+    {
+      "id": "F4-rate-negative-rejected",
+      "class": "business_definition",
+      "description": "rate rejects any negative stored value with invalid_request",
+      "cell_value": 0,
+      "reference_value": 0,
+      "abs_err": 0,
+      "rel_err": null,
+      "ulp": null,
+      "detail": "invalid: counter rate requires nonnegative values"
+    },
+    {
+      "id": "F4b-grouped-rate-rounding",
+      "class": "rounding",
+      "description": "grouped rate cell (3 series x 2000 points, reset-aware) vs exact reference",
+      "cell_value": 0.3045022511255198,
+      "reference_value": 0.30450225112553325,
+      "abs_err": 1.3433698597964394e-14,
+      "rel_err": 4.4116910624829025e-14,
+      "ulp": 242,
+      "detail": ""
+    },
+    {
+      "id": "F5-seal-invariance",
+      "class": "reproducibility",
+      "description": "sealing head points into gzip blocks must not change any cell",
+      "cell_value": 0,
+      "reference_value": 0,
+      "abs_err": 0,
+      "rel_err": 0,
+      "ulp": null,
+      "detail": "all cells bit-identical"
+    },
+    {
+      "id": "F6-delete-visibility",
+      "class": "visibility",
+      "description": "tombstone hides 500 zone-a points; sum drops by exactly 500*0.1",
+      "cell_value": 50.00000000000044,
+      "reference_value": 99.9999999999986,
+      "abs_err": 49.99999999999815,
+      "rel_err": 0.49999999999998856,
+      "ulp": null,
+      "detail": "expected delta=-50 stored-as-float64; observed delta=-49.99999999999815"
+    },
+    {
+      "id": "F7-correction-visibility",
+      "class": "visibility",
+      "description": "re-writing t=600 replaces 0.1 with 5.0 (highest sequence wins)",
+      "cell_value": 54.900000000000524,
+      "reference_value": 50.00000000000044,
+      "abs_err": 4.900000000000084,
+      "rel_err": 0.09800000000000081,
+      "ulp": null,
+      "detail": "expected delta=4.9; observed delta=4.900000000000084"
+    },
+    {
+      "id": "F8-compact-invariance",
+      "class": "reproducibility",
+      "description": "compaction resolves blocks+tombstones but must preserve every visible cell",
+      "cell_value": 0,
+      "reference_value": 0,
+      "abs_err": 0,
+      "rel_err": 0,
+      "ulp": null,
+      "detail": "all cells bit-identical"
+    },
+    {
+      "id": "F9-retention-visibility",
+      "class": "visibility",
+      "description": "monotonic retention floor physically removes old points; cells disappear",
+      "cell_value": 0,
+      "reference_value": 1,
+      "abs_err": 1,
+      "rel_err": null,
+      "ulp": null,
+      "detail": "cells before=1 after=0"
+    },
+    {
+      "id": "F10-engine-overflow",
+      "class": "overflow",
+      "description": "engine rejects a cell whose running sum reaches +/-Inf with capacity/422 instead of emitting non-finite JSON",
+      "cell_value": 0,
+      "reference_value": 0,
+      "abs_err": 0,
+      "rel_err": null,
+      "ulp": null,
+      "detail": "capacity: aggregation overflow"
+    }
+  ]
+}

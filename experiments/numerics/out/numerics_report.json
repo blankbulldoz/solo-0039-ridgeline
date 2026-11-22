@@ -1,0 +1,1556 @@
+{
+  "generated_at_utc": "2026-11-22T03:07:34Z",
+  "go_version": "go1.25.0",
+  "scan_budget_max": 2000000,
+  "sum_scenarios": [
+    {
+      "scenario": "small_increments_0p1",
+      "n": 2000000,
+      "note": "2e6 identical 0.1 increments (largest supported scan budget)",
+      "sequential_rel_bound_theory": 2.220444939520326e-10,
+      "ordering_probes": [
+        {
+          "order": "as_generated",
+          "non_finite": false,
+          "seq_value": 200000.00000715363,
+          "pairwise_value": 199999.99999999983,
+          "neumaier_value": 200000,
+          "exact": 200000,
+          "seq_rel_err": 3.576817107386887e-11,
+          "seq_ulp": 245797
+        },
+        {
+          "order": "reverse",
+          "non_finite": false,
+          "seq_value": 200000.00000715363,
+          "pairwise_value": 199999.99999999983,
+          "neumaier_value": 200000,
+          "exact": 200000,
+          "seq_rel_err": 3.576817107386887e-11,
+          "seq_ulp": 245797
+        },
+        {
+          "order": "stride",
+          "non_finite": false,
+          "seq_value": 200000.00000715363,
+          "pairwise_value": 199999.99999999983,
+          "neumaier_value": 200000,
+          "exact": 200000,
+          "seq_rel_err": 3.576817107386887e-11,
+          "seq_ulp": 245797
+        }
+      ],
+      "strategies": [
+        {
+          "strategy": "sequential_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3517064,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 200000.00000715363,
+          "exact": 200000,
+          "abs_err": 0.000007153634214773774,
+          "rel_err": 3.576817107386887e-11,
+          "ulp": 245797
+        },
+        {
+          "strategy": "pairwise_tree",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1571219,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 199999.99999999983,
+          "exact": 200000,
+          "abs_err": 1.7462298274040222e-10,
+          "rel_err": 8.731149137020111e-16,
+          "ulp": 6
+        },
+        {
+          "strategy": "kahan",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 12385789,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 200000,
+          "exact": 200000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3503897,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 200000,
+          "exact": 200000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "sorted_then_sequential",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 12121745,
+          "extra_bytes_per_element": 8,
+          "value_changes_under_reorder": false,
+          "value": 200000.00000715363,
+          "exact": 200000,
+          "abs_err": 0.000007153634214773774,
+          "rel_err": 3.576817107386887e-11,
+          "ulp": 245797
+        },
+        {
+          "strategy": "bigfloat_exact_then_round",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 165385116,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 200000,
+          "exact": 200000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ],
+      "avg_strategies": [
+        {
+          "strategy": "sum_then_divide_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3517064,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0.10000000000357681,
+          "exact": 0.1,
+          "abs_err": 3.576805518434867e-12,
+          "rel_err": 3.576805518434867e-11,
+          "ulp": 257736
+        },
+        {
+          "strategy": "neumaier_sum_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3503897,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0.1,
+          "exact": 0.1,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 165385116,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0.1,
+          "exact": 0.1,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ]
+    },
+    {
+      "scenario": "small_increments_unit",
+      "n": 2000000,
+      "note": "2e6 exact unit increments; result stays within 2^53 exact-int range",
+      "sequential_rel_bound_theory": 2.220444939520326e-10,
+      "ordering_probes": [
+        {
+          "order": "as_generated",
+          "non_finite": false,
+          "seq_value": 2000000,
+          "pairwise_value": 2000000,
+          "neumaier_value": 2000000,
+          "exact": 2000000,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        },
+        {
+          "order": "reverse",
+          "non_finite": false,
+          "seq_value": 2000000,
+          "pairwise_value": 2000000,
+          "neumaier_value": 2000000,
+          "exact": 2000000,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        },
+        {
+          "order": "stride",
+          "non_finite": false,
+          "seq_value": 2000000,
+          "pairwise_value": 2000000,
+          "neumaier_value": 2000000,
+          "exact": 2000000,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        }
+      ],
+      "strategies": [
+        {
+          "strategy": "sequential_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3359313,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 2000000,
+          "exact": 2000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "pairwise_tree",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1547593,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 2000000,
+          "exact": 2000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "kahan",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 12140454,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 2000000,
+          "exact": 2000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3389522,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 2000000,
+          "exact": 2000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "sorted_then_sequential",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 11777409,
+          "extra_bytes_per_element": 8,
+          "value_changes_under_reorder": false,
+          "value": 2000000,
+          "exact": 2000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_round",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 161553758,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 2000000,
+          "exact": 2000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ],
+      "avg_strategies": [
+        {
+          "strategy": "sum_then_divide_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3359313,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 1,
+          "exact": 1,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier_sum_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3389522,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 1,
+          "exact": 1,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 161553758,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 1,
+          "exact": 1,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ]
+    },
+    {
+      "scenario": "cancellation_pairs",
+      "n": 2000000,
+      "note": "1e15/-1e15 cancelling pairs; exact sum is 0 (or 1), relative error undefined",
+      "sequential_rel_bound_theory": 2.220444939520326e-10,
+      "ordering_probes": [
+        {
+          "order": "as_generated",
+          "non_finite": false,
+          "seq_value": 0,
+          "pairwise_value": 0,
+          "neumaier_value": 0,
+          "exact": 0,
+          "seq_rel_err": null,
+          "seq_ulp": 0
+        },
+        {
+          "order": "reverse",
+          "non_finite": false,
+          "seq_value": 0,
+          "pairwise_value": 0,
+          "neumaier_value": 0,
+          "exact": 0,
+          "seq_rel_err": null,
+          "seq_ulp": 0
+        },
+        {
+          "order": "stride",
+          "non_finite": false,
+          "seq_value": 0,
+          "pairwise_value": 0,
+          "neumaier_value": 0,
+          "exact": 0,
+          "seq_rel_err": null,
+          "seq_ulp": 0
+        }
+      ],
+      "strategies": [
+        {
+          "strategy": "sequential_production",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 3261355,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "pairwise_tree",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 1500801,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "kahan",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 11726701,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 3638440,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "sorted_then_sequential",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 15452142,
+          "extra_bytes_per_element": 8,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_round",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 52403007,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        }
+      ],
+      "avg_strategies": [
+        {
+          "strategy": "sum_then_divide_production",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 3261355,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier_sum_then_divide",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 3638440,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_divide",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 52403007,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        }
+      ]
+    },
+    {
+      "scenario": "catastrophic_cancellation_residual",
+      "n": 2000000,
+      "note": "true residual exists over reals but vanishes in stored float64 values",
+      "sequential_rel_bound_theory": 2.220444939520326e-10,
+      "ordering_probes": [
+        {
+          "order": "as_generated",
+          "non_finite": false,
+          "seq_value": 125000,
+          "pairwise_value": 125000,
+          "neumaier_value": 125000,
+          "exact": 125000,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        },
+        {
+          "order": "reverse",
+          "non_finite": false,
+          "seq_value": 125000,
+          "pairwise_value": 125000,
+          "neumaier_value": 125000,
+          "exact": 125000,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        },
+        {
+          "order": "stride",
+          "non_finite": false,
+          "seq_value": 125000,
+          "pairwise_value": 125000,
+          "neumaier_value": 125000,
+          "exact": 125000,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        }
+      ],
+      "strategies": [
+        {
+          "strategy": "sequential_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3299396,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 125000,
+          "exact": 125000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "pairwise_tree",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1611552,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 125000,
+          "exact": 125000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "kahan",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 12415122,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 125000,
+          "exact": 125000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3580065,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 125000,
+          "exact": 125000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "sorted_then_sequential",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 16554066,
+          "extra_bytes_per_element": 8,
+          "value_changes_under_reorder": false,
+          "value": 19342819328.25,
+          "exact": 125000,
+          "abs_err": 19342694328.25,
+          "rel_err": 154741.554626,
+          "ulp": 1.329219832901735e+21
+        },
+        {
+          "strategy": "bigfloat_exact_then_round",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 199565379,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 125000,
+          "exact": 125000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ],
+      "avg_strategies": [
+        {
+          "strategy": "sum_then_divide_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3299396,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0.0625,
+          "exact": 0.0625,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier_sum_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3580065,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0.0625,
+          "exact": 0.0625,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 199565379,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0.0625,
+          "exact": 0.0625,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ]
+    },
+    {
+      "scenario": "cancellation_with_survivor",
+      "n": 1000000,
+      "note": "large cancelling terms with a small surviving real sum (123.0)",
+      "sequential_rel_bound_theory": 1.1102219145253911e-10,
+      "ordering_probes": [
+        {
+          "order": "as_generated",
+          "non_finite": false,
+          "seq_value": 123,
+          "pairwise_value": 123,
+          "neumaier_value": 123,
+          "exact": 123,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        },
+        {
+          "order": "reverse",
+          "non_finite": false,
+          "seq_value": 123,
+          "pairwise_value": 123,
+          "neumaier_value": 123,
+          "exact": 123,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        },
+        {
+          "order": "stride",
+          "non_finite": false,
+          "seq_value": 123,
+          "pairwise_value": 123,
+          "neumaier_value": 123,
+          "exact": 123,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        }
+      ],
+      "strategies": [
+        {
+          "strategy": "sequential_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1608635,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 123,
+          "exact": 123,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "pairwise_tree",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 766838,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 123,
+          "exact": 123,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "kahan",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 5969122,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 123,
+          "exact": 123,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1800512,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 123,
+          "exact": 123,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "sorted_then_sequential",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 8180095,
+          "extra_bytes_per_element": 8,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 123,
+          "abs_err": 123,
+          "rel_err": 1,
+          "ulp": 8655355533852672
+        },
+        {
+          "strategy": "bigfloat_exact_then_round",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 25814584,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 123,
+          "exact": 123,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ],
+      "avg_strategies": [
+        {
+          "strategy": "sum_then_divide_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1608635,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0.000123,
+          "exact": 0.000123,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier_sum_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1800512,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0.000123,
+          "exact": 0.000123,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 25814584,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0.000123,
+          "exact": 0.000123,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ]
+    },
+    {
+      "scenario": "large_plus_tiny",
+      "n": 1000000,
+      "note": "one 1e16 anchor followed by 1e6 unit increments that vanish in addition",
+      "sequential_rel_bound_theory": 1.1102219145253911e-10,
+      "ordering_probes": [
+        {
+          "order": "as_generated",
+          "non_finite": false,
+          "seq_value": 10000000000000000,
+          "pairwise_value": 10000000000999938,
+          "neumaier_value": 10000000001000000,
+          "exact": 10000000001000000,
+          "seq_rel_err": 9.999999999e-11,
+          "seq_ulp": 500000
+        },
+        {
+          "order": "reverse",
+          "non_finite": false,
+          "seq_value": 10000000001000000,
+          "pairwise_value": 10000000000999998,
+          "neumaier_value": 10000000001000000,
+          "exact": 10000000001000000,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        },
+        {
+          "order": "stride",
+          "non_finite": false,
+          "seq_value": 10000000000000000,
+          "pairwise_value": 10000000000999938,
+          "neumaier_value": 10000000001000000,
+          "exact": 10000000001000000,
+          "seq_rel_err": 9.999999999e-11,
+          "seq_ulp": 500000
+        }
+      ],
+      "strategies": [
+        {
+          "strategy": "sequential_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1688552,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": true,
+          "value": 10000000000000000,
+          "exact": 10000000001000000,
+          "abs_err": 1000000,
+          "rel_err": 9.999999999e-11,
+          "ulp": 500000
+        },
+        {
+          "strategy": "pairwise_tree",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 780296,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": true,
+          "value": 10000000000999938,
+          "exact": 10000000001000000,
+          "abs_err": 62,
+          "rel_err": 6.19999999938e-15,
+          "ulp": 31
+        },
+        {
+          "strategy": "kahan",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 6036540,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 10000000001000000,
+          "exact": 10000000001000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1734262,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 10000000001000000,
+          "exact": 10000000001000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "sorted_then_sequential",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 6452917,
+          "extra_bytes_per_element": 8,
+          "value_changes_under_reorder": false,
+          "value": 10000000001000000,
+          "exact": 10000000001000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_round",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 81621738,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 10000000001000000,
+          "exact": 10000000001000000,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ],
+      "avg_strategies": [
+        {
+          "strategy": "sum_then_divide_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1688552,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 10000000000,
+          "exact": 10000000000.999998,
+          "abs_err": 0.9999980926513672,
+          "rel_err": 9.999980925513675e-11,
+          "ulp": 524287
+        },
+        {
+          "strategy": "neumaier_sum_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1734262,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 10000000001,
+          "exact": 10000000000.999998,
+          "abs_err": 0.0000019073486328125,
+          "rel_err": 1.9073486326217656e-16,
+          "ulp": 1
+        },
+        {
+          "strategy": "bigfloat_exact_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 81621738,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 10000000000.999998,
+          "exact": 10000000000.999998,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ]
+    },
+    {
+      "scenario": "mixed_magnitudes",
+      "n": 2000000,
+      "note": "deterministic 18-decade signed mix; stresses association order",
+      "sequential_rel_bound_theory": 2.220444939520326e-10,
+      "ordering_probes": [
+        {
+          "order": "as_generated",
+          "non_finite": false,
+          "seq_value": -6618828319173.219,
+          "pairwise_value": -6618828319177.469,
+          "neumaier_value": -6618828319177.424,
+          "exact": -6618828319177.424,
+          "seq_rel_err": 6.35320622052726e-13,
+          "seq_ulp": 4306
+        },
+        {
+          "order": "reverse",
+          "non_finite": false,
+          "seq_value": -6618828319174.995,
+          "pairwise_value": -6618828319177.484,
+          "neumaier_value": -6618828319177.424,
+          "exact": -6618828319177.424,
+          "seq_rel_err": 3.6693970902116343e-13,
+          "seq_ulp": 2487
+        },
+        {
+          "order": "stride",
+          "non_finite": false,
+          "seq_value": -6618828319180.177,
+          "pairwise_value": -6618828319177.355,
+          "neumaier_value": -6618828319177.424,
+          "exact": -6618828319177.424,
+          "seq_rel_err": 4.1592402080042605e-13,
+          "seq_ulp": 2819
+        }
+      ],
+      "strategies": [
+        {
+          "strategy": "sequential_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3383730,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": true,
+          "value": -6618828319173.219,
+          "exact": -6618828319177.424,
+          "abs_err": 4.205078125,
+          "rel_err": 6.35320622052726e-13,
+          "ulp": 4306
+        },
+        {
+          "strategy": "pairwise_tree",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 1582552,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": true,
+          "value": -6618828319177.469,
+          "exact": -6618828319177.424,
+          "abs_err": 0.044921875,
+          "rel_err": 6.786982957367719e-15,
+          "ulp": 46
+        },
+        {
+          "strategy": "kahan",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 12315122,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": -6618828319177.417,
+          "exact": -6618828319177.424,
+          "abs_err": 0.0068359375,
+          "rel_err": 1.0328017543820443e-15,
+          "ulp": 7
+        },
+        {
+          "strategy": "neumaier",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3719649,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": -6618828319177.424,
+          "exact": -6618828319177.424,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "sorted_then_sequential",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 256580250,
+          "extra_bytes_per_element": 8,
+          "value_changes_under_reorder": false,
+          "value": -6618828316471.588,
+          "exact": -6618828319177.424,
+          "abs_err": 2705.8359375,
+          "rel_err": 4.088089019713804e-10,
+          "ulp": 2770776
+        },
+        {
+          "strategy": "bigfloat_exact_then_round",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 169152390,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": -6618828319177.424,
+          "exact": -6618828319177.424,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ],
+      "avg_strategies": [
+        {
+          "strategy": "sum_then_divide_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3383730,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": -3309414.1595866093,
+          "exact": -3309414.159588712,
+          "abs_err": 0.0000021024607121944427,
+          "rel_err": 6.352969470752893e-13,
+          "ulp": 4515
+        },
+        {
+          "strategy": "neumaier_sum_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 3719649,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": -3309414.159588712,
+          "exact": -3309414.159588712,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 169152390,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": -3309414.159588712,
+          "exact": -3309414.159588712,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ]
+    },
+    {
+      "scenario": "near_overflow_chains",
+      "n": 1000000,
+      "note": "alternating ±1e308: intermediate inf can appear depending on association",
+      "sequential_rel_bound_theory": 1.1102219145253911e-10,
+      "ordering_probes": [
+        {
+          "order": "as_generated",
+          "non_finite": false,
+          "seq_value": 0,
+          "pairwise_value": 0,
+          "neumaier_value": 0,
+          "exact": 0,
+          "seq_rel_err": null,
+          "seq_ulp": 0
+        },
+        {
+          "order": "reverse",
+          "non_finite": false,
+          "seq_value": 0,
+          "pairwise_value": 0,
+          "neumaier_value": 0,
+          "exact": 0,
+          "seq_rel_err": null,
+          "seq_ulp": 0
+        },
+        {
+          "order": "stride",
+          "non_finite": false,
+          "seq_value": 0,
+          "pairwise_value": 0,
+          "neumaier_value": 0,
+          "exact": 0,
+          "seq_rel_err": null,
+          "seq_ulp": 0
+        }
+      ],
+      "strategies": [
+        {
+          "strategy": "sequential_production",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 1669136,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "pairwise_tree",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 790672,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "kahan",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 5730746,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 1887179,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "sorted_then_sequential",
+          "exact_zero": true,
+          "non_finite": true,
+          "nanos_per_op": 7692841,
+          "extra_bytes_per_element": 8,
+          "value_changes_under_reorder": false,
+          "value": null,
+          "exact": 0,
+          "abs_err": null,
+          "rel_err": null,
+          "ulp": null
+        },
+        {
+          "strategy": "bigfloat_exact_then_round",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 25494749,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        }
+      ],
+      "avg_strategies": [
+        {
+          "strategy": "sum_then_divide_production",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 1669136,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier_sum_then_divide",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 1887179,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_divide",
+          "exact_zero": true,
+          "non_finite": false,
+          "nanos_per_op": 25494749,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 0,
+          "exact": 0,
+          "abs_err": 0,
+          "rel_err": null,
+          "ulp": 0
+        }
+      ]
+    },
+    {
+      "scenario": "realistic_counters",
+      "n": 500000,
+      "note": "bounded positive operational counters (typical production shape)",
+      "sequential_rel_bound_theory": 5.551104021203684e-11,
+      "ordering_probes": [
+        {
+          "order": "as_generated",
+          "non_finite": false,
+          "seq_value": 275135807,
+          "pairwise_value": 275135807,
+          "neumaier_value": 275135807,
+          "exact": 275135807,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        },
+        {
+          "order": "reverse",
+          "non_finite": false,
+          "seq_value": 275135807,
+          "pairwise_value": 275135807,
+          "neumaier_value": 275135807,
+          "exact": 275135807,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        },
+        {
+          "order": "stride",
+          "non_finite": false,
+          "seq_value": 275135807,
+          "pairwise_value": 275135807,
+          "neumaier_value": 275135807,
+          "exact": 275135807,
+          "seq_rel_err": 0,
+          "seq_ulp": 0
+        }
+      ],
+      "strategies": [
+        {
+          "strategy": "sequential_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 819088,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 275135807,
+          "exact": 275135807,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "pairwise_tree",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 360086,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 275135807,
+          "exact": 275135807,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "kahan",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 2978686,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 275135807,
+          "exact": 275135807,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 802047,
+          "extra_bytes_per_element": 16,
+          "value_changes_under_reorder": false,
+          "value": 275135807,
+          "exact": 275135807,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "sorted_then_sequential",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 31358578,
+          "extra_bytes_per_element": 8,
+          "value_changes_under_reorder": false,
+          "value": 275135807,
+          "exact": 275135807,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_round",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 45352461,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 275135807,
+          "exact": 275135807,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ],
+      "avg_strategies": [
+        {
+          "strategy": "sum_then_divide_production",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 819088,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 550.271614,
+          "exact": 550.271614,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "neumaier_sum_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 802047,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 550.271614,
+          "exact": 550.271614,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        },
+        {
+          "strategy": "bigfloat_exact_then_divide",
+          "exact_zero": false,
+          "non_finite": false,
+          "nanos_per_op": 45352461,
+          "extra_bytes_per_element": 0,
+          "value_changes_under_reorder": false,
+          "value": 550.271614,
+          "exact": 550.271614,
+          "abs_err": 0,
+          "rel_err": 0,
+          "ulp": 0
+        }
+      ]
+    }
+  ],
+  "rate_cases": [
+    {
+      "name": "rate_small_steps_200x10k",
+      "series": 200,
+      "points_per_series": 10000,
+      "non_finite": false,
+      "note": "200 series x 10k points, +0.1/s per series; classic non-exact decimal drift",
+      "production_value": 20.00000000000314,
+      "neumaier_value": 20.00000000000314,
+      "exact_value": 20.000000000003176,
+      "production_rel_err": 1.7763568393999684e-15,
+      "production_ulp": 10
+    },
+    {
+      "name": "rate_exact_unit_200x10k",
+      "series": 200,
+      "points_per_series": 10000,
+      "non_finite": false,
+      "note": "same shape with integer steps; increase stays exactly representable up to 2^53",
+      "production_value": 200,
+      "neumaier_value": 200,
+      "exact_value": 200,
+      "production_rel_err": 0,
+      "production_ulp": 0
+    },
+    {
+      "name": "rate_with_resets_100x20k",
+      "series": 100,
+      "points_per_series": 20000,
+      "non_finite": false,
+      "note": "large base counters with periodic resets exercising the restart rule",
+      "production_value": 100,
+      "neumaier_value": 100,
+      "exact_value": 100,
+      "production_rel_err": 0,
+      "production_ulp": 0
+    },
+    {
+      "name": "rate_absorbent_counter_1e16",
+      "series": 1,
+      "points_per_series": 50000,
+      "non_finite": false,
+      "note": "unit increments at 1e16 magnitude disappear in float64 subtraction",
+      "production_value": 1.000020000400008,
+      "neumaier_value": 1.000020000400008,
+      "exact_value": 1.000020000400008,
+      "production_rel_err": 0,
+      "production_ulp": 0
+    },
+    {
+      "name": "rate_alternating_huge_increase_and_reset",
+      "series": 1,
+      "points_per_series": 100000,
+      "non_finite": false,
+      "note": "1e12 increases alternate with resets; reset deltas added to a large running sum",
+      "production_value": 500005000050.0906,
+      "neumaier_value": 500005000050.5005,
+      "exact_value": 500005000050.5005,
+      "production_rel_err": 8.198160205069927e-13,
+      "production_ulp": 6716
+    }
+  ],
+  "overflow_cases": [
+    {
+      "name": "two_max_then_subtract",
+      "inputs": [
+        1.7976931348623157e+308,
+        1.7976931348623157e+308,
+        -1.7976931348623157e+308
+      ],
+      "production_outcome": "aggregation overflow -\u003e 422 (intermediate +inf is sticky)",
+      "note": "mathematically finite (+MaxFloat64), but sequential order overflows first",
+      "seq": null,
+      "pairwise": null,
+      "neumaier": null,
+      "exact": 1.7976931348623157e+308
+    },
+    {
+      "name": "subtract_first_then_max",
+      "inputs": [
+        -1.7976931348623157e+308,
+        1.7976931348623157e+308,
+        1.7976931348623157e+308
+      ],
+      "production_outcome": "aggregation overflow -\u003e 422 (same sticky +inf)",
+      "note": "same multiset, different association; exact result is +MaxFloat64",
+      "seq": 1.7976931348623157e+308,
+      "pairwise": 1.7976931348623157e+308,
+      "neumaier": 1.7976931348623157e+308,
+      "exact": 1.7976931348623157e+308
+    },
+    {
+      "name": "true_divergence",
+      "inputs": [
+        1.7976931348623157e+308,
+        1.7976931348623157e+308
+      ],
+      "production_outcome": "aggregation overflow -\u003e 422 (correct: true sum exceeds range)",
+      "note": "no finite float64 answer exists; rejection is the only safe outcome",
+      "seq": null,
+      "pairwise": null,
+      "neumaier": null,
+      "exact": null
+    },
+    {
+      "name": "inf_inputs_rejected_at_ingest",
+      "inputs": [
+        1.7976931348623157e+308,
+        1
+      ],
+      "production_outcome": "400 at write time (ValidateObservation rejects non-finite)",
+      "note": "infinity can only arise inside arithmetic, never from stored points; ValidateObservation (model/validate.go) rejects math.IsInf/IsNaN",
+      "seq": 1.7976931348623157e+308,
+      "pairwise": 1.7976931348623157e+308,
+      "neumaier": 1.7976931348623157e+308,
+      "exact": 1.7976931348623157e+308
+    }
+  ]
+}

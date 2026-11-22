@@ -1,0 +1,114 @@
+{
+  "description": "Empirical sequential-summation error envelope for the production reducer. Inputs are identical 0.1 increments; theory bound is (n-1)*eps/(1-(n-1)*eps) with eps=2^-53.",
+  "growth_sweep": [
+    {
+      "n": 10,
+      "sequential_rel_err": 1.1102230246251565e-16,
+      "sequential_ulp": 0.5,
+      "pairwise_rel_err": 1.1102230246251565e-16,
+      "neumaier_rel_err": 0,
+      "theory_bound_sequential": 9.992007221626419e-16,
+      "absorbed_fraction_of_increments": 0.8888888888888888
+    },
+    {
+      "n": 100,
+      "sequential_rel_err": 1.9539925233402757e-15,
+      "sequential_ulp": 11,
+      "pairwise_rel_err": 3.552713678800501e-16,
+      "neumaier_rel_err": 0,
+      "theory_bound_sequential": 1.0991207943789171e-14,
+      "absorbed_fraction_of_increments": 1.0101010101010102
+    },
+    {
+      "n": 1000,
+      "sequential_rel_err": 1.4068746168049984e-14,
+      "sequential_ulp": 99,
+      "pairwise_rel_err": 9.947598300641404e-16,
+      "neumaier_rel_err": 0,
+      "theory_bound_sequential": 1.1091128016006544e-13,
+      "absorbed_fraction_of_increments": 1.001001001001001
+    },
+    {
+      "n": 10000,
+      "sequential_rel_err": 1.588205122970976e-13,
+      "sequential_ulp": 1397,
+      "pairwise_rel_err": 5.684341886080802e-16,
+      "neumaier_rel_err": 0,
+      "theory_bound_sequential": 1.1101120023239263e-12,
+      "absorbed_fraction_of_increments": 1.000100010001
+    },
+    {
+      "n": 100000,
+      "sequential_rel_err": 1.8848368199542165e-12,
+      "sequential_ulp": 10362,
+      "pairwise_rel_err": 3.637978807091713e-16,
+      "neumaier_rel_err": 0,
+      "theory_bound_sequential": 1.110211922407236e-11,
+      "absorbed_fraction_of_increments": 1.000010000100001
+    },
+    {
+      "n": 500000,
+      "sequential_rel_err": 8.942006388679146e-12,
+      "sequential_ulp": 61449,
+      "pairwise_rel_err": 8.731149137020111e-16,
+      "neumaier_rel_err": 0,
+      "theory_bound_sequential": 5.551104021203684e-11,
+      "absorbed_fraction_of_increments": 1.000002000004
+    },
+    {
+      "n": 1000000,
+      "sequential_rel_err": 1.3328826753422619e-11,
+      "sequential_ulp": 91595,
+      "pairwise_rel_err": 8.731149137020111e-16,
+      "neumaier_rel_err": 0,
+      "theory_bound_sequential": 1.1102219145253911e-10,
+      "absorbed_fraction_of_increments": 1.000001000001
+    },
+    {
+      "n": 2000000,
+      "sequential_rel_err": 3.576817107386887e-11,
+      "sequential_ulp": 245797,
+      "pairwise_rel_err": 8.731149137020111e-16,
+      "neumaier_rel_err": 0,
+      "theory_bound_sequential": 2.220444939520326e-10,
+      "absorbed_fraction_of_increments": 1.00000050000025
+    }
+  ],
+  "absorption_sweep": [
+    {
+      "running_sum": 1000000000000,
+      "ulp_at_that_magnitude": 0.0001220703125,
+      "unit_increment_survives_addition": true
+    },
+    {
+      "running_sum": 10000000000000,
+      "ulp_at_that_magnitude": 0.001953125,
+      "unit_increment_survives_addition": true
+    },
+    {
+      "running_sum": 100000000000000,
+      "ulp_at_that_magnitude": 0.015625,
+      "unit_increment_survives_addition": true
+    },
+    {
+      "running_sum": 1000000000000000,
+      "ulp_at_that_magnitude": 0.125,
+      "unit_increment_survives_addition": true
+    },
+    {
+      "running_sum": 9007199254740992,
+      "ulp_at_that_magnitude": 2,
+      "unit_increment_survives_addition": false
+    },
+    {
+      "running_sum": 10000000000000000,
+      "ulp_at_that_magnitude": 2,
+      "unit_increment_survives_addition": false
+    },
+    {
+      "running_sum": 100000000000000000,
+      "ulp_at_that_magnitude": 16,
+      "unit_increment_survives_addition": false
+    }
+  ]
+}
