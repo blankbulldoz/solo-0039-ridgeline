@@ -1,0 +1,11 @@
+# Drill override. The base service restarts automatically; an exercise must
+# keep the crashed container down while crash-time evidence is captured, so
+# the replay disables the restart policy. The host loopback publish from the
+# base file is retained: the drill's fault proxy listens on a second loopback
+# port and forwards to this one.
+#
+# Usage:
+#   docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.drill.yml up -d
+services:
+  ridgeline:
+    restart: "no"

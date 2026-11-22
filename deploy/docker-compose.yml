@@ -1,0 +1,46 @@
+# Ridgeline as a local Docker Compose service.
+#
+# Security posture:
+#   * the process runs as the unprivileged uid 10001 (also hard-coded in the
+#     image); root inside the container is never used
+#   * the port is published on the host loopback address only; the service is
+#     not reachable from the LAN or from other hosts
+#   * the root filesystem is read-only, all Linux capabilities are dropped and
+#     privilege escalation is disabled; the only writable path is the named
+#     volume holding the bbolt database
+#   * a named volume (ridgeline-data) is reused across container rebuilds, so
+#     `docker compose up -d --force-recreate` keeps the same database
+services:
+  ridgeline:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: ridgeline:local
+    container_name: ridgeline
+    user: "10001:10001"
+    ports:
+      # host bind address is explicitly the IPv4 loopback; no wildcard bind.
+      - "127.0.0.1:8399:8399"
+    volumes:
+      - ridgeline-data:/var/lib/ridgeline
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid,nodev
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 256m
+    restart: unless-stopped
+    stop_grace_period: 10s
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:8399/ridge/v1/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
+
+volumes:
+  ridgeline-data:
+    name: ridgeline-data

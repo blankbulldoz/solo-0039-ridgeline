@@ -31,6 +31,42 @@ preconditions and recovery remain reproducible. Formal tests are deferred.
 `examples/input.json` contains the original measurements; a recorded production
 session is in `examples/session.json`. These are synthetic, non-sensitive inputs.
 
+## Local Docker Compose Service
+
+`deploy/` ships a production-shaped local deployment:
+
+```sh
+docker compose -f deploy/docker-compose.yml up -d --build
+curl -s http://127.0.0.1:8399/ridge/v1/health
+```
+
+The container runs as the unprivileged uid 10001, the port is published on the
+host loopback only, the root filesystem is read-only with all capabilities
+dropped, and the bbolt database lives on the named volume `ridgeline-data`
+mounted at `/var/lib/ridgeline`. Recreating the container reuses that same
+volume, so committed data survives `up --force-recreate` and `down` (without
+`-v`). The drill override `deploy/docker-compose.drill.yml` disables the
+restart policy so a force-killed container stays down while evidence is taken.
+
+## Failure Drills And Recovery Runbook
+
+`drill/replay.py` runs a replayable, fully evidenced exercise over the two
+accidents that look identical to a producer (no receipt) but have opposite
+recoveries: the request never reaching the server, versus the server
+committing before the receipt was lost. Each boundary gets a SIGKILL (not a
+graceful stop), a crash-time database snapshot independently verified before
+recovery, and whole-batch reconciliation afterwards; acknowledged control
+writes must survive both crashes.
+
+```sh
+CGO_ENABLED=0 go build -o build/ridgeline ./cmd/ridgeline
+python3 -I drill/replay.py --backend local          # processes, no Docker
+python3 -I drill/replay.py --backend compose        # the delivered stack
+```
+
+See `docs/RUNBOOK.md` for the evidence model, pass criteria and the checklist
+that must be satisfied before producers may resume ingestion.
+
 ## API
 
 All routes start with `/ridge/v1`. JSON request fields are strict; bodies have

@@ -1,0 +1,12 @@
+# Build context hygiene: never copy local state, VCS metadata or drill
+# artifacts into the image. The image is built from source plus go.sum only.
+.git
+.gitignore
+.project-manifest.json
+.project-runtime.json
+.task-source.json
+var
+build
+docs
+**/__pycache__
+*.pyc
