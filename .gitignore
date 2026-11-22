@@ -3,3 +3,4 @@
 *.db
 *.db.lock
 __pycache__/
+/internal/visibility/testdata/failures/

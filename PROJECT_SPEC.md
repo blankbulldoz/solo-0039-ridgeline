@@ -87,6 +87,15 @@ runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
-exercise real API operations, process restart and failure responses. Formal
-automated tests are deferred. The walkthrough is a bounded production demo
-using temporary database files and synthetic infrastructure measurements.
+exercise real API operations, process restart and failure responses. The
+walkthrough is a bounded production demo using temporary database files and
+synthetic infrastructure measurements.
+
+`go test ./...` exercises sample visibility against an independent model in
+`internal/visibility`. The model imports only the standard library and derives
+visible samples from committed values, commit sequences, tombstones and the
+retention floor; it never calls the production scan path. Replayed sequences
+cover batch overwrites, same-batch duplicate timestamps, deletion followed by a
+new report, monotonic retention, sealing, compaction, database reopen and image
+restore. Divergences are persisted and delta-debugged to a minimal sequence
+before the test fails.

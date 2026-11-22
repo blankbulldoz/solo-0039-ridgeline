@@ -27,9 +27,23 @@ python3 examples/walkthrough.py --output var/observations.json
 
 The bounded walkthrough uses temporary volumes and an available ephemeral port.
 Each named workflow runs the entire related stateful scenario so its required
-preconditions and recovery remain reproducible. Formal tests are deferred.
+preconditions and recovery remain reproducible.
 `examples/input.json` contains the original measurements; a recorded production
 session is in `examples/session.json`. These are synthetic, non-sensitive inputs.
+
+```sh
+go test ./...
+```
+
+The visibility suite in `internal/visibility` replays mutation sequences
+through the engine and an independent model of visible samples. The model
+imports only the standard library and never calls the production scan path, so
+expected values cannot be copied from the implementation under test. Seeded
+sequences cover batch overwrites, same-batch duplicate timestamps, deletion
+followed by a new report, monotonic retention, sealing, compaction, process
+reopen and image restore. A divergence is saved under
+`internal/visibility/testdata/failures/` (git-ignored) as the full sequence plus
+a delta-debugged minimal reproducer.
 
 ## API
 
