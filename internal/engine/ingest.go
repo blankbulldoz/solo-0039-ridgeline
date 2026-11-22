@@ -12,12 +12,18 @@ import (
 
 func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteReceipt, error) {
 	var receipt model.WriteReceipt
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
+	release, err := e.beginLogical(name)
+	if err != nil {
+		return receipt, err
+	}
+	defer release()
+	err = e.DB.Raw.Update(func(tx *bolt.Tx) error {
 		b, n, err := loadNamespace(tx, name)
 		if err != nil {
 			return err
 		}
-		if err := policy.Admit(n, request); err != nil {
+		n.Normalize()
+		if err := policy.AdmitPoints(n, request); err != nil {
 			return err
 		}
 		series, err := catalog(b)

@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/json"
+	"sync"
 
 	"ridgeline/internal/model"
 	"ridgeline/internal/volume"
@@ -11,6 +12,9 @@ import (
 
 type Engine struct {
 	DB *volume.DB
+
+	gateMu sync.RWMutex
+	gates  map[string]*spaceGate
 }
 
 func Open(path string) (*Engine, error) {
@@ -18,7 +22,36 @@ func Open(path string) (*Engine, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Engine{DB: db}, nil
+	e := &Engine{DB: db, gates: map[string]*spaceGate{}}
+	if err := e.recover(); err != nil {
+		db.Close()
+		return nil, err
+	}
+	return e, nil
+}
+
+// recover loads every namespace into the process-local lifecycle table.
+//
+// A request cannot survive a process restart, so a namespace reopened in the
+// draining state has no in-flight logical work left to wait for. Recovery does
+// not silently complete the drain, however: completing it is a logical state
+// change with its own commit sequence. It records that this process did not
+// start the drain, which is what makes the observable status report the
+// restart truthfully; an operator can then complete or cancel deliberately.
+func (e *Engine) recover() error {
+	return e.DB.Raw.View(func(tx *bolt.Tx) error {
+		spaces := tx.Bucket(volume.Root).Bucket(volume.Spaces)
+		return spaces.ForEach(func(name, _ []byte) error {
+			b := spaces.Bucket(name)
+			var n model.Namespace
+			if err := volume.GetJSON(b, volume.Config, &n); err != nil {
+				return err
+			}
+			n.Normalize()
+			e.registerGate(string(name), n.EffectiveState(), false)
+			return nil
+		})
+	})
 }
 
 func (e *Engine) Close() error {
@@ -55,6 +88,9 @@ func (e *Engine) Create(n model.Namespace) (model.Namespace, error) {
 		return n, err
 	}
 	n.Floor, n.Watermark, n.HasWatermark = model.MinTime, 0, false
+	n.State = model.StateWritable
+	n.ReadOnly = false
+	n.DrainSequence, n.DrainCompletedSequence, n.DrainCanceledSequence = 0, 0, 0
 	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
 		if volume.Namespace(tx, n.Name) != nil {
 			return model.Conflict("namespace already exists")
@@ -69,33 +105,14 @@ func (e *Engine) Create(n model.Namespace) (model.Namespace, error) {
 		}
 		return volume.PutJSON(b, volume.Config, n)
 	})
-	return n, err
+	if err != nil {
+		return n, err
+	}
+	e.registerGate(n.Name, n.EffectiveState(), true)
+	return n, nil
 }
 
-func (e *Engine) Namespace(name string) (model.Namespace, error) {
-	var n model.Namespace
-	err := e.DB.Raw.View(func(tx *bolt.Tx) error {
-		_, loaded, err := loadNamespace(tx, name)
-		n = loaded
-		return err
-	})
-	return n, err
-}
-
-func (e *Engine) ReadOnly(name string, readOnly bool) (model.Namespace, error) {
-	var n model.Namespace
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
-		b, loaded, err := loadNamespace(tx, name)
-		if err != nil {
-			return err
-		}
-		n = loaded
-		n.ReadOnly = readOnly
-		n.LastSequence, err = volume.Next(tx)
-		if err != nil {
-			return err
-		}
-		return volume.PutJSON(b, volume.Config, n)
-	})
-	return n, err
+// ReadOnly is retained for callers of the original boolean mode API.
+func (e *Engine) ReadOnly(name string, readOnly bool) (model.NamespaceView, error) {
+	return e.SetReadOnly(name, readOnly)
 }

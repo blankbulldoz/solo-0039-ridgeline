@@ -68,6 +68,29 @@
       ]
     },
     {
+      "id": "drain",
+      "name": "Observable namespace drain and cancel",
+      "entry": "POST/DELETE /spaces/spindle/drain; POST /spaces/spindle/drain/complete",
+      "success": "Acceptance stops, in-flight logical writes finish, completion is a separate commit",
+      "failure": "completion conflict while in-flight work remains; logical mutation rejected while draining",
+      "verification": "python3 examples/walkthrough.py --workflow drain",
+      "steps": [
+        "start the drain and record its sequence",
+        "keep admitting already in-flight logical requests",
+        "observe phase and in-flight count",
+        "complete only when quiesced, or cancel to resume writes",
+        "after restart, report durable state with an empty in-flight set"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "model",
+        "policy",
+        "volume",
+        "server"
+      ]
+    },
+    {
       "id": "ingest",
       "name": "Atomic point ingestion and correction",
       "entry": "POST /spaces/spindle/points",

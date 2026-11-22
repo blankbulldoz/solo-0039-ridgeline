@@ -42,6 +42,8 @@ func (e *Engine) Compact(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
+		// Compaction is physical maintenance: it preserves logical samples,
+		// so it stays available in every lifecycle state, as before.
 		receipt, err = compact(tx, b, n)
 		return err
 	})
@@ -50,13 +52,19 @@ func (e *Engine) Compact(name string) (model.Maintenance, error) {
 
 func (e *Engine) Retain(name string, now int64) (model.Maintenance, error) {
 	var receipt model.Maintenance
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
+	release, err := e.beginLogical(name)
+	if err != nil {
+		return receipt, err
+	}
+	defer release()
+	err = e.DB.Raw.Update(func(tx *bolt.Tx) error {
 		b, n, err := loadNamespace(tx, name)
 		if err != nil {
 			return err
 		}
-		if n.ReadOnly {
-			return model.Conflict("namespace is read-only")
+		n.Normalize()
+		if err := policy.AdmitState(n); err != nil {
+			return err
 		}
 		n.Floor, err = policy.RetentionFloor(n, now)
 		if err != nil {

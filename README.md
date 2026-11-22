@@ -21,13 +21,17 @@ SIGTERM stops new HTTP requests, drains active requests for up to ten seconds,
 then closes the database. A second process cannot open the same database file.
 
 ```sh
+go test ./...
 python3 examples/walkthrough.py --workflow all
 python3 examples/walkthrough.py --output var/observations.json
 ```
 
 The bounded walkthrough uses temporary volumes and an available ephemeral port.
 Each named workflow runs the entire related stateful scenario so its required
-preconditions and recovery remain reproducible. Formal tests are deferred.
+preconditions and recovery remain reproducible. `--workflow drain` is included
+in `all`; it demonstrates write/delete/retention/materialization rejection,
+reads and physical maintenance during a drain, drain cancellation, drain
+completion and restart inspection. The Go tests cover the same state machine.
 `examples/input.json` contains the original measurements; a recorded production
 session is in `examples/session.json`. These are synthetic, non-sensitive inputs.
 
@@ -42,8 +46,12 @@ All methods below return 200 on success.
 | --- | --- | --- |
 | GET | `/health` | readiness |
 | POST | `/spaces` | namespace policy, as in input.json |
-| GET | `/spaces/{space}` | policy, watermark, floor, source sequence |
-| PUT | `/spaces/{space}/mode` | `{"read_only":true}` |
+| GET | `/spaces/{space}` | policy, watermark, floor, source sequence, lifecycle |
+| GET | `/spaces/{space}/drain` | lifecycle state, phase, in-flight count, sequences |
+| POST | `/spaces/{space}/drain` | stop accepting logical mutations (idempotent) |
+| POST | `/spaces/{space}/drain/complete` | commit the maintainable state |
+| DELETE | `/spaces/{space}/drain` | cancel the drain and accept writes again |
+| PUT | `/spaces/{space}/mode` | `{"read_only":true}` or `{"state":"draining"}` |
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
@@ -73,6 +81,36 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+## Namespace Drain
+
+`writable -> draining -> read_only` separates "stop accepting" from "safe to
+maintain". Reads and physical maintenance (seal, compact) work in every state.
+Logical mutations (points, deletions, retention, materialization) are accepted
+only while writable, but a request admitted just before a drain keeps an
+in-flight slot and is allowed to commit.
+
+```sh
+curl -X POST localhost:8399/ridge/v1/spaces/spindle/drain
+curl localhost:8399/ridge/v1/spaces/spindle/drain
+curl -X POST localhost:8399/ridge/v1/spaces/spindle/drain/complete
+curl -X DELETE localhost:8399/ridge/v1/spaces/spindle/drain
+```
+
+`phase` is `accepting`, `stopping` (drain started, logical requests still in
+flight), `quiesced` (no in-flight logical work, not yet completed),
+`completing`, or `maintainable`. Completing while `in_flight > 0` is a 409 with
+the remaining count; the completion commit therefore cannot be followed by a
+late logical mutation. `PUT /mode {"read_only":true}` is the one-call form: it
+starts the drain and completes it immediately when nothing is in flight, and
+otherwise fails with a 409 while leaving the namespace `draining`.
+
+Every transition has its own database sequence (`started_sequence`,
+`completed_sequence`, `canceled_sequence`), so a drain is auditable. After a
+restart the durable state and sequences survive; `in_flight` is 0 (requests do
+not survive a process) and `restarted` is true. The process never completes or
+cancels a drain on its own — inspect `GET /spaces/{space}`, then complete or
+cancel deliberately.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
@@ -84,8 +122,10 @@ Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with
 RIDGE_DB pointing to the verified image. Compare namespace floors, sequence,
 raw points and materialization freshness before directing producers there.
-The walkthrough demonstrates this sequence on an isolated restored volume.
-An image has the source identity and includes every namespace.
+The walkthrough demonstrates this sequence on an isolated restored volume and
+records the post-restart drain status, which reports `restarted` with an empty
+in-flight count until an operator completes or cancels the drain. An image has
+the source identity and includes every namespace.
 
 The server currently holds backup bytes in memory, compacts a namespace in one
 write transaction and scans catalog entries before selecting series. Query

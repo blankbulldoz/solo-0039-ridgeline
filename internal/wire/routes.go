@@ -22,10 +22,40 @@ func Handler(e *engine.Engine) http.Handler {
 	})
 	mux.HandleFunc("PUT "+base+"/mode", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(input struct {
-			ReadOnly bool `json:"read_only"`
+			ReadOnly *bool  `json:"read_only"`
+			State    string `json:"state"`
 		}) (any, error) {
-			return e.ReadOnly(r.PathValue("space"), input.ReadOnly)
+			space := r.PathValue("space")
+			if input.State != "" {
+				if input.ReadOnly != nil {
+					return nil, model.Bad("provide either state or read_only, not both")
+				}
+				if !model.ValidState(input.State) {
+					return nil, model.Bad("invalid namespace state")
+				}
+				return e.SetMode(space, input.State)
+			}
+			if input.ReadOnly == nil {
+				return nil, model.Bad("mode request requires state or read_only")
+			}
+			return e.SetReadOnly(space, *input.ReadOnly)
 		})
+	})
+	mux.HandleFunc("POST "+base+"/drain", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.StartDrain(r.PathValue("space"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("DELETE "+base+"/drain", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.CancelDrain(r.PathValue("space"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("POST "+base+"/drain/complete", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.CompleteDrain(r.PathValue("space"))
+		respond(w, out, err)
+	})
+	mux.HandleFunc("GET "+base+"/drain", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.DrainStatus(r.PathValue("space"))
+		respond(w, out, err)
 	})
 	mux.HandleFunc("POST "+base+"/points", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(input model.WriteRequest) (any, error) {

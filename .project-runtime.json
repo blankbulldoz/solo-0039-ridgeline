@@ -12,6 +12,10 @@
       "command": "python3 examples/walkthrough.py --workflow namespace"
     },
     {
+      "workflow_id": "drain",
+      "command": "python3 examples/walkthrough.py --workflow drain"
+    },
+    {
       "workflow_id": "ingest",
       "command": "python3 examples/walkthrough.py --workflow ingest"
     },

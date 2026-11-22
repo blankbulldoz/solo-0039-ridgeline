@@ -2,6 +2,7 @@ package engine
 
 import (
 	"ridgeline/internal/model"
+	"ridgeline/internal/policy"
 	"ridgeline/internal/volume"
 
 	bolt "go.etcd.io/bbolt"
@@ -12,13 +13,19 @@ func (e *Engine) Materialize(name, rollup string, q model.Query) (model.Material
 	if !model.ValidName(rollup) {
 		return out, model.Bad("invalid rollup name")
 	}
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
+	release, err := e.beginLogical(name)
+	if err != nil {
+		return out, err
+	}
+	defer release()
+	err = e.DB.Raw.Update(func(tx *bolt.Tx) error {
 		b, n, err := loadNamespace(tx, name)
 		if err != nil {
 			return err
 		}
-		if n.ReadOnly {
-			return model.Conflict("namespace is read-only")
+		n.Normalize()
+		if err := policy.AdmitState(n); err != nil {
+			return err
 		}
 		result, err := aggregate(b, n, q, volume.Current(tx))
 		if err != nil {

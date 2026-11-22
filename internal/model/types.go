@@ -2,6 +2,12 @@ package model
 
 type Labels map[string]string
 
+const (
+	StateWritable = "writable"
+	StateDraining = "draining"
+	StateReadOnly = "read_only"
+)
+
 type Namespace struct {
 	Name         string `json:"name"`
 	ReadOnly     bool   `json:"read_only"`
@@ -15,6 +21,77 @@ type Namespace struct {
 	Watermark    int64  `json:"watermark"`
 	HasWatermark bool   `json:"has_watermark"`
 	LastSequence uint64 `json:"last_sequence"`
+
+	// State is the durable namespace lifecycle state. ReadOnly is retained in
+	// the wire contract and is true exactly when State is StateReadOnly.
+	State string `json:"state"`
+	// DrainSequence records the commit that stopped accepting logical
+	// mutations. DrainCompletedSequence records the commit that made the
+	// namespace maintenance-ready. DrainCanceledSequence records a cancel.
+	DrainSequence          uint64 `json:"drain_sequence,omitempty"`
+	DrainCompletedSequence uint64 `json:"drain_completed_sequence,omitempty"`
+	DrainCanceledSequence  uint64 `json:"drain_canceled_sequence,omitempty"`
+}
+
+// EffectiveState normalizes legacy namespace records that predate the
+// lifecycle state field.
+func (n Namespace) EffectiveState() string {
+	switch n.State {
+	case StateWritable, StateDraining, StateReadOnly:
+		return n.State
+	}
+	if n.ReadOnly {
+		return StateReadOnly
+	}
+	return StateWritable
+}
+
+// Normalize keeps the legacy read_only flag and the lifecycle state in sync.
+func (n *Namespace) Normalize() {
+	n.State = n.EffectiveState()
+	n.ReadOnly = n.State == StateReadOnly
+}
+
+// DrainStatus is the observable lifecycle view of a namespace.
+//
+// State and the three sequences are durable: they survive a restart and are
+// only written by a committed lifecycle transaction. Acceptance stops
+// process-locally just before the start sequence commits, so a caller may
+// briefly observe state "writable" alongside a rejected request.
+//
+// In-flight logical requests are process-local. After a restart the field is
+// zero for every namespace and restarted is true, which is the signal that a
+// draining namespace's earlier in-flight work no longer exists in this
+// process. The durable State and the three drain sequences survive the
+// restart, so the lifecycle decision remains auditable.
+type DrainStatus struct {
+	State string `json:"state"`
+	// Phase is "accepting", "stopping" (drain started but logical requests
+	// remain in flight), "completing" (completion is committing), "quiesced"
+	// (no in-flight logical work, completion not committed yet) or
+	// "maintainable" (read_only).
+	Phase               string `json:"phase"`
+	AcceptingWrites     bool   `json:"accepting_writes"`
+	AcceptingLogical    bool   `json:"accepting_logical"`
+	PhysicalMaintenance bool   `json:"physical_maintenance"`
+	InFlight            int    `json:"in_flight"`
+	Maintainable        bool   `json:"maintainable"`
+	Drained             bool   `json:"drained"`
+	Restarted           bool   `json:"restarted"`
+	StartedSequence     uint64 `json:"started_sequence"`
+	CompletedSequence   uint64 `json:"completed_sequence"`
+	CanceledSequence    uint64 `json:"canceled_sequence"`
+	CompletionError     string `json:"completion_error,omitempty"`
+}
+
+// ValidState reports whether s is a lifecycle state accepted by the mode API.
+func ValidState(s string) bool {
+	return s == StateWritable || s == StateDraining || s == StateReadOnly
+}
+
+type NamespaceView struct {
+	Namespace
+	Drain DrainStatus `json:"drain"`
 }
 
 type Series struct {

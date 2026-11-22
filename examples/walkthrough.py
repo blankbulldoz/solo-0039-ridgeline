@@ -15,7 +15,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain",
+    "drain",
 ]
 
 
@@ -133,6 +134,53 @@ def exercise(workflow, output):
                     "now": 11000, "points": [{**seed["points"][0], "time": 1500}]
                 }, status=409)
                 op("resume", space + "/mode", {"read_only": False}, method="PUT")
+
+                # Staged drain: acceptance stops immediately, physical
+                # maintenance stays available, queries keep working.
+                writable = op("drain preconditions", space)
+                op("drain start", space + "/drain", {})
+                draining = op("drain status", space + "/drain")
+                if draining["state"] != "draining" or draining["accepting_logical"]:
+                    raise RuntimeError("drain must stop acceptance")
+                if not draining["physical_maintenance"]:
+                    raise RuntimeError("drain must keep physical maintenance")
+                if draining["started_sequence"] <= writable["last_sequence"]:
+                    raise RuntimeError("drain start must have its own sequence")
+                during = {"now": 11000, "points": [{**seed["points"][0], "time": 1500, "value": 11}]}
+                op("drain write rejection", space + "/points", during, status=409)
+                op("drain delete rejection", space + "/deletions",
+                   {**q, "start": 1200, "end": 1300}, status=409)
+                op("drain retention rejection", space + "/retention", {"now": 12000}, status=409)
+                op("drain materialize rejection", space + "/rollups/blocked", agg,
+                   method="PUT", status=409)
+                op("drain query", space + "/range", q)
+                op("drain seal", space + "/seal", {})
+                op("drain compact", space + "/compact", {})
+                canceled = op("drain cancel", space + "/drain", method="DELETE")
+                if canceled["drain"]["state"] != "writable" or not canceled["drain"]["accepting_writes"]:
+                    raise RuntimeError("cancel must return to writable")
+                if canceled["drain"]["canceled_sequence"] <= draining["started_sequence"]:
+                    raise RuntimeError("cancel must have its own sequence")
+                op("write after drain cancel", space + "/points", during)
+
+                # Complete drain: the maintainable state rejects logical
+                # mutations but still honours physical maintenance.
+                op("second drain start", space + "/drain", {})
+                done = op("drain complete", space + "/drain/complete", {})
+                if done["drain"]["state"] != "read_only" or not done["drain"]["maintainable"]:
+                    raise RuntimeError("drain completion must be maintainable")
+                if done["drain"]["completed_sequence"] <= done["drain"]["started_sequence"]:
+                    raise RuntimeError("completion must have its own sequence")
+                op("maintainable write rejection", space + "/points", during, status=409)
+                op("maintainable seal", space + "/seal", {})
+                op("maintainable compact", space + "/compact", {})
+                op("maintainable query", space + "/range", q)
+                op("maintainable resume", space + "/drain", method="DELETE")
+
+                # Leave the namespace draining when the image is taken, so the
+                # restart inspection below sees a real interrupted drain.
+                op("drain before image", space + "/drain", {})
+                pending = op("drain status before image", space + "/drain")
                 source = op("backup source", space + "/range", q)
                 image, headers = request(base, "image")
                 if hashlib.sha256(image).hexdigest() != headers["X-Ridge-Sha256"]:
@@ -148,6 +196,20 @@ def exercise(workflow, output):
                 if restored != source:
                     raise RuntimeError("restored image differs from source read")
                 observations.append({"step": "restored", "response": restored})
+                recovered = request(base, "spaces/spindle")
+                observations.append({"step": "restart drain status", "response": recovered})
+                drain = recovered["drain"]
+                if drain["state"] != "draining" or drain["completed_sequence"]:
+                    raise RuntimeError("restart must preserve the interrupted drain")
+                if not drain["restarted"] or drain["in_flight"] != 0:
+                    raise RuntimeError("restart must expose an empty in-flight set")
+                if drain["started_sequence"] != pending["started_sequence"]:
+                    raise RuntimeError("restart must preserve the drain sequence")
+                request(base, "spaces/spindle/points", during, status=409)
+                restored_done = request(base, "spaces/spindle/drain/complete", {})
+                observations.append({"step": "restart drain complete", "response": restored_done})
+                if restored_done["drain"]["completed_sequence"] <= drain["started_sequence"]:
+                    raise RuntimeError("restart completion must be sequenced")
             finally:
                 stop(process)
     if output:

@@ -22,7 +22,8 @@
       "floor": -4503599627370496,
       "watermark": 0,
       "has_watermark": false,
-      "last_sequence": 1
+      "last_sequence": 1,
+      "state": "writable"
     }
   },
   {
@@ -638,8 +639,8 @@
         "start": 500,
         "end": 501,
         "count": 1,
-        "bytes": 64,
-        "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+        "bytes": 63,
+        "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
         "format": 1
       },
       {
@@ -648,8 +649,8 @@
         "start": -500,
         "end": 501,
         "count": 2,
-        "bytes": 105,
-        "checksum": "4c2f12747df3833972d963a29b9b86b6225d2de929c6252543feb51e3c6ceb20",
+        "bytes": 73,
+        "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
         "format": 1
       },
       {
@@ -658,8 +659,8 @@
         "start": -1500,
         "end": 1501,
         "count": 4,
-        "bytes": 80,
-        "checksum": "f62effbef22081bacda4663b08c17e44f621f0135a4c07c22feb6b601c4c1d4a",
+        "bytes": 83,
+        "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
         "format": 1
       },
       {
@@ -668,8 +669,8 @@
         "start": -1500,
         "end": 501,
         "count": 2,
-        "bytes": 100,
-        "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+        "bytes": 71,
+        "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
         "format": 1
       }
     ]
@@ -1215,8 +1216,8 @@
           "start": 500,
           "end": 501,
           "count": 1,
-          "bytes": 64,
-          "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
           "format": 1
         },
         {
@@ -1225,8 +1226,8 @@
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
+          "bytes": 81,
+          "checksum": "b4466d94f2096f50dbddfb490d297e5d0c8c72b777bc6992b72dfdd2e62dd118",
           "format": 1
         },
         {
@@ -1235,8 +1236,8 @@
           "start": -1500,
           "end": 501,
           "count": 2,
-          "bytes": 100,
-          "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
           "format": 1
         }
       ],
@@ -1295,7 +1296,24 @@
       "floor": 1000,
       "watermark": 1500,
       "has_watermark": true,
-      "last_sequence": 10
+      "last_sequence": 11,
+      "state": "read_only",
+      "drain_sequence": 10,
+      "drain_completed_sequence": 11,
+      "drain": {
+        "state": "read_only",
+        "phase": "maintainable",
+        "accepting_writes": false,
+        "accepting_logical": false,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": true,
+        "drained": true,
+        "restarted": false,
+        "started_sequence": 10,
+        "completed_sequence": 11,
+        "canceled_sequence": 0
+      }
     }
   },
   {
@@ -1336,17 +1354,182 @@
       "floor": 1000,
       "watermark": 1500,
       "has_watermark": true,
-      "last_sequence": 11
+      "last_sequence": 12,
+      "state": "writable",
+      "drain_sequence": 10,
+      "drain_completed_sequence": 11,
+      "drain_canceled_sequence": 12,
+      "drain": {
+        "state": "writable",
+        "phase": "accepting",
+        "accepting_writes": true,
+        "accepting_logical": true,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": false,
+        "drained": false,
+        "restarted": false,
+        "started_sequence": 10,
+        "completed_sequence": 11,
+        "canceled_sequence": 12
+      }
     }
   },
   {
-    "step": "backup source",
+    "step": "drain preconditions",
+    "request": null,
+    "response": {
+      "name": "spindle",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": 1000,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 12,
+      "state": "writable",
+      "drain_sequence": 10,
+      "drain_completed_sequence": 11,
+      "drain_canceled_sequence": 12,
+      "drain": {
+        "state": "writable",
+        "phase": "accepting",
+        "accepting_writes": true,
+        "accepting_logical": true,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": false,
+        "drained": false,
+        "restarted": false,
+        "started_sequence": 10,
+        "completed_sequence": 11,
+        "canceled_sequence": 12
+      }
+    }
+  },
+  {
+    "step": "drain start",
+    "request": {},
+    "response": {
+      "name": "spindle",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": 1000,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 13,
+      "state": "draining",
+      "drain_sequence": 13,
+      "drain": {
+        "state": "draining",
+        "phase": "quiesced",
+        "accepting_writes": false,
+        "accepting_logical": false,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": false,
+        "drained": true,
+        "restarted": false,
+        "started_sequence": 13,
+        "completed_sequence": 0,
+        "canceled_sequence": 0
+      }
+    }
+  },
+  {
+    "step": "drain status",
+    "request": null,
+    "response": {
+      "state": "draining",
+      "phase": "quiesced",
+      "accepting_writes": false,
+      "accepting_logical": false,
+      "physical_maintenance": true,
+      "in_flight": 0,
+      "maintainable": false,
+      "drained": true,
+      "restarted": false,
+      "started_sequence": 13,
+      "completed_sequence": 0,
+      "canceled_sequence": 0
+    }
+  },
+  {
+    "step": "drain write rejection",
+    "request": {
+      "now": 11000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 1500,
+          "value": 11
+        }
+      ]
+    },
+    "response": {
+      "code": "conflict",
+      "detail": "namespace is draining; logical mutations are stopped"
+    }
+  },
+  {
+    "step": "drain delete rejection",
+    "request": {
+      "start": 1200,
+      "end": 1300
+    },
+    "response": {
+      "code": "conflict",
+      "detail": "namespace is draining; logical mutations are stopped"
+    }
+  },
+  {
+    "step": "drain retention rejection",
+    "request": {
+      "now": 12000
+    },
+    "response": {
+      "code": "conflict",
+      "detail": "namespace is draining; logical mutations are stopped"
+    }
+  },
+  {
+    "step": "drain materialize rejection",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "code": "conflict",
+      "detail": "namespace is draining; logical mutations are stopped"
+    }
+  },
+  {
+    "step": "drain query",
     "request": {
       "start": -5000,
       "end": 10000
     },
     "response": {
-      "sequence": 11,
+      "sequence": 13,
       "floor": 1000,
       "series": [
         {
@@ -1363,6 +1546,360 @@
               "time": 1500,
               "value": 6,
               "sequence": 2
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 1,
+        "visible": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "drain seal",
+    "request": {},
+    "response": {
+      "sequence": 14,
+      "blocks": 0,
+      "points": 0,
+      "floor": 1000
+    }
+  },
+  {
+    "step": "drain compact",
+    "request": {},
+    "response": {
+      "sequence": 15,
+      "blocks": 1,
+      "points": 1,
+      "floor": 1000
+    }
+  },
+  {
+    "step": "drain cancel",
+    "request": null,
+    "response": {
+      "name": "spindle",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": 1000,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 16,
+      "state": "writable",
+      "drain_sequence": 13,
+      "drain_canceled_sequence": 16,
+      "drain": {
+        "state": "writable",
+        "phase": "accepting",
+        "accepting_writes": true,
+        "accepting_logical": true,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": false,
+        "drained": false,
+        "restarted": false,
+        "started_sequence": 13,
+        "completed_sequence": 0,
+        "canceled_sequence": 16
+      }
+    }
+  },
+  {
+    "step": "write after drain cancel",
+    "request": {
+      "now": 11000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 1500,
+          "value": 11
+        }
+      ]
+    },
+    "response": {
+      "sequence": 17,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 1500
+    }
+  },
+  {
+    "step": "second drain start",
+    "request": {},
+    "response": {
+      "name": "spindle",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": 1000,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 18,
+      "state": "draining",
+      "drain_sequence": 18,
+      "drain": {
+        "state": "draining",
+        "phase": "quiesced",
+        "accepting_writes": false,
+        "accepting_logical": false,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": false,
+        "drained": true,
+        "restarted": false,
+        "started_sequence": 18,
+        "completed_sequence": 0,
+        "canceled_sequence": 0
+      }
+    }
+  },
+  {
+    "step": "drain complete",
+    "request": {},
+    "response": {
+      "name": "spindle",
+      "read_only": true,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": 1000,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 19,
+      "state": "read_only",
+      "drain_sequence": 18,
+      "drain_completed_sequence": 19,
+      "drain": {
+        "state": "read_only",
+        "phase": "maintainable",
+        "accepting_writes": false,
+        "accepting_logical": false,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": true,
+        "drained": true,
+        "restarted": false,
+        "started_sequence": 18,
+        "completed_sequence": 19,
+        "canceled_sequence": 0
+      }
+    }
+  },
+  {
+    "step": "maintainable write rejection",
+    "request": {
+      "now": 11000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 1500,
+          "value": 11
+        }
+      ]
+    },
+    "response": {
+      "code": "conflict",
+      "detail": "namespace is read-only"
+    }
+  },
+  {
+    "step": "maintainable seal",
+    "request": {},
+    "response": {
+      "sequence": 20,
+      "blocks": 1,
+      "points": 1,
+      "floor": 1000
+    }
+  },
+  {
+    "step": "maintainable compact",
+    "request": {},
+    "response": {
+      "sequence": 21,
+      "blocks": 1,
+      "points": 1,
+      "floor": 1000
+    }
+  },
+  {
+    "step": "maintainable query",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 21,
+      "floor": 1000,
+      "series": [
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1500,
+              "value": 11,
+              "sequence": 17
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 1,
+        "visible": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "maintainable resume",
+    "request": null,
+    "response": {
+      "name": "spindle",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": 1000,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 22,
+      "state": "writable",
+      "drain_sequence": 18,
+      "drain_completed_sequence": 19,
+      "drain_canceled_sequence": 22,
+      "drain": {
+        "state": "writable",
+        "phase": "accepting",
+        "accepting_writes": true,
+        "accepting_logical": true,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": false,
+        "drained": false,
+        "restarted": false,
+        "started_sequence": 18,
+        "completed_sequence": 19,
+        "canceled_sequence": 22
+      }
+    }
+  },
+  {
+    "step": "drain before image",
+    "request": {},
+    "response": {
+      "name": "spindle",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": 1000,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 23,
+      "state": "draining",
+      "drain_sequence": 23,
+      "drain": {
+        "state": "draining",
+        "phase": "quiesced",
+        "accepting_writes": false,
+        "accepting_logical": false,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": false,
+        "drained": true,
+        "restarted": false,
+        "started_sequence": 23,
+        "completed_sequence": 0,
+        "canceled_sequence": 0
+      }
+    }
+  },
+  {
+    "step": "drain status before image",
+    "request": null,
+    "response": {
+      "state": "draining",
+      "phase": "quiesced",
+      "accepting_writes": false,
+      "accepting_logical": false,
+      "physical_maintenance": true,
+      "in_flight": 0,
+      "maintainable": false,
+      "drained": true,
+      "restarted": false,
+      "started_sequence": 23,
+      "completed_sequence": 0,
+      "canceled_sequence": 0
+    }
+  },
+  {
+    "step": "backup source",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 23,
+      "floor": 1000,
+      "series": [
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1500,
+              "value": 11,
+              "sequence": 17
             }
           ]
         }
@@ -1380,14 +1917,14 @@
   },
   {
     "step": "backup",
-    "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sequence": "23",
+    "sha256": "ecc7311ae5d829f42a6bacea2a40ffe13808c884d594837120c5822e3283ad64",
+    "bytes": 57344
   },
   {
     "step": "restored",
     "response": {
-      "sequence": 11,
+      "sequence": 23,
       "floor": 1000,
       "series": [
         {
@@ -1402,8 +1939,8 @@
           "points": [
             {
               "time": 1500,
-              "value": 6,
-              "sequence": 2
+              "value": 11,
+              "sequence": 17
             }
           ]
         }
@@ -1417,6 +1954,73 @@
         "tombstones": 0
       },
       "truncated": false
+    }
+  },
+  {
+    "step": "restart drain status",
+    "response": {
+      "name": "spindle",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": 1000,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 23,
+      "state": "draining",
+      "drain_sequence": 23,
+      "drain": {
+        "state": "draining",
+        "phase": "quiesced",
+        "accepting_writes": false,
+        "accepting_logical": false,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": false,
+        "drained": true,
+        "restarted": true,
+        "started_sequence": 23,
+        "completed_sequence": 0,
+        "canceled_sequence": 0
+      }
+    }
+  },
+  {
+    "step": "restart drain complete",
+    "response": {
+      "name": "spindle",
+      "read_only": true,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": 1000,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 24,
+      "state": "read_only",
+      "drain_sequence": 23,
+      "drain_completed_sequence": 24,
+      "drain": {
+        "state": "read_only",
+        "phase": "maintainable",
+        "accepting_writes": false,
+        "accepting_logical": false,
+        "physical_maintenance": true,
+        "in_flight": 0,
+        "maintainable": true,
+        "drained": true,
+        "restarted": false,
+        "started_sequence": 23,
+        "completed_sequence": 24,
+        "canceled_sequence": 0
+      }
     }
   }
 ]

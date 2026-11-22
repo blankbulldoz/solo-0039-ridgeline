@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"ridgeline/internal/model"
+	"ridgeline/internal/policy"
 	selectseries "ridgeline/internal/select"
 	"ridgeline/internal/volume"
 
@@ -19,13 +20,19 @@ func (e *Engine) Delete(name string, q model.Query) (model.Tombstone, error) {
 	if err != nil {
 		return tomb, err
 	}
+	release, err := e.beginLogical(name)
+	if err != nil {
+		return tomb, err
+	}
+	defer release()
 	err = e.DB.Raw.Update(func(tx *bolt.Tx) error {
 		b, n, err := loadNamespace(tx, name)
 		if err != nil {
 			return err
 		}
-		if n.ReadOnly {
-			return model.Conflict("namespace is read-only")
+		n.Normalize()
+		if err := policy.AdmitState(n); err != nil {
+			return err
 		}
 		all, err := catalog(b)
 		if err != nil {

@@ -2,10 +2,31 @@ package policy
 
 import "ridgeline/internal/model"
 
-func Admit(n model.Namespace, request model.WriteRequest) error {
-	if n.ReadOnly {
+// AdmitState rejects logical mutations for a namespace whose lifecycle has
+// stopped accepting them.
+func AdmitState(n model.Namespace) error {
+	switch n.EffectiveState() {
+	case model.StateReadOnly:
 		return model.Conflict("namespace is read-only")
+	case model.StateDraining:
+		return model.Conflict("namespace is draining; logical mutations are stopped")
 	}
+	return nil
+}
+
+// Admit applies the lifecycle state and the event-time policy. Direct callers
+// use this; the engine admits a request once through its drain gate and then
+// calls AdmitPoints so an already-admitted request can finish during a drain.
+func Admit(n model.Namespace, request model.WriteRequest) error {
+	if err := AdmitState(n); err != nil {
+		return err
+	}
+	return AdmitPoints(n, request)
+}
+
+// AdmitPoints evaluates point count, age, future skew and retention without
+// consulting lifecycle state.
+func AdmitPoints(n model.Namespace, request model.WriteRequest) error {
 	if !model.ValidTime(request.Now) {
 		return model.Bad("invalid observation time")
 	}
