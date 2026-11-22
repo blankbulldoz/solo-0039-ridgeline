@@ -86,7 +86,25 @@ Large raw scans are bounded by the namespace scan budget. Maintenance currently
 runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
 
-Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
-exercise real API operations, process restart and failure responses. Formal
-automated tests are deferred. The walkthrough is a bounded production demo
+Every mutating engine entry point crosses one internal change boundary
+(`engine.mutate` / the `change` type). The boundary, not the individual step,
+owns read-only admission, the bbolt write transaction, receipt sequencing,
+namespace source-version publication and the final config save. A step asks
+the boundary for a receipt sequence (`Next`), a source publication
+(`PublishSource`), the source it actually read (`Source`) or the read
+sequence (`Current`), so new or composed maintenance steps cannot mistake a
+fresh database-wide sequence for a new namespace source version. Physical
+maintenance (seal, compaction) and the policy-only read-only toggle are
+admitted on a read-only namespace; writes, deletions, retention and rollup
+publication are logical mutations and are rejected. A materialization records
+the source version read before it allocates its own receipt sequence, and
+publishing it never advances the namespace source version. A composite step
+such as retention stages the floor and runs the physical rebuild inside one
+boundary: on failure the transaction rolls back, leaving no new floor, source
+version or receipt sequence behind.
+
+Use `go build ./...`, `go test ./...` and
+`python3 examples/walkthrough.py --workflow all` to exercise real API
+operations, process restart and failure responses. The Go tests cover the
+maintenance boundary contracts; the walkthrough is a bounded production demo
 using temporary database files and synthetic infrastructure measurements.

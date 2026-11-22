@@ -2,10 +2,11 @@ package policy
 
 import "ridgeline/internal/model"
 
+// Admit evaluates the numeric write policies. Read-only admission is not part
+// of this policy: every mutating entry crosses the engine change boundary,
+// which owns that decision uniformly for writes, deletions, retention and
+// rollup publication.
 func Admit(n model.Namespace, request model.WriteRequest) error {
-	if n.ReadOnly {
-		return model.Conflict("namespace is read-only")
-	}
 	if !model.ValidTime(request.Now) {
 		return model.Bad("invalid observation time")
 	}

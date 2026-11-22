@@ -4,13 +4,17 @@ import (
 	"ridgeline/internal/model"
 	"ridgeline/internal/policy"
 	"ridgeline/internal/volume"
-
-	bolt "go.etcd.io/bbolt"
 )
 
-func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance, error) {
+// compactStep rebuilds one block per visible series inside an existing change
+// boundary. It is a reusable internal maintenance step: it neither decides
+// read-only admission nor allocates sequences or saves the namespace config
+// itself, so it can be composed by retention without duplicating publication
+// rules.
+func compactStep(c *change) (model.Maintenance, error) {
+	b, n := c.bucket, c.namespace
 	// Maintenance is bounded by the same scan policy as user queries.
-	raw, err := scan(b, n, model.Query{Start: model.MinTime, End: model.MaxTime + 1}, volume.Current(tx))
+	raw, err := scan(b, n, model.Query{Start: model.MinTime, End: model.MaxTime + 1}, c.Current())
 	if err != nil {
 		return model.Maintenance{}, err
 	}
@@ -19,7 +23,7 @@ func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance,
 			return model.Maintenance{}, err
 		}
 	}
-	seq, err := volume.Next(tx)
+	seq, err := c.PublishSource()
 	if err != nil {
 		return model.Maintenance{}, err
 	}
@@ -31,18 +35,15 @@ func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance,
 		receipt.Blocks++
 		receipt.Points += len(s.Points)
 	}
-	n.LastSequence = seq
-	return receipt, volume.PutJSON(b, volume.Config, n)
+	return receipt, nil
 }
 
 func (e *Engine) Compact(name string) (model.Maintenance, error) {
 	var receipt model.Maintenance
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
-		b, n, err := loadNamespace(tx, name)
-		if err != nil {
-			return err
-		}
-		receipt, err = compact(tx, b, n)
+	// Compaction is physical maintenance: read-only namespaces still admit it.
+	err := e.mutate(name, physicalMaintenance, func(c *change) error {
+		var err error
+		receipt, err = compactStep(c)
 		return err
 	})
 	return receipt, err
@@ -50,19 +51,17 @@ func (e *Engine) Compact(name string) (model.Maintenance, error) {
 
 func (e *Engine) Retain(name string, now int64) (model.Maintenance, error) {
 	var receipt model.Maintenance
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
-		b, n, err := loadNamespace(tx, name)
+	// Retention changes a logical boundary, so it is rejected while read-only.
+	// The floor decision and the physical rebuild run inside one boundary: if
+	// the rebuild fails, the transaction rolls back and neither the new floor
+	// nor a new source version survives.
+	err := e.mutate(name, logicalMutation, func(c *change) error {
+		floor, err := policy.RetentionFloor(c.namespace, now)
 		if err != nil {
 			return err
 		}
-		if n.ReadOnly {
-			return model.Conflict("namespace is read-only")
-		}
-		n.Floor, err = policy.RetentionFloor(n, now)
-		if err != nil {
-			return err
-		}
-		receipt, err = compact(tx, b, n)
+		c.namespace.Floor = floor
+		receipt, err = compactStep(c)
 		return err
 	})
 	return receipt, err

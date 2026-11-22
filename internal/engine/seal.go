@@ -31,13 +31,10 @@ func clearBucket(parent *bolt.Bucket, name []byte) error {
 
 func (e *Engine) Seal(name string) (model.Maintenance, error) {
 	var receipt model.Maintenance
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
-		b, n, err := loadNamespace(tx, name)
-		if err != nil {
-			return err
-		}
+	err := e.mutate(name, physicalMaintenance, func(c *change) error {
+		b, n := c.bucket, c.namespace
 		grouped := map[string][]model.Sample{}
-		err = b.Bucket(volume.Head).ForEach(func(k, v []byte) error {
+		err := b.Bucket(volume.Head).ForEach(func(k, v []byte) error {
 			if len(k) != 72 {
 				return model.Bad("invalid stored point key")
 			}
@@ -51,7 +48,7 @@ func (e *Engine) Seal(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
-		seq, err := volume.Next(tx)
+		seq, err := c.PublishSource()
 		if err != nil {
 			return err
 		}
@@ -65,9 +62,8 @@ func (e *Engine) Seal(name string) (model.Maintenance, error) {
 		if err := clearBucket(b, volume.Head); err != nil {
 			return err
 		}
-		n.LastSequence = seq
 		receipt.Sequence, receipt.Floor = seq, n.Floor
-		return volume.PutJSON(b, volume.Config, n)
+		return nil
 	})
 	return receipt, err
 }

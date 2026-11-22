@@ -12,26 +12,24 @@ func (e *Engine) Materialize(name, rollup string, q model.Query) (model.Material
 	if !model.ValidName(rollup) {
 		return out, model.Bad("invalid rollup name")
 	}
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
-		b, n, err := loadNamespace(tx, name)
-		if err != nil {
-			return err
-		}
-		if n.ReadOnly {
-			return model.Conflict("namespace is read-only")
-		}
-		result, err := aggregate(b, n, q, volume.Current(tx))
+	err := e.mutate(name, logicalMutation, func(c *change) error {
+		// Provenance is fixed before any sequence is allocated: the
+		// materialization remembers the source version it actually read.
+		source := c.Source()
+		result, err := aggregate(c.bucket, c.namespace, q, c.Current())
 		if err != nil {
 			return err
 		}
 		out = model.Materialization{
-			Name: rollup, Query: q, SourceSequence: n.LastSequence, Result: result,
+			Name: rollup, Query: q, SourceSequence: source, Result: result,
 		}
-		// Rollup metadata does not change the source namespace sequence.
-		if _, err := volume.Next(tx); err != nil {
+		// Publication gets its own receipt sequence, but the namespace source
+		// version is deliberately not published: saving rollup metadata must
+		// not move LastSequence forward, and finish leaves the config untouched.
+		if _, err := c.Next(); err != nil {
 			return err
 		}
-		return volume.PutJSON(b.Bucket(volume.Rollups), []byte(rollup), out)
+		return volume.PutJSON(c.bucket.Bucket(volume.Rollups), []byte(rollup), out)
 	})
 	return out, err
 }

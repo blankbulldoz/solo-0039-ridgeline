@@ -19,19 +19,13 @@ func (e *Engine) Delete(name string, q model.Query) (model.Tombstone, error) {
 	if err != nil {
 		return tomb, err
 	}
-	err = e.DB.Raw.Update(func(tx *bolt.Tx) error {
-		b, n, err := loadNamespace(tx, name)
-		if err != nil {
-			return err
-		}
-		if n.ReadOnly {
-			return model.Conflict("namespace is read-only")
-		}
+	err = e.mutate(name, logicalMutation, func(c *change) error {
+		b := c.bucket
 		all, err := catalog(b)
 		if err != nil {
 			return err
 		}
-		seq, err := volume.Next(tx)
+		seq, err := c.PublishSource()
 		if err != nil {
 			return err
 		}
@@ -42,11 +36,7 @@ func (e *Engine) Delete(name string, q model.Query) (model.Tombstone, error) {
 		for _, s := range selectseries.Pick(all, selector) {
 			tomb.Series = append(tomb.Series, s.ID)
 		}
-		if err := volume.PutJSON(b.Bucket(volume.Deletes), []byte(tomb.ID), tomb); err != nil {
-			return err
-		}
-		n.LastSequence = seq
-		return volume.PutJSON(b, volume.Config, n)
+		return volume.PutJSON(b.Bucket(volume.Deletes), []byte(tomb.ID), tomb)
 	})
 	return tomb, err
 }

@@ -84,18 +84,15 @@ func (e *Engine) Namespace(name string) (model.Namespace, error) {
 
 func (e *Engine) ReadOnly(name string, readOnly bool) (model.Namespace, error) {
 	var n model.Namespace
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
-		b, loaded, err := loadNamespace(tx, name)
-		if err != nil {
+	// The mode toggle is a policy-only change; it must be admitted while the
+	// namespace is read-only, otherwise read-only could never be lifted.
+	err := e.mutate(name, physicalMaintenance, func(c *change) error {
+		c.namespace.ReadOnly = readOnly
+		if _, err := c.PublishSource(); err != nil {
 			return err
 		}
-		n = loaded
-		n.ReadOnly = readOnly
-		n.LastSequence, err = volume.Next(tx)
-		if err != nil {
-			return err
-		}
-		return volume.PutJSON(b, volume.Config, n)
+		n = c.namespace
+		return nil
 	})
 	return n, err
 }

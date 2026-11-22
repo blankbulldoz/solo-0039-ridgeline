@@ -12,11 +12,8 @@ import (
 
 func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteReceipt, error) {
 	var receipt model.WriteReceipt
-	err := e.DB.Raw.Update(func(tx *bolt.Tx) error {
-		b, n, err := loadNamespace(tx, name)
-		if err != nil {
-			return err
-		}
+	err := e.mutate(name, logicalMutation, func(c *change) error {
+		b, n := c.bucket, c.namespace
 		if err := policy.Admit(n, request); err != nil {
 			return err
 		}
@@ -34,7 +31,7 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 		if len(series)+len(newSeries) > n.MaxSeries {
 			return model.Capacity("series cardinality policy exceeded")
 		}
-		seq, err := volume.Next(tx)
+		seq, err := c.PublishSource()
 		if err != nil {
 			return err
 		}
@@ -54,12 +51,11 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 				n.Watermark, n.HasWatermark = p.Time, true
 			}
 		}
-		n.LastSequence = seq
 		receipt = model.WriteReceipt{
 			Sequence: seq, Accepted: len(request.Points),
 			NewSeries: len(newSeries), Watermark: n.Watermark,
 		}
-		return volume.PutJSON(b, volume.Config, n)
+		return nil
 	})
 	return receipt, err
 }
