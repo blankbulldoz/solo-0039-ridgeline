@@ -45,6 +45,10 @@ func Handler(e *engine.Engine) http.Handler {
 		})
 	})
 	mux.HandleFunc("POST "+base+"/aggregate", func(w http.ResponseWriter, r *http.Request) {
+		if streamingRequest(r) {
+			serveAggregateStream(e, w, r)
+			return
+		}
 		handleBody(w, r, func(q model.Query) (any, error) {
 			return e.Aggregate(r.PathValue("space"), q)
 		})

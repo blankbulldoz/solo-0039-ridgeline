@@ -62,6 +62,10 @@
     {
       "workflow_id": "explain",
       "command": "python3 examples/walkthrough.py --workflow explain"
+    },
+    {
+      "workflow_id": "incremental",
+      "command": "python3 examples/walkthrough.py --workflow incremental"
     }
   ]
 }

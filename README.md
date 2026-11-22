@@ -22,6 +22,7 @@ then closes the database. A second process cannot open the same database file.
 
 ```sh
 python3 examples/walkthrough.py --workflow all
+python3 examples/walkthrough.py --workflow incremental
 python3 examples/walkthrough.py --output var/observations.json
 ```
 
@@ -47,7 +48,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/points` | `{"now":10000,"points":[...]}` |
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
-| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
+| POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by; `?stream=sse` streams |
 | POST | `/spaces/{space}/explain` | interval and matchers |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
@@ -73,6 +74,36 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+### Incremental aggregate output
+
+The aggregate route keeps its single-document JSON response by default.
+Adding `?stream=sse` or `Accept: text/event-stream` instead answers with
+server-sent events over one bbolt read transaction:
+
+```
+event: open     data: {"sequence":..,"start":..,"end":..,"step":..}
+event: window   data: {"sequence":..,"start":..,"end":..,"cells":[..],"stats":{..}}
+event: done     data: {"sequence":..,"windows":N,"complete":true,"stats":{..}}
+event: error    data: {"code":..,"detail":..,"sequence":..,"windows":N,"complete":false}
+```
+
+A `window` event carries every group that has cells in `[start, end)`; a
+window without visible points is omitted, and windows arrive once each in
+ascending time order. A window is only sent after every block that could
+overlap it and every head record before its end has been read, so delivered
+cells are final for that read view and are never retracted. A window is
+resolved from head points and from any number of overlapping blocks and
+series; corrections follow the same newest-sequence rule as a raw query.
+
+The stream advances by source position, so the first window can be delivered
+while blocks covering later windows are still undecoded. If a later block
+exceeds the namespace scan budget, fails its checksum or cannot be decoded,
+the stream ends with `error` and `complete:false` after any windows already
+delivered; it never reports `done` for an incomplete query. Client hang-ups
+cancel the query, release the transaction and leave the database unchanged.
+Existing `sequence` values are unchanged: streaming is a representation
+choice, not a new commit.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
@@ -90,8 +121,11 @@ An image has the source identity and includes every namespace.
 The server currently holds backup bytes in memory, compacts a namespace in one
 write transaction and scans catalog entries before selecting series. Query
 source work is bounded by max_scan; maintenance shares that budget and may
-reject an oversized operation without changing the database. These are explicit
-single-node resource boundaries, not promises of unlimited ingestion.
+reject an oversized operation without changing the database. Incremental
+aggregate output holds one read transaction for the whole stream, so a slow
+consumer extends how long that read view and its bbolt pages stay live; a
+disconnect ends it promptly. These are explicit single-node resource
+boundaries, not promises of unlimited ingestion.
 
 See PROJECT_SPEC.md for exact arithmetic, late-data, counter and retention
 semantics. There is no background retention job; clients explicitly advance it.

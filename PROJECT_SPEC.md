@@ -40,6 +40,20 @@ Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
 No extrapolation, interpolation or clock correction is implied.
 
+Aggregation may additionally be read incrementally. The caller selects the
+event-stream representation on the same aggregate route; the default remains
+one JSON document. Incremental output publishes each origin-aligned window in
+ascending time order as soon as every source that could still contribute to
+it has been read, so a window is final when published and is never retracted.
+All groups of a window are published together. Contributions may come from
+mutable head points and from any number of overlapping blocks and series, and
+are merged by timestamp and sequence exactly like a raw query. A whole
+response observes one read transaction and one sequence. A query that later
+exceeds the scan budget or fails to decode a block ends in error after the
+windows already published; the response is then incomplete rather than
+complete, and earlier windows remain valid. Client cancellation stops the
+query without changing durable state.
+
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and
 deletions into one block per selected series; empty series retain their identity.
@@ -60,7 +74,8 @@ the server with that image as RIDGE_DB restores that database directly.
 2. Ingest ordered, late and corrective measurements atomically.
 3. Discover canonical series through label matchers.
 4. Read corrected points across head and sealed blocks.
-5. Aggregate groups into signed, origin-aligned time windows.
+5. Aggregate groups into signed, origin-aligned time windows, optionally
+   delivering final windows incrementally as they are read.
 6. Calculate rates across counter resets.
 7. Seal mutable measurements into verified compressed blocks.
 8. Delete a range without hiding later corrections.

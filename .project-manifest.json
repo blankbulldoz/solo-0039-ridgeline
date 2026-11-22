@@ -147,6 +147,27 @@
       ]
     },
     {
+      "id": "incremental",
+      "name": "Incremental final-window publication",
+      "entry": "POST /spaces/spindle/aggregate?stream=sse",
+      "success": "Final windows are published in ascending time order over one read view",
+      "failure": "late scan budget or decode failure ends the stream incomplete without retracting windows",
+      "verification": "python3 examples/walkthrough.py --workflow incremental",
+      "steps": [
+        "validate the public request",
+        "merge head and sealed sources in event-time order",
+        "publish each window once it cannot change",
+        "report completion or a non-retracting failure"
+      ],
+      "module_ids": [
+        "wire",
+        "engine",
+        "select",
+        "window",
+        "volume"
+      ]
+    },
+    {
       "id": "counters",
       "name": "Reset aware rates",
       "entry": "POST /spaces/spindle/aggregate function=rate",
