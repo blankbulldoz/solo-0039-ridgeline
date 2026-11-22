@@ -1,9 +1,6 @@
 package model
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
-	"encoding/json"
 	"math"
 	"regexp"
 )
@@ -34,12 +31,6 @@ func ValidateLabels(labels Labels) error {
 		return Bad("__name__ label is required")
 	}
 	return nil
-}
-
-func SeriesID(labels Labels) string {
-	b, _ := json.Marshal(labels)
-	hash := sha256.Sum256(b)
-	return hex.EncodeToString(hash[:])
 }
 
 func ValidateObservation(p Observation) error {

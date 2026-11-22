@@ -80,6 +80,63 @@ deletes and rollups buckets. Numeric point keys encode signed time in
 lexicographic order. Blocks use format 1: a gzip stream containing an ordered
 JSON sample array, with SHA-256 over the compressed payload.
 
+### Series identifier storage
+
+The HTTP identifier for a series is always the 64-character lowercase
+hexadecimal SHA-256 digest of its canonical label set. Two physical layouts
+exist and are tracked by a root-level `storage_version` marker:
+
+| Version | Catalog keys | Head point keys | Marker |
+| --- | --- | --- | --- |
+| V1 | 64-byte hexadecimal string | 72 bytes (64 hex ID + 8 time) | absent |
+| V2 | 32-byte raw digest | 40 bytes (32 raw ID + 8 time) | `storage_version = 2` |
+
+V2 stores the raw 32-byte digest internally while every HTTP payload (series
+IDs, block `series_id`, tombstone targets, rollup results) keeps using the
+64-character hexadecimal form, so wire clients observe no identifier change.
+Head keys use a fixed-width 32-byte prefix plus an 8-byte timestamp suffix;
+the timestamp is never parsed as part of the series identifier.
+
+### Versioned V1 -> V2 migration
+
+Opening a V1 database runs an automatic, version-gated migration inside one
+bbolt write transaction, before the service accepts traffic:
+
+1. catalog keys are rewritten from 64-byte hex to 32-byte raw keys (the JSON
+   `id` value stays hexadecimal);
+2. head keys are rewritten from 72 to 40 bytes using the fixed-width split;
+3. block metadata and payloads are verified to resolve through the new
+   catalog; block IDs and payload keys stay hexadecimal;
+4. tombstone targets are verified against the new catalog (their JSON stays
+   hexadecimal);
+5. rollup materializations need no rewrite and are parse-validated, keeping
+   their source-sequence provenance;
+6. the root `storage_version = 2` marker is written once.
+
+The migration consumes no domain sequence, so logical data, rollup freshness
+and provenance are unchanged. Empty series retain their catalog identity. A
+database already carrying the V2 marker is opened without touching data, and a
+file stamped with a newer version is rejected rather than partially read.
+
+Before any migration write, the original file is copied to
+`<database>.pre-v2-mirror` (an existing mirror is never overwritten). The
+migration is atomic: if the transaction fails it rolls back and the live file
+remains a consistent V1 database, so after a failed startup the original file
+is still the correct file to keep running — restart the same binary to retry,
+or stop and replace the live file with the mirror to roll back to V1. The
+mirror is the authoritative fallback if the live file is ever in doubt; keep
+it until the upgraded deployment is verified. Remove it manually only after
+that verification, since its presence is what makes rollback possible.
+
+`go run ./cmd/ridge-inspect inspect <db>` reports the marker and the physical
+key-length distribution without opening the database through the service, and
+its `tamper` subcommand supports migration failure drills on scratch copies.
+`python3 examples/migration/migration_drill.py` runs the full end-to-end
+procedure: it builds the frozen baseline binary, creates a V1 database with
+missing/empty labels, delete-then-repost and an empty series, performs the
+upgrade and restart, exercises a failed migration, and restores from the
+mirror.
+
 Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with
 RIDGE_DB pointing to the verified image. Compare namespace floors, sequence,

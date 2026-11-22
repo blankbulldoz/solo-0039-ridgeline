@@ -10,8 +10,8 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-func putBlock(b *bolt.Bucket, id string, seq uint64, points []model.Sample) error {
-	block, payload, err := chunk.Build(id, seq, points)
+func putBlock(b *bolt.Bucket, hexID string, seq uint64, points []model.Sample) error {
+	block, payload, err := chunk.Build(hexID, seq, points)
 	if err != nil {
 		return err
 	}
@@ -36,16 +36,29 @@ func (e *Engine) Seal(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
-		grouped := map[string][]model.Sample{}
+		type groupedPoints struct {
+			hexID  string
+			points []model.Sample
+		}
+		grouped := map[string]*groupedPoints{}
 		err = b.Bucket(volume.Head).ForEach(func(k, v []byte) error {
-			if len(k) != 72 {
+			if len(k) != volume.PointKeySize {
 				return model.Bad("invalid stored point key")
 			}
+			// Fixed-width split: the first 32 bytes are the raw series key
+			// and the trailing 8 bytes are the timestamp suffix.
+			seriesKey := volume.PointSeries(k)
 			var point model.Sample
 			if err := json.Unmarshal(v, &point); err != nil {
 				return err
 			}
-			grouped[string(k[:64])] = append(grouped[string(k[:64])], point)
+			hexID := model.DecodeSeriesKey(seriesKey)
+			group, ok := grouped[hexID]
+			if !ok {
+				group = &groupedPoints{hexID: hexID}
+				grouped[hexID] = group
+			}
+			group.points = append(group.points, point)
 			return nil
 		})
 		if err != nil {
@@ -55,12 +68,15 @@ func (e *Engine) Seal(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
-		for id, points := range grouped {
-			if err := putBlock(b, id, seq, points); err != nil {
+		for _, group := range grouped {
+			if _, err := model.EncodeSeriesKey(group.hexID); err != nil {
+				return err
+			}
+			if err := putBlock(b, group.hexID, seq, group.points); err != nil {
 				return err
 			}
 			receipt.Blocks++
-			receipt.Points += len(points)
+			receipt.Points += len(group.points)
 		}
 		if err := clearBucket(b, volume.Head); err != nil {
 			return err

@@ -49,6 +49,10 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 	result.Stats.Series = len(selected)
 	emitted := 0
 	for _, s := range selected {
+		seriesKey, err := model.EncodeSeriesKey(s.ID)
+		if err != nil {
+			return result, err
+		}
 		merged := map[int64]model.Sample{}
 		for _, block := range blocks {
 			if block.SeriesID != s.ID || block.End <= q.Start ||
@@ -75,7 +79,7 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 			}
 		}
 		cursor := b.Bucket(volume.Head).Cursor()
-		for k, v := cursor.Seek(volume.PointKey(s.ID, q.Start)); k != nil && bytes.HasPrefix(k, []byte(s.ID)); k, v = cursor.Next() {
+		for k, v := cursor.Seek(volume.PointKey(seriesKey, q.Start)); k != nil && bytes.HasPrefix(k, seriesKey); k, v = cursor.Next() {
 			timestamp, err := volume.PointTime(k)
 			if err != nil {
 				return result, err

@@ -23,7 +23,10 @@ var Rollups = []byte("rollups")
 var Config = []byte("config")
 
 type DB struct {
-	Raw *bolt.DB
+	Raw        *bolt.DB
+	Migration  MigrationStats
+	Migrated   bool
+	MirrorPath string
 }
 
 func Open(path string) (*DB, error) {
@@ -34,19 +37,36 @@ func Open(path string) (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	// Migration must precede every other write transaction so the
+	// pre-migration mirror is byte-identical to the file as last committed by
+	// a V1 process (bbolt rewrites meta pages on any writable transaction).
+	stats, err := MigrateIfNeeded(raw, path)
+	if err != nil {
+		raw.Close()
+		return nil, err
+	}
 	err = raw.Update(func(tx *bolt.Tx) error {
 		root, e := tx.CreateBucketIfNotExists(Root)
 		if e != nil {
 			return e
 		}
-		_, e = root.CreateBucketIfNotExists(Spaces)
-		return e
+		if _, e = root.CreateBucketIfNotExists(Spaces); e != nil {
+			return e
+		}
+		if root.Get(StorageVersion) == nil {
+			marker := make([]byte, 8)
+			binary.BigEndian.PutUint64(marker, StorageVersionV2)
+			return root.Put(StorageVersion, marker)
+		}
+		return nil
 	})
 	if err != nil {
 		raw.Close()
 		return nil, err
 	}
-	return &DB{Raw: raw}, nil
+	db := &DB{Raw: raw, Migration: stats, MirrorPath: path + MirrorSuffix}
+	db.Migrated = stats.Namespaces > 0
+	return db, nil
 }
 
 func (d *DB) Close() error {

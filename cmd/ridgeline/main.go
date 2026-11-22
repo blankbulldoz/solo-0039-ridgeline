@@ -23,11 +23,19 @@ func env(key, fallback string) string {
 }
 
 func run() error {
-	e, err := engine.Open(env("RIDGE_DB", "var/ridgeline.db"))
+	dbPath := env("RIDGE_DB", "var/ridgeline.db")
+	e, err := engine.Open(dbPath)
 	if err != nil {
 		return err
 	}
 	defer e.Close()
+	if e.DB.Migrated {
+		log.Printf("storage migrated V1 -> V2: namespaces=%d series=%d empty_series=%d head=%d blocks=%d tombstones=%d tomb_targets=%d rollups=%d orphan_blocks=%d",
+			e.DB.Migration.Namespaces, e.DB.Migration.Series, e.DB.Migration.EmptySeries,
+			e.DB.Migration.HeadPoints, e.DB.Migration.Blocks, e.DB.Migration.Tombstones,
+			e.DB.Migration.TombTargets, e.DB.Migration.Rollups, e.DB.Migration.OrphanBlocks)
+		log.Printf("pre-migration V1 mirror retained at %s", e.DB.MirrorPath)
+	}
 	listener, err := net.Listen("tcp", env("RIDGE_ADDR", "127.0.0.1:8399"))
 	if err != nil {
 		return err

@@ -86,6 +86,17 @@ Large raw scans are bounded by the namespace scan budget. Maintenance currently
 runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
 
+Persistent series identifiers have a versioned physical layout recorded by a
+root-level `storage_version` marker. V1 stores the 64-character hexadecimal
+digest in catalog and head keys; V2 stores the raw 32-byte digest (32-byte
+catalog keys, 40-byte head keys of 32 ID bytes plus an 8-byte timestamp) while
+all HTTP identifiers remain 64-character hexadecimal. Opening a V1 database
+performs a single-transaction, version-gated migration covering catalog, head,
+block metadata, deletion targets and rollup validation, preserves empty series
+and the domain sequence, writes a V2 marker, and keeps a byte-identical
+pre-migration mirror file for rollback. A failed migration transaction leaves
+the live file at V1.
+
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
 exercise real API operations, process restart and failure responses. Formal
 automated tests are deferred. The walkthrough is a bounded production demo

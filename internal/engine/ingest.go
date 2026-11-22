@@ -25,10 +25,12 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 			return err
 		}
 		newSeries := map[string]model.Labels{}
+		newKeys := map[string][]byte{}
 		for _, p := range request.Points {
 			id := model.SeriesID(p.Labels)
-			if b.Bucket(volume.Catalog).Get([]byte(id)) == nil {
+			if b.Bucket(volume.Catalog).Get(model.SeriesKey(p.Labels)) == nil {
 				newSeries[id] = p.Labels
+				newKeys[id] = model.SeriesKey(p.Labels)
 			}
 		}
 		if len(series)+len(newSeries) > n.MaxSeries {
@@ -39,14 +41,14 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 			return err
 		}
 		for id, labels := range newSeries {
-			if err := volume.PutJSON(b.Bucket(volume.Catalog), []byte(id),
+			if err := volume.PutJSON(b.Bucket(volume.Catalog), newKeys[id],
 				model.Series{ID: id, Labels: labels}); err != nil {
 				return err
 			}
 		}
 		for _, p := range request.Points {
 			s := model.Sample{Time: p.Time, Value: p.Value, Sequence: seq}
-			key := volume.PointKey(model.SeriesID(p.Labels), p.Time)
+			key := volume.PointKey(model.SeriesKey(p.Labels), p.Time)
 			if err := volume.PutJSON(b.Bucket(volume.Head), key, s); err != nil {
 				return err
 			}
