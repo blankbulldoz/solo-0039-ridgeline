@@ -38,7 +38,33 @@ Buckets align to a caller-supplied origin, including before the Unix epoch.
 Only populated windows appear. An average weights observations, not series.
 Counter rate sums positive changes and treats a decrease as a reset to zero;
 its denominator is elapsed time between the first and last observed point.
-No extrapolation, interpolation or clock correction is implied.
+No extrapolation, interpolation or clock correction is implied by default.
+
+A rate query may opt into edge context (`rate_edge_context` together with a
+positive `rate_max_gap_ms`). The default rule is otherwise unchanged: a window
+still needs at least two in-window samples and outside samples are never read.
+With edge context, a window containing exactly one sample may borrow the
+nearest visible neighbor immediately beyond each boundary, but only while that
+neighbor lies within `rate_max_gap_ms` milliseconds of the boundary. Borrowed
+increments are never counted in full. Each boundary segment contributes its
+reset-aware increase multiplied by the fraction of the segment that overlaps
+the window, so a segment crossing the edge attributes only its window share;
+a decrease detected across an edge is still treated as a reset and is flagged.
+The value divides the attributed increase by full window seconds. One-sided
+support is allowed: the uncovered part of the window is reported as
+extrapolated time. A window whose series has no neighbor within the gap gets no
+value from that series; grouped cells still name it as an unsupported series.
+
+Every edge-context cell carries `rate_evidence`: the actual first and last
+sample timestamps supporting it, covered versus extrapolated milliseconds,
+borrowed sample counts, edge-reset flags, per-series support and the max gap
+that was in force. The scan range is extended by exactly the configured gap,
+under the same decoded-point budget, so deletions, corrections, tombstones and
+the retention floor apply to borrowed neighbors exactly as to window samples;
+a removed neighbor simply contracts the reported support span. Rollups store
+the full query, including the edge-context choice and gap, alongside the
+evidence-bearing result, so a materialization always discloses the rule that
+produced it.
 
 Sealing moves all current head points into compressed per-series blocks in
 one transaction. Compaction resolves overlapping blocks, corrections and

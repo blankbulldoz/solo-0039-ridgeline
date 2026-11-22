@@ -73,6 +73,34 @@ are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
+### Rate edge context
+
+A sparse counter can leave a window with a single sample, so the default rate
+emits nothing for it even when neighbors sit just outside the boundaries. A
+rate query may opt into bounded edge context:
+
+```json
+{"start":0,"end":240000,"step":60000,"origin":0,"function":"rate",
+ "rate_edge_context":true,"rate_max_gap_ms":30000,
+ "matchers":[{"label":"__name__","op":"=","value":"events_total"}]}
+```
+
+`rate_edge_context` is accepted only with `function:"rate"` and requires a
+positive `rate_max_gap_ms`; without the flag, rate semantics and JSON output
+are unchanged. A single-sample window then borrows the nearest visible sample
+beyond each boundary while it lies within that many milliseconds of the
+boundary. The full outside increment is never counted: each borrowed segment
+is time-weighted to the part of the segment overlapping the window, with
+decreases still treated as resets. The value is the attributed increase per
+window second, and each cell returns `rate_evidence` with the real supporting
+timestamps, covered and extrapolated milliseconds, borrowed sample counts,
+edge-reset flags and any unsupported series. One-sided windows are reported
+with their extrapolated portion rather than silently dropped. Deletions,
+corrections and retention apply to borrowed samples through the same scan;
+the extended scan stays inside the namespace scan budget and reports borrowed
+points in the `edges` statistic. Rollups persist the edge-context query fields
+and the evidence, so a stored rollup always shows the rule that produced it.
+
 ## Storage And Recovery
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,

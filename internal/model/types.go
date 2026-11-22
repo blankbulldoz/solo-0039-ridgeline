@@ -61,6 +61,14 @@ type Query struct {
 	Origin   int64     `json:"origin"`
 	GroupBy  []string  `json:"group_by"`
 	Function string    `json:"function"`
+	// RateEdgeContext opts rate queries into bounded outside-window
+	// neighbor support for windows that contain a single sample. It is
+	// rejected for every other function and leaves the default rate
+	// contract untouched when false.
+	RateEdgeContext bool `json:"rate_edge_context,omitempty"`
+	// RateMaxGapMS is the largest permitted distance between a window
+	// boundary and a borrowed neighbor sample, in milliseconds.
+	RateMaxGapMS int64 `json:"rate_max_gap_ms,omitempty"`
 }
 
 type SeriesPoints struct {
@@ -74,6 +82,7 @@ type ScanStats struct {
 	Head       int `json:"head"`
 	Decoded    int `json:"decoded"`
 	Visible    int `json:"visible"`
+	Edges      int `json:"edges,omitempty"`
 	Tombstones int `json:"tombstones"`
 }
 
@@ -91,6 +100,42 @@ type Cell struct {
 	End    int64   `json:"end"`
 	Value  float64 `json:"value"`
 	Count  int     `json:"count"`
+	// RateEvidence is populated only for rate queries that enable edge
+	// context. It records how much of the rate rests on samples actually
+	// observed inside the window and how much is extrapolated from bounded
+	// outside neighbors.
+	Evidence *RateEvidence `json:"rate_evidence,omitempty"`
+}
+
+// SeriesRateEvidence explains one series' contribution to an edge-context
+// rate cell. Times are the actual sample timestamps supporting the value;
+// covered/extrapolated durations are milliseconds of the window that the
+// supporting span fills versus leaves to be extrapolated.
+type SeriesRateEvidence struct {
+	SeriesID        string  `json:"series_id"`
+	Mode            string  `json:"mode"`
+	SupportStart    int64   `json:"support_start,omitempty"`
+	SupportEnd      int64   `json:"support_end,omitempty"`
+	InWindowSamples int     `json:"in_window_samples"`
+	EdgeSamples     int     `json:"edge_samples"`
+	CoveredMS       int64   `json:"covered_ms"`
+	ExtrapolatedMS  int64   `json:"extrapolated_ms"`
+	Increase        float64 `json:"increase"`
+	EdgeReset       bool    `json:"edge_reset,omitempty"`
+}
+
+// RateEvidence aggregates the per-series support behind a rate cell.
+type RateEvidence struct {
+	Mode              string               `json:"mode"`
+	MaxGapMS          int64                `json:"max_gap_ms"`
+	SupportStart      int64                `json:"support_start,omitempty"`
+	SupportEnd        int64                `json:"support_end,omitempty"`
+	CoveredMS         int64                `json:"covered_ms"`
+	ExtrapolatedMS    int64                `json:"extrapolated_ms"`
+	EdgeSamples       int                  `json:"edge_samples"`
+	EdgeReset         bool                 `json:"edge_reset,omitempty"`
+	UnsupportedSeries int                  `json:"unsupported_series"`
+	Series            []SeriesRateEvidence `json:"series"`
 }
 
 type AggregateResult struct {

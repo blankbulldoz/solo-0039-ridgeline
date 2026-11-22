@@ -27,10 +27,36 @@ func readBlocks(b *bolt.Bucket) ([]model.Block, error) {
 }
 
 func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (model.RangeResult, error) {
+	extend := int64(0)
+	if q.Function == "rate" && q.RateEdgeContext {
+		extend = q.RateMaxGapMS
+	}
+	return scanRange(b, n, q, sequence, extend)
+}
+
+// scanRange reads the visible samples in [q.Start, q.End). When extend is
+// positive it additionally reads samples in a bounded margin on each side;
+// the reducer treats those samples as neighbor-only evidence rather than as
+// window members, so outside increments can never enter a window wholesale.
+// The same decoded-point scan budget covers the extra work.
+func scanRange(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64, extend int64) (model.RangeResult, error) {
 	result := model.RangeResult{Sequence: sequence, Floor: n.Floor, Series: []model.SeriesPoints{}}
 	selector, err := selectseries.Compile(q.Matchers)
 	if err != nil {
 		return result, err
+	}
+	readStart, readEnd := q.Start, q.End
+	if extend > 0 {
+		if q.Start-model.MinTime <= extend {
+			readStart = model.MinTime
+		} else {
+			readStart = q.Start - extend
+		}
+		if model.MaxTime+1-q.End <= extend {
+			readEnd = model.MaxTime + 1
+		} else {
+			readEnd = q.End + extend
+		}
 	}
 	allSeries, err := catalog(b)
 	if err != nil {
@@ -51,8 +77,8 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 	for _, s := range selected {
 		merged := map[int64]model.Sample{}
 		for _, block := range blocks {
-			if block.SeriesID != s.ID || block.End <= q.Start ||
-				block.Start >= q.End || block.End <= n.Floor {
+			if block.SeriesID != s.ID || block.End <= readStart ||
+				block.Start >= readEnd || block.End <= n.Floor {
 				continue
 			}
 			if result.Stats.Decoded+block.Count > n.MaxScan {
@@ -65,7 +91,7 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 			result.Stats.Blocks++
 			result.Stats.Decoded += len(points)
 			for _, p := range points {
-				if p.Time < q.Start || p.Time >= q.End || p.Time < n.Floor {
+				if p.Time < readStart || p.Time >= readEnd || p.Time < n.Floor {
 					continue
 				}
 				old, ok := merged[p.Time]
@@ -75,12 +101,12 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 			}
 		}
 		cursor := b.Bucket(volume.Head).Cursor()
-		for k, v := cursor.Seek(volume.PointKey(s.ID, q.Start)); k != nil && bytes.HasPrefix(k, []byte(s.ID)); k, v = cursor.Next() {
+		for k, v := cursor.Seek(volume.PointKey(s.ID, readStart)); k != nil && bytes.HasPrefix(k, []byte(s.ID)); k, v = cursor.Next() {
 			timestamp, err := volume.PointTime(k)
 			if err != nil {
 				return result, err
 			}
-			if timestamp >= q.End {
+			if timestamp >= readEnd {
 				break
 			}
 			result.Stats.Head++
@@ -107,6 +133,13 @@ func scan(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (mo
 			}
 		}
 		sort.Slice(points, func(i, j int) bool { return points[i].Time < points[j].Time })
+		if extend > 0 {
+			for _, p := range points {
+				if p.Time < q.Start || p.Time >= q.End {
+					result.Stats.Edges++
+				}
+			}
+		}
 		result.Stats.Visible += len(points)
 		if q.Limit > 0 && emitted+len(points) > q.Limit {
 			keep := q.Limit - emitted

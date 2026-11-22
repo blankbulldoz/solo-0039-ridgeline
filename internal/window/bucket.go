@@ -16,10 +16,19 @@ func Validate(q model.Query) error {
 	}
 	switch q.Function {
 	case "count", "sum", "min", "max", "avg", "first", "last", "rate":
-		return nil
 	default:
 		return model.Bad("unknown aggregation function")
 	}
+	if q.RateEdgeContext && q.Function != "rate" {
+		return model.Bad("rate edge context is valid only for the rate function")
+	}
+	if !q.RateEdgeContext && q.RateMaxGapMS != 0 {
+		return model.Bad("rate_max_gap_ms requires rate_edge_context")
+	}
+	if q.RateEdgeContext && (q.RateMaxGapMS <= 0 || q.RateMaxGapMS > model.MaxTime) {
+		return model.Bad("rate edge context requires a supported positive max gap")
+	}
+	return nil
 }
 
 func Bucket(t, origin, step int64) int64 {
