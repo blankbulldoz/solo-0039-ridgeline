@@ -87,11 +87,13 @@ raw points and materialization freshness before directing producers there.
 The walkthrough demonstrates this sequence on an isolated restored volume.
 An image has the source identity and includes every namespace.
 
-The server currently holds backup bytes in memory, compacts a namespace in one
-write transaction and scans catalog entries before selecting series. Query
-source work is bounded by max_scan; maintenance shares that budget and may
-reject an oversized operation without changing the database. These are explicit
-single-node resource boundaries, not promises of unlimited ingestion.
+The server currently holds backup bytes in memory and compacts a namespace in
+one write transaction. Compaction streams the shared read path one series at a
+time and publishes each replacement block as it resolves, so it does not retain
+an expanded copy of every visible point across the namespace. Query source work
+is bounded by max_scan for the whole operation; maintenance shares that budget
+and may reject an oversized operation without changing the database. These are
+explicit single-node resource boundaries, not promises of unlimited ingestion.
 
 See PROJECT_SPEC.md for exact arithmetic, late-data, counter and retention
 semantics. There is no background retention job; clients explicitly advance it.

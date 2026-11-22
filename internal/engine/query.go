@@ -36,12 +36,22 @@ func aggregate(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64
 	}
 	// A raw result limit must not bias reducers.
 	q.Limit = 0
-	raw, err := scan(b, n, q, sequence)
+	src, err := openScan(b, n, q)
 	if err != nil {
 		return model.AggregateResult{}, err
 	}
-	cells, err := window.Aggregate(raw.Series, q)
-	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats}, err
+	reducer, err := window.NewReducer(q)
+	if err != nil {
+		return model.AggregateResult{}, err
+	}
+	err = src.forEach(func(s model.Series, points []model.Sample) error {
+		return reducer.Add(model.SeriesPoints{Series: s, Points: points})
+	})
+	if err != nil {
+		return model.AggregateResult{}, err
+	}
+	cells, err := reducer.Cells()
+	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: src.stats()}, err
 }
 
 func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, error) {

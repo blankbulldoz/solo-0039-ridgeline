@@ -20,44 +20,72 @@ type accumulator struct {
 	max      float64
 }
 
-func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error) {
+// Reducer folds series into aggregation cells incrementally. A caller that
+// streams a namespace one series at a time never has to retain every expanded
+// point, and the resulting cells are identical to a whole-slice reduction.
+type Reducer struct {
+	query  model.Query
+	groups map[string]*accumulator
+	rates  map[string]*model.Cell
+}
+
+func NewReducer(q model.Query) (*Reducer, error) {
 	if err := Validate(q); err != nil {
 		return nil, err
 	}
+	r := &Reducer{query: q}
 	if q.Function == "rate" {
-		return Rates(series, q)
+		r.rates = map[string]*model.Cell{}
+	} else {
+		r.groups = map[string]*accumulator{}
 	}
-	groups := map[string]*accumulator{}
-	for _, s := range series {
-		key, labels := Group(s.Series.Labels, q.GroupBy)
-		for _, p := range s.Points {
-			start := Bucket(p.Time, q.Origin, q.Step)
-			k := fmt.Sprintf("%s/%d", key, start)
-			a := groups[k]
-			if a == nil {
-				a = &accumulator{
-					cell:   model.Cell{Labels: labels, Start: start, End: start + q.Step},
-					firstT: p.Time, lastT: p.Time, first: p.Value, last: p.Value,
-					firstKey: s.Series.ID, lastKey: s.Series.ID,
-					min: p.Value, max: p.Value,
-				}
-				groups[k] = a
+	return r, nil
+}
+
+func (r *Reducer) Add(s model.SeriesPoints) error {
+	if r.query.Function == "rate" {
+		return r.addRate(s)
+	}
+	r.addGroup(s)
+	return nil
+}
+
+func (r *Reducer) addGroup(s model.SeriesPoints) {
+	q := r.query
+	key, labels := Group(s.Series.Labels, q.GroupBy)
+	for _, p := range s.Points {
+		start := Bucket(p.Time, q.Origin, q.Step)
+		k := fmt.Sprintf("%s/%d", key, start)
+		a := r.groups[k]
+		if a == nil {
+			a = &accumulator{
+				cell:   model.Cell{Labels: labels, Start: start, End: start + q.Step},
+				firstT: p.Time, lastT: p.Time, first: p.Value, last: p.Value,
+				firstKey: s.Series.ID, lastKey: s.Series.ID,
+				min: p.Value, max: p.Value,
 			}
-			a.cell.Count++
-			a.sum += p.Value
-			a.min = math.Min(a.min, p.Value)
-			a.max = math.Max(a.max, p.Value)
-			if p.Time < a.firstT || (p.Time == a.firstT && s.Series.ID < a.firstKey) {
-				a.firstT, a.firstKey, a.first = p.Time, s.Series.ID, p.Value
-			}
-			if p.Time > a.lastT || (p.Time == a.lastT && s.Series.ID > a.lastKey) {
-				a.lastT, a.lastKey, a.last = p.Time, s.Series.ID, p.Value
-			}
+			r.groups[k] = a
+		}
+		a.cell.Count++
+		a.sum += p.Value
+		a.min = math.Min(a.min, p.Value)
+		a.max = math.Max(a.max, p.Value)
+		if p.Time < a.firstT || (p.Time == a.firstT && s.Series.ID < a.firstKey) {
+			a.firstT, a.firstKey, a.first = p.Time, s.Series.ID, p.Value
+		}
+		if p.Time > a.lastT || (p.Time == a.lastT && s.Series.ID > a.lastKey) {
+			a.lastT, a.lastKey, a.last = p.Time, s.Series.ID, p.Value
 		}
 	}
-	out := make([]model.Cell, 0, len(groups))
-	for _, a := range groups {
-		switch q.Function {
+}
+
+func (r *Reducer) Cells() ([]model.Cell, error) {
+	if r.query.Function == "rate" {
+		return r.rateCells(), nil
+	}
+	out := make([]model.Cell, 0, len(r.groups))
+	for _, a := range r.groups {
+		switch r.query.Function {
 		case "count":
 			a.cell.Value = float64(a.cell.Count)
 		case "sum":
@@ -80,4 +108,17 @@ func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error)
 	}
 	SortCells(out)
 	return out, nil
+}
+
+func Aggregate(series []model.SeriesPoints, q model.Query) ([]model.Cell, error) {
+	r, err := NewReducer(q)
+	if err != nil {
+		return nil, err
+	}
+	for _, s := range series {
+		if err := r.Add(s); err != nil {
+			return nil, err
+		}
+	}
+	return r.Cells()
 }

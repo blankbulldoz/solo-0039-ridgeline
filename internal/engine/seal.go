@@ -10,15 +10,22 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
+// publishBlock stores an encoded block's metadata and payload together. It is
+// the single publication point shared by sealing and compaction so both paths
+// emit the same format-1 records.
+func publishBlock(b *bolt.Bucket, block model.Block, payload []byte) error {
+	if err := volume.PutJSON(b.Bucket(volume.Blocks), []byte(block.ID), block); err != nil {
+		return err
+	}
+	return b.Bucket(volume.Payloads).Put([]byte(block.ID), payload)
+}
+
 func putBlock(b *bolt.Bucket, id string, seq uint64, points []model.Sample) error {
 	block, payload, err := chunk.Build(id, seq, points)
 	if err != nil {
 		return err
 	}
-	if err := volume.PutJSON(b.Bucket(volume.Blocks), []byte(block.ID), block); err != nil {
-		return err
-	}
-	return b.Bucket(volume.Payloads).Put([]byte(block.ID), payload)
+	return publishBlock(b, block, payload)
 }
 
 func clearBucket(parent *bolt.Bucket, name []byte) error {
