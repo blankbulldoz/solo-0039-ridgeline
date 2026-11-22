@@ -23,7 +23,13 @@ then closes the database. A second process cannot open the same database file.
 ```sh
 python3 examples/walkthrough.py --workflow all
 python3 examples/walkthrough.py --output var/observations.json
+python3 examples/backfill_order.py
 ```
+
+`examples/backfill_order.py` reproduces how one late backfill batch draws
+three different first errors depending on point order, proves rejections leave
+no state, and rehearses the safe split-resend order; conclusions are recorded
+in `examples/backfill_order.md`.
 
 The bounded walkthrough uses temporary volumes and an available ephemeral port.
 Each named workflow runs the entire related stateful scenario so its required
