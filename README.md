@@ -95,3 +95,19 @@ single-node resource boundaries, not promises of unlimited ingestion.
 
 See PROJECT_SPEC.md for exact arithmetic, late-data, counter and retention
 semantics. There is no background retention job; clients explicitly advance it.
+
+## Label Governance
+
+`governance/` holds a read-only data-governance review of `node` label
+normalization across collection groups. It does not change any database: the
+fixture is ingested into a throwaway volume to obtain authoritative SeriesIDs,
+and the handoff tables are generated from that evidence. Start with
+`governance/README.md`; `governance/handoff/mapping.csv` is the table an access
+team applies. Reproduce with:
+
+```sh
+go build -o /tmp/ridgeline ./cmd/ridgeline
+python3 -I governance/verify/verify_series.py --binary /tmp/ridgeline \
+    --out governance/evidence/series-verification.json
+python3 -I governance/verify/build_handoff.py
+```

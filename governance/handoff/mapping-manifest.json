@@ -1,0 +1,1782 @@
+{
+  "schema_version": 1,
+  "database_change": "none",
+  "scope": "governance analysis only",
+  "generated_at": "2026-11-22",
+  "provenance": {
+    "fixture": "governance/fixtures/extended-seed.json",
+    "fixture_sha256": "b3d9dfa7c267763836dae1c3109e6ffea974d686869d1e094b7ee100004722d4",
+    "evidence": "governance/evidence/series-verification.json",
+    "seed_session": "examples/session.json",
+    "seed_series_ids": {
+      "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87": {
+        "__name__": "pulse_total",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f": {
+        "__name__": "load_ratio",
+        "node": "ridge-a",
+        "rack": "",
+        "zone": "east"
+      },
+      "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69": {
+        "__name__": "pulse_total",
+        "node": "ridge-b",
+        "zone": "east"
+      },
+      "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888": {
+        "__name__": "load_ratio",
+        "node": "ridge-b",
+        "zone": "west"
+      }
+    },
+    "identity_rule": "SeriesID = sha256(json.Marshal(labels)); see internal/model/validate.go:39",
+    "namespace_independence": "SeriesID depends only on labels, not on namespace name"
+  },
+  "recommended_policy": {
+    "case_fold": {
+      "decision": "apply_to_node_value_only",
+      "confirmed": [
+        "ridge-a",
+        "RIDGE-A"
+      ],
+      "inferred": [
+        [
+          "ridge-a.lab",
+          "RIDGE-A.lab"
+        ],
+        [
+          "ridge-a.prod",
+          "RIDGE-A.prod"
+        ]
+      ],
+      "basis": "B1 for the base pair; rule extension for suffix pairs (U5)"
+    },
+    "suffix_strip": {
+      "decision": "reject",
+      "basis": [
+        "B2",
+        "B6"
+      ],
+      "reason": "B2 makes .lab and .prod different devices. Removing the suffix merges 6 pulse_total series into one at every one of the 7 observed timestamps, with 3 distinct values at each."
+    },
+    "rack_presence_collapse": {
+      "decision": "reject_until_source_confirmed",
+      "basis": [
+        "B3"
+      ],
+      "reason": "Missing and explicit empty rack are distinct SeriesIDs. There is no observed value conflict, but absence of a conflict does not prove the same source."
+    },
+    "zone": {
+      "decision": "do_not_use_for_identity",
+      "basis": [
+        "seed observation B7"
+      ]
+    },
+    "storage": {
+      "decision": "keep_existing_series_ids",
+      "reason": "Head point keys, blocks, tombstones and rollup outputs reference SeriesID. There is no relabel API and rewriting identity would orphan stored references."
+    }
+  },
+  "node_business_mapping": [
+    {
+      "display_nodes": [
+        "RIDGE-A",
+        "ridge-a"
+      ],
+      "normalized_node": "ridge-a",
+      "business_device": "ridge-a (legacy hardware before the window; replacement hardware after the window)",
+      "relation_to_ridge_a": "same device as ridge-a/RIDGE-A (B1)",
+      "validity": "label equivalence ridge-a/RIDGE-A holds at all times (B1); the physical device is time-split, see segments",
+      "segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795003200000,
+          "device_key": "dev:ridge-a@legacy",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log pre-window"
+          ]
+        },
+        {
+          "start_ms": 1795003200000,
+          "end_ms": 1795003800000,
+          "device_key": null,
+          "validity": "undecided",
+          "basis": [
+            "B4",
+            "B5",
+            "log resolves only a ten-minute bound"
+          ]
+        },
+        {
+          "start_ms": 1795003800000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a@replacement",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log post-window"
+          ]
+        }
+      ],
+      "series_keys": [
+        "S1a",
+        "S1b",
+        "S3a",
+        "S3b",
+        "S3c",
+        "S3d"
+      ],
+      "series_ids": [
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+        "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+        "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+      ]
+    },
+    {
+      "display_nodes": [
+        "RIDGE-A.lab",
+        "ridge-a.lab"
+      ],
+      "normalized_node": "ridge-a.lab",
+      "business_device": "ridge-a.lab",
+      "relation_to_ridge_a": "distinct device; relation to base ridge-a unknown (B2, B6)",
+      "validity": "label identity holds at all times; relation to ridge-a is not stated by the business table",
+      "segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a.lab",
+          "validity": "label_exact_distinct_from_prod",
+          "basis": [
+            "B2"
+          ]
+        }
+      ],
+      "series_keys": [
+        "S1c",
+        "S1d"
+      ],
+      "series_ids": [
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e"
+      ]
+    },
+    {
+      "display_nodes": [
+        "RIDGE-A.prod",
+        "ridge-a.prod"
+      ],
+      "normalized_node": "ridge-a.prod",
+      "business_device": "ridge-a.prod",
+      "relation_to_ridge_a": "distinct device; relation to base ridge-a unknown (B2, B6)",
+      "validity": "label identity holds at all times; relation to ridge-a is not stated by the business table",
+      "segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a.prod",
+          "validity": "label_exact_distinct_from_lab",
+          "basis": [
+            "B2"
+          ]
+        }
+      ],
+      "series_keys": [
+        "S1e",
+        "S1f"
+      ],
+      "series_ids": [
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ]
+    },
+    {
+      "display_nodes": [
+        "ridge-b"
+      ],
+      "normalized_node": "ridge-b",
+      "business_device": "ridge-b",
+      "relation_to_ridge_a": "separate device, not covered by the business table",
+      "validity": "label identity holds at all times; no relation to ridge-a is proposed",
+      "segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-b",
+          "validity": "label_exact",
+          "basis": [
+            "no normalization proposed"
+          ]
+        }
+      ],
+      "series_keys": [
+        "S2",
+        "S4"
+      ],
+      "series_ids": [
+        "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888"
+      ]
+    }
+  ],
+  "series": [
+    {
+      "key": "S1a",
+      "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+      "series_id_source": "examples/session.json discovery",
+      "seed_cross_check": true,
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "metric": "pulse_total",
+      "node_case": "lower",
+      "node_suffix": null,
+      "rack_state": "absent",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795003200000,
+          "device_key": "dev:ridge-a@legacy",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log pre-window"
+          ]
+        },
+        {
+          "start_ms": 1795003200000,
+          "end_ms": 1795003800000,
+          "device_key": null,
+          "validity": "undecided",
+          "basis": [
+            "B4",
+            "B5",
+            "log resolves only a ten-minute bound"
+          ]
+        },
+        {
+          "start_ms": 1795003800000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a@replacement",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log post-window"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356"
+        ],
+        "case_fold_basis": "confirmed_all_time (B1)",
+        "suffix_strip_merge_with": [
+          "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S1b",
+      "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+      "series_id_source": "governance fixture discovery",
+      "seed_cross_check": null,
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A",
+        "zone": "east"
+      },
+      "metric": "pulse_total",
+      "node_case": "upper",
+      "node_suffix": null,
+      "rack_state": "absent",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795003200000,
+          "device_key": "dev:ridge-a@legacy",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log pre-window"
+          ]
+        },
+        {
+          "start_ms": 1795003200000,
+          "end_ms": 1795003800000,
+          "device_key": null,
+          "validity": "undecided",
+          "basis": [
+            "B4",
+            "B5",
+            "log resolves only a ten-minute bound"
+          ]
+        },
+        {
+          "start_ms": 1795003800000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a@replacement",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log post-window"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+        ],
+        "case_fold_basis": "confirmed_all_time (B1)",
+        "suffix_strip_merge_with": [
+          "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S1c",
+      "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+      "series_id_source": "governance fixture discovery",
+      "seed_cross_check": null,
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a.lab",
+        "zone": "east"
+      },
+      "metric": "pulse_total",
+      "node_case": "lower",
+      "node_suffix": "lab",
+      "rack_state": "absent",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a.lab",
+          "validity": "label_exact_distinct_from_prod",
+          "basis": [
+            "B2"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e"
+        ],
+        "case_fold_basis": "inferred by rule; business table names only ridge-a/RIDGE-A (U5)",
+        "suffix_strip_merge_with": [
+          "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S1d",
+      "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+      "series_id_source": "governance fixture discovery",
+      "seed_cross_check": null,
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A.lab",
+        "zone": "east"
+      },
+      "metric": "pulse_total",
+      "node_case": "upper",
+      "node_suffix": "lab",
+      "rack_state": "absent",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a.lab",
+          "validity": "label_exact_distinct_from_prod",
+          "basis": [
+            "B2"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4"
+        ],
+        "case_fold_basis": "inferred by rule; business table names only ridge-a/RIDGE-A (U5)",
+        "suffix_strip_merge_with": [
+          "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S1e",
+      "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+      "series_id_source": "governance fixture discovery",
+      "seed_cross_check": null,
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a.prod",
+        "zone": "east"
+      },
+      "metric": "pulse_total",
+      "node_case": "lower",
+      "node_suffix": "prod",
+      "rack_state": "absent",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a.prod",
+          "validity": "label_exact_distinct_from_lab",
+          "basis": [
+            "B2"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+        ],
+        "case_fold_basis": "inferred by rule; business table names only ridge-a/RIDGE-A (U5)",
+        "suffix_strip_merge_with": [
+          "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S1f",
+      "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+      "series_id_source": "governance fixture discovery",
+      "seed_cross_check": null,
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A.prod",
+        "zone": "east"
+      },
+      "metric": "pulse_total",
+      "node_case": "upper",
+      "node_suffix": "prod",
+      "rack_state": "absent",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a.prod",
+          "validity": "label_exact_distinct_from_lab",
+          "basis": [
+            "B2"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+        ],
+        "case_fold_basis": "inferred by rule; business table names only ridge-a/RIDGE-A (U5)",
+        "suffix_strip_merge_with": [
+          "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S2",
+      "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+      "series_id_source": "examples/session.json discovery",
+      "seed_cross_check": true,
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-b",
+        "zone": "east"
+      },
+      "metric": "pulse_total",
+      "node_case": "lower",
+      "node_suffix": null,
+      "rack_state": "absent",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-b",
+          "validity": "label_exact",
+          "basis": [
+            "no normalization proposed"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [],
+        "case_fold_basis": "not covered by the business table; no counterpart series observed",
+        "suffix_strip_merge_with": [],
+        "suffix_strip_effect": "no sibling series; suffix strip is a no-op for this row",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S3a",
+      "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+      "series_id_source": "examples/session.json discovery",
+      "seed_cross_check": true,
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-a",
+        "rack": "",
+        "zone": "east"
+      },
+      "metric": "load_ratio",
+      "node_case": "lower",
+      "node_suffix": null,
+      "rack_state": "present_empty",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795003200000,
+          "device_key": "dev:ridge-a@legacy",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log pre-window"
+          ]
+        },
+        {
+          "start_ms": 1795003200000,
+          "end_ms": 1795003800000,
+          "device_key": null,
+          "validity": "undecided",
+          "basis": [
+            "B4",
+            "B5",
+            "log resolves only a ten-minute bound"
+          ]
+        },
+        {
+          "start_ms": 1795003800000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a@replacement",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log post-window"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "present",
+        "rack_value": "",
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8"
+        ],
+        "case_fold_basis": "confirmed_all_time (B1)",
+        "suffix_strip_merge_with": [
+          "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S3b",
+      "series_id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+      "series_id_source": "governance fixture discovery",
+      "seed_cross_check": null,
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "RIDGE-A",
+        "rack": "",
+        "zone": "east"
+      },
+      "metric": "load_ratio",
+      "node_case": "upper",
+      "node_suffix": null,
+      "rack_state": "present_empty",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795003200000,
+          "device_key": "dev:ridge-a@legacy",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log pre-window"
+          ]
+        },
+        {
+          "start_ms": 1795003200000,
+          "end_ms": 1795003800000,
+          "device_key": null,
+          "validity": "undecided",
+          "basis": [
+            "B4",
+            "B5",
+            "log resolves only a ten-minute bound"
+          ]
+        },
+        {
+          "start_ms": 1795003800000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a@replacement",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log post-window"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "present",
+        "rack_value": "",
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f"
+        ],
+        "case_fold_basis": "confirmed_all_time (B1)",
+        "suffix_strip_merge_with": [
+          "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S3c",
+      "series_id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+      "series_id_source": "governance fixture discovery",
+      "seed_cross_check": null,
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "metric": "load_ratio",
+      "node_case": "lower",
+      "node_suffix": null,
+      "rack_state": "absent",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795003200000,
+          "device_key": "dev:ridge-a@legacy",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log pre-window"
+          ]
+        },
+        {
+          "start_ms": 1795003200000,
+          "end_ms": 1795003800000,
+          "device_key": null,
+          "validity": "undecided",
+          "basis": [
+            "B4",
+            "B5",
+            "log resolves only a ten-minute bound"
+          ]
+        },
+        {
+          "start_ms": 1795003800000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a@replacement",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log post-window"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+        ],
+        "case_fold_basis": "confirmed_all_time (B1)",
+        "suffix_strip_merge_with": [
+          "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S3d",
+      "series_id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+      "series_id_source": "governance fixture discovery",
+      "seed_cross_check": null,
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "RIDGE-A",
+        "zone": "east"
+      },
+      "metric": "load_ratio",
+      "node_case": "upper",
+      "node_suffix": null,
+      "rack_state": "absent",
+      "zone": "east",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795003200000,
+          "device_key": "dev:ridge-a@legacy",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log pre-window"
+          ]
+        },
+        {
+          "start_ms": 1795003200000,
+          "end_ms": 1795003800000,
+          "device_key": null,
+          "validity": "undecided",
+          "basis": [
+            "B4",
+            "B5",
+            "log resolves only a ten-minute bound"
+          ]
+        },
+        {
+          "start_ms": 1795003800000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-a@replacement",
+          "validity": "confirmed_interval",
+          "basis": [
+            "B4",
+            "legacy log post-window"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "east",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [
+          "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d"
+        ],
+        "case_fold_basis": "confirmed_all_time (B1)",
+        "suffix_strip_merge_with": [
+          "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d"
+        ],
+        "suffix_strip_effect": "merges distinct devices; reject",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    },
+    {
+      "key": "S4",
+      "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+      "series_id_source": "examples/session.json discovery",
+      "seed_cross_check": true,
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-b",
+        "zone": "west"
+      },
+      "metric": "load_ratio",
+      "node_case": "lower",
+      "node_suffix": null,
+      "rack_state": "absent",
+      "zone": "west",
+      "identity_segments": [
+        {
+          "start_ms": 1794960000000,
+          "end_ms": 1795046400000,
+          "device_key": "dev:ridge-b",
+          "validity": "label_exact",
+          "basis": [
+            "no normalization proposed"
+          ]
+        }
+      ],
+      "attributes": {
+        "rack_presence": "absent",
+        "rack_value": null,
+        "rack_source": "unknown (B3)",
+        "zone_value": "west",
+        "zone_use_for_identity": "forbidden; seed has ridge-b/east and ridge-b/west"
+      },
+      "normalization": {
+        "case_fold_merge_with": [],
+        "case_fold_basis": "not covered by the business table; no counterpart series observed",
+        "suffix_strip_merge_with": [],
+        "suffix_strip_effect": "no sibling series; suffix strip is a no-op for this row",
+        "suffix_strip_decision": "reject (B2, B6)"
+      }
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "C1",
+      "kind": "same_device_same_time_different_value",
+      "normalization": "case_fold_node",
+      "metric": "pulse_total",
+      "node_display": "ridge-a / RIDGE-A",
+      "series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+      ],
+      "time": 1795003440000,
+      "time_iso": "2026-11-18T12:04:00Z",
+      "inside_change_window": true,
+      "distinct_values": [
+        412,
+        512
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 512,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 412,
+          "sequence": 3
+        }
+      ],
+      "meaning": "Case folding is authorized by B1, so after the merge these become two observations of one device at one timestamp. The engine keeps them apart today because their SeriesIDs differ; the conflict is created by the proposed normalization. A downstream join on lower(node) would see two values at this timestamp with no defined precedence: 412 has commit sequence 3, 512 has sequence 2, but they are different series, so sequence does not order them as one timeline.",
+      "resolution": "undecided; hand off to access team (U4)"
+    },
+    {
+      "id": "C2",
+      "kind": "merge_of_distinct_devices",
+      "normalization": "strip_suffix_only and case_fold_and_strip_suffix",
+      "metric": "pulse_total",
+      "merged_series_count": 3,
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "conflict_timestamps_by_normalization": {
+        "strip_suffix_only": [
+          {
+            "time": 1795002000000,
+            "inside_change_window": false,
+            "distinct_values": [
+              100,
+              300,
+              700
+            ]
+          },
+          {
+            "time": 1795002600000,
+            "inside_change_window": false,
+            "distinct_values": [
+              110,
+              310,
+              710
+            ]
+          },
+          {
+            "time": 1795003200000,
+            "inside_change_window": true,
+            "distinct_values": [
+              120,
+              320,
+              720
+            ]
+          },
+          {
+            "time": 1795003440000,
+            "inside_change_window": true,
+            "distinct_values": [
+              330,
+              412,
+              512,
+              730
+            ]
+          },
+          {
+            "time": 1795003740000,
+            "inside_change_window": true,
+            "distinct_values": [
+              140,
+              340,
+              740
+            ]
+          },
+          {
+            "time": 1795004400000,
+            "inside_change_window": false,
+            "distinct_values": [
+              150,
+              350,
+              750
+            ]
+          },
+          {
+            "time": 1795005000000,
+            "inside_change_window": false,
+            "distinct_values": [
+              160,
+              360,
+              760
+            ]
+          }
+        ],
+        "case_fold_and_strip_suffix": [
+          {
+            "time": 1795002000000,
+            "inside_change_window": false,
+            "distinct_values": [
+              100,
+              300,
+              700
+            ]
+          },
+          {
+            "time": 1795002600000,
+            "inside_change_window": false,
+            "distinct_values": [
+              110,
+              310,
+              710
+            ]
+          },
+          {
+            "time": 1795003200000,
+            "inside_change_window": true,
+            "distinct_values": [
+              120,
+              320,
+              720
+            ]
+          },
+          {
+            "time": 1795003440000,
+            "inside_change_window": true,
+            "distinct_values": [
+              330,
+              412,
+              512,
+              730
+            ]
+          },
+          {
+            "time": 1795003740000,
+            "inside_change_window": true,
+            "distinct_values": [
+              140,
+              340,
+              740
+            ]
+          },
+          {
+            "time": 1795004400000,
+            "inside_change_window": false,
+            "distinct_values": [
+              150,
+              350,
+              750
+            ]
+          },
+          {
+            "time": 1795005000000,
+            "inside_change_window": false,
+            "distinct_values": [
+              160,
+              360,
+              760
+            ]
+          }
+        ]
+      },
+      "sample_observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 100,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 300,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 700,
+          "sequence": 2
+        }
+      ],
+      "sample_time": 1795002000000,
+      "meaning": "This is not a data error. B2 says .lab and .prod are different devices, so stripping the suffix merges distinct device timelines. The conflict appears even without case folding, so the case-folding decision is not what makes suffix stripping invalid. Outside the change window the merged bucket yields 3 distinct values at every observed timestamp, the signature of an invalid identity merge rather than a recoverable conflict.",
+      "resolution": "reject normalization; no value reconciliation applies"
+    },
+    {
+      "id": "C3",
+      "kind": "same_series_same_time_overwritten",
+      "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+      "time": 1795003440000,
+      "submitted_values": [
+        410,
+        412
+      ],
+      "stored_value": 412,
+      "inside_change_window": true,
+      "meaning": "Two producers using the same node label wrote the same series at the same timestamp during the cutover. The engine kept the last committed value, so the first value exists only in the submission log. This is a same-time value conflict at the storage layer and cannot be repaired by identity mapping.",
+      "resolution": "undecided; hand off to access team (U4)"
+    }
+  ],
+  "aggregate_impact": {
+    "case_fold_conflict_cell": {
+      "window": [
+        1795003440000,
+        1795003500000
+      ],
+      "avg_with_case_insensitive_selector": 462,
+      "count": 2,
+      "exact_ridge_a_avg": 412,
+      "note": "A case-insensitive selector averages the conflicting values into 462; the exact selector returns 412. Neither is a validated device value."
+    },
+    "suffix_strip_impact_cell": {
+      "window": [
+        1795002000000,
+        1795002060000
+      ],
+      "avg_after_suffix_strip": 366.6666666666667,
+      "count": 6,
+      "note": "Averaging distinct devices (.lab and .prod) with the base produces a number that describes no physical device."
+    },
+    "series_counts": {
+      "engine_series": 12,
+      "after_case_fold": 7,
+      "after_case_fold_and_suffix_strip": 5,
+      "after_rack_presence_collapse": 10,
+      "after_all_three": 4
+    }
+  },
+  "undecidable": [
+    {
+      "id": "U1",
+      "topic": "exact cutover instant",
+      "fact": "The log bounds the replacement to [12:00, 12:10) UTC; it does not identify the second.",
+      "consequence": "Every sample in the window has an unknown physical producer.",
+      "owner": "access team + legacy collector operations",
+      "needed_evidence": "per-device serial or agent ID near T3..T5, or a timestamped operations record"
+    },
+    {
+      "id": "U2",
+      "topic": "base ridge-a versus .lab/.prod",
+      "fact": "B2 only states .lab != .prod; the business table does not relate the base name to either.",
+      "consequence": "Cannot use .lab/.prod to infer the base device identity, and cannot strip suffixes.",
+      "owner": "business owner",
+      "needed_evidence": "asset registry entry linking display names to device serials"
+    },
+    {
+      "id": "U3",
+      "topic": "rack empty source",
+      "fact": "B3 says the source of an empty rack value is unknown.",
+      "consequence": "Missing rack and explicit empty rack have different SeriesIDs; whether they are the same state is unknown.",
+      "owner": "collection owner",
+      "needed_evidence": "producer configuration showing whether rack is omitted or emitted as empty, and why"
+    },
+    {
+      "id": "U4",
+      "topic": "same-time value conflicts at T4",
+      "fact": "C1 (412 vs 512 across case variants) and C3 (410 overwritten by 412 in one series) both fall inside the window.",
+      "consequence": "Value selection at T4 is not determined by identity alone.",
+      "owner": "access team + collection owners of both devices",
+      "needed_evidence": "per-device raw submission log with producer identity"
+    },
+    {
+      "id": "U5",
+      "topic": "case fold for .lab/.prod variants",
+      "fact": "B1 names only ridge-a/RIDGE-A; it does not state that RIDGE-A.lab is ridge-a.lab.",
+      "consequence": "The case-fold merge for suffix variants is recommended by rule but not confirmed.",
+      "owner": "business owner",
+      "needed_evidence": "explicit statement or asset registry match"
+    },
+    {
+      "id": "U6",
+      "topic": "zone as an identity attribute",
+      "fact": "Seed contains node=ridge-b with zone=east (pulse_total) and zone=west (load_ratio).",
+      "consequence": "zone cannot be used to join or split device identity; it is an inconsistent attribute.",
+      "owner": "collection owner",
+      "needed_evidence": "authoritative site/zone assignment per device"
+    },
+    {
+      "id": "U7",
+      "topic": "validity outside the governance day",
+      "fact": "The replacement log covers one day. No statement covers earlier or later days.",
+      "consequence": "The legacy/replacement time split is confirmed only for 2026-11-18 UTC.",
+      "owner": "legacy collector operations",
+      "needed_evidence": "change history for the full retention horizon"
+    }
+  ],
+  "case_variant_time_coverage": [
+    {
+      "labels_key": [
+        "load_ratio",
+        "ridge-a",
+        false,
+        null,
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "ridge-a",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "RIDGE-A",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    },
+    {
+      "labels_key": [
+        "load_ratio",
+        "ridge-a",
+        true,
+        "",
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "RIDGE-A",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "ridge-a",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    },
+    {
+      "labels_key": [
+        "pulse_total",
+        "ridge-a",
+        false,
+        null,
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "RIDGE-A",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "ridge-a",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    },
+    {
+      "labels_key": [
+        "pulse_total",
+        "ridge-a.lab",
+        false,
+        null,
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "ridge-a.lab",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "RIDGE-A.lab",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    },
+    {
+      "labels_key": [
+        "pulse_total",
+        "ridge-a.prod",
+        false,
+        null,
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "ridge-a.prod",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "RIDGE-A.prod",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    }
+  ],
+  "assumptions_to_check_against_production": [
+    {
+      "id": "A1",
+      "assumption": "Both case variants of every node exist on both sides of the hardware change in the governance fixture.",
+      "risk": "If production has RIDGE-A only before the change and ridge-a only after, case folding would merge the legacy device with its replacement across the cutover. Then B1 ('same device') would hold only within each period.",
+      "check": "Select node=~'(?i)ridge-a' and compare first/last times per SeriesID before applying the mapping.",
+      "status": "verified true in fixture; unverified in production"
+    },
+    {
+      "id": "A2",
+      "assumption": "Case variants of one device agree on values at each timestamp outside the change window.",
+      "risk": "If they disagree, case folding turns every disagreement into a same-time conflict even though the engine stores the two SeriesIDs separately. In the fixture the only disagreement is C1 at T4, inside the window.",
+      "check": "Replay the pre/post masks with node =~ '(?i)ridge-a' and compare values per timestamp before declaring the pair safe.",
+      "status": "true in fixture outside the window; unverified in production"
+    }
+  ],
+  "handoff": {
+    "freeze": [
+      "Do not rewrite labels, SeriesIDs, head points, blocks or tombstones.",
+      "Do not run a suffix-stripping or case-collapsing migration; both would either merge distinct devices or orphan stored keys.",
+      "Keep the source database read-only for the reconciliation window."
+    ],
+    "query_pack": {
+      "namespace": "spindle_gov",
+      "note": "All intervals are half-open. Run against a copy or a read-only namespace.",
+      "pre_confirmed": {
+        "query": {
+          "start": 1794960000000,
+          "end": 1795003200000
+        },
+        "expected": "12 series, 24 points (T1, T2 per series), directly mapable",
+        "observed_point_count": 24
+      },
+      "undecided_window": {
+        "query": {
+          "start": 1795003200000,
+          "end": 1795003800000
+        },
+        "expected": "12 series, 36 points (T3, T4, T5 per series); these must not be assigned to a physical device",
+        "observed_point_count": 36
+      },
+      "post_confirmed": {
+        "query": {
+          "start": 1795003800000,
+          "end": 1795046400000
+        },
+        "expected": "12 series, 24 points (T6, T7 per series), directly mapable",
+        "observed_point_count": 24
+      },
+      "case_insensitive_discovery": {
+        "query": {
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=~",
+              "value": "(?i)ridge-a"
+            }
+          ]
+        },
+        "expected": "6 series: both case variants for ridge-a, ridge-a.lab and ridge-a.prod; proves both identities exist",
+        "observed_series_count": 6
+      },
+      "exact_case_discovery": {
+        "query": {
+          "matchers": [
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ]
+        },
+        "expected": "3 series with node exactly ridge-a",
+        "observed_series_count": 3
+      },
+      "rack_empty_discovery": {
+        "query": {
+          "matchers": [
+            {
+              "label": "rack",
+              "op": "=",
+              "value": ""
+            }
+          ]
+        },
+        "expected": "12 series: explicit rack=\"\" and series with no rack label are both returned; the engine matcher treats absent as empty even though SeriesIDs differ",
+        "observed_series_count": 12
+      },
+      "conflict_replay": {
+        "query": {
+          "start": 1795003440000,
+          "end": 1795003440001
+        },
+        "expected": "case-fold conflict values [412, 512]; 410 is not retrievable because it was overwritten in its own series",
+        "observed": [
+          {
+            "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+            "value": 512
+          },
+          {
+            "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "value": 412
+          }
+        ]
+      }
+    },
+    "per_series_queries": [
+      {
+        "key": "S1a",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S1b",
+        "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S1c",
+        "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a.lab"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S1d",
+        "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A.lab"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S1e",
+        "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a.prod"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S1f",
+        "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A.prod"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S2",
+        "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-b"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S3a",
+        "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            },
+            {
+              "label": "rack",
+              "op": "=",
+              "value": ""
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S3b",
+        "series_id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A"
+            },
+            {
+              "label": "rack",
+              "op": "=",
+              "value": ""
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S3c",
+        "series_id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S3d",
+        "series_id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      },
+      {
+        "key": "S4",
+        "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-b"
+            }
+          ]
+        },
+        "note": "Exact node matcher is required. A case-insensitive matcher returns the sibling identity as well. Rows that differ only by rack presence cannot be isolated by any matcher; filter the result by the expected SeriesID."
+      }
+    ],
+    "steps": [
+      "1. Confirm U1-U7 with the named owners; record answers by series ID, not display name.",
+      "2. Pull the pre_confirmed and post_confirmed masks; these may be mapped now.",
+      "3. Pull the undecided window and hold it aside; do not label it legacy or replacement.",
+      "4. For each point in the window, attach producer evidence (serial/agent ID) and then split it.",
+      "5. Resolve C1/C3 values from the submission log; never average or silently pick a value.",
+      "6. Only after U1 and U4 are answered, publish device-level series; keep SeriesID as the storage key.",
+      "7. Re-run governance/verify/verify_series.py after any producer label change."
+    ]
+  },
+  "verification": {
+    "all_ids_match_computation": true,
+    "every_declared_label_set_has_one_identity": true,
+    "declared_series_count": 12,
+    "engine_catalog_count": 12,
+    "range_series_set_equals_catalog": true,
+    "same_series_same_time_has_one_stored_value": true,
+    "overwritten_value_visible_only_in_submission_log": {
+      "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+      "timestamp": 1795003440000,
+      "submitted_values": [
+        410,
+        412
+      ],
+      "stored_value": 412
+    },
+    "baseline_has_no_merges": true,
+    "absent_and_empty_rack_both_match_empty": {
+      "s3a_present_empty_in_result": true,
+      "s3c_absent_in_result": true,
+      "ids_are_distinct": true
+    },
+    "masks_cover_all_series": true,
+    "windows_are_disjoint_and_contiguous": true,
+    "mask_point_counts": {
+      "pre_confirmed": 24,
+      "undecided": 36,
+      "post_confirmed": 24
+    },
+    "case_insensitive_matcher_returns_both_identities": {
+      "returned": 6,
+      "expected": 6,
+      "has_lower": 3,
+      "has_upper": 3
+    },
+    "exact_queries_isolate_single_identity": false,
+    "rack_presence_needs_series_id_filter": {
+      "rows": [
+        "S3a",
+        "S3b",
+        "S3c",
+        "S3d"
+      ],
+      "explanation": "Absent and present-empty labels compare as the empty string, so rack=\"\" matches both. No matcher can select presence alone; the client must filter by SeriesID."
+    },
+    "only_rack_rows_are_presence_ambiguous": true,
+    "replay_shows_conflicting_values": true,
+    "case_variants_span_whole_day_in_fixture": true
+  }
+}

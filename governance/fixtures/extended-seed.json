@@ -1,0 +1,376 @@
+{
+  "fixture_version": 1,
+  "purpose": "Governance-only extension of examples/input.json. It is ingested into a disposable database to obtain authoritative SeriesIDs and conflict evidence. It is not a production migration and must never be applied to an existing database.",
+  "database_change": "none",
+  "namespace": {
+    "name": "spindle_gov",
+    "retention_ms": 2592000000,
+    "lateness_ms": 604800000,
+    "future_ms": 60000,
+    "max_series": 100,
+    "max_write": 1000,
+    "max_scan": 100000
+  },
+  "observation_time": 1795005600000,
+  "governance_day": {
+    "start_ms": 1794960000000,
+    "end_ms": 1795046400000,
+    "timezone": "UTC",
+    "iso": "2026-11-18T00:00:00Z/2026-11-19T00:00:00Z"
+  },
+  "change_window": {
+    "start_ms": 1795003200000,
+    "end_ms": 1795003800000,
+    "bounds": "half-open [start,end)",
+    "iso": "2026-11-18T12:00:00Z/2026-11-18T12:10:00Z",
+    "precision": "ten_minute_bound_only",
+    "source": "legacy collector operations log",
+    "statement": "The legacy collection group replaced hardware on 2026-11-18 and continued to report as node=ridge-a. The log fixes only a ten-minute interval around the cutover. It neither identifies the exact second nor says which physical device produced each sample."
+  },
+  "timestamps": {
+    "T1": 1795002000000,
+    "T2": 1795002600000,
+    "T3": 1795003200000,
+    "T4": 1795003440000,
+    "T5": 1795003740000,
+    "T6": 1795004400000,
+    "T7": 1795005000000
+  },
+  "timestamps_iso": {
+    "T1": "2026-11-18T11:40:00Z",
+    "T2": "2026-11-18T11:50:00Z",
+    "T3": "2026-11-18T12:00:00Z",
+    "T4": "2026-11-18T12:04:00Z",
+    "T5": "2026-11-18T12:09:00Z",
+    "T6": "2026-11-18T12:20:00Z",
+    "T7": "2026-11-18T12:30:00Z"
+  },
+  "business_statements": [
+    {
+      "id": "B1",
+      "statement": "ridge-a and RIDGE-A belong to the same device.",
+      "status": "confirmed",
+      "scope": "all_time"
+    },
+    {
+      "id": "B2",
+      "statement": "ridge-a.lab and ridge-a.prod are different devices.",
+      "status": "confirmed",
+      "scope": "all_time"
+    },
+    {
+      "id": "B3",
+      "statement": "The source of an empty rack value is unknown.",
+      "status": "unknown",
+      "scope": "all_time"
+    },
+    {
+      "id": "B4",
+      "statement": "The legacy collection group replaced hardware on the governance day and kept using node=ridge-a; logs bound the change to a ten-minute window.",
+      "status": "bounded_interval",
+      "scope": "governance_day"
+    },
+    {
+      "id": "B5",
+      "statement": "Inside the change window there are observations with the same timestamp and different values.",
+      "status": "conflict_observed",
+      "scope": "change_window"
+    },
+    {
+      "id": "B6",
+      "statement": "The relation between base ridge-a and its .lab/.prod names is not stated by the business table.",
+      "status": "unknown",
+      "scope": "all_time"
+    },
+    {
+      "id": "B7",
+      "statement": "The seed already contains node=ridge-b with zone=east for pulse_total and zone=west for load_ratio; zone is not a stable per-node identity field.",
+      "status": "data_quality_observation",
+      "scope": "seed"
+    }
+  ],
+  "series": [
+    {
+      "key": "S1a",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "origin": "seed",
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "absent",
+      "values": {
+        "T1": 100,
+        "T2": 110,
+        "T3": 120,
+        "T4": 410,
+        "T5": 140,
+        "T6": 150,
+        "T7": 160
+      }
+    },
+    {
+      "key": "S1b",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A",
+        "zone": "east"
+      },
+      "origin": "extension_case",
+      "node_case": "upper",
+      "suffix": "",
+      "rack_state": "absent",
+      "values": {
+        "T1": 100,
+        "T2": 110,
+        "T3": 120,
+        "T4": 512,
+        "T5": 140,
+        "T6": 150,
+        "T7": 160
+      }
+    },
+    {
+      "key": "S1c",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a.lab",
+        "zone": "east"
+      },
+      "origin": "extension_suffix",
+      "node_case": "lower",
+      "suffix": "lab",
+      "rack_state": "absent",
+      "values": {
+        "T1": 300,
+        "T2": 310,
+        "T3": 320,
+        "T4": 330,
+        "T5": 340,
+        "T6": 350,
+        "T7": 360
+      }
+    },
+    {
+      "key": "S1d",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A.lab",
+        "zone": "east"
+      },
+      "origin": "extension_suffix_case",
+      "node_case": "upper",
+      "suffix": "lab",
+      "rack_state": "absent",
+      "values": {
+        "T1": 300,
+        "T2": 310,
+        "T3": 320,
+        "T4": 330,
+        "T5": 340,
+        "T6": 350,
+        "T7": 360
+      }
+    },
+    {
+      "key": "S1e",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a.prod",
+        "zone": "east"
+      },
+      "origin": "extension_suffix",
+      "node_case": "lower",
+      "suffix": "prod",
+      "rack_state": "absent",
+      "values": {
+        "T1": 700,
+        "T2": 710,
+        "T3": 720,
+        "T4": 730,
+        "T5": 740,
+        "T6": 750,
+        "T7": 760
+      }
+    },
+    {
+      "key": "S1f",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A.prod",
+        "zone": "east"
+      },
+      "origin": "extension_suffix_case",
+      "node_case": "upper",
+      "suffix": "prod",
+      "rack_state": "absent",
+      "values": {
+        "T1": 700,
+        "T2": 710,
+        "T3": 720,
+        "T4": 730,
+        "T5": 740,
+        "T6": 750,
+        "T7": 760
+      }
+    },
+    {
+      "key": "S2",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-b",
+        "zone": "east"
+      },
+      "origin": "seed",
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "absent",
+      "values": {
+        "T1": 50,
+        "T2": 55,
+        "T3": 60,
+        "T4": 65,
+        "T5": 70,
+        "T6": 75,
+        "T7": 80
+      }
+    },
+    {
+      "key": "S3a",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-a",
+        "rack": "",
+        "zone": "east"
+      },
+      "origin": "seed",
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "present_empty",
+      "values": {
+        "T1": 0.4,
+        "T2": 0.41,
+        "T3": 0.42,
+        "T4": 0.43,
+        "T5": 0.44,
+        "T6": 0.45,
+        "T7": 0.46
+      }
+    },
+    {
+      "key": "S3b",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "RIDGE-A",
+        "rack": "",
+        "zone": "east"
+      },
+      "origin": "extension_case",
+      "node_case": "upper",
+      "suffix": "",
+      "rack_state": "present_empty",
+      "values": {
+        "T1": 0.4,
+        "T2": 0.41,
+        "T3": 0.42,
+        "T4": 0.43,
+        "T5": 0.44,
+        "T6": 0.45,
+        "T7": 0.46
+      }
+    },
+    {
+      "key": "S3c",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "origin": "extension_missing_rack",
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "absent",
+      "values": {
+        "T1": 0.4,
+        "T2": 0.41,
+        "T3": 0.42,
+        "T4": 0.43,
+        "T5": 0.44,
+        "T6": 0.45,
+        "T7": 0.46
+      }
+    },
+    {
+      "key": "S3d",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "RIDGE-A",
+        "zone": "east"
+      },
+      "origin": "extension_case_missing_rack",
+      "node_case": "upper",
+      "suffix": "",
+      "rack_state": "absent",
+      "values": {
+        "T1": 0.4,
+        "T2": 0.41,
+        "T3": 0.42,
+        "T4": 0.43,
+        "T5": 0.44,
+        "T6": 0.45,
+        "T7": 0.46
+      }
+    },
+    {
+      "key": "S4",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-b",
+        "zone": "west"
+      },
+      "origin": "seed",
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "absent",
+      "values": {
+        "T1": 0.5,
+        "T2": 0.51,
+        "T3": 0.52,
+        "T4": 0.53,
+        "T5": 0.54,
+        "T6": 0.55,
+        "T7": 0.56
+      }
+    }
+  ],
+  "corrections": [
+    {
+      "series": "S1a",
+      "timestamp": "T4",
+      "value": 412,
+      "reason": "A second observation at the same series and timestamp. The old collector group and the takeover group overlapped inside the change window. The database keeps the last committed value (412); 410 survives only in the submission log."
+    }
+  ],
+  "log_observations": [
+    {
+      "series": "S1a",
+      "timestamp": "T4",
+      "values": [
+        410,
+        412
+      ],
+      "note": "Same labels, same timestamp. Raw range returns only the later value because head point keys are one record per series-time."
+    },
+    {
+      "series": "S1a",
+      "timestamp": "T4",
+      "values": [
+        410,
+        512
+      ],
+      "note": "Cross-series view: node=ridge-a and node=RIDGE-A report different values at the same timestamp inside the change window. Case folding merges them into one device timeline and exposes a conflict."
+    }
+  ]
+}

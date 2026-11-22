@@ -1,0 +1,4863 @@
+{
+  "fixture": "governance/fixtures/extended-seed.json",
+  "database_change": "none",
+  "authoritative_source": "SeriesID returned by the running engine, cross-checked by SHA-256 of the canonical label map",
+  "fixture_sha256": "b3d9dfa7c267763836dae1c3109e6ffea974d686869d1e094b7ee100004722d4",
+  "observation_time": 1795005600000,
+  "ingest": [
+    {
+      "batch": 1,
+      "points": 84,
+      "receipt": {
+        "sequence": 2,
+        "accepted": 84,
+        "new_series": 12,
+        "watermark": 1795005000000
+      }
+    },
+    {
+      "batch": 2,
+      "points": 1,
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "timestamp": "T4",
+      "value": 412,
+      "receipt": {
+        "sequence": 3,
+        "accepted": 1,
+        "new_series": 0,
+        "watermark": 1795005000000
+      }
+    }
+  ],
+  "series": [
+    {
+      "key": "S1a",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "absent",
+      "computed_sha256": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+      "engine_series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S1b",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A",
+        "zone": "east"
+      },
+      "node_case": "upper",
+      "suffix": "",
+      "rack_state": "absent",
+      "computed_sha256": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+      "engine_series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S1c",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a.lab",
+        "zone": "east"
+      },
+      "node_case": "lower",
+      "suffix": "lab",
+      "rack_state": "absent",
+      "computed_sha256": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+      "engine_series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S1d",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A.lab",
+        "zone": "east"
+      },
+      "node_case": "upper",
+      "suffix": "lab",
+      "rack_state": "absent",
+      "computed_sha256": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+      "engine_series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S1e",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a.prod",
+        "zone": "east"
+      },
+      "node_case": "lower",
+      "suffix": "prod",
+      "rack_state": "absent",
+      "computed_sha256": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+      "engine_series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S1f",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A.prod",
+        "zone": "east"
+      },
+      "node_case": "upper",
+      "suffix": "prod",
+      "rack_state": "absent",
+      "computed_sha256": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+      "engine_series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S2",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-b",
+        "zone": "east"
+      },
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "absent",
+      "computed_sha256": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+      "engine_series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S3a",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-a",
+        "rack": "",
+        "zone": "east"
+      },
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "present_empty",
+      "computed_sha256": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+      "engine_series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S3b",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "RIDGE-A",
+        "rack": "",
+        "zone": "east"
+      },
+      "node_case": "upper",
+      "suffix": "",
+      "rack_state": "present_empty",
+      "computed_sha256": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+      "engine_series_id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S3c",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "absent",
+      "computed_sha256": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+      "engine_series_id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S3d",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "RIDGE-A",
+        "zone": "east"
+      },
+      "node_case": "upper",
+      "suffix": "",
+      "rack_state": "absent",
+      "computed_sha256": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+      "engine_series_id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    },
+    {
+      "key": "S4",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-b",
+        "zone": "west"
+      },
+      "node_case": "lower",
+      "suffix": "",
+      "rack_state": "absent",
+      "computed_sha256": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+      "engine_series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+      "id_matches_computation": true,
+      "distinct_engine_entries_for_labels": 1
+    }
+  ],
+  "range": {
+    "sequence": 3,
+    "floor": -4503599627370496,
+    "series_returned": 12,
+    "truncated": false,
+    "series": [
+      {
+        "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-b",
+          "zone": "west"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 0.5,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 0.51,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 0.52,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 0.53,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 0.54,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 0.55,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 0.56,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "RIDGE-A",
+          "rack": "",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 0.4,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 0.41,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 0.42,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 0.43,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 0.44,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 0.45,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 0.46,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-a",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 0.4,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 0.41,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 0.42,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 0.43,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 0.44,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 0.45,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 0.46,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-a",
+          "rack": "",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 0.4,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 0.41,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 0.42,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 0.43,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 0.44,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 0.45,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 0.46,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "RIDGE-A",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 0.4,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 0.41,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 0.42,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 0.43,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 0.44,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 0.45,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 0.46,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "RIDGE-A",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 100,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 110,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 120,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 512,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 140,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 150,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 160,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-a.lab",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 300,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 310,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 320,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 330,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 340,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 350,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 360,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-a",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 100,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 110,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 120,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 412,
+            "sequence": 3
+          },
+          {
+            "time": 1795003740000,
+            "value": 140,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 150,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 160,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-b",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 50,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 55,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 60,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 65,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 70,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 75,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 80,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "RIDGE-A.lab",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 300,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 310,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 320,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 330,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 340,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 350,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 360,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-a.prod",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 700,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 710,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 720,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 730,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 740,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 750,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 760,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "RIDGE-A.prod",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795002000000,
+            "value": 700,
+            "sequence": 2
+          },
+          {
+            "time": 1795002600000,
+            "value": 710,
+            "sequence": 2
+          },
+          {
+            "time": 1795003200000,
+            "value": 720,
+            "sequence": 2
+          },
+          {
+            "time": 1795003440000,
+            "value": 730,
+            "sequence": 2
+          },
+          {
+            "time": 1795003740000,
+            "value": 740,
+            "sequence": 2
+          },
+          {
+            "time": 1795004400000,
+            "value": 750,
+            "sequence": 2
+          },
+          {
+            "time": 1795005000000,
+            "value": 760,
+            "sequence": 2
+          }
+        ]
+      }
+    ]
+  },
+  "checks": {
+    "all_ids_match_computation": true,
+    "every_declared_label_set_has_one_identity": true,
+    "declared_series_count": 12,
+    "engine_catalog_count": 12,
+    "range_series_set_equals_catalog": true,
+    "same_series_same_time_has_one_stored_value": true,
+    "overwritten_value_visible_only_in_submission_log": {
+      "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+      "timestamp": 1795003440000,
+      "submitted_values": [
+        410,
+        412
+      ],
+      "stored_value": 412
+    },
+    "baseline_has_no_merges": true,
+    "absent_and_empty_rack_both_match_empty": {
+      "s3a_present_empty_in_result": true,
+      "s3c_absent_in_result": true,
+      "ids_are_distinct": true
+    },
+    "masks_cover_all_series": true,
+    "windows_are_disjoint_and_contiguous": true,
+    "mask_point_counts": {
+      "pre_confirmed": 24,
+      "undecided": 36,
+      "post_confirmed": 24
+    },
+    "case_insensitive_matcher_returns_both_identities": {
+      "returned": 6,
+      "expected": 6,
+      "has_lower": 3,
+      "has_upper": 3
+    },
+    "exact_queries_isolate_single_identity": false,
+    "rack_presence_needs_series_id_filter": {
+      "rows": [
+        "S3a",
+        "S3b",
+        "S3c",
+        "S3d"
+      ],
+      "explanation": "Absent and present-empty labels compare as the empty string, so rack=\"\" matches both. No matcher can select presence alone; the client must filter by SeriesID."
+    },
+    "only_rack_rows_are_presence_ambiguous": true,
+    "replay_shows_conflicting_values": true,
+    "case_variants_span_whole_day_in_fixture": true
+  },
+  "conflicts": [
+    {
+      "normalization": "case_fold_node",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+      ],
+      "time": 1795003440000,
+      "distinct_values": [
+        412,
+        512
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 512,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 412,
+          "sequence": 3
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "RIDGE-A",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795002000000,
+      "distinct_values": [
+        100,
+        300,
+        700
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 100,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 300,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 700,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "RIDGE-A",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795002600000,
+      "distinct_values": [
+        110,
+        310,
+        710
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 110,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 310,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 710,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "RIDGE-A",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795003200000,
+      "distinct_values": [
+        120,
+        320,
+        720
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 120,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 320,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 720,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "RIDGE-A",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795003440000,
+      "distinct_values": [
+        330,
+        512,
+        730
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 512,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 330,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 730,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "RIDGE-A",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795003740000,
+      "distinct_values": [
+        140,
+        340,
+        740
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 140,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 340,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 740,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "RIDGE-A",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795004400000,
+      "distinct_values": [
+        150,
+        350,
+        750
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 150,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 350,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 750,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "RIDGE-A",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795005000000,
+      "distinct_values": [
+        160,
+        360,
+        760
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 160,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 360,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 760,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+      ],
+      "time": 1795002000000,
+      "distinct_values": [
+        100,
+        300,
+        700
+      ],
+      "observations": [
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 300,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 100,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 700,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+      ],
+      "time": 1795002600000,
+      "distinct_values": [
+        110,
+        310,
+        710
+      ],
+      "observations": [
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 310,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 110,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 710,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+      ],
+      "time": 1795003200000,
+      "distinct_values": [
+        120,
+        320,
+        720
+      ],
+      "observations": [
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 320,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 120,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 720,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+      ],
+      "time": 1795003440000,
+      "distinct_values": [
+        330,
+        412,
+        730
+      ],
+      "observations": [
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 330,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 412,
+          "sequence": 3
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 730,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+      ],
+      "time": 1795003740000,
+      "distinct_values": [
+        140,
+        340,
+        740
+      ],
+      "observations": [
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 340,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 140,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 740,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+      ],
+      "time": 1795004400000,
+      "distinct_values": [
+        150,
+        350,
+        750
+      ],
+      "observations": [
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 350,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 150,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 750,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "strip_suffix_only",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+      ],
+      "time": 1795005000000,
+      "distinct_values": [
+        160,
+        360,
+        760
+      ],
+      "observations": [
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 360,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 160,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 760,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_and_strip_suffix",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795002000000,
+      "distinct_values": [
+        100,
+        300,
+        700
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 100,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 300,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 100,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 300,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 700,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 700,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_and_strip_suffix",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795002600000,
+      "distinct_values": [
+        110,
+        310,
+        710
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 110,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 310,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 110,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 310,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 710,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 710,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_and_strip_suffix",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795003200000,
+      "distinct_values": [
+        120,
+        320,
+        720
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 120,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 320,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 120,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 320,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 720,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 720,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_and_strip_suffix",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795003440000,
+      "distinct_values": [
+        330,
+        412,
+        512,
+        730
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 512,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 330,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 412,
+          "sequence": 3
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 330,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 730,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 730,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_and_strip_suffix",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795003740000,
+      "distinct_values": [
+        140,
+        340,
+        740
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 140,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 340,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 140,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 340,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 740,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 740,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_and_strip_suffix",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795004400000,
+      "distinct_values": [
+        150,
+        350,
+        750
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 150,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 350,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 150,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 350,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 750,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 750,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_and_strip_suffix",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795005000000,
+      "distinct_values": [
+        160,
+        360,
+        760
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 160,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 360,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 160,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 360,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 760,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 760,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_and_collapse_rack_presence",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        ""
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+      ],
+      "time": 1795003440000,
+      "distinct_values": [
+        412,
+        512
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 512,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 412,
+          "sequence": 3
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_strip_suffix_and_collapse_rack",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        ""
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795002000000,
+      "distinct_values": [
+        100,
+        300,
+        700
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 100,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 300,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 100,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 300,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 700,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 700,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_strip_suffix_and_collapse_rack",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        ""
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795002600000,
+      "distinct_values": [
+        110,
+        310,
+        710
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 110,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 310,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 110,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 310,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 710,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 710,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_strip_suffix_and_collapse_rack",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        ""
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795003200000,
+      "distinct_values": [
+        120,
+        320,
+        720
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 120,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 320,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 120,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 320,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 720,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 720,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_strip_suffix_and_collapse_rack",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        ""
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795003440000,
+      "distinct_values": [
+        330,
+        412,
+        512,
+        730
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 512,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 330,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 412,
+          "sequence": 3
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 330,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 730,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 730,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_strip_suffix_and_collapse_rack",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        ""
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795003740000,
+      "distinct_values": [
+        140,
+        340,
+        740
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 140,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 340,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 140,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 340,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 740,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 740,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_strip_suffix_and_collapse_rack",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        ""
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795004400000,
+      "distinct_values": [
+        150,
+        350,
+        750
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 150,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 350,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 150,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 350,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 750,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 750,
+          "sequence": 2
+        }
+      ]
+    },
+    {
+      "normalization": "case_fold_strip_suffix_and_collapse_rack",
+      "group_key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        ""
+      ],
+      "merged_series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "time": 1795005000000,
+      "distinct_values": [
+        160,
+        360,
+        760
+      ],
+      "observations": [
+        {
+          "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "value": 160,
+          "sequence": 2
+        },
+        {
+          "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "value": 360,
+          "sequence": 2
+        },
+        {
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "value": 160,
+          "sequence": 2
+        },
+        {
+          "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "value": 360,
+          "sequence": 2
+        },
+        {
+          "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "value": 760,
+          "sequence": 2
+        },
+        {
+          "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "value": 760,
+          "sequence": 2
+        }
+      ]
+    }
+  ],
+  "display_name_dedup": {
+    "case_fold_node": {
+      "groups": 7,
+      "inputs": 12,
+      "series_after_normalization": 7,
+      "bucket_detail": [
+        {
+          "key": [
+            "load_ratio",
+            "ridge-a",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+            "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-a",
+            "east",
+            true,
+            ""
+          ],
+          "series_ids": [
+            "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-b",
+            "west",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a.lab",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+            "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a.prod",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+            "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-b",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    "strip_suffix_only": {
+      "groups": 8,
+      "inputs": 12,
+      "series_after_normalization": 8,
+      "bucket_detail": [
+        {
+          "key": [
+            "load_ratio",
+            "RIDGE-A",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "load_ratio",
+            "RIDGE-A",
+            "east",
+            true,
+            ""
+          ],
+          "series_ids": [
+            "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-a",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-a",
+            "east",
+            true,
+            ""
+          ],
+          "series_ids": [
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-b",
+            "west",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "RIDGE-A",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+            "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+            "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+          ],
+          "count": 3
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+          ],
+          "count": 3
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-b",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    "case_fold_and_strip_suffix": {
+      "groups": 5,
+      "inputs": 12,
+      "series_after_normalization": 5,
+      "bucket_detail": [
+        {
+          "key": [
+            "load_ratio",
+            "ridge-a",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+            "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-a",
+            "east",
+            true,
+            ""
+          ],
+          "series_ids": [
+            "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-b",
+            "west",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+            "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+            "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+            "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+          ],
+          "count": 6
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-b",
+            "east",
+            false,
+            "<absent>"
+          ],
+          "series_ids": [
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    "collapse_rack_presence": {
+      "groups": 10,
+      "inputs": 12,
+      "series_after_normalization": 10,
+      "bucket_detail": [
+        {
+          "key": [
+            "load_ratio",
+            "RIDGE-A",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+            "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-a",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-b",
+            "west",
+            ""
+          ],
+          "series_ids": [
+            "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "RIDGE-A",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "RIDGE-A.lab",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "RIDGE-A.prod",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a.lab",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a.prod",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-b",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    "case_fold_and_collapse_rack_presence": {
+      "groups": 6,
+      "inputs": 12,
+      "series_after_normalization": 6,
+      "bucket_detail": [
+        {
+          "key": [
+            "load_ratio",
+            "ridge-a",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+            "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+          ],
+          "count": 4
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-b",
+            "west",
+            ""
+          ],
+          "series_ids": [
+            "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a.lab",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+            "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a.prod",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+            "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+          ],
+          "count": 2
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-b",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    "case_fold_strip_suffix_and_collapse_rack": {
+      "groups": 4,
+      "inputs": 12,
+      "series_after_normalization": 4,
+      "bucket_detail": [
+        {
+          "key": [
+            "load_ratio",
+            "ridge-a",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+            "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+            "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+          ],
+          "count": 4
+        },
+        {
+          "key": [
+            "load_ratio",
+            "ridge-b",
+            "west",
+            ""
+          ],
+          "series_ids": [
+            "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888"
+          ],
+          "count": 1
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-a",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+            "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+            "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+            "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+            "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+          ],
+          "count": 6
+        },
+        {
+          "key": [
+            "pulse_total",
+            "ridge-b",
+            "east",
+            ""
+          ],
+          "series_ids": [
+            "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+          ],
+          "count": 1
+        }
+      ]
+    }
+  },
+  "baseline_groups": [
+    {
+      "key": [
+        "load_ratio",
+        "RIDGE-A",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "load_ratio",
+        "RIDGE-A",
+        "east",
+        true,
+        ""
+      ],
+      "series_ids": [
+        "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "load_ratio",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "load_ratio",
+        "ridge-a",
+        "east",
+        true,
+        ""
+      ],
+      "series_ids": [
+        "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "load_ratio",
+        "ridge-b",
+        "west",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "pulse_total",
+        "RIDGE-A",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "pulse_total",
+        "RIDGE-A.lab",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "pulse_total",
+        "RIDGE-A.prod",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "pulse_total",
+        "ridge-a",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "pulse_total",
+        "ridge-a.lab",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "pulse_total",
+        "ridge-a.prod",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+      ],
+      "count": 1
+    },
+    {
+      "key": [
+        "pulse_total",
+        "ridge-b",
+        "east",
+        false,
+        "<absent>"
+      ],
+      "series_ids": [
+        "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+      ],
+      "count": 1
+    }
+  ],
+  "node_label_level": {
+    "raw_values": [
+      "RIDGE-A",
+      "RIDGE-A.lab",
+      "RIDGE-A.prod",
+      "ridge-a",
+      "ridge-a.lab",
+      "ridge-a.prod",
+      "ridge-b"
+    ],
+    "raw_count": 7,
+    "after_case_fold": [
+      "ridge-a",
+      "ridge-a.lab",
+      "ridge-a.prod",
+      "ridge-b"
+    ],
+    "after_case_fold_count": 4,
+    "after_case_fold_and_suffix_strip": [
+      "ridge-a",
+      "ridge-b"
+    ],
+    "after_case_fold_and_suffix_strip_count": 2
+  },
+  "impact": {
+    "case_insensitive_avg": [
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795002000000,
+        "end": 1795002060000,
+        "value": 100,
+        "count": 2
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795002600000,
+        "end": 1795002660000,
+        "value": 110,
+        "count": 2
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795003200000,
+        "end": 1795003260000,
+        "value": 120,
+        "count": 2
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795003440000,
+        "end": 1795003500000,
+        "value": 462,
+        "count": 2
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795003740000,
+        "end": 1795003800000,
+        "value": 140,
+        "count": 2
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795004400000,
+        "end": 1795004460000,
+        "value": 150,
+        "count": 2
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795005000000,
+        "end": 1795005060000,
+        "value": 160,
+        "count": 2
+      }
+    ],
+    "exact_ridge_a_avg": [
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795002000000,
+        "end": 1795002060000,
+        "value": 100,
+        "count": 1
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795002600000,
+        "end": 1795002660000,
+        "value": 110,
+        "count": 1
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795003200000,
+        "end": 1795003260000,
+        "value": 120,
+        "count": 1
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795003440000,
+        "end": 1795003500000,
+        "value": 412,
+        "count": 1
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795003740000,
+        "end": 1795003800000,
+        "value": 140,
+        "count": 1
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795004400000,
+        "end": 1795004460000,
+        "value": 150,
+        "count": 1
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795005000000,
+        "end": 1795005060000,
+        "value": 160,
+        "count": 1
+      }
+    ],
+    "suffix_stripped_avg": [
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795002000000,
+        "end": 1795002060000,
+        "value": 366.6666666666667,
+        "count": 6
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795002600000,
+        "end": 1795002660000,
+        "value": 376.6666666666667,
+        "count": 6
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795003200000,
+        "end": 1795003260000,
+        "value": 386.6666666666667,
+        "count": 6
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795003440000,
+        "end": 1795003500000,
+        "value": 507.3333333333333,
+        "count": 6
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795003740000,
+        "end": 1795003800000,
+        "value": 406.6666666666667,
+        "count": 6
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795004400000,
+        "end": 1795004460000,
+        "value": 416.6666666666667,
+        "count": 6
+      },
+      {
+        "labels": {
+          "zone": "east"
+        },
+        "start": 1795005000000,
+        "end": 1795005060000,
+        "value": 426.6666666666667,
+        "count": 6
+      }
+    ]
+  },
+  "handoff_queries": {
+    "case_insensitive_node_discovery": [
+      {
+        "id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "RIDGE-A",
+          "rack": "",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-a",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-a",
+          "rack": "",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "RIDGE-A",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "RIDGE-A",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-a",
+          "zone": "east"
+        }
+      }
+    ],
+    "exact_node_ridge_a_discovery": [
+      {
+        "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-a",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-a",
+          "rack": "",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-a",
+          "zone": "east"
+        }
+      }
+    ],
+    "rack_equals_empty_discovery": [
+      {
+        "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-b",
+          "zone": "west"
+        }
+      },
+      {
+        "id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "RIDGE-A",
+          "rack": "",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-a",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "ridge-a",
+          "rack": "",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+        "labels": {
+          "__name__": "load_ratio",
+          "node": "RIDGE-A",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "RIDGE-A",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-a.lab",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-a",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-b",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "RIDGE-A.lab",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-a.prod",
+          "zone": "east"
+        }
+      },
+      {
+        "id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "RIDGE-A.prod",
+          "zone": "east"
+        }
+      }
+    ],
+    "pre_confirmed": {
+      "query": {
+        "start": 1794960000000,
+        "end": 1795003200000
+      },
+      "series": [
+        {
+          "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 0.5,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 0.51,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "RIDGE-A",
+            "rack": "",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 0.4,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 0.41,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 0.4,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 0.41,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "rack": "",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 0.4,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 0.41,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "RIDGE-A",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 0.4,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 0.41,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "RIDGE-A",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 100,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 110,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a.lab",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 300,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 310,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 100,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 110,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-b",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 50,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 55,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "RIDGE-A.lab",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 300,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 310,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a.prod",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 700,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 710,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "RIDGE-A.prod",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795002000000,
+              "value": 700,
+              "sequence": 2
+            },
+            {
+              "time": 1795002600000,
+              "value": 710,
+              "sequence": 2
+            }
+          ]
+        }
+      ]
+    },
+    "undecided": {
+      "query": {
+        "start": 1795003200000,
+        "end": 1795003800000
+      },
+      "series": [
+        {
+          "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 0.52,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 0.53,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 0.54,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "RIDGE-A",
+            "rack": "",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 0.42,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 0.43,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 0.44,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 0.42,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 0.43,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 0.44,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "rack": "",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 0.42,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 0.43,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 0.44,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "RIDGE-A",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 0.42,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 0.43,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 0.44,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "RIDGE-A",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 120,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 512,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 140,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a.lab",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 320,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 330,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 340,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 120,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 412,
+              "sequence": 3
+            },
+            {
+              "time": 1795003740000,
+              "value": 140,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-b",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 60,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 65,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 70,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "RIDGE-A.lab",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 320,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 330,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 340,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a.prod",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 720,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 730,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 740,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "RIDGE-A.prod",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795003200000,
+              "value": 720,
+              "sequence": 2
+            },
+            {
+              "time": 1795003440000,
+              "value": 730,
+              "sequence": 2
+            },
+            {
+              "time": 1795003740000,
+              "value": 740,
+              "sequence": 2
+            }
+          ]
+        }
+      ]
+    },
+    "post_confirmed": {
+      "query": {
+        "start": 1795003800000,
+        "end": 1795046400000
+      },
+      "series": [
+        {
+          "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 0.55,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 0.56,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "RIDGE-A",
+            "rack": "",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 0.45,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 0.46,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 0.45,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 0.46,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "rack": "",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 0.45,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 0.46,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "RIDGE-A",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 0.45,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 0.46,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "RIDGE-A",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 150,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 160,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a.lab",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 350,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 360,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 150,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 160,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-b",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 75,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 80,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "RIDGE-A.lab",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 350,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 360,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a.prod",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 750,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 760,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "RIDGE-A.prod",
+            "zone": "east"
+          },
+          "points": [
+            {
+              "time": 1795004400000,
+              "value": 750,
+              "sequence": 2
+            },
+            {
+              "time": 1795005000000,
+              "value": 760,
+              "sequence": 2
+            }
+          ]
+        }
+      ]
+    },
+    "per_series_exact": [
+      {
+        "key": "S1a",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+        ],
+        "matches_exactly_one_identity": true,
+        "matcher_isolates_identity": true,
+        "presence_ambiguous_result": false,
+        "client_action": "single identity returned; no client filter needed"
+      },
+      {
+        "key": "S1b",
+        "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356"
+        ],
+        "matches_exactly_one_identity": true,
+        "matcher_isolates_identity": true,
+        "presence_ambiguous_result": false,
+        "client_action": "single identity returned; no client filter needed"
+      },
+      {
+        "key": "S1c",
+        "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a.lab"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4"
+        ],
+        "matches_exactly_one_identity": true,
+        "matcher_isolates_identity": true,
+        "presence_ambiguous_result": false,
+        "client_action": "single identity returned; no client filter needed"
+      },
+      {
+        "key": "S1d",
+        "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A.lab"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e"
+        ],
+        "matches_exactly_one_identity": true,
+        "matcher_isolates_identity": true,
+        "presence_ambiguous_result": false,
+        "client_action": "single identity returned; no client filter needed"
+      },
+      {
+        "key": "S1e",
+        "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a.prod"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418"
+        ],
+        "matches_exactly_one_identity": true,
+        "matcher_isolates_identity": true,
+        "presence_ambiguous_result": false,
+        "client_action": "single identity returned; no client filter needed"
+      },
+      {
+        "key": "S1f",
+        "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A.prod"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe"
+        ],
+        "matches_exactly_one_identity": true,
+        "matcher_isolates_identity": true,
+        "presence_ambiguous_result": false,
+        "client_action": "single identity returned; no client filter needed"
+      },
+      {
+        "key": "S2",
+        "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-b"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69"
+        ],
+        "matches_exactly_one_identity": true,
+        "matcher_isolates_identity": true,
+        "presence_ambiguous_result": false,
+        "client_action": "single identity returned; no client filter needed"
+      },
+      {
+        "key": "S3a",
+        "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            },
+            {
+              "label": "rack",
+              "op": "=",
+              "value": ""
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+          "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f"
+        ],
+        "matches_exactly_one_identity": false,
+        "matcher_isolates_identity": false,
+        "presence_ambiguous_result": true,
+        "client_action": "select only returned points whose series id equals this SeriesID"
+      },
+      {
+        "key": "S3b",
+        "series_id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            },
+            {
+              "label": "rack",
+              "op": "=",
+              "value": ""
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+          "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+        ],
+        "matches_exactly_one_identity": false,
+        "matcher_isolates_identity": false,
+        "presence_ambiguous_result": true,
+        "client_action": "select only returned points whose series id equals this SeriesID"
+      },
+      {
+        "key": "S3c",
+        "series_id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-a"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+          "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f"
+        ],
+        "matches_exactly_one_identity": false,
+        "matcher_isolates_identity": false,
+        "presence_ambiguous_result": true,
+        "client_action": "select only returned points whose series id equals this SeriesID"
+      },
+      {
+        "key": "S3d",
+        "series_id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "RIDGE-A"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "east"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+          "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587"
+        ],
+        "matches_exactly_one_identity": false,
+        "matcher_isolates_identity": false,
+        "presence_ambiguous_result": true,
+        "client_action": "select only returned points whose series id equals this SeriesID"
+      },
+      {
+        "key": "S4",
+        "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "query": {
+          "start": 1794960000000,
+          "end": 1795046400000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "load_ratio"
+            },
+            {
+              "label": "node",
+              "op": "=",
+              "value": "ridge-b"
+            },
+            {
+              "label": "zone",
+              "op": "=",
+              "value": "west"
+            }
+          ]
+        },
+        "returned_series_ids": [
+          "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888"
+        ],
+        "matches_exactly_one_identity": true,
+        "matcher_isolates_identity": true,
+        "presence_ambiguous_result": false,
+        "client_action": "single identity returned; no client filter needed"
+      }
+    ],
+    "conflict_replay": [
+      {
+        "id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "RIDGE-A",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795003440000,
+            "value": 512,
+            "sequence": 2
+          }
+        ]
+      },
+      {
+        "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "labels": {
+          "__name__": "pulse_total",
+          "node": "ridge-a",
+          "zone": "east"
+        },
+        "points": [
+          {
+            "time": 1795003440000,
+            "value": 412,
+            "sequence": 3
+          }
+        ]
+      }
+    ]
+  },
+  "time_extents": [
+    {
+      "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-b",
+        "zone": "west"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "0fe0950ee24d4d1765f626ce91fcde862666fe40075c0797946af87bd95205b8",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "RIDGE-A",
+        "rack": "",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "287614e883fda058677eb79ee313049e8df4a33a815322ed7bd482447d123f0d",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "ridge-a",
+        "rack": "",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "5fa5a5528904232f552389ce95f0832df758c93b286a8a25c9131a61fba30587",
+      "labels": {
+        "__name__": "load_ratio",
+        "node": "RIDGE-A",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "7c8a040e5b92f306c40103a28f951cd22b88c2a8e0e6c1a20c3b37559af21356",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "a00b37f4a2b2a5d8b5e99f8b8bedc947639e39edff70f2b0b1aaa2261d0d52e4",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a.lab",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-b",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "d94174f200cd39b964e1ddaf0469423529b712669f40057fcf4c17882ac2866e",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A.lab",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "fa85531517fbc221066b270d840ef64ea9b006a6629470ec6692f0a95e5ea418",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "ridge-a.prod",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    },
+    {
+      "series_id": "fb0e801ca35d15e6b8fb678a8e5a307a4c95f1fe31fca2e89e4a19089b3c1bfe",
+      "labels": {
+        "__name__": "pulse_total",
+        "node": "RIDGE-A.prod",
+        "zone": "east"
+      },
+      "first_time": 1795002000000,
+      "last_time": 1795005000000,
+      "point_count": 7,
+      "straddles_change_window": true,
+      "has_point_inside_change_window": true
+    }
+  ],
+  "case_variant_time_coverage": [
+    {
+      "labels_key": [
+        "load_ratio",
+        "ridge-a",
+        false,
+        null,
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "ridge-a",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "RIDGE-A",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    },
+    {
+      "labels_key": [
+        "load_ratio",
+        "ridge-a",
+        true,
+        "",
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "RIDGE-A",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "ridge-a",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    },
+    {
+      "labels_key": [
+        "pulse_total",
+        "ridge-a",
+        false,
+        null,
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "RIDGE-A",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "ridge-a",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    },
+    {
+      "labels_key": [
+        "pulse_total",
+        "ridge-a.lab",
+        false,
+        null,
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "ridge-a.lab",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "RIDGE-A.lab",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    },
+    {
+      "labels_key": [
+        "pulse_total",
+        "ridge-a.prod",
+        false,
+        null,
+        "east"
+      ],
+      "variants": [
+        {
+          "node": "ridge-a.prod",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        },
+        {
+          "node": "RIDGE-A.prod",
+          "first_time": 1795002000000,
+          "last_time": 1795005000000,
+          "has_pre_window_point": true,
+          "has_post_window_point": true
+        }
+      ],
+      "both_variants_span_change": true
+    }
+  ]
+}
