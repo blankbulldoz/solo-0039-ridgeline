@@ -20,10 +20,17 @@ func (e *Engine) Materialize(name, rollup string, q model.Query) (model.Material
 		if n.ReadOnly {
 			return model.Conflict("namespace is read-only")
 		}
-		result, err := aggregate(b, n, q, volume.Current(tx))
+		view, err := loadView(b, n, tx)
 		if err != nil {
 			return err
 		}
+		result, _, err := aggregate(b, view, q)
+		if err != nil {
+			return err
+		}
+		// Diagnostics belong to the read that produced them, not to durable
+		// materialization; storing them would misstate the source view.
+		result.Evidence = nil
 		out = model.Materialization{
 			Name: rollup, Query: q, SourceSequence: n.LastSequence, Result: result,
 		}

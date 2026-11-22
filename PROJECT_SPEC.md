@@ -31,7 +31,12 @@ resolve corrections, deletions and retention. A query runs in one bbolt read
 transaction. Exact label, inequality and regular-expression matchers are
 supported; absent labels behave as the empty string for matcher evaluation.
 Limits reject excessive source work rather than silently dropping points.
-Raw result limits are explicit and include a truncation indicator.
+Raw result limits are explicit and include a truncation indicator; they bound
+returned rows only and never reduce decoded source work. A rejected read
+reports the source work observed before it stopped: only fully read series are
+aggregated, the interrupted series is reported separately, and plan-only cost
+describes the unread remainder, so partial evidence is never presented as a
+whole-query result.
 
 Window aggregation supports count, sum, min, max, average, first and last.
 Buckets align to a caller-supplied origin, including before the Unix epoch.
@@ -69,7 +74,9 @@ the server with that image as RIDGE_DB restores that database directly.
 11. Inspect materialization freshness after later writes.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
-14. Explain candidate series, physical blocks and query budgets.
+14. Explain candidate series, physical blocks, decode cost, budget
+    projection and narrowing alternatives without decoding samples. A read
+    reports whether measured source work reconciled with that plan.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.

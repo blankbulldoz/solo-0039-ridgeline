@@ -328,7 +328,59 @@
         "visible": 9,
         "tombstones": 0
       },
-      "truncated": false
+      "truncated": false,
+      "evidence": {
+        "sequence": 2,
+        "floor": -4503599627370496,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": false,
+        "budget": {
+          "limit": 100000,
+          "used": 9,
+          "remaining": 99991,
+          "within": true
+        },
+        "planned": {
+          "series": 4,
+          "blocks": 0,
+          "blocks_contained": 0,
+          "blocks_partial": 0,
+          "block_points": 0,
+          "contained_block_points": 0,
+          "straddling_block_points": 0,
+          "head_records": 9,
+          "head_records_namespace": 9,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 9,
+          "series_with_sources": 4,
+          "series_without_sources": 0,
+          "series_with_version_overlap": 0,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 9,
+          "certain_visible_points": 9,
+          "certain_visible_series": 4
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 4,
+          "blocks": 0,
+          "block_points": 0,
+          "head_records": 9,
+          "physical_points": 9,
+          "in_range_points": 9,
+          "superseded": 0,
+          "hidden": 0,
+          "visible": 9
+        },
+        "reconcile": {
+          "planned_decode": 9,
+          "observed_source": 9,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        }
+      }
     }
   },
   {
@@ -386,7 +438,62 @@
         "visible": 9,
         "tombstones": 0
       },
-      "truncated": true
+      "truncated": true,
+      "evidence": {
+        "sequence": 2,
+        "floor": -4503599627370496,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": true,
+        "budget": {
+          "limit": 100000,
+          "used": 9,
+          "remaining": 99991,
+          "within": true
+        },
+        "planned": {
+          "series": 4,
+          "blocks": 0,
+          "blocks_contained": 0,
+          "blocks_partial": 0,
+          "block_points": 0,
+          "contained_block_points": 0,
+          "straddling_block_points": 0,
+          "head_records": 9,
+          "head_records_namespace": 9,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 9,
+          "series_with_sources": 4,
+          "series_without_sources": 0,
+          "series_with_version_overlap": 0,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 9,
+          "certain_visible_points": 9,
+          "certain_visible_series": 4
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 4,
+          "blocks": 0,
+          "block_points": 0,
+          "head_records": 9,
+          "physical_points": 9,
+          "in_range_points": 9,
+          "superseded": 0,
+          "hidden": 0,
+          "visible": 9
+        },
+        "reconcile": {
+          "planned_decode": 9,
+          "observed_source": 9,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        },
+        "caveats": [
+          "result limit 2 truncates returned rows after decoding; it does not lower decoded points or avoid a scan-budget rejection"
+        ]
+      }
     }
   },
   {
@@ -457,6 +564,58 @@
         "decoded": 9,
         "visible": 9,
         "tombstones": 0
+      },
+      "evidence": {
+        "sequence": 2,
+        "floor": -4503599627370496,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": false,
+        "budget": {
+          "limit": 100000,
+          "used": 9,
+          "remaining": 99991,
+          "within": true
+        },
+        "planned": {
+          "series": 4,
+          "blocks": 0,
+          "blocks_contained": 0,
+          "blocks_partial": 0,
+          "block_points": 0,
+          "contained_block_points": 0,
+          "straddling_block_points": 0,
+          "head_records": 9,
+          "head_records_namespace": 9,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 9,
+          "series_with_sources": 4,
+          "series_without_sources": 0,
+          "series_with_version_overlap": 0,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 9,
+          "certain_visible_points": 9,
+          "certain_visible_series": 4
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 4,
+          "blocks": 0,
+          "block_points": 0,
+          "head_records": 9,
+          "physical_points": 9,
+          "in_range_points": 9,
+          "superseded": 0,
+          "hidden": 0,
+          "visible": 9
+        },
+        "reconcile": {
+          "planned_decode": 9,
+          "observed_source": 9,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        }
       }
     }
   },
@@ -499,6 +658,58 @@
         "decoded": 6,
         "visible": 6,
         "tombstones": 0
+      },
+      "evidence": {
+        "sequence": 2,
+        "floor": -4503599627370496,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": false,
+        "budget": {
+          "limit": 100000,
+          "used": 6,
+          "remaining": 99994,
+          "within": true
+        },
+        "planned": {
+          "series": 2,
+          "blocks": 0,
+          "blocks_contained": 0,
+          "blocks_partial": 0,
+          "block_points": 0,
+          "contained_block_points": 0,
+          "straddling_block_points": 0,
+          "head_records": 6,
+          "head_records_namespace": 9,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 6,
+          "series_with_sources": 2,
+          "series_without_sources": 0,
+          "series_with_version_overlap": 0,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 6,
+          "certain_visible_points": 6,
+          "certain_visible_series": 2
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 2,
+          "blocks": 0,
+          "block_points": 0,
+          "head_records": 6,
+          "physical_points": 6,
+          "in_range_points": 6,
+          "superseded": 0,
+          "hidden": 0,
+          "visible": 6
+        },
+        "reconcile": {
+          "planned_decode": 6,
+          "observed_source": 6,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        }
       }
     }
   },
@@ -625,7 +836,59 @@
         "visible": 9,
         "tombstones": 0
       },
-      "truncated": false
+      "truncated": false,
+      "evidence": {
+        "sequence": 3,
+        "floor": -4503599627370496,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": false,
+        "budget": {
+          "limit": 100000,
+          "used": 9,
+          "remaining": 99991,
+          "within": true
+        },
+        "planned": {
+          "series": 4,
+          "blocks": 4,
+          "blocks_contained": 4,
+          "blocks_partial": 0,
+          "block_points": 9,
+          "contained_block_points": 9,
+          "straddling_block_points": 0,
+          "head_records": 0,
+          "head_records_namespace": 0,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 9,
+          "series_with_sources": 4,
+          "series_without_sources": 0,
+          "series_with_version_overlap": 0,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 9,
+          "certain_visible_points": 9,
+          "certain_visible_series": 4
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 4,
+          "blocks": 4,
+          "block_points": 9,
+          "head_records": 0,
+          "physical_points": 9,
+          "in_range_points": 9,
+          "superseded": 0,
+          "hidden": 0,
+          "visible": 9
+        },
+        "reconcile": {
+          "planned_decode": 9,
+          "observed_source": 9,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        }
+      }
     }
   },
   {
@@ -1063,7 +1326,63 @@
         "visible": 6,
         "tombstones": 1
       },
-      "truncated": false
+      "truncated": false,
+      "evidence": {
+        "sequence": 7,
+        "floor": -4503599627370496,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": false,
+        "budget": {
+          "limit": 100000,
+          "used": 10,
+          "remaining": 99990,
+          "within": true
+        },
+        "planned": {
+          "series": 4,
+          "blocks": 4,
+          "blocks_contained": 4,
+          "blocks_partial": 0,
+          "block_points": 9,
+          "contained_block_points": 9,
+          "straddling_block_points": 0,
+          "head_records": 1,
+          "head_records_namespace": 1,
+          "head_records_overlapping_blocks": 1,
+          "decode_points": 10,
+          "series_with_sources": 4,
+          "series_without_sources": 0,
+          "series_with_version_overlap": 1,
+          "series_with_deletions": 2,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 10,
+          "certain_visible_points": 3,
+          "certain_visible_series": 2
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 4,
+          "blocks": 4,
+          "block_points": 9,
+          "head_records": 1,
+          "physical_points": 10,
+          "in_range_points": 10,
+          "superseded": 1,
+          "hidden": 3,
+          "visible": 6
+        },
+        "reconcile": {
+          "planned_decode": 10,
+          "observed_source": 10,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        },
+        "caveats": [
+          "version overlap: block points or head records may share timestamps, so visible points are an upper bound",
+          "deletions touch the interval: hide/show depends on each sample commit sequence, which the plan does not decode"
+        ]
+      }
     }
   },
   {
@@ -1161,7 +1480,59 @@
         "visible": 6,
         "tombstones": 0
       },
-      "truncated": false
+      "truncated": false,
+      "evidence": {
+        "sequence": 8,
+        "floor": -4503599627370496,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": false,
+        "budget": {
+          "limit": 100000,
+          "used": 6,
+          "remaining": 99994,
+          "within": true
+        },
+        "planned": {
+          "series": 4,
+          "blocks": 3,
+          "blocks_contained": 3,
+          "blocks_partial": 0,
+          "block_points": 6,
+          "contained_block_points": 6,
+          "straddling_block_points": 0,
+          "head_records": 0,
+          "head_records_namespace": 0,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 6,
+          "series_with_sources": 3,
+          "series_without_sources": 1,
+          "series_with_version_overlap": 0,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 6,
+          "certain_visible_points": 6,
+          "certain_visible_series": 4
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 4,
+          "blocks": 3,
+          "block_points": 6,
+          "head_records": 0,
+          "physical_points": 6,
+          "in_range_points": 6,
+          "superseded": 0,
+          "hidden": 0,
+          "visible": 6
+        },
+        "reconcile": {
+          "planned_decode": 6,
+          "observed_source": 6,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        }
+      }
     }
   },
   {
@@ -1173,6 +1544,7 @@
     "response": {
       "sequence": 8,
       "floor": -4503599627370496,
+      "result_limit": 0,
       "candidates": [
         {
           "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
@@ -1242,7 +1614,135 @@
       ],
       "max_decoded": 100000,
       "source_point_hint": 6,
-      "head_records": 0
+      "head_records": 0,
+      "totals": {
+        "series": 4,
+        "blocks": 3,
+        "blocks_contained": 3,
+        "blocks_partial": 0,
+        "block_points": 6,
+        "contained_block_points": 6,
+        "straddling_block_points": 0,
+        "head_records": 0,
+        "head_records_namespace": 0,
+        "head_records_overlapping_blocks": 0,
+        "decode_points": 6,
+        "series_with_sources": 3,
+        "series_without_sources": 1,
+        "series_with_version_overlap": 0,
+        "series_with_deletions": 0,
+        "series_with_retention_floor": 0,
+        "visible_upper_bound": 6,
+        "certain_visible_points": 6,
+        "certain_visible_series": 4
+      },
+      "budget": {
+        "limit": 100000,
+        "planned": 6,
+        "within": true,
+        "confident": true,
+        "verdict": "planned decode fits the scan budget exactly"
+      },
+      "narrowing": {
+        "time": {
+          "contained_block_points": 6,
+          "straddling_block_points": 0,
+          "straddling_blocks": null,
+          "head_records": 0,
+          "confident": true,
+          "verdict": "every decoded block is wholly inside the interval; narrowing time within it saves nothing"
+        },
+        "series": {
+          "candidates": 4,
+          "with_sources": 3,
+          "without_sources": 1,
+          "top": [
+            {
+              "series": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "decode_points": 3
+            },
+            {
+              "series": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+              "decode_points": 2
+            },
+            {
+              "series": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+              "decode_points": 1
+            }
+          ],
+          "confident": true,
+          "verdict": "only series with a positive decode cost matter; check the top list before tightening matchers"
+        }
+      },
+      "storage": {
+        "drive": "block_granularity",
+        "compact_resolves": false,
+        "verdict": "every decoded point sits in a block wholly inside the interval, so no smaller interval can avoid it. Only physical maintenance that rewrites block boundaries can reduce this cost"
+      },
+      "series": [
+        {
+          "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "blocks": 1,
+          "blocks_contained": 1,
+          "blocks_partial": 0,
+          "block_points": 1,
+          "head_records": 0,
+          "decode_points": 1,
+          "overlap": false,
+          "deletions": false,
+          "retention_cutoff": false,
+          "certainty": "exact",
+          "visible_upper_bound": 1,
+          "certain_visible": 1
+        },
+        {
+          "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "blocks": 0,
+          "blocks_contained": 0,
+          "blocks_partial": 0,
+          "block_points": 0,
+          "head_records": 0,
+          "decode_points": 0,
+          "overlap": false,
+          "deletions": false,
+          "retention_cutoff": false,
+          "certainty": "exact",
+          "visible_upper_bound": 0,
+          "certain_visible": 0
+        },
+        {
+          "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "blocks": 1,
+          "blocks_contained": 1,
+          "blocks_partial": 0,
+          "block_points": 3,
+          "head_records": 0,
+          "decode_points": 3,
+          "overlap": false,
+          "deletions": false,
+          "retention_cutoff": false,
+          "certainty": "exact",
+          "visible_upper_bound": 3,
+          "certain_visible": 3
+        },
+        {
+          "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "blocks": 1,
+          "blocks_contained": 1,
+          "blocks_partial": 0,
+          "block_points": 2,
+          "head_records": 0,
+          "decode_points": 2,
+          "overlap": false,
+          "deletions": false,
+          "retention_cutoff": false,
+          "certainty": "exact",
+          "visible_upper_bound": 2,
+          "certain_visible": 2
+        }
+      ],
+      "alternatives": [],
+      "caveats": []
     }
   },
   {
@@ -1375,14 +1875,999 @@
         "visible": 1,
         "tombstones": 0
       },
-      "truncated": false
+      "truncated": false,
+      "evidence": {
+        "sequence": 11,
+        "floor": 1000,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": false,
+        "budget": {
+          "limit": 100000,
+          "used": 1,
+          "remaining": 99999,
+          "within": true
+        },
+        "planned": {
+          "series": 4,
+          "blocks": 1,
+          "blocks_contained": 1,
+          "blocks_partial": 0,
+          "block_points": 1,
+          "contained_block_points": 1,
+          "straddling_block_points": 0,
+          "head_records": 0,
+          "head_records_namespace": 0,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 1,
+          "series_with_sources": 1,
+          "series_without_sources": 3,
+          "series_with_version_overlap": 0,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 1,
+          "certain_visible_points": 1,
+          "certain_visible_series": 4
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 4,
+          "blocks": 1,
+          "block_points": 1,
+          "head_records": 0,
+          "physical_points": 1,
+          "in_range_points": 1,
+          "superseded": 0,
+          "hidden": 0,
+          "visible": 1
+        },
+        "reconcile": {
+          "planned_decode": 1,
+          "observed_source": 1,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        }
+      }
     }
   },
   {
     "step": "backup",
     "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sha256": "4b977ec6d9470ed2bbe219e48dd6accff5f8a60d8aa2defd8637a818926584c0",
+    "bytes": 57344
+  },
+  {
+    "step": "create granite",
+    "request": {
+      "name": "granite",
+      "retention_ms": 100000000,
+      "lateness_ms": 100000000,
+      "future_ms": 100000,
+      "max_series": 1000,
+      "max_write": 100,
+      "max_scan": 200
+    },
+    "response": {
+      "name": "granite",
+      "read_only": false,
+      "retention_ms": 100000000,
+      "lateness_ms": 100000000,
+      "future_ms": 100000,
+      "max_series": 1000,
+      "max_write": 100,
+      "max_scan": 200,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 12
+    }
+  },
+  {
+    "step": "write spaces/granite",
+    "series": [
+      "{\"__name__\": \"wide\", \"node\": \"w\"}"
+    ],
+    "points": 100,
+    "response": {
+      "sequence": 13,
+      "accepted": 100,
+      "new_series": 1,
+      "watermark": 99
+    }
+  },
+  {
+    "step": "write spaces/granite",
+    "series": [
+      "{\"__name__\": \"wide\", \"node\": \"w\"}"
+    ],
+    "points": 100,
+    "response": {
+      "sequence": 14,
+      "accepted": 100,
+      "new_series": 0,
+      "watermark": 199
+    }
+  },
+  {
+    "step": "write spaces/granite",
+    "series": [
+      "{\"__name__\": \"wide\", \"node\": \"w\"}"
+    ],
+    "points": 100,
+    "response": {
+      "sequence": 15,
+      "accepted": 100,
+      "new_series": 0,
+      "watermark": 299
+    }
+  },
+  {
+    "step": "write spaces/granite",
+    "series": [
+      "{\"__name__\": \"wide\", \"node\": \"w\"}"
+    ],
+    "points": 1,
+    "response": {
+      "sequence": 16,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 300
+    }
+  },
+  {
+    "step": "seal granite",
+    "request": {},
+    "response": {
+      "sequence": 17,
+      "blocks": 1,
+      "points": 301,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "narrow plan in a big block",
+    "request": {
+      "start": 100,
+      "end": 110,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "wide"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 17,
+      "floor": -4503599627370496,
+      "result_limit": 0,
+      "candidates": [
+        {
+          "id": "0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+          "labels": {
+            "__name__": "wide",
+            "node": "w"
+          }
+        }
+      ],
+      "blocks": [
+        {
+          "id": "00000000000000000017-0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+          "series_id": "0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+          "start": 0,
+          "end": 301,
+          "count": 301,
+          "bytes": 705,
+          "checksum": "02683205c41372930d33880774a998e5b0255e417bdaaeef40fbf8193cb71c04",
+          "format": 1
+        }
+      ],
+      "max_decoded": 200,
+      "source_point_hint": 301,
+      "head_records": 0,
+      "totals": {
+        "series": 1,
+        "blocks": 1,
+        "blocks_contained": 0,
+        "blocks_partial": 1,
+        "block_points": 301,
+        "contained_block_points": 0,
+        "straddling_block_points": 301,
+        "head_records": 0,
+        "head_records_namespace": 0,
+        "head_records_overlapping_blocks": 0,
+        "decode_points": 301,
+        "series_with_sources": 1,
+        "series_without_sources": 0,
+        "series_with_version_overlap": 0,
+        "series_with_deletions": 0,
+        "series_with_retention_floor": 0,
+        "visible_upper_bound": 301,
+        "certain_visible_points": 0,
+        "certain_visible_series": 0
+      },
+      "budget": {
+        "limit": 200,
+        "planned": 301,
+        "within": false,
+        "rejected_source": {
+          "series": "0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+          "kind": "block",
+          "block": "00000000000000000017-0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+          "need": 301,
+          "remaining": 200
+        },
+        "confident": true,
+        "verdict": "planned decode exceeds the scan budget; the read would stop at this block and return no rows"
+      },
+      "narrowing": {
+        "time": {
+          "contained_block_points": 0,
+          "straddling_block_points": 301,
+          "straddling_blocks": [
+            {
+              "series": "0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+              "block": "00000000000000000017-0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+              "start": 0,
+              "end": 301,
+              "points": 301,
+              "overlaps_head": false
+            }
+          ],
+          "head_records": 0,
+          "confident": true,
+          "verdict": "straddling blocks cost their whole point count even for a thin overlap; narrowing saves them only by excluding the block entirely"
+        },
+        "series": {
+          "candidates": 1,
+          "with_sources": 1,
+          "without_sources": 0,
+          "top": [
+            {
+              "series": "0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+              "decode_points": 301
+            }
+          ],
+          "confident": true,
+          "verdict": "only series with a positive decode cost matter; check the top list before tightening matchers"
+        }
+      },
+      "storage": {
+        "drive": "block_granularity",
+        "compact_resolves": false,
+        "verdict": "the interval cuts block edges, so whole blocks are decoded. Narrowing time helps only once the interval excludes a block entirely; compaction widens blocks and makes that harder, not easier"
+      },
+      "series": [
+        {
+          "id": "0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+          "blocks": 1,
+          "blocks_contained": 0,
+          "blocks_partial": 1,
+          "block_points": 301,
+          "head_records": 0,
+          "decode_points": 301,
+          "overlap": false,
+          "deletions": false,
+          "retention_cutoff": false,
+          "certainty": "upper_only",
+          "visible_upper_bound": 301,
+          "certain_visible": 0
+        }
+      ],
+      "alternatives": [],
+      "caveats": [
+        "partial blocks: the interval cuts block edges, so stored counts include points outside the interval"
+      ]
+    }
+  },
+  {
+    "step": "narrow rejection",
+    "request": {
+      "start": 100,
+      "end": 110,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "wide"
+        }
+      ]
+    },
+    "response": {
+      "code": "capacity",
+      "detail": "query decoded point budget exceeded",
+      "evidence": {
+        "sequence": 17,
+        "floor": -4503599627370496,
+        "outcome": "rejected",
+        "complete": false,
+        "truncated": false,
+        "budget": {
+          "limit": 200,
+          "used": 0,
+          "remaining": 200,
+          "within": false,
+          "rejected_source": {
+            "series": "0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+            "kind": "block",
+            "block": "00000000000000000017-0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+            "need": 301,
+            "remaining": 200
+          }
+        },
+        "planned": {
+          "series": 1,
+          "blocks": 1,
+          "blocks_contained": 0,
+          "blocks_partial": 1,
+          "block_points": 301,
+          "contained_block_points": 0,
+          "straddling_block_points": 301,
+          "head_records": 0,
+          "head_records_namespace": 0,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 301,
+          "series_with_sources": 1,
+          "series_without_sources": 0,
+          "series_with_version_overlap": 0,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 301,
+          "certain_visible_points": 0,
+          "certain_visible_series": 0
+        },
+        "observed": {
+          "scope": "fully read series only",
+          "series": 0,
+          "blocks": 0,
+          "block_points": 0,
+          "head_records": 0,
+          "physical_points": 0,
+          "in_range_points": 0,
+          "superseded": 0,
+          "hidden": 0,
+          "visible": 0
+        },
+        "partial": {
+          "series": "0bbc5522e41c59e7445c50760584dc04810aa16a756a5d15761584fdd6194c24",
+          "stage": "blocks",
+          "blocks_decoded": 0,
+          "block_points_read": 0,
+          "head_records_read": 0,
+          "physical_read": 0,
+          "planned_decode": 301,
+          "unread_decode": 301
+        },
+        "unscanned": {
+          "series": 0,
+          "planned_decode_points": 0,
+          "visible_known": false
+        },
+        "reconcile": {
+          "planned_decode": 301,
+          "observed_source": 0,
+          "matches": false,
+          "verdict": "rejected after 0 of a planned 301 decode points; the rest was never read"
+        },
+        "caveats": [
+          "partial blocks: the interval cuts block edges, so stored counts include points outside the interval",
+          "read stopped at the scan budget: observed counters cover only fully read series; the partial series and all remaining sources are not evidence of visible rows"
+        ]
+      }
+    }
+  },
+  {
+    "step": "create atlas",
+    "request": {
+      "name": "atlas",
+      "retention_ms": 100000000,
+      "lateness_ms": 100000000,
+      "future_ms": 100000,
+      "max_series": 1000,
+      "max_write": 10000,
+      "max_scan": 100000
+    },
+    "response": {
+      "name": "atlas",
+      "read_only": false,
+      "retention_ms": 100000000,
+      "lateness_ms": 100000000,
+      "future_ms": 100000,
+      "max_series": 1000,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 18
+    }
+  },
+  {
+    "step": "write spaces/atlas",
+    "series": [
+      "{\"__name__\": \"versions\", \"node\": \"v\"}"
+    ],
+    "points": 10,
+    "response": {
+      "sequence": 19,
+      "accepted": 10,
+      "new_series": 1,
+      "watermark": 90
+    }
+  },
+  {
+    "step": "seal atlas",
+    "request": {},
+    "response": {
+      "sequence": 20,
+      "blocks": 1,
+      "points": 10,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "write spaces/atlas",
+    "series": [
+      "{\"__name__\": \"versions\", \"node\": \"v\"}"
+    ],
+    "points": 10,
+    "response": {
+      "sequence": 21,
+      "accepted": 10,
+      "new_series": 0,
+      "watermark": 90
+    }
+  },
+  {
+    "step": "seal correction",
+    "request": {},
+    "response": {
+      "sequence": 22,
+      "blocks": 1,
+      "points": 10,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "stacked versions plan",
+    "request": {
+      "start": 0,
+      "end": 100,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "versions"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 22,
+      "floor": -4503599627370496,
+      "result_limit": 0,
+      "candidates": [
+        {
+          "id": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "labels": {
+            "__name__": "versions",
+            "node": "v"
+          }
+        }
+      ],
+      "blocks": [
+        {
+          "id": "00000000000000000020-637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "series_id": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "start": 0,
+          "end": 91,
+          "count": 10,
+          "bytes": 90,
+          "checksum": "947af347421ab7cb6fe575b5c11cc64ebd977ffe3d39262f45d3fb5e9ecbacc8",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000022-637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "series_id": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "start": 0,
+          "end": 91,
+          "count": 10,
+          "bytes": 90,
+          "checksum": "a2686bbf3f085b26b50e0fbf3bd17e106d65e822287285959ba64bc7c3ea4ece",
+          "format": 1
+        }
+      ],
+      "max_decoded": 100000,
+      "source_point_hint": 20,
+      "head_records": 0,
+      "totals": {
+        "series": 1,
+        "blocks": 2,
+        "blocks_contained": 2,
+        "blocks_partial": 0,
+        "block_points": 20,
+        "contained_block_points": 20,
+        "straddling_block_points": 0,
+        "head_records": 0,
+        "head_records_namespace": 0,
+        "head_records_overlapping_blocks": 0,
+        "decode_points": 20,
+        "series_with_sources": 1,
+        "series_without_sources": 0,
+        "series_with_version_overlap": 1,
+        "series_with_deletions": 0,
+        "series_with_retention_floor": 0,
+        "visible_upper_bound": 20,
+        "certain_visible_points": 0,
+        "certain_visible_series": 0
+      },
+      "budget": {
+        "limit": 100000,
+        "planned": 20,
+        "within": true,
+        "confident": true,
+        "verdict": "planned decode fits the scan budget exactly"
+      },
+      "narrowing": {
+        "time": {
+          "contained_block_points": 20,
+          "straddling_block_points": 0,
+          "straddling_blocks": null,
+          "head_records": 0,
+          "confident": true,
+          "verdict": "every decoded block is wholly inside the interval; narrowing time within it saves nothing"
+        },
+        "series": {
+          "candidates": 1,
+          "with_sources": 1,
+          "without_sources": 0,
+          "top": [
+            {
+              "series": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+              "decode_points": 20
+            }
+          ],
+          "confident": true,
+          "verdict": "only series with a positive decode cost matter; check the top list before tightening matchers"
+        }
+      },
+      "storage": {
+        "drive": "version_overlap",
+        "compact_resolves": true,
+        "verdict": "duplicate versions inflate decode cost. Compaction resolves them into one point per series-time, but it also rewrites one wide block per series, so a later narrow read may decode the whole span unless the retention floor removes it"
+      },
+      "series": [
+        {
+          "id": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "blocks": 2,
+          "blocks_contained": 2,
+          "blocks_partial": 0,
+          "block_points": 20,
+          "head_records": 0,
+          "decode_points": 20,
+          "overlap": true,
+          "deletions": false,
+          "retention_cutoff": false,
+          "certainty": "upper_only",
+          "visible_upper_bound": 20,
+          "certain_visible": 0
+        }
+      ],
+      "alternatives": [],
+      "caveats": [
+        "version overlap: block points or head records may share timestamps, so visible points are an upper bound"
+      ]
+    }
+  },
+  {
+    "step": "stacked versions read",
+    "request": {
+      "start": 0,
+      "end": 100,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "versions"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 22,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+            "labels": {
+              "__name__": "versions",
+              "node": "v"
+            }
+          },
+          "points": [
+            {
+              "time": 0,
+              "value": 9,
+              "sequence": 21
+            },
+            {
+              "time": 10,
+              "value": 9,
+              "sequence": 21
+            },
+            {
+              "time": 20,
+              "value": 9,
+              "sequence": 21
+            },
+            {
+              "time": 30,
+              "value": 9,
+              "sequence": 21
+            },
+            {
+              "time": 40,
+              "value": 9,
+              "sequence": 21
+            },
+            {
+              "time": 50,
+              "value": 9,
+              "sequence": 21
+            },
+            {
+              "time": 60,
+              "value": 9,
+              "sequence": 21
+            },
+            {
+              "time": 70,
+              "value": 9,
+              "sequence": 21
+            },
+            {
+              "time": 80,
+              "value": 9,
+              "sequence": 21
+            },
+            {
+              "time": 90,
+              "value": 9,
+              "sequence": 21
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 2,
+        "head": 0,
+        "decoded": 20,
+        "visible": 10,
+        "tombstones": 0
+      },
+      "truncated": false,
+      "evidence": {
+        "sequence": 22,
+        "floor": -4503599627370496,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": false,
+        "budget": {
+          "limit": 100000,
+          "used": 20,
+          "remaining": 99980,
+          "within": true
+        },
+        "planned": {
+          "series": 1,
+          "blocks": 2,
+          "blocks_contained": 2,
+          "blocks_partial": 0,
+          "block_points": 20,
+          "contained_block_points": 20,
+          "straddling_block_points": 0,
+          "head_records": 0,
+          "head_records_namespace": 0,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 20,
+          "series_with_sources": 1,
+          "series_without_sources": 0,
+          "series_with_version_overlap": 1,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 20,
+          "certain_visible_points": 0,
+          "certain_visible_series": 0
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 1,
+          "blocks": 2,
+          "block_points": 20,
+          "head_records": 0,
+          "physical_points": 20,
+          "in_range_points": 20,
+          "superseded": 10,
+          "hidden": 0,
+          "visible": 10
+        },
+        "reconcile": {
+          "planned_decode": 20,
+          "observed_source": 20,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        },
+        "caveats": [
+          "version overlap: block points or head records may share timestamps, so visible points are an upper bound"
+        ]
+      }
+    }
+  },
+  {
+    "step": "compact atlas",
+    "request": {},
+    "response": {
+      "sequence": 23,
+      "blocks": 1,
+      "points": 10,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "stacked versions after compaction",
+    "request": {
+      "start": 0,
+      "end": 100,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "versions"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 23,
+      "floor": -4503599627370496,
+      "result_limit": 0,
+      "candidates": [
+        {
+          "id": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "labels": {
+            "__name__": "versions",
+            "node": "v"
+          }
+        }
+      ],
+      "blocks": [
+        {
+          "id": "00000000000000000023-637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "series_id": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "start": 0,
+          "end": 91,
+          "count": 10,
+          "bytes": 90,
+          "checksum": "a2686bbf3f085b26b50e0fbf3bd17e106d65e822287285959ba64bc7c3ea4ece",
+          "format": 1
+        }
+      ],
+      "max_decoded": 100000,
+      "source_point_hint": 10,
+      "head_records": 0,
+      "totals": {
+        "series": 1,
+        "blocks": 1,
+        "blocks_contained": 1,
+        "blocks_partial": 0,
+        "block_points": 10,
+        "contained_block_points": 10,
+        "straddling_block_points": 0,
+        "head_records": 0,
+        "head_records_namespace": 0,
+        "head_records_overlapping_blocks": 0,
+        "decode_points": 10,
+        "series_with_sources": 1,
+        "series_without_sources": 0,
+        "series_with_version_overlap": 0,
+        "series_with_deletions": 0,
+        "series_with_retention_floor": 0,
+        "visible_upper_bound": 10,
+        "certain_visible_points": 10,
+        "certain_visible_series": 1
+      },
+      "budget": {
+        "limit": 100000,
+        "planned": 10,
+        "within": true,
+        "confident": true,
+        "verdict": "planned decode fits the scan budget exactly"
+      },
+      "narrowing": {
+        "time": {
+          "contained_block_points": 10,
+          "straddling_block_points": 0,
+          "straddling_blocks": null,
+          "head_records": 0,
+          "confident": true,
+          "verdict": "every decoded block is wholly inside the interval; narrowing time within it saves nothing"
+        },
+        "series": {
+          "candidates": 1,
+          "with_sources": 1,
+          "without_sources": 0,
+          "top": [
+            {
+              "series": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+              "decode_points": 10
+            }
+          ],
+          "confident": true,
+          "verdict": "only series with a positive decode cost matter; check the top list before tightening matchers"
+        }
+      },
+      "storage": {
+        "drive": "block_granularity",
+        "compact_resolves": false,
+        "verdict": "every decoded point sits in a block wholly inside the interval, so no smaller interval can avoid it. Only physical maintenance that rewrites block boundaries can reduce this cost"
+      },
+      "series": [
+        {
+          "id": "637c4794ec28ec4e33fb61df99b6f073d277ddde89c9fd90309171143fe8686e",
+          "blocks": 1,
+          "blocks_contained": 1,
+          "blocks_partial": 0,
+          "block_points": 10,
+          "head_records": 0,
+          "decode_points": 10,
+          "overlap": false,
+          "deletions": false,
+          "retention_cutoff": false,
+          "certainty": "exact",
+          "visible_upper_bound": 10,
+          "certain_visible": 10
+        }
+      ],
+      "alternatives": [],
+      "caveats": []
+    }
+  },
+  {
+    "step": "write spaces/atlas",
+    "series": [
+      "{\"__name__\": \"chatter\", \"node\": \"c\"}"
+    ],
+    "points": 301,
+    "response": {
+      "sequence": 24,
+      "accepted": 301,
+      "new_series": 1,
+      "watermark": 300
+    }
+  },
+  {
+    "step": "write spaces/atlas",
+    "series": [
+      "{\"__name__\": \"quiet\", \"node\": \"q\"}"
+    ],
+    "points": 3,
+    "response": {
+      "sequence": 25,
+      "accepted": 3,
+      "new_series": 1,
+      "watermark": 300
+    }
+  },
+  {
+    "step": "head excluded by matcher",
+    "request": {
+      "start": 0,
+      "end": 400,
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "quiet"
+        },
+        {
+          "label": "node",
+          "op": "=",
+          "value": "q"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 25,
+      "floor": -4503599627370496,
+      "result_limit": 0,
+      "candidates": [
+        {
+          "id": "40a7fda80bda177726269b5f3403f94e8a857d62388121c5d9897785a211043b",
+          "labels": {
+            "__name__": "quiet",
+            "node": "q"
+          }
+        }
+      ],
+      "blocks": [],
+      "max_decoded": 100000,
+      "source_point_hint": 0,
+      "head_records": 304,
+      "totals": {
+        "series": 1,
+        "blocks": 0,
+        "blocks_contained": 0,
+        "blocks_partial": 0,
+        "block_points": 0,
+        "contained_block_points": 0,
+        "straddling_block_points": 0,
+        "head_records": 3,
+        "head_records_namespace": 304,
+        "head_records_overlapping_blocks": 0,
+        "decode_points": 3,
+        "series_with_sources": 1,
+        "series_without_sources": 0,
+        "series_with_version_overlap": 0,
+        "series_with_deletions": 0,
+        "series_with_retention_floor": 0,
+        "visible_upper_bound": 3,
+        "certain_visible_points": 3,
+        "certain_visible_series": 1
+      },
+      "budget": {
+        "limit": 100000,
+        "planned": 3,
+        "within": true,
+        "confident": true,
+        "verdict": "planned decode fits the scan budget exactly"
+      },
+      "narrowing": {
+        "time": {
+          "contained_block_points": 0,
+          "straddling_block_points": 0,
+          "straddling_blocks": null,
+          "head_records": 3,
+          "confident": true,
+          "verdict": "cost is head records only; a proportionally narrower interval reduces it"
+        },
+        "series": {
+          "candidates": 1,
+          "with_sources": 1,
+          "without_sources": 0,
+          "top": [
+            {
+              "series": "40a7fda80bda177726269b5f3403f94e8a857d62388121c5d9897785a211043b",
+              "decode_points": 3
+            }
+          ],
+          "confident": true,
+          "verdict": "only series with a positive decode cost matter; check the top list before tightening matchers"
+        }
+      },
+      "storage": {
+        "drive": "head_records",
+        "compact_resolves": false,
+        "verdict": "cost is mutable head records. Sealing moves them into blocks without changing logical points; sealing alone does not reduce the samples a read must decode"
+      },
+      "series": [
+        {
+          "id": "40a7fda80bda177726269b5f3403f94e8a857d62388121c5d9897785a211043b",
+          "blocks": 0,
+          "blocks_contained": 0,
+          "blocks_partial": 0,
+          "block_points": 0,
+          "head_records": 3,
+          "decode_points": 3,
+          "overlap": false,
+          "deletions": false,
+          "retention_cutoff": false,
+          "certainty": "exact",
+          "visible_upper_bound": 3,
+          "certain_visible": 3
+        }
+      ],
+      "alternatives": [],
+      "caveats": []
+    }
   },
   {
     "step": "restored",
@@ -1416,7 +2901,59 @@
         "visible": 1,
         "tombstones": 0
       },
-      "truncated": false
+      "truncated": false,
+      "evidence": {
+        "sequence": 11,
+        "floor": 1000,
+        "outcome": "complete",
+        "complete": true,
+        "truncated": false,
+        "budget": {
+          "limit": 100000,
+          "used": 1,
+          "remaining": 99999,
+          "within": true
+        },
+        "planned": {
+          "series": 4,
+          "blocks": 1,
+          "blocks_contained": 1,
+          "blocks_partial": 0,
+          "block_points": 1,
+          "contained_block_points": 1,
+          "straddling_block_points": 0,
+          "head_records": 0,
+          "head_records_namespace": 0,
+          "head_records_overlapping_blocks": 0,
+          "decode_points": 1,
+          "series_with_sources": 1,
+          "series_without_sources": 3,
+          "series_with_version_overlap": 0,
+          "series_with_deletions": 0,
+          "series_with_retention_floor": 0,
+          "visible_upper_bound": 1,
+          "certain_visible_points": 1,
+          "certain_visible_series": 4
+        },
+        "observed": {
+          "scope": "all candidate series",
+          "series": 4,
+          "blocks": 1,
+          "block_points": 1,
+          "head_records": 0,
+          "physical_points": 1,
+          "in_range_points": 1,
+          "superseded": 0,
+          "hidden": 0,
+          "visible": 1
+        },
+        "reconcile": {
+          "planned_decode": 1,
+          "observed_source": 1,
+          "matches": true,
+          "verdict": "measured decode equals the plan"
+        }
+      }
     }
   }
 ]

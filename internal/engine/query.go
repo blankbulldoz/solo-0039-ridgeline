@@ -30,18 +30,19 @@ func (e *Engine) Discover(name string, matchers []model.Matcher) ([]model.Series
 	return out, err
 }
 
-func aggregate(b *bolt.Bucket, n model.Namespace, q model.Query, sequence uint64) (model.AggregateResult, error) {
+func aggregate(b *bolt.Bucket, view readView, q model.Query) (model.AggregateResult, model.ScanEvidence, error) {
 	if err := window.Validate(q); err != nil {
-		return model.AggregateResult{}, err
+		return model.AggregateResult{}, model.ScanEvidence{}, err
 	}
 	// A raw result limit must not bias reducers.
 	q.Limit = 0
-	raw, err := scan(b, n, q, sequence)
+	raw, evidence, err := scan(b, view, q)
 	if err != nil {
-		return model.AggregateResult{}, err
+		return model.AggregateResult{}, evidence, err
 	}
 	cells, err := window.Aggregate(raw.Series, q)
-	return model.AggregateResult{Sequence: sequence, Cells: cells, Stats: raw.Stats}, err
+	return model.AggregateResult{Sequence: view.sequence, Cells: cells,
+		Stats: raw.Stats, Evidence: &evidence}, evidence, err
 }
 
 func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, error) {
@@ -51,23 +52,39 @@ func (e *Engine) Aggregate(name string, q model.Query) (model.AggregateResult, e
 		if err != nil {
 			return err
 		}
-		out, err = aggregate(b, n, q, volume.Current(tx))
+		view, err := loadView(b, n, tx)
+		if err != nil {
+			return err
+		}
+		out, _, err = aggregate(b, view, q)
 		return err
 	})
 	return out, err
 }
 
+// Plan is the explain response. Candidates and Blocks stay for compatibility;
+// the plan-phase evidence below adds the decision material: exact decode cost,
+// budget projection, narrowing verdicts and per-series certainty.
 type Plan struct {
-	Sequence        uint64         `json:"sequence"`
-	Floor           int64          `json:"floor"`
-	Candidates      []model.Series `json:"candidates"`
-	Blocks          []model.Block  `json:"blocks"`
-	MaxDecoded      int            `json:"max_decoded"`
-	SourcePointHint int            `json:"source_point_hint"`
-	HeadRecords     int            `json:"head_records"`
+	Sequence        uint64            `json:"sequence"`
+	Floor           int64             `json:"floor"`
+	ResultLimit     int               `json:"result_limit"`
+	Candidates      []model.Series    `json:"candidates"`
+	Blocks          []model.Block     `json:"blocks"`
+	MaxDecoded      int               `json:"max_decoded"`
+	SourcePointHint int               `json:"source_point_hint"`
+	HeadRecords     int               `json:"head_records"`
+	Totals          model.PlanTotals  `json:"totals"`
+	Budget          BudgetPlan        `json:"budget"`
+	Narrowing       PlanNarrowing     `json:"narrowing"`
+	Storage         StorageAdvice     `json:"storage"`
+	Series          []SeriesEvidence  `json:"series"`
+	Alternatives    []AlternativePlan `json:"alternatives"`
+	Caveats         []string          `json:"caveats"`
 }
 
-func (e *Engine) Explain(name string, q model.Query) (Plan, error) {
+func (e *Engine) Explain(name string, req model.ExplainRequest) (Plan, error) {
+	q := req.Query
 	var plan Plan
 	if err := model.ValidateQuery(q); err != nil {
 		return plan, err
@@ -81,29 +98,41 @@ func (e *Engine) Explain(name string, q model.Query) (Plan, error) {
 		if err != nil {
 			return err
 		}
-		all, err := catalog(b)
+		view, err := loadView(b, n, tx)
 		if err != nil {
 			return err
 		}
-		plan.Candidates = selectseries.Pick(all, selector)
-		plan.Sequence, plan.Floor, plan.MaxDecoded = volume.Current(tx), n.Floor, n.MaxScan
-		plan.HeadRecords = b.Bucket(volume.Head).Stats().KeyN
+		plan.Sequence, plan.Floor, plan.MaxDecoded = view.sequence, n.Floor, n.MaxScan
+		plan.ResultLimit = q.Limit
+		plan.Candidates = selectseries.Pick(view.catalog, selector)
 		plan.Blocks = []model.Block{}
-		blocks, err := readBlocks(b)
-		if err != nil {
-			return err
-		}
-		ids := map[string]bool{}
+		// HeadRecords is the namespace-wide key count, kept as a rough size
+		// signal. Totals.head_records is the exact in-interval count for
+		// candidate series and is the number to budget against.
+		plan.HeadRecords = b.Bucket(volume.Head).Stats().KeyN
+		selected := make(map[string]bool, len(plan.Candidates))
 		for _, s := range plan.Candidates {
-			ids[s.ID] = true
+			selected[s.ID] = true
 		}
-		for _, block := range blocks {
-			if ids[block.SeriesID] && block.End > q.Start &&
-				block.Start < q.End && block.End > n.Floor {
+		for _, block := range view.blocks {
+			if selected[block.SeriesID] &&
+				BlockIntersects(block, q.Start, q.End, n.Floor) {
 				plan.Blocks = append(plan.Blocks, block)
 				plan.SourcePointHint += block.Count
 			}
 		}
+		evidence, err := buildPlan(b, n, view.sequence, view.catalog, selector, q,
+			view.blocks, view.tombstones, req.Alternatives)
+		if err != nil {
+			return err
+		}
+		plan.Totals = evidence.Totals
+		plan.Budget = evidence.Budget
+		plan.Narrowing = evidence.Narrowing
+		plan.Storage = evidence.Storage
+		plan.Series = evidence.Series
+		plan.Alternatives = evidence.Alternatives
+		plan.Caveats = evidence.Caveats
 		return nil
 	})
 	return plan, err

@@ -48,7 +48,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/series` | `{"matchers":[]}` |
 | POST | `/spaces/{space}/range` | time interval, matchers, optional limit |
 | POST | `/spaces/{space}/aggregate` | interval, step, origin, function, group_by |
-| POST | `/spaces/{space}/explain` | interval and matchers |
+| POST | `/spaces/{space}/explain` | interval, matchers, optional alternatives |
 | POST | `/spaces/{space}/seal` | empty object |
 | GET | `/spaces/{space}/blocks` | physical block inventory |
 | POST | `/spaces/{space}/deletions` | interval and matchers |
@@ -71,7 +71,28 @@ Matchers are ANDed and regexes are fully anchored. Empty/missing labels match
 the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
-Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+Explain reports a physical plan, not a guarantee of visible rows. It counts
+decode work from block headers and head key positions without decompressing a
+sample: exact block points, exact in-interval head records, the budget verdict
+and, when the plan would be rejected, the source the read would stop at. A
+`certainty` of `exact` means no version overlap, partial block, deletion or
+retention cutoff can change the visible count; `upper_only` means it can.
+`narrowing.time` says whether a smaller interval decodes less (contained
+blocks are fixed cost, straddling blocks cost their whole count, head records
+scale), and `narrowing.series` names the expensive candidates. `storage`
+separates query-side narrowing from physical rewrite: compaction resolves
+stacked versions but widens blocks. `alternatives` accepts proposed
+`{label,start,end,matchers}` requests and projects each one's decode cost and
+budget verdict. A result `limit` truncates output after decoding and never
+lowers scanned source work.
+
+Every range and aggregate response carries `evidence`, and a scan-budget
+rejection returns the same structure in its 422 body. The evidence comes from
+the same read transaction as the attempt. On success it covers every
+candidate; on rejection, `observed` covers only fully read series, `partial`
+describes the interrupted series without claiming its visible rows, and
+`unscanned` carries the planned cost of what was never reached. `reconcile`
+states whether measured decode matched the plan.
 
 ## Storage And Recovery
 

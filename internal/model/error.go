@@ -5,6 +5,10 @@ import "fmt"
 type Error struct {
 	Code   string `json:"code"`
 	Detail string `json:"detail"`
+	// Evidence carries the read-view facts that existed when a capacity
+	// rejection stopped source work. It is diagnostic context, never a
+	// partial result the caller may project over the whole request.
+	Evidence *ScanEvidence `json:"evidence,omitempty"`
 }
 
 func (e *Error) Error() string {

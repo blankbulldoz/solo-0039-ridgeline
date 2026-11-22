@@ -10,7 +10,11 @@ import (
 
 func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance, error) {
 	// Maintenance is bounded by the same scan policy as user queries.
-	raw, err := scan(b, n, model.Query{Start: model.MinTime, End: model.MaxTime + 1}, volume.Current(tx))
+	view, err := loadView(b, n, tx)
+	if err != nil {
+		return model.Maintenance{}, err
+	}
+	raw, _, err := scan(b, view, model.Query{Start: model.MinTime, End: model.MaxTime + 1})
 	if err != nil {
 		return model.Maintenance{}, err
 	}

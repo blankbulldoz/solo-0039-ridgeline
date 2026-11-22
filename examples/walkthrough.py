@@ -69,6 +69,103 @@ def stop(process):
         raise RuntimeError(f"service exit {process.returncode}")
 
 
+def diagnostics(base, op, observations):
+    """Show when a narrower scan helps, when it cannot, and what a rejection proves."""
+    def make_space(name, max_write, max_scan):
+        return op("create " + name, "spaces", {
+            "name": name, "retention_ms": 100000000, "lateness_ms": 100000000,
+            "future_ms": 100000, "max_series": 1000, "max_write": max_write,
+            "max_scan": max_scan})
+
+    def write(space, points):
+        # Bulk diagnostic writes are summarised, not echoed, so the recorded
+        # session stays readable while the request still runs verbatim.
+        out = request(base, space + "/points", {"now": 100000, "points": points})
+        observations.append({"step": "write " + space, "series": sorted(
+            {json.dumps(p["labels"], sort_keys=True) for p in points}),
+            "points": len(points), "response": out})
+        return out
+
+    def every(name, node, start, stop, step, value):
+        return [{"labels": {"__name__": name, "node": node}, "time": t, "value": value}
+                for t in range(start, stop, step)]
+
+    # A narrow interval that still decodes a whole block, and a request whose
+    # budget cannot cover it. The rejection must carry the same view.
+    make_space("granite", 100, 200)
+    wide = every("wide", "w", 0, 301, 1, 1)
+    for offset in range(0, len(wide), 100):
+        write("spaces/granite", wide[offset:offset + 100])
+    # One seal call packs every head point into a single wide block.
+    op("seal granite", "spaces/granite/seal", {})
+    narrow = {"start": 100, "end": 110,
+              "matchers": [{"label": "__name__", "op": "=", "value": "wide"}]}
+    narrow_plan = op("narrow plan in a big block", "spaces/granite/explain", narrow)
+    if narrow_plan["totals"]["decode_points"] <= 200:
+        raise RuntimeError("a narrow interval should still count the whole block")
+    if narrow_plan["narrowing"]["time"]["straddling_block_points"] == 0:
+        raise RuntimeError("narrow interval should report a straddling block")
+    if narrow_plan["budget"]["within"]:
+        raise RuntimeError("narrow interval should exceed the small scan budget")
+    failure = request(base, "spaces/granite/range", narrow, status=422)
+    observations.append({"step": "narrow rejection", "request": narrow, "response": failure})
+    evidence = failure["evidence"]
+    if evidence["observed"]["scope"] != "fully read series only":
+        raise RuntimeError("a rejection must not project partial series over the query")
+    if evidence["partial"]["series"] != narrow_plan["budget"]["rejected_source"]["series"]:
+        raise RuntimeError("rejection and plan disagree on the stopping series")
+    if evidence["reconcile"]["matches"]:
+        raise RuntimeError("a rejected read cannot match the whole plan")
+    if evidence["planned"]["decode_points"] != narrow_plan["totals"]["decode_points"]:
+        raise RuntimeError("rejection evidence and plan disagree on planned decode")
+
+    # Same interval cost, but older versions stack under the newer ones.
+    make_space("atlas", 10000, 100000)
+    write("spaces/atlas", every("versions", "v", 0, 100, 10, 5))
+    op("seal atlas", "spaces/atlas/seal", {})
+    write("spaces/atlas", [{"labels": {"__name__": "versions", "node": "v"},
+                            "time": t, "value": 9} for t in range(0, 100, 10)])
+    op("seal correction", "spaces/atlas/seal", {})
+    stacked = {"start": 0, "end": 100,
+               "matchers": [{"label": "__name__", "op": "=", "value": "versions"}]}
+    stacked_plan = op("stacked versions plan", "spaces/atlas/explain", stacked)
+    if stacked_plan["totals"]["series_with_version_overlap"] == 0:
+        raise RuntimeError("stacked blocks should be reported as version overlap")
+    if stacked_plan["totals"]["certain_visible_series"] != 0:
+        raise RuntimeError("stacked versions must not claim a certain visible count")
+    if stacked_plan["series"][0]["certainty"] != "upper_only":
+        raise RuntimeError("stacked versions must not claim an exact visible count")
+    if not stacked_plan["storage"]["compact_resolves"]:
+        raise RuntimeError("stacked versions are resolvable by compaction")
+    stacked_read = op("stacked versions read", "spaces/atlas/range", stacked)
+    if stacked_read["stats"]["decoded"] != stacked_plan["totals"]["decode_points"]:
+        raise RuntimeError("read decode should match the planned decode")
+    if stacked_read["evidence"]["observed"]["superseded"] == 0:
+        raise RuntimeError("overlap should be visible only after decoding")
+    op("compact atlas", "spaces/atlas/compact", {})
+    resolved = op("stacked versions after compaction", "spaces/atlas/explain", stacked)
+    if resolved["series"][0]["certainty"] != "exact":
+        raise RuntimeError("compaction should resolve the version overlap")
+    if resolved["totals"]["decode_points"] >= stacked_plan["totals"]["decode_points"]:
+        raise RuntimeError("compaction should remove stacked decode work")
+
+    # A large head that the matcher excludes cannot explain the cost.
+    write("spaces/atlas", every("chatter", "c", 0, 301, 1, 3))
+    write("spaces/atlas", every("quiet", "q", 0, 3, 1, 1))
+    quiet = {"start": 0, "end": 400,
+             "matchers": [{"label": "__name__", "op": "=", "value": "quiet"},
+                          {"label": "node", "op": "=", "value": "q"}]}
+    quiet_plan = op("head excluded by matcher", "spaces/atlas/explain", quiet)
+    if quiet_plan["totals"]["head_records_namespace"] == 0:
+        raise RuntimeError("namespace head should be visible as a size signal")
+    if quiet_plan["totals"]["head_records"] != 3:
+        raise RuntimeError("only the matching series' head records are decode work")
+    if quiet_plan["totals"]["head_records_namespace"] < 300:
+        raise RuntimeError("the excluded head should still be visible as a size signal")
+    if quiet_plan["totals"]["decode_points"] != 3:
+        raise RuntimeError("a selective matcher should avoid almost all head work")
+
+
 def exercise(workflow, output):
     seed = json.loads((ROOT / "examples/input.json").read_text())
     observations = []
@@ -125,7 +222,9 @@ def exercise(workflow, output):
                 op("compact", space + "/compact", {})
                 if op("post-compaction", space + "/range", q)["series"] != logical:
                     raise RuntimeError("compaction changed logical samples")
-                op("explain", space + "/explain", q)
+                plan = op("explain", space + "/explain", q)
+                if plan["totals"]["decode_points"] != plan["budget"]["planned"]:
+                    raise RuntimeError("explain decode total disagrees with its budget projection")
                 op("retention", space + "/retention", {"now": 11000})
                 op("retention no resurrection", space + "/points", replacement, status=409)
                 op("read-only", space + "/mode", {"read_only": True}, method="PUT")
@@ -140,6 +239,7 @@ def exercise(workflow, output):
                 (scratch / "restored.db").write_bytes(image)
                 observations.append({"step": "backup", "sequence": headers["X-Ridge-Sequence"],
                                      "sha256": headers["X-Ridge-Sha256"], "bytes": len(image)})
+                diagnostics(base, op, observations)
             finally:
                 stop(process)
             process, base = launch(binary, scratch / "restored.db", log)
