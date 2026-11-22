@@ -1,0 +1,10 @@
+image_a,image_b,rollup_name,seq_a,seq_b,query_differs,values_differ,observations_equal,layout_differs,verdict,same_source_sequence
+branch-a.db,branch-b.db,pulse-avg,4,4,0,1,0,0,REJECT_COMMON_SOURCE,1
+branch-a.db,branch-c.db,pulse-avg,4,5,0,1,0,1,REJECT_COMMON_SOURCE,0
+branch-a.db,branch-b.db,pulse-sum,4,4,0,1,0,0,REJECT_COMMON_SOURCE,1
+branch-a.db,branch-c.db,pulse-sum,4,5,0,1,0,1,REJECT_COMMON_SOURCE,0
+branch-a.db,branch-b.db,pulse-caliber,4,4,1,1,0,0,REJECT_COMMON_SOURCE,1
+branch-a.db,branch-c.db,pulse-caliber,4,5,0,1,0,1,REJECT_COMMON_SOURCE,0
+branch-b.db,branch-c.db,pulse-avg,4,5,0,1,0,1,REJECT_COMMON_SOURCE,0
+branch-b.db,branch-c.db,pulse-sum,4,5,0,1,0,1,REJECT_COMMON_SOURCE,0
+branch-b.db,branch-c.db,pulse-caliber,4,5,1,1,0,1,REJECT_COMMON_SOURCE,0

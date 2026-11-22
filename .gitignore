@@ -3,3 +3,6 @@
 *.db
 *.db.lock
 __pycache__/
+/handoff/bin/
+/handoff/var/
+/handoff/dist/images/

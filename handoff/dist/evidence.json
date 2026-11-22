@@ -1,0 +1,4324 @@
+{
+  "generated_at_utc": "2026-11-22T04:13:29Z",
+  "input": "examples/input.json",
+  "input_sha256": "acb9d346c200ece68ac2e9d926693d783ced15c2ba24043fccaa6edce866626c",
+  "namespace": {
+    "name": "spindle",
+    "read_only": false,
+    "retention_ms": 10000,
+    "lateness_ms": 30000,
+    "future_ms": 1000,
+    "max_series": 100,
+    "max_write": 10000,
+    "max_scan": 100000,
+    "floor": -4503599627370496,
+    "watermark": 1500,
+    "has_watermark": true,
+    "last_sequence": 3
+  },
+  "queries": {
+    "pulse-avg": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "pulse_total"
+        }
+      ]
+    },
+    "pulse-sum": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "sum",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "pulse_total"
+        }
+      ]
+    },
+    "pulse-caliber": {
+      "wide": {
+        "start": -5000,
+        "end": 10000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "narrow": {
+        "start": -2000,
+        "end": 2000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      }
+    }
+  },
+  "seed": {
+    "namespace": {
+      "name": "spindle",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 1500,
+      "has_watermark": true,
+      "last_sequence": 3
+    },
+    "blocks": [
+      {
+        "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 63,
+        "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "start": -500,
+        "end": 501,
+        "count": 2,
+        "bytes": 73,
+        "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "start": -1500,
+        "end": 1501,
+        "count": 4,
+        "bytes": 83,
+        "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "start": -1500,
+        "end": 501,
+        "count": 2,
+        "bytes": 71,
+        "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+        "format": 1
+      }
+    ],
+    "range": {
+      "sequence": 3,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -500,
+              "value": 0.25,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 0.75,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": -500,
+              "value": 14,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 2,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 4,
+        "head": 0,
+        "decoded": 9,
+        "visible": 9,
+        "tombstones": 0
+      },
+      "truncated": false
+    },
+    "image": {
+      "step": "export base-seed image",
+      "sha256": "da022bb4038d4549a15dad2b50f35d1fa9d1d3a65f11aa3aa1b41bed96e884d5",
+      "bytes": 57344,
+      "sequence": 3,
+      "image": "base-seed.db"
+    }
+  },
+  "branches": {
+    "branch-a": {
+      "meta": {
+        "kind": "observation_fork",
+        "correction": 8.0
+      },
+      "namespace": {
+        "name": "spindle",
+        "read_only": false,
+        "retention_ms": 10000,
+        "lateness_ms": 30000,
+        "future_ms": 1000,
+        "max_series": 100,
+        "max_write": 10000,
+        "max_scan": 100000,
+        "floor": -4503599627370496,
+        "watermark": 1500,
+        "has_watermark": true,
+        "last_sequence": 4
+      },
+      "blocks": [
+        {
+          "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "start": 500,
+          "end": 501,
+          "count": 1,
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "start": -500,
+          "end": 501,
+          "count": 2,
+          "bytes": 73,
+          "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "start": -1500,
+          "end": 1501,
+          "count": 4,
+          "bytes": 83,
+          "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "start": -1500,
+          "end": 501,
+          "count": 2,
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+          "format": 1
+        }
+      ],
+      "range": {
+        "sequence": 7,
+        "floor": -4503599627370496,
+        "series": [
+          {
+            "series": {
+              "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-b",
+                "zone": "west"
+              }
+            },
+            "points": [
+              {
+                "time": 500,
+                "value": 0.5,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-a",
+                "rack": "",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -500,
+                "value": 0.25,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 0.75,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 10,
+                "sequence": 2
+              },
+              {
+                "time": -500,
+                "value": 14,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 8,
+                "sequence": 4
+              },
+              {
+                "time": 1500,
+                "value": 6,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-b",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 3,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 7,
+                "sequence": 2
+              }
+            ]
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 9,
+          "tombstones": 0
+        },
+        "truncated": false
+      },
+      "rollups": {
+        "pulse-avg": {
+          "name": "pulse-avg",
+          "query": {
+            "start": -5000,
+            "end": 10000,
+            "matchers": [
+              {
+                "label": "__name__",
+                "op": "=",
+                "value": "pulse_total"
+              }
+            ],
+            "limit": 0,
+            "step": 1000,
+            "origin": 0,
+            "group_by": [
+              "zone"
+            ],
+            "function": "avg"
+          },
+          "source_sequence": 4,
+          "result": {
+            "sequence": 4,
+            "cells": [
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -2000,
+                "end": -1000,
+                "value": 6.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -1000,
+                "end": 0,
+                "value": 14,
+                "count": 1
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 0,
+                "end": 1000,
+                "value": 7.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 1000,
+                "end": 2000,
+                "value": 6,
+                "count": 1
+              }
+            ],
+            "stats": {
+              "series": 2,
+              "blocks": 2,
+              "head": 1,
+              "decoded": 7,
+              "visible": 6,
+              "tombstones": 0
+            }
+          },
+          "stale": false
+        },
+        "pulse-sum": {
+          "name": "pulse-sum",
+          "query": {
+            "start": -5000,
+            "end": 10000,
+            "matchers": [
+              {
+                "label": "__name__",
+                "op": "=",
+                "value": "pulse_total"
+              }
+            ],
+            "limit": 0,
+            "step": 1000,
+            "origin": 0,
+            "group_by": [
+              "zone"
+            ],
+            "function": "sum"
+          },
+          "source_sequence": 4,
+          "result": {
+            "sequence": 5,
+            "cells": [
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -2000,
+                "end": -1000,
+                "value": 13,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -1000,
+                "end": 0,
+                "value": 14,
+                "count": 1
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 0,
+                "end": 1000,
+                "value": 15,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 1000,
+                "end": 2000,
+                "value": 6,
+                "count": 1
+              }
+            ],
+            "stats": {
+              "series": 2,
+              "blocks": 2,
+              "head": 1,
+              "decoded": 7,
+              "visible": 6,
+              "tombstones": 0
+            }
+          },
+          "stale": false
+        },
+        "pulse-caliber": {
+          "name": "pulse-caliber",
+          "query": {
+            "start": -5000,
+            "end": 10000,
+            "matchers": [
+              {
+                "label": "__name__",
+                "op": "=",
+                "value": "pulse_total"
+              }
+            ],
+            "limit": 0,
+            "step": 1000,
+            "origin": 0,
+            "group_by": [
+              "zone"
+            ],
+            "function": "avg"
+          },
+          "source_sequence": 4,
+          "result": {
+            "sequence": 6,
+            "cells": [
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -2000,
+                "end": -1000,
+                "value": 6.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -1000,
+                "end": 0,
+                "value": 14,
+                "count": 1
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 0,
+                "end": 1000,
+                "value": 7.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 1000,
+                "end": 2000,
+                "value": 6,
+                "count": 1
+              }
+            ],
+            "stats": {
+              "series": 2,
+              "blocks": 2,
+              "head": 1,
+              "decoded": 7,
+              "visible": 6,
+              "tombstones": 0
+            }
+          },
+          "stale": false
+        }
+      },
+      "explain": {
+        "sequence": 7,
+        "floor": -4503599627370496,
+        "candidates": [
+          {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          }
+        ],
+        "blocks": [
+          {
+            "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "start": 500,
+            "end": 501,
+            "count": 1,
+            "bytes": 63,
+            "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "start": -500,
+            "end": 501,
+            "count": 2,
+            "bytes": 73,
+            "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "start": -1500,
+            "end": 1501,
+            "count": 4,
+            "bytes": 83,
+            "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "start": -1500,
+            "end": 501,
+            "count": 2,
+            "bytes": 71,
+            "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+            "format": 1
+          }
+        ],
+        "max_decoded": 100000,
+        "source_point_hint": 9,
+        "head_records": 1
+      },
+      "image": {
+        "step": "export branch-a image",
+        "sha256": "cb81f8228c24cc67f15d1217fa753e665bfe9665d1f4a8690a93cf5d0e70c232",
+        "bytes": 61440,
+        "sequence": 7,
+        "image": "branch-a.db"
+      }
+    },
+    "branch-b": {
+      "meta": {
+        "kind": "observation_fork",
+        "correction": 9.0
+      },
+      "namespace": {
+        "name": "spindle",
+        "read_only": false,
+        "retention_ms": 10000,
+        "lateness_ms": 30000,
+        "future_ms": 1000,
+        "max_series": 100,
+        "max_write": 10000,
+        "max_scan": 100000,
+        "floor": -4503599627370496,
+        "watermark": 1500,
+        "has_watermark": true,
+        "last_sequence": 4
+      },
+      "blocks": [
+        {
+          "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "start": 500,
+          "end": 501,
+          "count": 1,
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "start": -500,
+          "end": 501,
+          "count": 2,
+          "bytes": 73,
+          "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "start": -1500,
+          "end": 1501,
+          "count": 4,
+          "bytes": 83,
+          "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "start": -1500,
+          "end": 501,
+          "count": 2,
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+          "format": 1
+        }
+      ],
+      "range": {
+        "sequence": 7,
+        "floor": -4503599627370496,
+        "series": [
+          {
+            "series": {
+              "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-b",
+                "zone": "west"
+              }
+            },
+            "points": [
+              {
+                "time": 500,
+                "value": 0.5,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-a",
+                "rack": "",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -500,
+                "value": 0.25,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 0.75,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 10,
+                "sequence": 2
+              },
+              {
+                "time": -500,
+                "value": 14,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 9,
+                "sequence": 4
+              },
+              {
+                "time": 1500,
+                "value": 6,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-b",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 3,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 7,
+                "sequence": 2
+              }
+            ]
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 9,
+          "tombstones": 0
+        },
+        "truncated": false
+      },
+      "rollups": {
+        "pulse-avg": {
+          "name": "pulse-avg",
+          "query": {
+            "start": -5000,
+            "end": 10000,
+            "matchers": [
+              {
+                "label": "__name__",
+                "op": "=",
+                "value": "pulse_total"
+              }
+            ],
+            "limit": 0,
+            "step": 1000,
+            "origin": 0,
+            "group_by": [
+              "zone"
+            ],
+            "function": "avg"
+          },
+          "source_sequence": 4,
+          "result": {
+            "sequence": 4,
+            "cells": [
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -2000,
+                "end": -1000,
+                "value": 6.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -1000,
+                "end": 0,
+                "value": 14,
+                "count": 1
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 0,
+                "end": 1000,
+                "value": 8,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 1000,
+                "end": 2000,
+                "value": 6,
+                "count": 1
+              }
+            ],
+            "stats": {
+              "series": 2,
+              "blocks": 2,
+              "head": 1,
+              "decoded": 7,
+              "visible": 6,
+              "tombstones": 0
+            }
+          },
+          "stale": false
+        },
+        "pulse-sum": {
+          "name": "pulse-sum",
+          "query": {
+            "start": -5000,
+            "end": 10000,
+            "matchers": [
+              {
+                "label": "__name__",
+                "op": "=",
+                "value": "pulse_total"
+              }
+            ],
+            "limit": 0,
+            "step": 1000,
+            "origin": 0,
+            "group_by": [
+              "zone"
+            ],
+            "function": "sum"
+          },
+          "source_sequence": 4,
+          "result": {
+            "sequence": 5,
+            "cells": [
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -2000,
+                "end": -1000,
+                "value": 13,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -1000,
+                "end": 0,
+                "value": 14,
+                "count": 1
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 0,
+                "end": 1000,
+                "value": 16,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 1000,
+                "end": 2000,
+                "value": 6,
+                "count": 1
+              }
+            ],
+            "stats": {
+              "series": 2,
+              "blocks": 2,
+              "head": 1,
+              "decoded": 7,
+              "visible": 6,
+              "tombstones": 0
+            }
+          },
+          "stale": false
+        },
+        "pulse-caliber": {
+          "name": "pulse-caliber",
+          "query": {
+            "start": -2000,
+            "end": 2000,
+            "matchers": [
+              {
+                "label": "__name__",
+                "op": "=",
+                "value": "pulse_total"
+              }
+            ],
+            "limit": 0,
+            "step": 1000,
+            "origin": 0,
+            "group_by": [
+              "zone"
+            ],
+            "function": "avg"
+          },
+          "source_sequence": 4,
+          "result": {
+            "sequence": 6,
+            "cells": [
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -2000,
+                "end": -1000,
+                "value": 6.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -1000,
+                "end": 0,
+                "value": 14,
+                "count": 1
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 0,
+                "end": 1000,
+                "value": 8,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 1000,
+                "end": 2000,
+                "value": 6,
+                "count": 1
+              }
+            ],
+            "stats": {
+              "series": 2,
+              "blocks": 2,
+              "head": 1,
+              "decoded": 7,
+              "visible": 6,
+              "tombstones": 0
+            }
+          },
+          "stale": false
+        }
+      },
+      "explain": {
+        "sequence": 7,
+        "floor": -4503599627370496,
+        "candidates": [
+          {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          }
+        ],
+        "blocks": [
+          {
+            "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "start": 500,
+            "end": 501,
+            "count": 1,
+            "bytes": 63,
+            "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "start": -500,
+            "end": 501,
+            "count": 2,
+            "bytes": 73,
+            "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "start": -1500,
+            "end": 1501,
+            "count": 4,
+            "bytes": 83,
+            "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "start": -1500,
+            "end": 501,
+            "count": 2,
+            "bytes": 71,
+            "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+            "format": 1
+          }
+        ],
+        "max_decoded": 100000,
+        "source_point_hint": 9,
+        "head_records": 1
+      },
+      "image": {
+        "step": "export branch-b image",
+        "sha256": "75c2cb2dd1009c23e430854f60003bfeec10e1437bc6d0748820c7954e6060af",
+        "bytes": 61440,
+        "sequence": 7,
+        "image": "branch-b.db"
+      }
+    },
+    "branch-c": {
+      "meta": {
+        "kind": "physical_only",
+        "correction": null
+      },
+      "namespace": {
+        "name": "spindle",
+        "read_only": false,
+        "retention_ms": 10000,
+        "lateness_ms": 30000,
+        "future_ms": 1000,
+        "max_series": 100,
+        "max_write": 10000,
+        "max_scan": 100000,
+        "floor": -4503599627370496,
+        "watermark": 1500,
+        "has_watermark": true,
+        "last_sequence": 5
+      },
+      "blocks": [
+        {
+          "id": "00000000000000000005-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "start": 500,
+          "end": 501,
+          "count": 1,
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000005-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "start": -500,
+          "end": 501,
+          "count": 2,
+          "bytes": 73,
+          "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000005-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "start": -1500,
+          "end": 1501,
+          "count": 4,
+          "bytes": 83,
+          "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000005-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "start": -1500,
+          "end": 501,
+          "count": 2,
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+          "format": 1
+        }
+      ],
+      "range": {
+        "sequence": 8,
+        "floor": -4503599627370496,
+        "series": [
+          {
+            "series": {
+              "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-b",
+                "zone": "west"
+              }
+            },
+            "points": [
+              {
+                "time": 500,
+                "value": 0.5,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-a",
+                "rack": "",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -500,
+                "value": 0.25,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 0.75,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 10,
+                "sequence": 2
+              },
+              {
+                "time": -500,
+                "value": 14,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 2,
+                "sequence": 2
+              },
+              {
+                "time": 1500,
+                "value": 6,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-b",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 3,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 7,
+                "sequence": 2
+              }
+            ]
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 0,
+          "decoded": 9,
+          "visible": 9,
+          "tombstones": 0
+        },
+        "truncated": false
+      },
+      "rollups": {
+        "pulse-avg": {
+          "name": "pulse-avg",
+          "query": {
+            "start": -5000,
+            "end": 10000,
+            "matchers": [
+              {
+                "label": "__name__",
+                "op": "=",
+                "value": "pulse_total"
+              }
+            ],
+            "limit": 0,
+            "step": 1000,
+            "origin": 0,
+            "group_by": [
+              "zone"
+            ],
+            "function": "avg"
+          },
+          "source_sequence": 5,
+          "result": {
+            "sequence": 5,
+            "cells": [
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -2000,
+                "end": -1000,
+                "value": 6.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -1000,
+                "end": 0,
+                "value": 14,
+                "count": 1
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 0,
+                "end": 1000,
+                "value": 4.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 1000,
+                "end": 2000,
+                "value": 6,
+                "count": 1
+              }
+            ],
+            "stats": {
+              "series": 2,
+              "blocks": 2,
+              "head": 0,
+              "decoded": 6,
+              "visible": 6,
+              "tombstones": 0
+            }
+          },
+          "stale": false
+        },
+        "pulse-sum": {
+          "name": "pulse-sum",
+          "query": {
+            "start": -5000,
+            "end": 10000,
+            "matchers": [
+              {
+                "label": "__name__",
+                "op": "=",
+                "value": "pulse_total"
+              }
+            ],
+            "limit": 0,
+            "step": 1000,
+            "origin": 0,
+            "group_by": [
+              "zone"
+            ],
+            "function": "sum"
+          },
+          "source_sequence": 5,
+          "result": {
+            "sequence": 6,
+            "cells": [
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -2000,
+                "end": -1000,
+                "value": 13,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -1000,
+                "end": 0,
+                "value": 14,
+                "count": 1
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 0,
+                "end": 1000,
+                "value": 9,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 1000,
+                "end": 2000,
+                "value": 6,
+                "count": 1
+              }
+            ],
+            "stats": {
+              "series": 2,
+              "blocks": 2,
+              "head": 0,
+              "decoded": 6,
+              "visible": 6,
+              "tombstones": 0
+            }
+          },
+          "stale": false
+        },
+        "pulse-caliber": {
+          "name": "pulse-caliber",
+          "query": {
+            "start": -5000,
+            "end": 10000,
+            "matchers": [
+              {
+                "label": "__name__",
+                "op": "=",
+                "value": "pulse_total"
+              }
+            ],
+            "limit": 0,
+            "step": 1000,
+            "origin": 0,
+            "group_by": [
+              "zone"
+            ],
+            "function": "avg"
+          },
+          "source_sequence": 5,
+          "result": {
+            "sequence": 7,
+            "cells": [
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -2000,
+                "end": -1000,
+                "value": 6.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": -1000,
+                "end": 0,
+                "value": 14,
+                "count": 1
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 0,
+                "end": 1000,
+                "value": 4.5,
+                "count": 2
+              },
+              {
+                "labels": {
+                  "zone": "east"
+                },
+                "start": 1000,
+                "end": 2000,
+                "value": 6,
+                "count": 1
+              }
+            ],
+            "stats": {
+              "series": 2,
+              "blocks": 2,
+              "head": 0,
+              "decoded": 6,
+              "visible": 6,
+              "tombstones": 0
+            }
+          },
+          "stale": false
+        }
+      },
+      "explain": {
+        "sequence": 8,
+        "floor": -4503599627370496,
+        "candidates": [
+          {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          }
+        ],
+        "blocks": [
+          {
+            "id": "00000000000000000005-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "start": 500,
+            "end": 501,
+            "count": 1,
+            "bytes": 63,
+            "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000005-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "start": -500,
+            "end": 501,
+            "count": 2,
+            "bytes": 73,
+            "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000005-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "start": -1500,
+            "end": 1501,
+            "count": 4,
+            "bytes": 83,
+            "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000005-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "start": -1500,
+            "end": 501,
+            "count": 2,
+            "bytes": 71,
+            "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+            "format": 1
+          }
+        ],
+        "max_decoded": 100000,
+        "source_point_hint": 9,
+        "head_records": 0
+      },
+      "image": {
+        "step": "export branch-c image",
+        "sha256": "6f4f799fa66591af9f99453f0dbb9a7f42f7eaf15c9f8686e25321a5d63677d9",
+        "bytes": 61440,
+        "sequence": 8,
+        "image": "branch-c.db"
+      }
+    }
+  },
+  "images": [
+    {
+      "step": "export base-seed image",
+      "sha256": "da022bb4038d4549a15dad2b50f35d1fa9d1d3a65f11aa3aa1b41bed96e884d5",
+      "bytes": 57344,
+      "sequence": 3,
+      "image": "base-seed.db"
+    },
+    {
+      "step": "export branch-a image",
+      "sha256": "cb81f8228c24cc67f15d1217fa753e665bfe9665d1f4a8690a93cf5d0e70c232",
+      "bytes": 61440,
+      "sequence": 7,
+      "image": "branch-a.db"
+    },
+    {
+      "step": "export branch-b image",
+      "sha256": "75c2cb2dd1009c23e430854f60003bfeec10e1437bc6d0748820c7954e6060af",
+      "bytes": 61440,
+      "sequence": 7,
+      "image": "branch-b.db"
+    },
+    {
+      "step": "export branch-c image",
+      "sha256": "6f4f799fa66591af9f99453f0dbb9a7f42f7eaf15c9f8686e25321a5d63677d9",
+      "bytes": 61440,
+      "sequence": 8,
+      "image": "branch-c.db"
+    }
+  ],
+  "restore_checks": [
+    {
+      "image": "base-seed.db",
+      "range_matches_source": true
+    },
+    {
+      "image": "branch-a.db",
+      "range_matches_source": true
+    },
+    {
+      "image": "branch-b.db",
+      "range_matches_source": true
+    },
+    {
+      "image": "branch-c.db",
+      "range_matches_source": true
+    }
+  ],
+  "api_journal": [
+    {
+      "step": "ingest seed observations",
+      "route": "spaces/spindle/points",
+      "method": "POST",
+      "request": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            },
+            "time": -1500,
+            "value": 10
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            },
+            "time": -500,
+            "value": 14
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            },
+            "time": 500,
+            "value": 2
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            },
+            "time": 1500,
+            "value": 6
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            },
+            "time": -1500,
+            "value": 3
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            },
+            "time": 500,
+            "value": 7
+          },
+          {
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "zone": "east",
+              "rack": ""
+            },
+            "time": -500,
+            "value": 0.25
+          },
+          {
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "zone": "east",
+              "rack": ""
+            },
+            "time": 500,
+            "value": 0.75
+          },
+          {
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            },
+            "time": 500,
+            "value": 0.5
+          }
+        ]
+      },
+      "response": {
+        "sequence": 2,
+        "accepted": 9,
+        "new_series": 4,
+        "watermark": 1500
+      },
+      "elapsed_ns": 3243832,
+      "sequence": 2
+    },
+    {
+      "step": "branch-a corrective write at t=500",
+      "route": "spaces/spindle/points",
+      "method": "POST",
+      "request": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            },
+            "time": 500,
+            "value": 8.0
+          }
+        ]
+      },
+      "response": {
+        "sequence": 4,
+        "accepted": 1,
+        "new_series": 0,
+        "watermark": 1500
+      },
+      "elapsed_ns": 3241041,
+      "sequence": 4
+    },
+    {
+      "step": "branch-a materialize rollup pulse-avg",
+      "route": "spaces/spindle/rollups/pulse-avg",
+      "method": "PUT",
+      "request": {
+        "start": -5000,
+        "end": 10000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "response": {
+        "name": "pulse-avg",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 4,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 7.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        }
+      },
+      "elapsed_ns": 3097830
+    },
+    {
+      "step": "branch-a materialize rollup pulse-sum",
+      "route": "spaces/spindle/rollups/pulse-sum",
+      "method": "PUT",
+      "request": {
+        "start": -5000,
+        "end": 10000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "sum",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "response": {
+        "name": "pulse-sum",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 5,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 13,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 15,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        }
+      },
+      "elapsed_ns": 2493406
+    },
+    {
+      "step": "branch-a materialize rollup pulse-caliber",
+      "route": "spaces/spindle/rollups/pulse-caliber",
+      "method": "PUT",
+      "request": {
+        "start": -5000,
+        "end": 10000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "response": {
+        "name": "pulse-caliber",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 6,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 7.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        }
+      },
+      "elapsed_ns": 3970966
+    },
+    {
+      "step": "branch-a namespace",
+      "route": "spaces/spindle",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "spindle",
+        "read_only": false,
+        "retention_ms": 10000,
+        "lateness_ms": 30000,
+        "future_ms": 1000,
+        "max_series": 100,
+        "max_write": 10000,
+        "max_scan": 100000,
+        "floor": -4503599627370496,
+        "watermark": 1500,
+        "has_watermark": true,
+        "last_sequence": 4
+      },
+      "elapsed_ns": 330838
+    },
+    {
+      "step": "branch-a blocks",
+      "route": "spaces/spindle/blocks",
+      "method": "GET",
+      "request": null,
+      "response": [
+        {
+          "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "start": 500,
+          "end": 501,
+          "count": 1,
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "start": -500,
+          "end": 501,
+          "count": 2,
+          "bytes": 73,
+          "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "start": -1500,
+          "end": 1501,
+          "count": 4,
+          "bytes": 83,
+          "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "start": -1500,
+          "end": 501,
+          "count": 2,
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+          "format": 1
+        }
+      ],
+      "elapsed_ns": 220794
+    },
+    {
+      "step": "branch-a range",
+      "route": "spaces/spindle/range",
+      "method": "POST",
+      "request": {
+        "start": -5000,
+        "end": 10000
+      },
+      "response": {
+        "sequence": 7,
+        "floor": -4503599627370496,
+        "series": [
+          {
+            "series": {
+              "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-b",
+                "zone": "west"
+              }
+            },
+            "points": [
+              {
+                "time": 500,
+                "value": 0.5,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-a",
+                "rack": "",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -500,
+                "value": 0.25,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 0.75,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 10,
+                "sequence": 2
+              },
+              {
+                "time": -500,
+                "value": 14,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 8,
+                "sequence": 4
+              },
+              {
+                "time": 1500,
+                "value": 6,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-b",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 3,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 7,
+                "sequence": 2
+              }
+            ]
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 9,
+          "tombstones": 0
+        },
+        "truncated": false
+      },
+      "elapsed_ns": 278128,
+      "sequence": 7
+    },
+    {
+      "step": "branch-a rollup pulse-avg",
+      "route": "spaces/spindle/rollups/pulse-avg",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "pulse-avg",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 4,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 7.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        },
+        "stale": false
+      },
+      "elapsed_ns": 190044
+    },
+    {
+      "step": "branch-a rollup pulse-sum",
+      "route": "spaces/spindle/rollups/pulse-sum",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "pulse-sum",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 5,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 13,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 15,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        },
+        "stale": false
+      },
+      "elapsed_ns": 154752
+    },
+    {
+      "step": "branch-a rollup pulse-caliber",
+      "route": "spaces/spindle/rollups/pulse-caliber",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "pulse-caliber",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 6,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 7.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        },
+        "stale": false
+      },
+      "elapsed_ns": 150918
+    },
+    {
+      "step": "branch-a explain",
+      "route": "spaces/spindle/explain",
+      "method": "POST",
+      "request": {
+        "start": -5000,
+        "end": 10000
+      },
+      "response": {
+        "sequence": 7,
+        "floor": -4503599627370496,
+        "candidates": [
+          {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          }
+        ],
+        "blocks": [
+          {
+            "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "start": 500,
+            "end": 501,
+            "count": 1,
+            "bytes": 63,
+            "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "start": -500,
+            "end": 501,
+            "count": 2,
+            "bytes": 73,
+            "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "start": -1500,
+            "end": 1501,
+            "count": 4,
+            "bytes": 83,
+            "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "start": -1500,
+            "end": 501,
+            "count": 2,
+            "bytes": 71,
+            "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+            "format": 1
+          }
+        ],
+        "max_decoded": 100000,
+        "source_point_hint": 9,
+        "head_records": 1
+      },
+      "elapsed_ns": 198128,
+      "sequence": 7
+    },
+    {
+      "step": "branch-b corrective write at t=500",
+      "route": "spaces/spindle/points",
+      "method": "POST",
+      "request": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            },
+            "time": 500,
+            "value": 9.0
+          }
+        ]
+      },
+      "response": {
+        "sequence": 4,
+        "accepted": 1,
+        "new_series": 0,
+        "watermark": 1500
+      },
+      "elapsed_ns": 4430680,
+      "sequence": 4
+    },
+    {
+      "step": "branch-b materialize rollup pulse-avg",
+      "route": "spaces/spindle/rollups/pulse-avg",
+      "method": "PUT",
+      "request": {
+        "start": -5000,
+        "end": 10000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "response": {
+        "name": "pulse-avg",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 4,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 8,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        }
+      },
+      "elapsed_ns": 2955120
+    },
+    {
+      "step": "branch-b materialize rollup pulse-sum",
+      "route": "spaces/spindle/rollups/pulse-sum",
+      "method": "PUT",
+      "request": {
+        "start": -5000,
+        "end": 10000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "sum",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "response": {
+        "name": "pulse-sum",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 5,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 13,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 16,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        }
+      },
+      "elapsed_ns": 2538657
+    },
+    {
+      "step": "branch-b materialize rollup pulse-caliber",
+      "route": "spaces/spindle/rollups/pulse-caliber",
+      "method": "PUT",
+      "request": {
+        "start": -2000,
+        "end": 2000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "response": {
+        "name": "pulse-caliber",
+        "query": {
+          "start": -2000,
+          "end": 2000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 6,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 8,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        }
+      },
+      "elapsed_ns": 4022467
+    },
+    {
+      "step": "branch-b namespace",
+      "route": "spaces/spindle",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "spindle",
+        "read_only": false,
+        "retention_ms": 10000,
+        "lateness_ms": 30000,
+        "future_ms": 1000,
+        "max_series": 100,
+        "max_write": 10000,
+        "max_scan": 100000,
+        "floor": -4503599627370496,
+        "watermark": 1500,
+        "has_watermark": true,
+        "last_sequence": 4
+      },
+      "elapsed_ns": 210419
+    },
+    {
+      "step": "branch-b blocks",
+      "route": "spaces/spindle/blocks",
+      "method": "GET",
+      "request": null,
+      "response": [
+        {
+          "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "start": 500,
+          "end": 501,
+          "count": 1,
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "start": -500,
+          "end": 501,
+          "count": 2,
+          "bytes": 73,
+          "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "start": -1500,
+          "end": 1501,
+          "count": 4,
+          "bytes": 83,
+          "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "start": -1500,
+          "end": 501,
+          "count": 2,
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+          "format": 1
+        }
+      ],
+      "elapsed_ns": 235086
+    },
+    {
+      "step": "branch-b range",
+      "route": "spaces/spindle/range",
+      "method": "POST",
+      "request": {
+        "start": -5000,
+        "end": 10000
+      },
+      "response": {
+        "sequence": 7,
+        "floor": -4503599627370496,
+        "series": [
+          {
+            "series": {
+              "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-b",
+                "zone": "west"
+              }
+            },
+            "points": [
+              {
+                "time": 500,
+                "value": 0.5,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-a",
+                "rack": "",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -500,
+                "value": 0.25,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 0.75,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 10,
+                "sequence": 2
+              },
+              {
+                "time": -500,
+                "value": 14,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 9,
+                "sequence": 4
+              },
+              {
+                "time": 1500,
+                "value": 6,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-b",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 3,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 7,
+                "sequence": 2
+              }
+            ]
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 1,
+          "decoded": 10,
+          "visible": 9,
+          "tombstones": 0
+        },
+        "truncated": false
+      },
+      "elapsed_ns": 300628,
+      "sequence": 7
+    },
+    {
+      "step": "branch-b rollup pulse-avg",
+      "route": "spaces/spindle/rollups/pulse-avg",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "pulse-avg",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 4,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 8,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        },
+        "stale": false
+      },
+      "elapsed_ns": 212877
+    },
+    {
+      "step": "branch-b rollup pulse-sum",
+      "route": "spaces/spindle/rollups/pulse-sum",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "pulse-sum",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 5,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 13,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 16,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        },
+        "stale": false
+      },
+      "elapsed_ns": 164960
+    },
+    {
+      "step": "branch-b rollup pulse-caliber",
+      "route": "spaces/spindle/rollups/pulse-caliber",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "pulse-caliber",
+        "query": {
+          "start": -2000,
+          "end": 2000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 4,
+        "result": {
+          "sequence": 6,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 8,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 1,
+            "decoded": 7,
+            "visible": 6,
+            "tombstones": 0
+          }
+        },
+        "stale": false
+      },
+      "elapsed_ns": 156418
+    },
+    {
+      "step": "branch-b explain",
+      "route": "spaces/spindle/explain",
+      "method": "POST",
+      "request": {
+        "start": -5000,
+        "end": 10000
+      },
+      "response": {
+        "sequence": 7,
+        "floor": -4503599627370496,
+        "candidates": [
+          {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          }
+        ],
+        "blocks": [
+          {
+            "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "start": 500,
+            "end": 501,
+            "count": 1,
+            "bytes": 63,
+            "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "start": -500,
+            "end": 501,
+            "count": 2,
+            "bytes": 73,
+            "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "start": -1500,
+            "end": 1501,
+            "count": 4,
+            "bytes": 83,
+            "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "start": -1500,
+            "end": 501,
+            "count": 2,
+            "bytes": 71,
+            "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+            "format": 1
+          }
+        ],
+        "max_decoded": 100000,
+        "source_point_hint": 9,
+        "head_records": 1
+      },
+      "elapsed_ns": 206044,
+      "sequence": 7
+    },
+    {
+      "step": "branch-c materialize rollup pulse-avg",
+      "route": "spaces/spindle/rollups/pulse-avg",
+      "method": "PUT",
+      "request": {
+        "start": -5000,
+        "end": 10000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "response": {
+        "name": "pulse-avg",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "result": {
+          "sequence": 5,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 4.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 0,
+            "decoded": 6,
+            "visible": 6,
+            "tombstones": 0
+          }
+        }
+      },
+      "elapsed_ns": 3120122
+    },
+    {
+      "step": "branch-c materialize rollup pulse-sum",
+      "route": "spaces/spindle/rollups/pulse-sum",
+      "method": "PUT",
+      "request": {
+        "start": -5000,
+        "end": 10000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "sum",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "response": {
+        "name": "pulse-sum",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 5,
+        "result": {
+          "sequence": 6,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 13,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 9,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 0,
+            "decoded": 6,
+            "visible": 6,
+            "tombstones": 0
+          }
+        }
+      },
+      "elapsed_ns": 3236623
+    },
+    {
+      "step": "branch-c materialize rollup pulse-caliber",
+      "route": "spaces/spindle/rollups/pulse-caliber",
+      "method": "PUT",
+      "request": {
+        "start": -5000,
+        "end": 10000,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg",
+        "matchers": [
+          {
+            "label": "__name__",
+            "op": "=",
+            "value": "pulse_total"
+          }
+        ]
+      },
+      "response": {
+        "name": "pulse-caliber",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "result": {
+          "sequence": 7,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 4.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 0,
+            "decoded": 6,
+            "visible": 6,
+            "tombstones": 0
+          }
+        }
+      },
+      "elapsed_ns": 4257345
+    },
+    {
+      "step": "branch-c namespace",
+      "route": "spaces/spindle",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "spindle",
+        "read_only": false,
+        "retention_ms": 10000,
+        "lateness_ms": 30000,
+        "future_ms": 1000,
+        "max_series": 100,
+        "max_write": 10000,
+        "max_scan": 100000,
+        "floor": -4503599627370496,
+        "watermark": 1500,
+        "has_watermark": true,
+        "last_sequence": 5
+      },
+      "elapsed_ns": 225711
+    },
+    {
+      "step": "branch-c blocks",
+      "route": "spaces/spindle/blocks",
+      "method": "GET",
+      "request": null,
+      "response": [
+        {
+          "id": "00000000000000000005-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+          "start": 500,
+          "end": 501,
+          "count": 1,
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000005-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "start": -500,
+          "end": 501,
+          "count": 2,
+          "bytes": 73,
+          "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000005-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+          "start": -1500,
+          "end": 1501,
+          "count": 4,
+          "bytes": 83,
+          "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+          "format": 1
+        },
+        {
+          "id": "00000000000000000005-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+          "start": -1500,
+          "end": 501,
+          "count": 2,
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+          "format": 1
+        }
+      ],
+      "elapsed_ns": 201794
+    },
+    {
+      "step": "branch-c range",
+      "route": "spaces/spindle/range",
+      "method": "POST",
+      "request": {
+        "start": -5000,
+        "end": 10000
+      },
+      "response": {
+        "sequence": 8,
+        "floor": -4503599627370496,
+        "series": [
+          {
+            "series": {
+              "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-b",
+                "zone": "west"
+              }
+            },
+            "points": [
+              {
+                "time": 500,
+                "value": 0.5,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-a",
+                "rack": "",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -500,
+                "value": 0.25,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 0.75,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 10,
+                "sequence": 2
+              },
+              {
+                "time": -500,
+                "value": 14,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 2,
+                "sequence": 2
+              },
+              {
+                "time": 1500,
+                "value": 6,
+                "sequence": 2
+              }
+            ]
+          },
+          {
+            "series": {
+              "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-b",
+                "zone": "east"
+              }
+            },
+            "points": [
+              {
+                "time": -1500,
+                "value": 3,
+                "sequence": 2
+              },
+              {
+                "time": 500,
+                "value": 7,
+                "sequence": 2
+              }
+            ]
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 4,
+          "head": 0,
+          "decoded": 9,
+          "visible": 9,
+          "tombstones": 0
+        },
+        "truncated": false
+      },
+      "elapsed_ns": 289628,
+      "sequence": 8
+    },
+    {
+      "step": "branch-c rollup pulse-avg",
+      "route": "spaces/spindle/rollups/pulse-avg",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "pulse-avg",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "result": {
+          "sequence": 5,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 4.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 0,
+            "decoded": 6,
+            "visible": 6,
+            "tombstones": 0
+          }
+        },
+        "stale": false
+      },
+      "elapsed_ns": 186960
+    },
+    {
+      "step": "branch-c rollup pulse-sum",
+      "route": "spaces/spindle/rollups/pulse-sum",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "pulse-sum",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 5,
+        "result": {
+          "sequence": 6,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 13,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 9,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 0,
+            "decoded": 6,
+            "visible": 6,
+            "tombstones": 0
+          }
+        },
+        "stale": false
+      },
+      "elapsed_ns": 146252
+    },
+    {
+      "step": "branch-c rollup pulse-caliber",
+      "route": "spaces/spindle/rollups/pulse-caliber",
+      "method": "GET",
+      "request": null,
+      "response": {
+        "name": "pulse-caliber",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": [
+            {
+              "label": "__name__",
+              "op": "=",
+              "value": "pulse_total"
+            }
+          ],
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "result": {
+          "sequence": 7,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -1000,
+              "end": 0,
+              "value": 14,
+              "count": 1
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 4.5,
+              "count": 2
+            },
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 2,
+            "blocks": 2,
+            "head": 0,
+            "decoded": 6,
+            "visible": 6,
+            "tombstones": 0
+          }
+        },
+        "stale": false
+      },
+      "elapsed_ns": 147918
+    },
+    {
+      "step": "branch-c explain",
+      "route": "spaces/spindle/explain",
+      "method": "POST",
+      "request": {
+        "start": -5000,
+        "end": 10000
+      },
+      "response": {
+        "sequence": 8,
+        "floor": -4503599627370496,
+        "candidates": [
+          {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          {
+            "id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-a",
+              "rack": "",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          }
+        ],
+        "blocks": [
+          {
+            "id": "00000000000000000005-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "start": 500,
+            "end": 501,
+            "count": 1,
+            "bytes": 63,
+            "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000005-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+            "start": -500,
+            "end": 501,
+            "count": 2,
+            "bytes": 73,
+            "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000005-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "start": -1500,
+            "end": 1501,
+            "count": 4,
+            "bytes": 83,
+            "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+            "format": 1
+          },
+          {
+            "id": "00000000000000000005-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "start": -1500,
+            "end": 501,
+            "count": 2,
+            "bytes": 71,
+            "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+            "format": 1
+          }
+        ],
+        "max_decoded": 100000,
+        "source_point_hint": 9,
+        "head_records": 0
+      },
+      "elapsed_ns": 191503,
+      "sequence": 8
+    }
+  ]
+}

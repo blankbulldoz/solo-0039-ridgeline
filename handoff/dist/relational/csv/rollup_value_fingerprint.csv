@@ -1,0 +1,10 @@
+image_name,rollup_name,values_sha256,cell_rows
+branch-a.db,pulse-avg,1b93afad74e20bc1bfddf609356a32a4c26df81599dbcfcf8721b5c6326f3062,4
+branch-a.db,pulse-caliber,1b93afad74e20bc1bfddf609356a32a4c26df81599dbcfcf8721b5c6326f3062,4
+branch-a.db,pulse-sum,6d3f6588812a4208a051f90fcb4e0ba4d55964f4666c23434d61bd201f7e8c61,4
+branch-b.db,pulse-avg,5a8346cdc5eb374bda885842efa201d2161deb0a258d3a2a7aa2b409d764f206,4
+branch-b.db,pulse-caliber,5a8346cdc5eb374bda885842efa201d2161deb0a258d3a2a7aa2b409d764f206,4
+branch-b.db,pulse-sum,72488f54e4010a70660f2437784197ae7ea775f409d5aedf52546a273c454ff2,4
+branch-c.db,pulse-avg,f169b067a2581a009dc8a445483b4cb156a852a55659322343b584c38ed32f61,4
+branch-c.db,pulse-caliber,f169b067a2581a009dc8a445483b4cb156a852a55659322343b584c38ed32f61,4
+branch-c.db,pulse-sum,851ea450fe13d41b8691dac927cc22bef090894ac816f2c18af9498d9419a250,4

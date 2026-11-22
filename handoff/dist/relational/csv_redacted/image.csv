@@ -1,0 +1,5 @@
+image_name,image_sha256,byte_size,backup_sequence,restored_from,fork_kind
+base-seed.db,da022bb4038d4549a15dad2b50f35d1fa9d1d3a65f11aa3aa1b41bed96e884d5,57344,3,,shared_backup
+branch-a.db,cb81f8228c24cc67f15d1217fa753e665bfe9665d1f4a8690a93cf5d0e70c232,61440,7,base-seed.db,observation_fork
+branch-b.db,75c2cb2dd1009c23e430854f60003bfeec10e1437bc6d0748820c7954e6060af,61440,7,base-seed.db,observation_fork
+branch-c.db,6f4f799fa66591af9f99453f0dbb9a7f42f7eaf15c9f8686e25321a5d63677d9,61440,8,base-seed.db,physical_only

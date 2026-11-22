@@ -1,0 +1,7 @@
+image_a,image_b,observations_equal,layout_differs,image_bytes_differ,verdict
+base-seed.db,branch-a.db,0,0,1,OBSERVATIONS_DIVERGE
+base-seed.db,branch-b.db,0,0,1,OBSERVATIONS_DIVERGE
+base-seed.db,branch-c.db,1,1,1,SAME_OBSERVATIONS_LAYOUT_ONLY
+branch-a.db,branch-b.db,0,0,1,OBSERVATIONS_DIVERGE
+branch-a.db,branch-c.db,0,1,1,OBSERVATIONS_DIVERGE
+branch-b.db,branch-c.db,0,1,1,OBSERVATIONS_DIVERGE

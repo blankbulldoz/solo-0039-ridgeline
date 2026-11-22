@@ -1,0 +1,4 @@
+image_a,image_b,rollup_name,seq_a,seq_b,val_a,val_b
+branch-a.db,branch-b.db,pulse-avg,4,4,1b93afad74e20bc1bfddf609356a32a4c26df81599dbcfcf8721b5c6326f3062,5a8346cdc5eb374bda885842efa201d2161deb0a258d3a2a7aa2b409d764f206
+branch-a.db,branch-b.db,pulse-sum,4,4,6d3f6588812a4208a051f90fcb4e0ba4d55964f4666c23434d61bd201f7e8c61,72488f54e4010a70660f2437784197ae7ea775f409d5aedf52546a273c454ff2
+branch-a.db,branch-b.db,pulse-caliber,4,4,1b93afad74e20bc1bfddf609356a32a4c26df81599dbcfcf8721b5c6326f3062,5a8346cdc5eb374bda885842efa201d2161deb0a258d3a2a7aa2b409d764f206

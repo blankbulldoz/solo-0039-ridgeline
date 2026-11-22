@@ -1,0 +1,5 @@
+image_name,logical_sha256,sample_rows
+base-seed.db,2ba0c2caf64ccd6d83e42fbd6479c86d6e00cfa76a43bbd601e5d082ae5c6f1c,9
+branch-a.db,0c1034e9a0fe1fa2d57b520b531ebbdc24d0d08950f82da285b91b70c8133324,9
+branch-b.db,8cfaf32915a92434c365ad383431ebbd5dbc6b4941d8814811a95dc9ce4624de,9
+branch-c.db,2ba0c2caf64ccd6d83e42fbd6479c86d6e00cfa76a43bbd601e5d082ae5c6f1c,9
