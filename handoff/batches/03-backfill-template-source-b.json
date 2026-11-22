@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "purpose": "Backfill request TEMPLATE for collector b. The two time values are non-numeric placeholders, so this file as stored is rejected by validation and is NOT submittable. Replace the placeholders only with times derived from the confirmed calibration record, then POST. Do not pre-fill guessed numbers.",
+    "space": "device01",
+    "submittable": false,
+    "fill_rule": "time = source_local_time - confirmed_offset_ms (same confirmed offset for both points). Submit the surviving point ALONE: the local-500 point is always inadmissible this round and bundling it makes the atomic request reject the good point too.",
+    "pre_submit_checks": [
+      "GET /spaces/device01 and re-check against the current floor and watermark (retention may have advanced).",
+      "Drop any point whose computed time is below the current floor; one rejected point fails the entire request.",
+      "Drop any point whose computed time exceeds now + future_ms (1800 for now=1700)."
+    ]
+  },
+  "now": 1700,
+  "points": [
+    {
+      "labels": {"__name__": "device_counter_total", "device": "device01"},
+      "time": "REPLACE: 500 - confirmed_offset_ms",
+      "value": 3
+    },
+    {
+      "labels": {"__name__": "device_counter_total", "device": "device01"},
+      "time": "REPLACE: 1500 - confirmed_offset_ms",
+      "value": 5
+    }
+  ]
+}

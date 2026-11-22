@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "purpose": "Original-source batch for collector b, held pending the clock-calibration record. This is NOT a Ridgeline request body and must never be POSTed: it carries no confirmed timestamps. No guessed time is written anywhere in a submittable file.",
+    "space": "device01",
+    "submittable": false,
+    "clock_record": {
+      "local_minus_true_ms_bounds": [-300, 300],
+      "status": "UNCONFIRMED - one shared offset for both points, exact value not yet received"
+    },
+    "labels": {"__name__": "device_counter_total", "device": "device01"},
+    "round_now": 1700
+  },
+  "held_points": [
+    {
+      "source": "collector-b",
+      "source_local_time": 500,
+      "value": 3,
+      "true_time_formula": "500 - confirmed_offset_ms",
+      "feasible_true_time_range": [200, 800],
+      "admission_after_a_commits_wm_1600": "always rejected: latest feasible true time 800 is below the lateness line 1600-700=900; for offset > 100 it is additionally below retention floor 400"
+    },
+    {
+      "source": "collector-b",
+      "source_local_time": 1500,
+      "value": 5,
+      "true_time_formula": "1500 - confirmed_offset_ms",
+      "feasible_true_time_range": [1200, 1800],
+      "admission_after_a_commits_wm_1600": "admissible via a single-point request when offset in [-100, 300] (true time <= 1800 future limit); rejected by future skew for offset in [-300, -101]"
+    }
+  ]
+}

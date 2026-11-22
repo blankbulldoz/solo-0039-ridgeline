@@ -1,0 +1,15 @@
+{
+  "now": 1700,
+  "points": [
+    {
+      "labels": {"__name__": "device_counter_total", "device": "device01"},
+      "time": 600,
+      "value": 2
+    },
+    {
+      "labels": {"__name__": "device_counter_total", "device": "device01"},
+      "time": 1600,
+      "value": 4
+    }
+  ]
+}

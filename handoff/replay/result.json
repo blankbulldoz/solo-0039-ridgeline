@@ -1,0 +1,3512 @@
+{
+  "parameters": {
+    "now": 1700,
+    "retention_ms": 600,
+    "floor": 400,
+    "watermark": 1000,
+    "lateness_ms": 700,
+    "future_ms": 100,
+    "a_true_times": [
+      600,
+      1600
+    ],
+    "b_true_time_bounds": {
+      "b1": [
+        200,
+        800
+      ],
+      "b2": [
+        1200,
+        1800
+      ]
+    }
+  },
+  "summary": [
+    {
+      "plan": "A",
+      "delta": -300,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 2,
+      "rate": 2,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 2.0,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point exceeds out-of-order time policy",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "A",
+      "delta": -101,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 2,
+      "rate": 2,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 2.0,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point exceeds out-of-order time policy",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "A",
+      "delta": -100,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 2,
+      "rate": 2,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 2.0,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point exceeds out-of-order time policy",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "A",
+      "delta": 0,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 2,
+      "rate": 2,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 2.0,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point exceeds out-of-order time policy",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "A",
+      "delta": 100,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 2,
+      "rate": 2,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 2.0,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point exceeds out-of-order time policy",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "A",
+      "delta": 101,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 2,
+      "rate": 2,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 2.0,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point precedes retention floor",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "A",
+      "delta": 300,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 2,
+      "rate": 2,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 2.0,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point precedes retention floor",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "A",
+      "delta": 300,
+      "split_retry": true,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1200,
+          5
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 3,
+      "rate": 7,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1200,
+          5
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 7.0,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point precedes retention floor",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": true,
+          "detail": "ok"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "A",
+      "delta": -300,
+      "split_retry": true,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ],
+        [
+          1800,
+          5
+        ]
+      ],
+      "visible_count": 3,
+      "rate": 2.5,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          1600,
+          4
+        ],
+        [
+          1800,
+          5
+        ]
+      ],
+      "expected_rate": 2.5,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point exceeds out-of-order time policy",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": true,
+          "detail": "ok"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "B",
+      "delta": -300,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          800,
+          3
+        ],
+        [
+          1600,
+          4
+        ],
+        [
+          1800,
+          5
+        ]
+      ],
+      "visible_count": 4,
+      "rate": 2.5,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          800,
+          3
+        ],
+        [
+          1600,
+          4
+        ],
+        [
+          1800,
+          5
+        ]
+      ],
+      "expected_rate": 2.5,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b2": {
+          "admitted": true,
+          "detail": "ok"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "B",
+      "delta": -101,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          2
+        ],
+        [
+          601,
+          3
+        ],
+        [
+          1600,
+          4
+        ],
+        [
+          1601,
+          5
+        ]
+      ],
+      "visible_count": 4,
+      "rate": 2.997002997002997,
+      "expected_visible": [
+        [
+          600,
+          2
+        ],
+        [
+          601,
+          3
+        ],
+        [
+          1600,
+          4
+        ],
+        [
+          1601,
+          5
+        ]
+      ],
+      "expected_rate": 2.997002997002997,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b2": {
+          "admitted": true,
+          "detail": "ok"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "B",
+      "delta": -100,
+      "split_retry": false,
+      "visible": [
+        [
+          600,
+          3
+        ],
+        [
+          1600,
+          5
+        ]
+      ],
+      "visible_count": 2,
+      "rate": 2,
+      "expected_visible": [
+        [
+          600,
+          3
+        ],
+        [
+          1600,
+          5
+        ]
+      ],
+      "expected_rate": 2.0,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b2": {
+          "admitted": true,
+          "detail": "ok"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "B",
+      "delta": 0,
+      "split_retry": false,
+      "visible": [
+        [
+          500,
+          3
+        ],
+        [
+          600,
+          2
+        ],
+        [
+          1500,
+          5
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 4,
+      "rate": 8.181818181818182,
+      "expected_visible": [
+        [
+          500,
+          3
+        ],
+        [
+          600,
+          2
+        ],
+        [
+          1500,
+          5
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 8.181818181818182,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b2": {
+          "admitted": true,
+          "detail": "ok"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "B",
+      "delta": 100,
+      "split_retry": false,
+      "visible": [
+        [
+          400,
+          3
+        ],
+        [
+          600,
+          2
+        ],
+        [
+          1400,
+          5
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "visible_count": 4,
+      "rate": 7.5,
+      "expected_visible": [
+        [
+          400,
+          3
+        ],
+        [
+          600,
+          2
+        ],
+        [
+          1400,
+          5
+        ],
+        [
+          1600,
+          4
+        ]
+      ],
+      "expected_rate": 7.5,
+      "verdicts": {
+        "a1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "a2": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b1": {
+          "admitted": true,
+          "detail": "ok"
+        },
+        "b2": {
+          "admitted": true,
+          "detail": "ok"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "B",
+      "delta": 101,
+      "split_retry": false,
+      "visible": [],
+      "visible_count": 0,
+      "rate": null,
+      "expected_visible": [],
+      "expected_rate": null,
+      "verdicts": {
+        "a1": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        },
+        "a2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point precedes retention floor",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        }
+      },
+      "match": true
+    },
+    {
+      "plan": "B",
+      "delta": 300,
+      "split_retry": false,
+      "visible": [],
+      "visible_count": 0,
+      "rate": null,
+      "expected_visible": [],
+      "expected_rate": null,
+      "verdicts": {
+        "a1": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        },
+        "a2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        },
+        "b1": {
+          "admitted": false,
+          "detail": "point precedes retention floor",
+          "reason": "whole atomic request rejected"
+        },
+        "b2": {
+          "admitted": false,
+          "detail": "ok",
+          "reason": "whole atomic request rejected"
+        }
+      },
+      "match": true
+    }
+  ],
+  "all_match": true,
+  "scenarios": [
+    {
+      "space": "dev_a_m300_1",
+      "plan": "A",
+      "delta": -300,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_a_m300_1",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_a_m300_1",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planA_submit_a",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 2,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        },
+        {
+          "step": "planA_bundle_b_two_points",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 800,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1800,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point exceeds out-of-order time policy"
+            }
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2,
+        "rate_count": 2,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2.0,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point exceeds out-of-order time policy",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_a_m101_2",
+      "plan": "A",
+      "delta": -101,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_a_m101_2",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_a_m101_2",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planA_submit_a",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 2,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        },
+        {
+          "step": "planA_bundle_b_two_points",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 601,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1601,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point exceeds out-of-order time policy"
+            }
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2,
+        "rate_count": 2,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2.0,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point exceeds out-of-order time policy",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_a_m100_3",
+      "plan": "A",
+      "delta": -100,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_a_m100_3",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_a_m100_3",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planA_submit_a",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 2,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        },
+        {
+          "step": "planA_bundle_b_two_points",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point exceeds out-of-order time policy"
+            }
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2,
+        "rate_count": 2,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2.0,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point exceeds out-of-order time policy",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_a_0_4",
+      "plan": "A",
+      "delta": 0,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_a_0_4",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_a_0_4",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planA_submit_a",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 2,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        },
+        {
+          "step": "planA_bundle_b_two_points",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 500,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1500,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point exceeds out-of-order time policy"
+            }
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2,
+        "rate_count": 2,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2.0,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point exceeds out-of-order time policy",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_a_100_5",
+      "plan": "A",
+      "delta": 100,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_a_100_5",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_a_100_5",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planA_submit_a",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 2,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        },
+        {
+          "step": "planA_bundle_b_two_points",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 400,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1400,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point exceeds out-of-order time policy"
+            }
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2,
+        "rate_count": 2,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2.0,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point exceeds out-of-order time policy",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_a_101_6",
+      "plan": "A",
+      "delta": 101,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_a_101_6",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_a_101_6",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planA_submit_a",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 2,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        },
+        {
+          "step": "planA_bundle_b_two_points",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 399,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1399,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point precedes retention floor"
+            }
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2,
+        "rate_count": 2,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2.0,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point precedes retention floor",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_a_300_7",
+      "plan": "A",
+      "delta": 300,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_a_300_7",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_a_300_7",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planA_submit_a",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 2,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        },
+        {
+          "step": "planA_bundle_b_two_points",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 200,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1200,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point precedes retention floor"
+            }
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2,
+        "rate_count": 2,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2.0,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point precedes retention floor",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_a_300_8",
+      "plan": "A",
+      "delta": 300,
+      "split_retry": true,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_a_300_8",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_a_300_8",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planA_submit_a",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 2,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        },
+        {
+          "step": "planA_bundle_b_two_points",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 200,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1200,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point precedes retention floor"
+            }
+          }
+        },
+        {
+          "step": "planA_split_retry_b1",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 200,
+                "value": 3
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point precedes retention floor"
+            }
+          }
+        },
+        {
+          "step": "planA_split_retry_b2",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1200,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "sequence": 5,
+            "accepted": 1,
+            "new_series": 0,
+            "watermark": 1600
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1200,
+            5
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 3,
+        "rate": 7,
+        "rate_count": 3,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1200,
+            5
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 3,
+        "rate": 7.0,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point precedes retention floor",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": true,
+            "detail": "ok"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_a_m300_9",
+      "plan": "A",
+      "delta": -300,
+      "split_retry": true,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_a_m300_9",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_a_m300_9",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planA_submit_a",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 2,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        },
+        {
+          "step": "planA_bundle_b_two_points",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 800,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1800,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point exceeds out-of-order time policy"
+            }
+          }
+        },
+        {
+          "step": "planA_split_retry_b1",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 800,
+                "value": 3
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point exceeds out-of-order time policy"
+            }
+          }
+        },
+        {
+          "step": "planA_split_retry_b2",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1800,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "sequence": 5,
+            "accepted": 1,
+            "new_series": 0,
+            "watermark": 1800
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ],
+          [
+            1800,
+            5
+          ]
+        ],
+        "visible_count": 3,
+        "rate": 2.5,
+        "rate_count": 3,
+        "watermark": 1800
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            1600,
+            4
+          ],
+          [
+            1800,
+            5
+          ]
+        ],
+        "visible_count": 3,
+        "rate": 2.5,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point exceeds out-of-order time policy",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": true,
+            "detail": "ok"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_b_m300_10",
+      "plan": "B",
+      "delta": -300,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_b_m300_10",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_b_m300_10",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planB_bundle_a_and_b_guessed_times",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 800,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1800,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 4,
+            "new_series": 1,
+            "watermark": 1800
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            800,
+            3
+          ],
+          [
+            1600,
+            4
+          ],
+          [
+            1800,
+            5
+          ]
+        ],
+        "visible_count": 4,
+        "rate": 2.5,
+        "rate_count": 4,
+        "watermark": 1800
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            800,
+            3
+          ],
+          [
+            1600,
+            4
+          ],
+          [
+            1800,
+            5
+          ]
+        ],
+        "visible_count": 4,
+        "rate": 2.5,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b2": {
+            "admitted": true,
+            "detail": "ok"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_b_m101_11",
+      "plan": "B",
+      "delta": -101,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_b_m101_11",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_b_m101_11",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planB_bundle_a_and_b_guessed_times",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 601,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1601,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 4,
+            "new_series": 1,
+            "watermark": 1601
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            601,
+            3
+          ],
+          [
+            1600,
+            4
+          ],
+          [
+            1601,
+            5
+          ]
+        ],
+        "visible_count": 4,
+        "rate": 2.997002997002997,
+        "rate_count": 4,
+        "watermark": 1601
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            2
+          ],
+          [
+            601,
+            3
+          ],
+          [
+            1600,
+            4
+          ],
+          [
+            1601,
+            5
+          ]
+        ],
+        "visible_count": 4,
+        "rate": 2.997002997002997,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b2": {
+            "admitted": true,
+            "detail": "ok"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_b_m100_12",
+      "plan": "B",
+      "delta": -100,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_b_m100_12",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_b_m100_12",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planB_bundle_a_and_b_guessed_times",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 4,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            600,
+            3
+          ],
+          [
+            1600,
+            5
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2,
+        "rate_count": 2,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            600,
+            3
+          ],
+          [
+            1600,
+            5
+          ]
+        ],
+        "visible_count": 2,
+        "rate": 2.0,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b2": {
+            "admitted": true,
+            "detail": "ok"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_b_0_13",
+      "plan": "B",
+      "delta": 0,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_b_0_13",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_b_0_13",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planB_bundle_a_and_b_guessed_times",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 500,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1500,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 4,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            500,
+            3
+          ],
+          [
+            600,
+            2
+          ],
+          [
+            1500,
+            5
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 4,
+        "rate": 8.181818181818182,
+        "rate_count": 4,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            500,
+            3
+          ],
+          [
+            600,
+            2
+          ],
+          [
+            1500,
+            5
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 4,
+        "rate": 8.181818181818182,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b2": {
+            "admitted": true,
+            "detail": "ok"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_b_100_14",
+      "plan": "B",
+      "delta": 100,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_b_100_14",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_b_100_14",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planB_bundle_a_and_b_guessed_times",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 400,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1400,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "sequence": 4,
+            "accepted": 4,
+            "new_series": 1,
+            "watermark": 1600
+          }
+        }
+      ],
+      "actual": {
+        "visible": [
+          [
+            400,
+            3
+          ],
+          [
+            600,
+            2
+          ],
+          [
+            1400,
+            5
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 4,
+        "rate": 7.5,
+        "rate_count": 4,
+        "watermark": 1600
+      },
+      "expected": {
+        "visible": [
+          [
+            400,
+            3
+          ],
+          [
+            600,
+            2
+          ],
+          [
+            1400,
+            5
+          ],
+          [
+            1600,
+            4
+          ]
+        ],
+        "visible_count": 4,
+        "rate": 7.5,
+        "verdicts": {
+          "a1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "a2": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b1": {
+            "admitted": true,
+            "detail": "ok"
+          },
+          "b2": {
+            "admitted": true,
+            "detail": "ok"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_b_101_15",
+      "plan": "B",
+      "delta": 101,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_b_101_15",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_b_101_15",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planB_bundle_a_and_b_guessed_times",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 399,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1399,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point precedes retention floor"
+            }
+          }
+        }
+      ],
+      "actual": {
+        "visible": [],
+        "visible_count": 0,
+        "rate": null,
+        "rate_count": 0,
+        "watermark": 1000
+      },
+      "expected": {
+        "visible": [],
+        "visible_count": 0,
+        "rate": null,
+        "verdicts": {
+          "a1": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          },
+          "a2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point precedes retention floor",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          }
+        }
+      },
+      "match": true
+    },
+    {
+      "space": "dev_b_300_16",
+      "plan": "B",
+      "delta": 300,
+      "split_retry": false,
+      "trace": [
+        {
+          "step": "seed",
+          "result": {
+            "create": {
+              "name": "dev_b_300_16",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": -4503599627370496,
+              "watermark": 0,
+              "has_watermark": false,
+              "last_sequence": 1
+            },
+            "seed": {
+              "sequence": 2,
+              "accepted": 1,
+              "new_series": 1,
+              "watermark": 1000
+            },
+            "retention": {
+              "sequence": 3,
+              "blocks": 1,
+              "points": 1,
+              "floor": 400
+            },
+            "inspect": {
+              "name": "dev_b_300_16",
+              "read_only": false,
+              "retention_ms": 600,
+              "lateness_ms": 700,
+              "future_ms": 100,
+              "max_series": 10,
+              "max_write": 1000,
+              "max_scan": 100000,
+              "floor": 400,
+              "watermark": 1000,
+              "has_watermark": true,
+              "last_sequence": 3
+            }
+          }
+        },
+        {
+          "step": "planB_bundle_a_and_b_guessed_times",
+          "request": {
+            "now": 1700,
+            "points": [
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 600,
+                "value": 2
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1600,
+                "value": 4
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 200,
+                "value": 3
+              },
+              {
+                "labels": {
+                  "__name__": "device_counter_total",
+                  "device": "device01"
+                },
+                "time": 1200,
+                "value": 5
+              }
+            ]
+          },
+          "result": {
+            "_http_status": 409,
+            "_error": {
+              "code": "conflict",
+              "detail": "point precedes retention floor"
+            }
+          }
+        }
+      ],
+      "actual": {
+        "visible": [],
+        "visible_count": 0,
+        "rate": null,
+        "rate_count": 0,
+        "watermark": 1000
+      },
+      "expected": {
+        "visible": [],
+        "visible_count": 0,
+        "rate": null,
+        "verdicts": {
+          "a1": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          },
+          "a2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          },
+          "b1": {
+            "admitted": false,
+            "detail": "point precedes retention floor",
+            "reason": "whole atomic request rejected"
+          },
+          "b2": {
+            "admitted": false,
+            "detail": "ok",
+            "reason": "whole atomic request rejected"
+          }
+        }
+      },
+      "match": true
+    }
+  ]
+}
