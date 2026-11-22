@@ -82,6 +82,10 @@ func Handler(e *engine.Engine) http.Handler {
 		out, err := e.Compact(r.PathValue("space"))
 		respond(w, out, err)
 	})
+	mux.HandleFunc("POST "+base+"/migrate", func(w http.ResponseWriter, r *http.Request) {
+		out, err := e.Migrate(r.PathValue("space"))
+		respond(w, out, err)
+	})
 	mux.HandleFunc("PUT "+base+"/rollups/{rollup}", func(w http.ResponseWriter, r *http.Request) {
 		handleBody(w, r, func(q model.Query) (any, error) {
 			return e.Materialize(r.PathValue("space"), r.PathValue("rollup"), q)

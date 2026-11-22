@@ -10,8 +10,8 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-func putBlock(b *bolt.Bucket, id string, seq uint64, points []model.Sample) error {
-	block, payload, err := chunk.Build(id, seq, points)
+func putBlock(b *bolt.Bucket, id string, seq uint64, points []model.Sample, format int) error {
+	block, payload, err := chunk.Build(id, seq, points, format)
 	if err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func (e *Engine) Seal(name string) (model.Maintenance, error) {
 			return err
 		}
 		for id, points := range grouped {
-			if err := putBlock(b, id, seq, points); err != nil {
+			if err := putBlock(b, id, seq, points, e.WriteFormat); err != nil {
 				return err
 			}
 			receipt.Blocks++

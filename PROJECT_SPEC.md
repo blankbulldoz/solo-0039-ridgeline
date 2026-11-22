@@ -70,12 +70,38 @@ the server with that image as RIDGE_DB restores that database directly.
 12. Compact physical blocks while preserving query results.
 13. Export a consistent image and restart from it.
 14. Explain candidate series, physical blocks and query budgets.
+15. Migrate legacy format 1 blocks to the current format.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
 The engine coordinates transaction ownership; volume owns durable publication;
 chunk owns encoding; select owns matching; window owns numerical semantics;
 policy owns admission and retention decisions; model owns identities and types.
+
+## Block Formats
+
+Sealed samples live in per-series blocks carrying a format number and a
+SHA-256 checksum of the encoded payload. Format 1 is a gzip stream of an
+ordered JSON sample array. Format 2 is a compact binary encoding: an 8-byte
+header (`RB`, version byte 2, a reserved flags byte that must be zero, a
+little-endian uint32 sample count) followed by one record per sample —
+zigzag-varint timestamp for the first sample then uvarint deltas, 8
+little-endian bytes of IEEE-754 value bits, and a uvarint sequence then
+zigzag-varint deltas. Timestamps, float64 bit patterns and observation
+sequences round-trip exactly in both formats.
+
+One database may hold both formats at once; reads dispatch on the block
+record's format. Seals, compactions and retentions write the configured
+format (RIDGE_BLOCK_FORMAT, default 2; 1 pins legacy writes). Migration
+rewrites every older block to the configured format in one storage
+transaction after verifying the re-encoded payload decodes to identical
+samples; an interrupted migration commits nothing and loses no confirmed
+observation. Blocks already current are skipped, an empty migration consumes
+no sequence, and migration is forward-only — it never downgrades. Unknown
+formats, checksum mismatches, truncation and trailing bytes fail loudly with
+the block ID. Format 1 stays readable indefinitely; builds without format 2
+support cannot read format 2 blocks, so rollback across the transition
+requires pinned legacy writes and no migrated blocks.
 
 ## Boundaries
 
@@ -84,9 +110,11 @@ the service does not implement distributed consensus, replication, historical
 revision queries, SQL, authentication or a background retention scheduler.
 Large raw scans are bounded by the namespace scan budget. Maintenance currently
 runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
-Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
+Block payload formats are described under Block Formats.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
-exercise real API operations, process restart and failure responses. Formal
-automated tests are deferred. The walkthrough is a bounded production demo
+exercise real API operations, process restart and failure responses. Block
+codec round-trip and corruption tests live in `internal/chunk`
+(`go test ./internal/chunk/`); broader formal automated tests are deferred.
+The walkthrough is a bounded production demo
 using temporary database files and synthetic infrastructure measurements.

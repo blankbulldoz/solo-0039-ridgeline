@@ -2,7 +2,9 @@ package engine
 
 import (
 	"encoding/json"
+	"fmt"
 
+	"ridgeline/internal/chunk"
 	"ridgeline/internal/model"
 	"ridgeline/internal/volume"
 
@@ -11,14 +13,20 @@ import (
 
 type Engine struct {
 	DB *volume.DB
+	// WriteFormat is the chunk format used by new seals, compactions and
+	// migrations. Existing blocks of either supported format stay readable.
+	WriteFormat int
 }
 
-func Open(path string) (*Engine, error) {
+func Open(path string, writeFormat int) (*Engine, error) {
+	if !chunk.Supported(writeFormat) {
+		return nil, fmt.Errorf("unsupported block write format %d", writeFormat)
+	}
 	db, err := volume.Open(path)
 	if err != nil {
 		return nil, err
 	}
-	return &Engine{DB: db}, nil
+	return &Engine{DB: db, WriteFormat: writeFormat}, nil
 }
 
 func (e *Engine) Close() error {

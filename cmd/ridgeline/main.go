@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"syscall"
 	"time"
 
+	"ridgeline/internal/chunk"
 	"ridgeline/internal/engine"
 	"ridgeline/internal/wire"
 )
@@ -22,12 +24,32 @@ func env(key, fallback string) string {
 	return fallback
 }
 
+// blockFormat selects the chunk format for newly written blocks. Existing
+// blocks of every supported format stay readable regardless of this choice.
+func blockFormat() (int, error) {
+	switch value := os.Getenv("RIDGE_BLOCK_FORMAT"); value {
+	case "":
+		return chunk.Latest, nil
+	case "1":
+		return chunk.FormatV1, nil
+	case "2":
+		return chunk.FormatV2, nil
+	default:
+		return 0, fmt.Errorf("RIDGE_BLOCK_FORMAT must be 1 or 2, got %q", value)
+	}
+}
+
 func run() error {
-	e, err := engine.Open(env("RIDGE_DB", "var/ridgeline.db"))
+	format, err := blockFormat()
+	if err != nil {
+		return err
+	}
+	e, err := engine.Open(env("RIDGE_DB", "var/ridgeline.db"), format)
 	if err != nil {
 		return err
 	}
 	defer e.Close()
+	log.Printf("ridgeline block write format %d", format)
 	listener, err := net.Listen("tcp", env("RIDGE_ADDR", "127.0.0.1:8399"))
 	if err != nil {
 		return err

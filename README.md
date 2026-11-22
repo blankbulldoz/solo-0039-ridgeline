@@ -27,7 +27,8 @@ python3 examples/walkthrough.py --output var/observations.json
 
 The bounded walkthrough uses temporary volumes and an available ephemeral port.
 Each named workflow runs the entire related stateful scenario so its required
-preconditions and recovery remain reproducible. Formal tests are deferred.
+preconditions and recovery remain reproducible. Block codec round-trip and
+corruption tests live in `internal/chunk`; broader formal tests are deferred.
 `examples/input.json` contains the original measurements; a recorded production
 session is in `examples/session.json`. These are synthetic, non-sensitive inputs.
 
@@ -55,6 +56,7 @@ All methods below return 200 on success.
 | GET | `/spaces/{space}/deletions` | deletion sequence inventory |
 | POST | `/spaces/{space}/retention` | `{"now":11000}` |
 | POST | `/spaces/{space}/compact` | empty object |
+| POST | `/spaces/{space}/migrate` | empty object |
 | PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
 | GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
 | GET | `/image` | consistent binary image, SHA-256 and sequence headers |
@@ -77,8 +79,32 @@ Explain is an estimate of candidate blocks, not a guarantee of visible rows.
 
 `ridge-v1/spaces/<name>` contains config, catalog, head, blocks, payloads,
 deletes and rollups buckets. Numeric point keys encode signed time in
-lexicographic order. Blocks use format 1: a gzip stream containing an ordered
-JSON sample array, with SHA-256 over the compressed payload.
+lexicographic order. Blocks carry a format number and a SHA-256 checksum of
+the encoded payload. Format 1 is a gzip stream containing an ordered JSON
+sample array. Format 2 is the compact binary encoding written by default:
+an 8-byte header (`RB`, version byte 2, reserved flags byte, little-endian
+uint32 sample count) followed by one record per sample — zigzag-varint
+timestamp for the first sample then uvarint deltas, 8 little-endian bytes of
+IEEE-754 value bits, and a uvarint sequence then zigzag-varint deltas.
+Timestamps, float64 bit patterns and observation sequences round-trip
+exactly in both formats.
+
+Both formats coexist in one database; reads dispatch on each block record's
+format. New seals and compactions write `RIDGE_BLOCK_FORMAT` (default 2;
+set 1 to pin legacy writes). `POST /spaces/{space}/migrate` rewrites every
+older block to the configured format in a single storage transaction, so an
+interrupted migration commits nothing and loses no confirmed observation.
+Blocks already at the target format are skipped; an empty migration consumes
+no sequence. Migration is forward-only and never downgrades. Unknown block
+formats, checksum mismatches and truncated or trailing payloads fail loudly
+with the block ID.
+
+Upgrade and rollback boundaries: format 1 remains readable indefinitely, so
+upgrading is safe at any time. Builds without format 2 support cannot read
+format 2 blocks; once any block is written or migrated to format 2, rolling
+back to such a build is unsupported. To preserve a rollback path during the
+transition, run this build with `RIDGE_BLOCK_FORMAT=1` and do not migrate;
+drop the pin and migrate per namespace when rollback is no longer needed.
 
 Keep a downloaded image and its response hash together. Verify the bytes,
 stop any process using the destination, then start a separate instance with

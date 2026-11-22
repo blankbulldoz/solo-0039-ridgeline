@@ -638,9 +638,9 @@
         "start": 500,
         "end": 501,
         "count": 1,
-        "bytes": 64,
-        "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
-        "format": 1
+        "bytes": 19,
+        "checksum": "861efce7c4691b7e053ff53a545441288dd6e8bf425cda0bd16ff2278944a5bc",
+        "format": 2
       },
       {
         "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
@@ -648,9 +648,9 @@
         "start": -500,
         "end": 501,
         "count": 2,
-        "bytes": 105,
-        "checksum": "4c2f12747df3833972d963a29b9b86b6225d2de929c6252543feb51e3c6ceb20",
-        "format": 1
+        "bytes": 30,
+        "checksum": "4b97af768bcdeea7bcb618cc4244cec1686f866c103822733cbbdd2dac5ddd21",
+        "format": 2
       },
       {
         "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
@@ -658,9 +658,9 @@
         "start": -1500,
         "end": 1501,
         "count": 4,
-        "bytes": 80,
-        "checksum": "f62effbef22081bacda4663b08c17e44f621f0135a4c07c22feb6b601c4c1d4a",
-        "format": 1
+        "bytes": 52,
+        "checksum": "b29febadaabe1457fa8e87c8d0f26e0bd6ab750ca34f7fdf809dd05740d03c45",
+        "format": 2
       },
       {
         "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
@@ -668,9 +668,9 @@
         "start": -1500,
         "end": 501,
         "count": 2,
-        "bytes": 100,
-        "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
-        "format": 1
+        "bytes": 30,
+        "checksum": "37915cc6dd2d0ec331bb338a8022fb838bf26c62ff08ec976df112124fd4a2ea",
+        "format": 2
       }
     ]
   },
@@ -1215,9 +1215,9 @@
           "start": 500,
           "end": 501,
           "count": 1,
-          "bytes": 64,
-          "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
-          "format": 1
+          "bytes": 19,
+          "checksum": "861efce7c4691b7e053ff53a545441288dd6e8bf425cda0bd16ff2278944a5bc",
+          "format": 2
         },
         {
           "id": "00000000000000000008-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
@@ -1225,9 +1225,9 @@
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
-          "format": 1
+          "bytes": 41,
+          "checksum": "ce986f784b6205b097d91612961f82567123fc9b6aa33b6909c00a0f18aefdcd",
+          "format": 2
         },
         {
           "id": "00000000000000000008-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
@@ -1235,9 +1235,9 @@
           "start": -1500,
           "end": 501,
           "count": 2,
-          "bytes": 100,
-          "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
-          "format": 1
+          "bytes": 30,
+          "checksum": "37915cc6dd2d0ec331bb338a8022fb838bf26c62ff08ec976df112124fd4a2ea",
+          "format": 2
         }
       ],
       "max_decoded": 100000,
@@ -1381,8 +1381,8 @@
   {
     "step": "backup",
     "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sha256": "87af9dbfb1f79abf29f2cdb21ab03c26a8797eeccd9799c8ef67ad8ffd0c23f3",
+    "bytes": 57344
   },
   {
     "step": "restored",
@@ -1415,6 +1415,2382 @@
         "decoded": 1,
         "visible": 1,
         "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "legacy namespace",
+    "request": {
+      "name": "relay",
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000
+    },
+    "response": {
+      "name": "relay",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 1
+    }
+  },
+  {
+    "step": "legacy ingest",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -1500,
+          "value": 10
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": -500,
+          "value": 14
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 2
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 1500,
+          "value": 6
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-b",
+            "zone": "east"
+          },
+          "time": -1500,
+          "value": 3
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-b",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 7
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east",
+            "rack": ""
+          },
+          "time": -500,
+          "value": 0.25
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-a",
+            "zone": "east",
+            "rack": ""
+          },
+          "time": 500,
+          "value": 0.75
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 500,
+          "value": 0.5
+        }
+      ]
+    },
+    "response": {
+      "sequence": 2,
+      "accepted": 9,
+      "new_series": 4,
+      "watermark": 1500
+    }
+  },
+  {
+    "step": "legacy seal",
+    "request": {},
+    "response": {
+      "sequence": 3,
+      "blocks": 4,
+      "points": 9,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "legacy corrections",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 5
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-b",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 11
+        },
+        {
+          "labels": {
+            "__name__": "load_ratio",
+            "node": "ridge-b",
+            "zone": "west"
+          },
+          "time": 1500,
+          "value": 0.5
+        }
+      ]
+    },
+    "response": {
+      "sequence": 4,
+      "accepted": 3,
+      "new_series": 0,
+      "watermark": 1500
+    }
+  },
+  {
+    "step": "legacy reseal",
+    "request": {},
+    "response": {
+      "sequence": 5,
+      "blocks": 3,
+      "points": 3,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "legacy delete",
+    "request": {
+      "start": -600,
+      "end": 600,
+      "matchers": [
+        {
+          "label": "node",
+          "op": "=",
+          "value": "ridge-a"
+        }
+      ]
+    },
+    "response": {
+      "id": "00000000000000000006",
+      "series": [
+        "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+      ],
+      "start": -600,
+      "end": 600,
+      "sequence": 6
+    }
+  },
+  {
+    "step": "legacy correct after delete",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 500,
+          "value": 8
+        }
+      ]
+    },
+    "response": {
+      "sequence": 7,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 1500
+    }
+  },
+  {
+    "step": "legacy materialize",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "name": "pulse",
+      "query": {
+        "start": -5000,
+        "end": 10000,
+        "matchers": null,
+        "limit": 0,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 7,
+      "result": {
+        "sequence": 7,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -2000,
+            "end": -1000,
+            "value": 6.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 9.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 6,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 0.5,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 0.5,
+            "count": 1
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 7,
+          "head": 1,
+          "decoded": 13,
+          "visible": 7,
+          "tombstones": 1
+        }
+      }
+    }
+  },
+  {
+    "step": "legacy rollup",
+    "request": null,
+    "response": {
+      "name": "pulse",
+      "query": {
+        "start": -5000,
+        "end": 10000,
+        "matchers": null,
+        "limit": 0,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 7,
+      "result": {
+        "sequence": 7,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -2000,
+            "end": -1000,
+            "value": 6.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 9.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 6,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 0.5,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 0.5,
+            "count": 1
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 7,
+          "head": 1,
+          "decoded": 13,
+          "visible": 7,
+          "tombstones": 1
+        }
+      },
+      "stale": false
+    }
+  },
+  {
+    "step": "legacy range",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 8,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 0.5,
+              "sequence": 4
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 8,
+              "sequence": 7
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 11,
+              "sequence": 4
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 7,
+        "head": 1,
+        "decoded": 13,
+        "visible": 7,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "legacy rate",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 10000,
+      "origin": -5000,
+      "group_by": [
+        "zone"
+      ],
+      "function": "rate",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "pulse_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 8,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -5000,
+          "end": 5000,
+          "value": 8.666666666666668,
+          "count": 5
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 4,
+        "head": 1,
+        "decoded": 9,
+        "visible": 5,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "legacy windows",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "sequence": 8,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -2000,
+          "end": -1000,
+          "value": 6.5,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 9.5,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 6,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 0.5,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 0.5,
+          "count": 1
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 7,
+        "head": 1,
+        "decoded": 13,
+        "visible": 7,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "legacy blocks",
+    "request": null,
+    "response": [
+      {
+        "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 63,
+        "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "start": -500,
+        "end": 501,
+        "count": 2,
+        "bytes": 73,
+        "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "start": -1500,
+        "end": 1501,
+        "count": 4,
+        "bytes": 83,
+        "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "start": -1500,
+        "end": 501,
+        "count": 2,
+        "bytes": 71,
+        "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000005-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "start": 1500,
+        "end": 1501,
+        "count": 1,
+        "bytes": 64,
+        "checksum": "1dccc0e63492d162ecb6a7c0f1a09c46f69d747c27f609f8019e395b0e639ce1",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000005-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 59,
+        "checksum": "cb3af5cb1fc8869b75d4de60b10fa03df8206339ae36d977fa4ee8486f2b77d0",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000005-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 62,
+        "checksum": "5ba50b8de57586430da0abbae67d237746f5dc4c11bddbd7362c1aa3ff41f4ae",
+        "format": 1
+      }
+    ]
+  },
+  {
+    "step": "legacy deletions",
+    "request": null,
+    "response": [
+      {
+        "id": "00000000000000000006",
+        "series": [
+          "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+        ],
+        "start": -600,
+        "end": 600,
+        "sequence": 6
+      }
+    ]
+  },
+  {
+    "step": "restarted range",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 8,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 0.5,
+              "sequence": 4
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 8,
+              "sequence": 7
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 11,
+              "sequence": 4
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 7,
+        "head": 1,
+        "decoded": 13,
+        "visible": 7,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "restarted rate",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 10000,
+      "origin": -5000,
+      "group_by": [
+        "zone"
+      ],
+      "function": "rate",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "pulse_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 8,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -5000,
+          "end": 5000,
+          "value": 8.666666666666668,
+          "count": 5
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 4,
+        "head": 1,
+        "decoded": 9,
+        "visible": 5,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "restarted windows",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "sequence": 8,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -2000,
+          "end": -1000,
+          "value": 6.5,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 9.5,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 6,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 0.5,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 0.5,
+          "count": 1
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 7,
+        "head": 1,
+        "decoded": 13,
+        "visible": 7,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "restarted rollup",
+    "request": null,
+    "response": {
+      "name": "pulse",
+      "query": {
+        "start": -5000,
+        "end": 10000,
+        "matchers": null,
+        "limit": 0,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 7,
+      "result": {
+        "sequence": 7,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -2000,
+            "end": -1000,
+            "value": 6.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 9.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 6,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 0.5,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 0.5,
+            "count": 1
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 7,
+          "head": 1,
+          "decoded": 13,
+          "visible": 7,
+          "tombstones": 1
+        }
+      },
+      "stale": false
+    }
+  },
+  {
+    "step": "mixed correction",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-a",
+            "zone": "east"
+          },
+          "time": 1500,
+          "value": 9
+        }
+      ]
+    },
+    "response": {
+      "sequence": 9,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 1500
+    }
+  },
+  {
+    "step": "mixed seal",
+    "request": {},
+    "response": {
+      "sequence": 10,
+      "blocks": 1,
+      "points": 2,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "head survivor",
+    "request": {
+      "now": 10000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-b",
+            "zone": "east"
+          },
+          "time": 2500,
+          "value": 4
+        }
+      ]
+    },
+    "response": {
+      "sequence": 11,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 2500
+    }
+  },
+  {
+    "step": "mixed blocks",
+    "request": null,
+    "response": [
+      {
+        "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 63,
+        "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "start": -500,
+        "end": 501,
+        "count": 2,
+        "bytes": 73,
+        "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "start": -1500,
+        "end": 1501,
+        "count": 4,
+        "bytes": 83,
+        "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "start": -1500,
+        "end": 501,
+        "count": 2,
+        "bytes": 71,
+        "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000005-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "start": 1500,
+        "end": 1501,
+        "count": 1,
+        "bytes": 64,
+        "checksum": "1dccc0e63492d162ecb6a7c0f1a09c46f69d747c27f609f8019e395b0e639ce1",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000005-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 59,
+        "checksum": "cb3af5cb1fc8869b75d4de60b10fa03df8206339ae36d977fa4ee8486f2b77d0",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000005-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 62,
+        "checksum": "5ba50b8de57586430da0abbae67d237746f5dc4c11bddbd7362c1aa3ff41f4ae",
+        "format": 1
+      },
+      {
+        "id": "00000000000000000010-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "start": 500,
+        "end": 1501,
+        "count": 2,
+        "bytes": 30,
+        "checksum": "53d65fc5177a766dc0f477eeee024bc5ed92a751d0600d629ac014284b8023a5",
+        "format": 2
+      }
+    ]
+  },
+  {
+    "step": "mixed range",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 11,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 0.5,
+              "sequence": 4
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 8,
+              "sequence": 7
+            },
+            {
+              "time": 1500,
+              "value": 9,
+              "sequence": 9
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 11,
+              "sequence": 4
+            },
+            {
+              "time": 2500,
+              "value": 4,
+              "sequence": 11
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 8,
+        "head": 1,
+        "decoded": 15,
+        "visible": 8,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "mixed rate",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 10000,
+      "origin": -5000,
+      "group_by": [
+        "zone"
+      ],
+      "function": "rate",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "pulse_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 11,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -5000,
+          "end": 5000,
+          "value": 6,
+          "count": 6
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 5,
+        "head": 1,
+        "decoded": 11,
+        "visible": 6,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "mixed windows",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "sequence": 11,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -2000,
+          "end": -1000,
+          "value": 6.5,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 9.5,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 9,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 2000,
+          "end": 3000,
+          "value": 4,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 0.5,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 0.5,
+          "count": 1
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 8,
+        "head": 1,
+        "decoded": 15,
+        "visible": 8,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "mixed materialize",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "name": "pulse",
+      "query": {
+        "start": -5000,
+        "end": 10000,
+        "matchers": null,
+        "limit": 0,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 11,
+      "result": {
+        "sequence": 11,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -2000,
+            "end": -1000,
+            "value": 6.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 9.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 9,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 2000,
+            "end": 3000,
+            "value": 4,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 0.5,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 0.5,
+            "count": 1
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 8,
+          "head": 1,
+          "decoded": 15,
+          "visible": 8,
+          "tombstones": 1
+        }
+      }
+    }
+  },
+  {
+    "step": "pre-migration rollup",
+    "request": null,
+    "response": {
+      "name": "pulse",
+      "query": {
+        "start": -5000,
+        "end": 10000,
+        "matchers": null,
+        "limit": 0,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 11,
+      "result": {
+        "sequence": 11,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -2000,
+            "end": -1000,
+            "value": 6.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 9.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 9,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 2000,
+            "end": 3000,
+            "value": 4,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 0.5,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 0.5,
+            "count": 1
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 8,
+          "head": 1,
+          "decoded": 15,
+          "visible": 8,
+          "tombstones": 1
+        }
+      },
+      "stale": false
+    }
+  },
+  {
+    "step": "migrate",
+    "request": {},
+    "response": {
+      "sequence": 13,
+      "format": 2,
+      "rewritten": 7,
+      "current": 1,
+      "points": 12
+    }
+  },
+  {
+    "step": "migrated blocks",
+    "request": null,
+    "response": [
+      {
+        "id": "00000000000000000003-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 19,
+        "checksum": "861efce7c4691b7e053ff53a545441288dd6e8bf425cda0bd16ff2278944a5bc",
+        "format": 2
+      },
+      {
+        "id": "00000000000000000003-39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "series_id": "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+        "start": -500,
+        "end": 501,
+        "count": 2,
+        "bytes": 30,
+        "checksum": "4b97af768bcdeea7bcb618cc4244cec1686f866c103822733cbbdd2dac5ddd21",
+        "format": 2
+      },
+      {
+        "id": "00000000000000000003-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "start": -1500,
+        "end": 1501,
+        "count": 4,
+        "bytes": 52,
+        "checksum": "b29febadaabe1457fa8e87c8d0f26e0bd6ab750ca34f7fdf809dd05740d03c45",
+        "format": 2
+      },
+      {
+        "id": "00000000000000000003-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "start": -1500,
+        "end": 501,
+        "count": 2,
+        "bytes": 30,
+        "checksum": "37915cc6dd2d0ec331bb338a8022fb838bf26c62ff08ec976df112124fd4a2ea",
+        "format": 2
+      },
+      {
+        "id": "00000000000000000005-0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "series_id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+        "start": 1500,
+        "end": 1501,
+        "count": 1,
+        "bytes": 19,
+        "checksum": "83d8478b323c3fe3e1e87f9ef75872e4cb0acf8a5347371e5e8bb49d9811b677",
+        "format": 2
+      },
+      {
+        "id": "00000000000000000005-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 19,
+        "checksum": "a6c064c9841e212bb4c15252712bb099fc15188274f810b6a1cc7030a198560a",
+        "format": 2
+      },
+      {
+        "id": "00000000000000000005-c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "series_id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+        "start": 500,
+        "end": 501,
+        "count": 1,
+        "bytes": 19,
+        "checksum": "3c414efbcc60530c12301e49893a6001528d92b6fa356b956c53facdecc6d399",
+        "format": 2
+      },
+      {
+        "id": "00000000000000000010-ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "series_id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+        "start": 500,
+        "end": 1501,
+        "count": 2,
+        "bytes": 30,
+        "checksum": "53d65fc5177a766dc0f477eeee024bc5ed92a751d0600d629ac014284b8023a5",
+        "format": 2
+      }
+    ]
+  },
+  {
+    "step": "migrated range",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 13,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 0.5,
+              "sequence": 4
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 8,
+              "sequence": 7
+            },
+            {
+              "time": 1500,
+              "value": 9,
+              "sequence": 9
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 11,
+              "sequence": 4
+            },
+            {
+              "time": 2500,
+              "value": 4,
+              "sequence": 11
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 8,
+        "head": 1,
+        "decoded": 15,
+        "visible": 8,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "migrated rate",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 10000,
+      "origin": -5000,
+      "group_by": [
+        "zone"
+      ],
+      "function": "rate",
+      "matchers": [
+        {
+          "label": "__name__",
+          "op": "=",
+          "value": "pulse_total"
+        }
+      ]
+    },
+    "response": {
+      "sequence": 13,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -5000,
+          "end": 5000,
+          "value": 6,
+          "count": 6
+        }
+      ],
+      "stats": {
+        "series": 2,
+        "blocks": 5,
+        "head": 1,
+        "decoded": 11,
+        "visible": 6,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "migrated windows",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "sequence": 13,
+      "cells": [
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": -2000,
+          "end": -1000,
+          "value": 6.5,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 9.5,
+          "count": 2
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 9,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "east"
+          },
+          "start": 2000,
+          "end": 3000,
+          "value": 4,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 0,
+          "end": 1000,
+          "value": 0.5,
+          "count": 1
+        },
+        {
+          "labels": {
+            "zone": "west"
+          },
+          "start": 1000,
+          "end": 2000,
+          "value": 0.5,
+          "count": 1
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 8,
+        "head": 1,
+        "decoded": 15,
+        "visible": 8,
+        "tombstones": 1
+      }
+    }
+  },
+  {
+    "step": "migrated deletions",
+    "request": null,
+    "response": [
+      {
+        "id": "00000000000000000006",
+        "series": [
+          "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+          "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+        ],
+        "start": -600,
+        "end": 600,
+        "sequence": 6
+      }
+    ]
+  },
+  {
+    "step": "migrated rollup",
+    "request": null,
+    "response": {
+      "name": "pulse",
+      "query": {
+        "start": -5000,
+        "end": 10000,
+        "matchers": null,
+        "limit": 0,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 11,
+      "result": {
+        "sequence": 11,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -2000,
+            "end": -1000,
+            "value": 6.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 9.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 9,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 2000,
+            "end": 3000,
+            "value": 4,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 0.5,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 0.5,
+            "count": 1
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 8,
+          "head": 1,
+          "decoded": 15,
+          "visible": 8,
+          "tombstones": 1
+        }
+      },
+      "stale": true
+    }
+  },
+  {
+    "step": "rematerialize",
+    "request": {
+      "start": -5000,
+      "end": 10000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "zone"
+      ],
+      "function": "avg"
+    },
+    "response": {
+      "name": "pulse",
+      "query": {
+        "start": -5000,
+        "end": 10000,
+        "matchers": null,
+        "limit": 0,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 13,
+      "result": {
+        "sequence": 13,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -2000,
+            "end": -1000,
+            "value": 6.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 9.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 9,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 2000,
+            "end": 3000,
+            "value": 4,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 0.5,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 0.5,
+            "count": 1
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 8,
+          "head": 1,
+          "decoded": 15,
+          "visible": 8,
+          "tombstones": 1
+        }
+      }
+    }
+  },
+  {
+    "step": "fresh rollup",
+    "request": null,
+    "response": {
+      "name": "pulse",
+      "query": {
+        "start": -5000,
+        "end": 10000,
+        "matchers": null,
+        "limit": 0,
+        "step": 1000,
+        "origin": 0,
+        "group_by": [
+          "zone"
+        ],
+        "function": "avg"
+      },
+      "source_sequence": 13,
+      "result": {
+        "sequence": 13,
+        "cells": [
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": -2000,
+            "end": -1000,
+            "value": 6.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 9.5,
+            "count": 2
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 9,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "east"
+            },
+            "start": 2000,
+            "end": 3000,
+            "value": 4,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 0,
+            "end": 1000,
+            "value": 0.5,
+            "count": 1
+          },
+          {
+            "labels": {
+              "zone": "west"
+            },
+            "start": 1000,
+            "end": 2000,
+            "value": 0.5,
+            "count": 1
+          }
+        ],
+        "stats": {
+          "series": 4,
+          "blocks": 8,
+          "head": 1,
+          "decoded": 15,
+          "visible": 8,
+          "tombstones": 1
+        }
+      },
+      "stale": false
+    }
+  },
+  {
+    "step": "namespace before noop",
+    "request": null,
+    "response": {
+      "name": "relay",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 2500,
+      "has_watermark": true,
+      "last_sequence": 13
+    }
+  },
+  {
+    "step": "migrate noop",
+    "request": {},
+    "response": {
+      "sequence": 14,
+      "format": 2,
+      "rewritten": 0,
+      "current": 8,
+      "points": 0
+    }
+  },
+  {
+    "step": "namespace after noop",
+    "request": null,
+    "response": {
+      "name": "relay",
+      "read_only": false,
+      "retention_ms": 10000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 100,
+      "max_write": 10000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 2500,
+      "has_watermark": true,
+      "last_sequence": 13
+    }
+  },
+  {
+    "step": "migration backup source",
+    "request": {
+      "start": -5000,
+      "end": 10000
+    },
+    "response": {
+      "sequence": 14,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 0.5,
+              "sequence": 4
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 8,
+              "sequence": 7
+            },
+            {
+              "time": 1500,
+              "value": 9,
+              "sequence": 9
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 11,
+              "sequence": 4
+            },
+            {
+              "time": 2500,
+              "value": 4,
+              "sequence": 11
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 8,
+        "head": 1,
+        "decoded": 15,
+        "visible": 8,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "migration backup",
+    "sequence": "14",
+    "sha256": "a5c727cf51cd2af94ce2f068916431b022895a6fb1dbfc898b0acb20b2f02caa",
+    "bytes": 65536
+  },
+  {
+    "step": "migrated restored",
+    "response": {
+      "sequence": 14,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 0.5,
+              "sequence": 4
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 10,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 8,
+              "sequence": 7
+            },
+            {
+              "time": 1500,
+              "value": 9,
+              "sequence": 9
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": -1500,
+              "value": 3,
+              "sequence": 2
+            },
+            {
+              "time": 500,
+              "value": 11,
+              "sequence": 4
+            },
+            {
+              "time": 2500,
+              "value": 4,
+              "sequence": 11
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 4,
+        "blocks": 8,
+        "head": 1,
+        "decoded": 15,
+        "visible": 8,
+        "tombstones": 1
       },
       "truncated": false
     }

@@ -136,3 +136,13 @@ type Maintenance struct {
 	Points   int    `json:"points"`
 	Floor    int64  `json:"floor"`
 }
+
+// Migration reports a block format rewrite: blocks converted to the target
+// format, blocks already current, and the points re-encoded.
+type Migration struct {
+	Sequence  uint64 `json:"sequence"`
+	Format    int    `json:"format"`
+	Rewritten int    `json:"rewritten"`
+	Current   int    `json:"current"`
+	Points    int    `json:"points"`
+}

@@ -8,7 +8,7 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance, error) {
+func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace, format int) (model.Maintenance, error) {
 	// Maintenance is bounded by the same scan policy as user queries.
 	raw, err := scan(b, n, model.Query{Start: model.MinTime, End: model.MaxTime + 1}, volume.Current(tx))
 	if err != nil {
@@ -25,7 +25,7 @@ func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance,
 	}
 	receipt := model.Maintenance{Sequence: seq, Floor: n.Floor}
 	for _, s := range raw.Series {
-		if err := putBlock(b, s.Series.ID, seq, s.Points); err != nil {
+		if err := putBlock(b, s.Series.ID, seq, s.Points, format); err != nil {
 			return receipt, err
 		}
 		receipt.Blocks++
@@ -42,7 +42,7 @@ func (e *Engine) Compact(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
-		receipt, err = compact(tx, b, n)
+		receipt, err = compact(tx, b, n, e.WriteFormat)
 		return err
 	})
 	return receipt, err
@@ -62,7 +62,7 @@ func (e *Engine) Retain(name string, now int64) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
-		receipt, err = compact(tx, b, n)
+		receipt, err = compact(tx, b, n, e.WriteFormat)
 		return err
 	})
 	return receipt, err
