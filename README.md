@@ -95,3 +95,28 @@ single-node resource boundaries, not promises of unlimited ingestion.
 
 See PROJECT_SPEC.md for exact arithmetic, late-data, counter and retention
 semantics. There is no background retention job; clients explicitly advance it.
+
+## Operational Runbooks
+
+`docs/runbooks/retention-handoff.md` covers a read-only block tidy followed by
+an approved return to writes and a retention floor advance, with another
+namespace in the same database still ingesting. It defines the evidence to
+keep before the advance, the source state each export must bind to, and when a
+stored rollup may be retained but not endorsed.
+
+Two scripts back the runbook:
+
+```sh
+# Bounded, reproducible drill on disposable databases; writes evidence.json.
+python3 examples/handoff_drill.py --workdir /tmp/ridge-handoff
+python3 examples/handoff_drill.py --verify /tmp/ridge-handoff/evidence.json
+
+# Read-only capture against a running server before advancing retention.
+python3 examples/handoff_capture.py \
+    --base http://127.0.0.1:8399 --space archive --rollup handover \
+    --purge-start -2000 --purge-end 1000 --output var/handoff-capture
+```
+
+The drill also proves one successful advancement and one tidy rejected by the
+namespace scan budget (HTTP 422, transaction rolled back), and that restoring
+an old image over the live path would drop a later confirmed write.
