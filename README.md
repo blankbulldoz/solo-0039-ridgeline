@@ -25,6 +25,11 @@ python3 examples/walkthrough.py --workflow all
 python3 examples/walkthrough.py --output var/observations.json
 ```
 
+`docs/backfill-onboarding.md` is an integration manual for backfill collectors
+(exclusive vs. shared streams, receipt reconciliation, delete/retention
+confirmability); `examples/backfill/replay.py` replays its scenarios as
+asserted HTTP exchanges and records them to `examples/backfill/transcript.json`.
+
 The bounded walkthrough uses temporary volumes and an available ephemeral port.
 Each named workflow runs the entire related stateful scenario so its required
 preconditions and recovery remain reproducible. Formal tests are deferred.

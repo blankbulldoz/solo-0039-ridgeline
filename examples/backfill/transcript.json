@@ -1,0 +1,2147 @@
+[
+  {
+    "step": "setup-main",
+    "kind": "http",
+    "note": "main namespace",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces",
+      "body": {
+        "name": "backfill",
+        "retention_ms": 3600000,
+        "lateness_ms": 3600000,
+        "future_ms": 60000,
+        "max_series": 100,
+        "max_write": 1000,
+        "max_scan": 100000
+      }
+    },
+    "status": 200,
+    "response": {
+      "name": "backfill",
+      "read_only": false,
+      "retention_ms": 3600000,
+      "lateness_ms": 3600000,
+      "future_ms": 60000,
+      "max_series": 100,
+      "max_write": 1000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 1
+    }
+  },
+  {
+    "step": "setup-ret",
+    "kind": "http",
+    "note": "retention rig namespace",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces",
+      "body": {
+        "name": "backfill_ret",
+        "retention_ms": 5000,
+        "lateness_ms": 3600000,
+        "future_ms": 60000,
+        "max_series": 100,
+        "max_write": 1000,
+        "max_scan": 100000
+      }
+    },
+    "status": 200,
+    "response": {
+      "name": "backfill_ret",
+      "read_only": false,
+      "retention_ms": 5000,
+      "lateness_ms": 3600000,
+      "future_ms": 60000,
+      "max_series": 100,
+      "max_write": 1000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 2
+    }
+  },
+  {
+    "step": "A0",
+    "kind": "decision",
+    "note": "exclusive stream node=edge-a; collector attempt log kept locally"
+  },
+  {
+    "step": "A1",
+    "kind": "http-lost",
+    "note": "batch #1 response lost (timeout after commit): outcome unknown, collector keeps no receipt and must not count anything",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            },
+            "time": 1000,
+            "value": 1
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            },
+            "time": 2000,
+            "value": 2
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            },
+            "time": 3000,
+            "value": 3
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "wire_response": {
+      "sequence": 3,
+      "accepted": 3,
+      "new_series": 1,
+      "watermark": 3000
+    },
+    "client_receipt": null
+  },
+  {
+    "step": "A2",
+    "kind": "http",
+    "note": "reconcile read-back over the batch window",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 1000,
+        "end": 3001,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 3,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 1,
+              "sequence": 3
+            },
+            {
+              "time": 2000,
+              "value": 2,
+              "sequence": 3
+            },
+            {
+              "time": 3000,
+              "value": 3,
+              "sequence": 3
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 3,
+        "decoded": 3,
+        "visible": 3,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "A2",
+    "kind": "decision",
+    "note": "exclusive rule: value match on an exclusive series is the collector's own commit; count from read-back, do NOT resend",
+    "confirmed": [
+      1000,
+      2000,
+      3000
+    ],
+    "missing": [],
+    "ledger": {
+      "confirmed_increments": 3,
+      "naive_accepted_counter": 3
+    }
+  },
+  {
+    "step": "A3-pre",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 1000,
+        "end": 4001,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 3,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 1,
+              "sequence": 3
+            },
+            {
+              "time": 2000,
+              "value": 2,
+              "sequence": 3
+            },
+            {
+              "time": 3000,
+              "value": 3,
+              "sequence": 3
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 3,
+        "decoded": 3,
+        "visible": 3,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "A3",
+    "kind": "http",
+    "note": "mixed batch: t=2000 already committed, t=4000 new",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            },
+            "time": 2000,
+            "value": 2
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            },
+            "time": 4000,
+            "value": 4
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 4,
+      "accepted": 2,
+      "new_series": 0,
+      "watermark": 4000
+    }
+  },
+  {
+    "step": "A3-post",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 1000,
+        "end": 4001,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 4,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 1,
+              "sequence": 3
+            },
+            {
+              "time": 2000,
+              "value": 2,
+              "sequence": 4
+            },
+            {
+              "time": 3000,
+              "value": 3,
+              "sequence": 3
+            },
+            {
+              "time": 4000,
+              "value": 4,
+              "sequence": 4
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 4,
+        "decoded": 4,
+        "visible": 4,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "A3",
+    "kind": "decision",
+    "note": "accepted=2 but read-back diff shows 1 new point; the old client's accepted-counter diverges here",
+    "accepted": 2,
+    "real_increments": [
+      4000
+    ],
+    "ledger": {
+      "confirmed_increments": 4,
+      "naive_accepted_counter": 5
+    }
+  },
+  {
+    "step": "A4",
+    "kind": "http",
+    "note": "intra-batch duplicate timestamp: correction inside one request",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            },
+            "time": 5000,
+            "value": 5
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            },
+            "time": 5000,
+            "value": 50
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 5,
+      "accepted": 2,
+      "new_series": 0,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "A4-post",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 5000,
+        "end": 5001,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 5,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 5000,
+              "value": 50,
+              "sequence": 5
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 1,
+        "decoded": 1,
+        "visible": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "A4",
+    "kind": "decision",
+    "note": "intra-batch duplicate: accepted=2, one visible point (last wins); send-side dedup would have made accepted interpretable",
+    "ledger": {
+      "confirmed_increments": 5,
+      "naive_accepted_counter": 7
+    }
+  },
+  {
+    "step": "A5-pre",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 0,
+        "end": 10000,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 5,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 1,
+              "sequence": 3
+            },
+            {
+              "time": 2000,
+              "value": 2,
+              "sequence": 4
+            },
+            {
+              "time": 3000,
+              "value": 3,
+              "sequence": 3
+            },
+            {
+              "time": 4000,
+              "value": 4,
+              "sequence": 4
+            },
+            {
+              "time": 5000,
+              "value": 50,
+              "sequence": 5
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 5,
+        "decoded": 5,
+        "visible": 5,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "A5",
+    "kind": "http",
+    "note": "maintenance: head -> compressed blocks",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/seal",
+      "body": {}
+    },
+    "status": 200,
+    "response": {
+      "sequence": 6,
+      "blocks": 1,
+      "points": 5,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "A5-post",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 0,
+        "end": 10000,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 6,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 1,
+              "sequence": 3
+            },
+            {
+              "time": 2000,
+              "value": 2,
+              "sequence": 4
+            },
+            {
+              "time": 3000,
+              "value": 3,
+              "sequence": 3
+            },
+            {
+              "time": 4000,
+              "value": 4,
+              "sequence": 4
+            },
+            {
+              "time": 5000,
+              "value": 50,
+              "sequence": 5
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 5,
+        "visible": 5,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "A5",
+    "kind": "decision",
+    "note": "attribution survives seal: per-point sequences unchanged",
+    "ledger": {
+      "confirmed_increments": 5,
+      "naive_accepted_counter": 7
+    }
+  },
+  {
+    "step": "B0a",
+    "kind": "http-lost",
+    "note": "hazard demo on node=edge-blind: batch response lost",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-blind",
+              "zone": "east"
+            },
+            "time": 1000,
+            "value": 20
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "wire_response": {
+      "sequence": 7,
+      "accepted": 1,
+      "new_series": 1,
+      "watermark": 5000
+    },
+    "client_receipt": null
+  },
+  {
+    "step": "B0b",
+    "kind": "http",
+    "note": "peer client corrects the same (series,time) meanwhile",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-blind",
+              "zone": "east"
+            },
+            "time": 1000,
+            "value": 99
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 8,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "B0c",
+    "kind": "http",
+    "note": "OLD client behavior: blind whole-batch resend after timeout",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-blind",
+              "zone": "east"
+            },
+            "time": 1000,
+            "value": 20
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 9,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "B0d",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 1000,
+        "end": 1001,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-blind"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 9,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "708f2dc5f7843da00676d340e804ef8dd4f00b21e83ed93ce8f2037e04e4e790",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-blind",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 20,
+              "sequence": 9
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 1,
+        "decoded": 1,
+        "visible": 1,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "B0",
+    "kind": "decision",
+    "note": "the peer's correction 99 is gone, replaced by stale 20; this is why shared streams forbid blind resends",
+    "peer_correction": 99,
+    "visible_after_blind_resend": {
+      "1000": [
+        20,
+        9
+      ]
+    }
+  },
+  {
+    "step": "B1",
+    "kind": "http-lost",
+    "note": "shared stream node=edge-b: batch response lost, collector holds no receipt",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-b",
+              "zone": "east"
+            },
+            "time": 1000,
+            "value": 10
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-b",
+              "zone": "east"
+            },
+            "time": 2000,
+            "value": 20
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "wire_response": {
+      "sequence": 10,
+      "accepted": 2,
+      "new_series": 1,
+      "watermark": 5000
+    },
+    "client_receipt": null
+  },
+  {
+    "step": "B2",
+    "kind": "http",
+    "note": "peer re-reports 10@1000 identically and corrects 2000 to 99",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-b",
+              "zone": "east"
+            },
+            "time": 1000,
+            "value": 10
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-b",
+              "zone": "east"
+            },
+            "time": 2000,
+            "value": 99
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 11,
+      "accepted": 2,
+      "new_series": 0,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "B3",
+    "kind": "http",
+    "note": "collector reconciles instead of resending",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 1000,
+        "end": 2001,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-b"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 11,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0c458b38c3c0b2f814b8faaf6300cd0837f2c2fa03ad8d61ecb704cbd4752fd3",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 10,
+              "sequence": 11
+            },
+            {
+              "time": 2000,
+              "value": 99,
+              "sequence": 11
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 2,
+        "decoded": 2,
+        "visible": 2,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "B3-evidence",
+    "kind": "http",
+    "note": "evidence: no deletion covers the window",
+    "request": {
+      "method": "GET",
+      "path": "/ridge/v1/spaces/backfill/deletions",
+      "body": null
+    },
+    "status": 200,
+    "response": []
+  },
+  {
+    "step": "B3-space",
+    "kind": "http",
+    "note": "evidence: floor and last_sequence",
+    "request": {
+      "method": "GET",
+      "path": "/ridge/v1/spaces/backfill",
+      "body": null
+    },
+    "status": 200,
+    "response": {
+      "name": "backfill",
+      "read_only": false,
+      "retention_ms": 3600000,
+      "lateness_ms": 3600000,
+      "future_ms": 60000,
+      "max_series": 100,
+      "max_write": 1000,
+      "max_scan": 100000,
+      "floor": -4503599627370496,
+      "watermark": 5000,
+      "has_watermark": true,
+      "last_sequence": 11
+    }
+  },
+  {
+    "step": "B4",
+    "kind": "handback",
+    "note": "unattributable/superseded records go back to the upstream owner; the collector must not resolve them by itself",
+    "packet": {
+      "packet_version": 1,
+      "space": "backfill",
+      "collector": "collector-1",
+      "batch_id": "B1",
+      "observed_at_sequence": 11,
+      "records": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "edge-b",
+            "zone": "east"
+          },
+          "time": 1000,
+          "expected_value": 10,
+          "classification": "unattributable",
+          "observed": {
+            "visible": true,
+            "value": 10,
+            "sequence": 11
+          },
+          "collector_receipts": [],
+          "evidence": {
+            "tombstones_covering": [],
+            "floor": -4503599627370496
+          }
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "edge-b",
+            "zone": "east"
+          },
+          "time": 2000,
+          "expected_value": 20,
+          "classification": "superseded",
+          "observed": {
+            "visible": true,
+            "value": 99,
+            "sequence": 11
+          },
+          "collector_receipts": [],
+          "evidence": {
+            "tombstones_covering": [],
+            "floor": -4503599627370496
+          }
+        }
+      ]
+    }
+  },
+  {
+    "step": "B5",
+    "kind": "decision",
+    "note": "upstream verdict (authority over both clients): t=1000 the peer's identical re-report is the same sample, credit the batch upstream, no rewrite; t=2000 authoritative value is 20, instruct a targeted rewrite of exactly that point"
+  },
+  {
+    "step": "B6",
+    "kind": "http",
+    "note": "targeted rewrite of the single point upstream authorized",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-b",
+              "zone": "east"
+            },
+            "time": 2000,
+            "value": 20
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 12,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "B6-post",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 1000,
+        "end": 2001,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-b"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 12,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "0c458b38c3c0b2f814b8faaf6300cd0837f2c2fa03ad8d61ecb704cbd4752fd3",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 10,
+              "sequence": 11
+            },
+            {
+              "time": 2000,
+              "value": 20,
+              "sequence": 12
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 2,
+        "decoded": 2,
+        "visible": 2,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "B6",
+    "kind": "decision",
+    "note": "collector counts only the rewrite confirmed by its own receipt sequence; t=1000 is counted in the upstream ledger, not here",
+    "ledger": {
+      "confirmed_increments": 1,
+      "naive_accepted_counter": 2
+    }
+  },
+  {
+    "step": "C1",
+    "kind": "http",
+    "note": "operator deletes (1500,2500)-ish window on the exclusive series",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/deletions",
+      "body": {
+        "start": 1500,
+        "end": 2500,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "id": "00000000000000000013",
+      "series": [
+        "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29"
+      ],
+      "start": 1500,
+      "end": 2500,
+      "sequence": 13
+    }
+  },
+  {
+    "step": "C1-inv",
+    "kind": "http",
+    "note": "tombstone inventory is queryable evidence",
+    "request": {
+      "method": "GET",
+      "path": "/ridge/v1/spaces/backfill/deletions",
+      "body": null
+    },
+    "status": 200,
+    "response": [
+      {
+        "id": "00000000000000000013",
+        "series": [
+          "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29"
+        ],
+        "start": 1500,
+        "end": 2500,
+        "sequence": 13
+      }
+    ]
+  },
+  {
+    "step": "C1-read",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 1000,
+        "end": 4001,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 13,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 1,
+              "sequence": 3
+            },
+            {
+              "time": 3000,
+              "value": 3,
+              "sequence": 3
+            },
+            {
+              "time": 4000,
+              "value": 4,
+              "sequence": 4
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 5,
+        "visible": 3,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "C1",
+    "kind": "decision",
+    "note": "confirmable now: the tombstone (interval, series, sequence) plus the collector's logged receipts prove 'committed, then hidden'; the hidden samples themselves are not readable",
+    "tombstone": {
+      "id": "00000000000000000013",
+      "series": [
+        "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29"
+      ],
+      "start": 1500,
+      "end": 2500,
+      "sequence": 13
+    }
+  },
+  {
+    "step": "C2",
+    "kind": "http",
+    "note": "exclusive repair batch: exactly the missing point",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            },
+            "time": 2000,
+            "value": 2
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 14,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "C2-read",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 1000,
+        "end": 4001,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 14,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 1,
+              "sequence": 3
+            },
+            {
+              "time": 2000,
+              "value": 2,
+              "sequence": 14
+            },
+            {
+              "time": 3000,
+              "value": 3,
+              "sequence": 3
+            },
+            {
+              "time": 4000,
+              "value": 4,
+              "sequence": 4
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 1,
+        "head": 1,
+        "decoded": 6,
+        "visible": 4,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "C2",
+    "kind": "decision",
+    "note": "deletion does not advance the floor; re-sending the missing point restores it (exclusive stream only)"
+  },
+  {
+    "step": "C3-pre",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 0,
+        "end": 10000,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 14,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 1,
+              "sequence": 3
+            },
+            {
+              "time": 2000,
+              "value": 2,
+              "sequence": 14
+            },
+            {
+              "time": 3000,
+              "value": 3,
+              "sequence": 3
+            },
+            {
+              "time": 4000,
+              "value": 4,
+              "sequence": 4
+            },
+            {
+              "time": 5000,
+              "value": 50,
+              "sequence": 5
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 1,
+        "head": 1,
+        "decoded": 6,
+        "visible": 5,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "C3",
+    "kind": "http",
+    "note": "compaction physically resolves the deletion",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/compact",
+      "body": {}
+    },
+    "status": 200,
+    "response": {
+      "sequence": 15,
+      "blocks": 3,
+      "points": 8,
+      "floor": -4503599627370496
+    }
+  },
+  {
+    "step": "C3-post",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 0,
+        "end": 10000,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-a"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 15,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "d7179e94b7bf4fdfd0d99a165257c2d025086ffc571cb32aabaca588ad409d29",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 1000,
+              "value": 1,
+              "sequence": 3
+            },
+            {
+              "time": 2000,
+              "value": 2,
+              "sequence": 14
+            },
+            {
+              "time": 3000,
+              "value": 3,
+              "sequence": 3
+            },
+            {
+              "time": 4000,
+              "value": 4,
+              "sequence": 4
+            },
+            {
+              "time": 5000,
+              "value": 50,
+              "sequence": 5
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 1,
+        "blocks": 1,
+        "head": 0,
+        "decoded": 5,
+        "visible": 5,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "C3-inv",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "GET",
+      "path": "/ridge/v1/spaces/backfill/deletions",
+      "body": null
+    },
+    "status": 200,
+    "response": []
+  },
+  {
+    "step": "C3",
+    "kind": "decision",
+    "note": "after compact the deletion event itself is gone from the API; only the collector's local log still knows it happened"
+  },
+  {
+    "step": "C4a",
+    "kind": "http",
+    "note": "retention rig: two committed points, receipts logged locally",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill_ret/points",
+      "body": {
+        "now": 7000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-r",
+              "zone": "east"
+            },
+            "time": 1000,
+            "value": 1
+          },
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-r",
+              "zone": "east"
+            },
+            "time": 4500,
+            "value": 4
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 16,
+      "accepted": 2,
+      "new_series": 1,
+      "watermark": 4500
+    }
+  },
+  {
+    "step": "C4b",
+    "kind": "http",
+    "note": "a deletion whose evidence retention will erase",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill_ret/deletions",
+      "body": {
+        "start": 4000,
+        "end": 5000,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-r"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "id": "00000000000000000017",
+      "series": [
+        "507eb12c44a54d9a472c87b6fffa381eb16704556d1779132f964f21e894d9ee"
+      ],
+      "start": 4000,
+      "end": 5000,
+      "sequence": 17
+    }
+  },
+  {
+    "step": "C4b-inv",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "GET",
+      "path": "/ridge/v1/spaces/backfill_ret/deletions",
+      "body": null
+    },
+    "status": 200,
+    "response": [
+      {
+        "id": "00000000000000000017",
+        "series": [
+          "507eb12c44a54d9a472c87b6fffa381eb16704556d1779132f964f21e894d9ee"
+        ],
+        "start": 4000,
+        "end": 5000,
+        "sequence": 17
+      }
+    ]
+  },
+  {
+    "step": "C4c",
+    "kind": "http",
+    "note": "retention_ms=5000 -> floor advances to 2000 and compacts",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill_ret/retention",
+      "body": {
+        "now": 7000
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 18,
+      "blocks": 0,
+      "points": 0,
+      "floor": 2000
+    }
+  },
+  {
+    "step": "C4d",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "GET",
+      "path": "/ridge/v1/spaces/backfill_ret",
+      "body": null
+    },
+    "status": 200,
+    "response": {
+      "name": "backfill_ret",
+      "read_only": false,
+      "retention_ms": 5000,
+      "lateness_ms": 3600000,
+      "future_ms": 60000,
+      "max_series": 100,
+      "max_write": 1000,
+      "max_scan": 100000,
+      "floor": 2000,
+      "watermark": 4500,
+      "has_watermark": true,
+      "last_sequence": 18
+    }
+  },
+  {
+    "step": "C4e",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill_ret/range",
+      "body": {
+        "start": 0,
+        "end": 10000,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-r"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 18,
+      "floor": 2000,
+      "series": [],
+      "stats": {
+        "series": 1,
+        "blocks": 0,
+        "head": 0,
+        "decoded": 0,
+        "visible": 0,
+        "tombstones": 0
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "C4f",
+    "kind": "http",
+    "note": null,
+    "request": {
+      "method": "GET",
+      "path": "/ridge/v1/spaces/backfill_ret/deletions",
+      "body": null
+    },
+    "status": 200,
+    "response": []
+  },
+  {
+    "step": "C4g",
+    "kind": "http",
+    "note": "re-sending a floored point is rejected permanently",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill_ret/points",
+      "body": {
+        "now": 7000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-r",
+              "zone": "east"
+            },
+            "time": 1000,
+            "value": 1
+          }
+        ]
+      }
+    },
+    "status": 409,
+    "response": {
+      "code": "conflict",
+      "detail": "point precedes retention floor"
+    }
+  },
+  {
+    "step": "C4h",
+    "kind": "http",
+    "note": "the namespace still accepts new points at/above the floor",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill_ret/points",
+      "body": {
+        "now": 7500,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-r",
+              "zone": "east"
+            },
+            "time": 8000,
+            "value": 8
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 19,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 8000
+    }
+  },
+  {
+    "step": "C4",
+    "kind": "decision",
+    "note": "after retention the receipt for t=1000 rests solely on the collector's local log; the API can only confirm the terminal fact 't < floor: never readable, never writable again' via the monotonic floor field"
+  },
+  {
+    "step": "D1",
+    "kind": "http",
+    "note": "history 1: collector write, receipt kept",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-c",
+              "hist": "h1",
+              "zone": "west"
+            },
+            "time": 500,
+            "value": 10
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 20,
+      "accepted": 1,
+      "new_series": 1,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "D2a",
+    "kind": "http-lost",
+    "note": "history 2: collector write, receipt lost ...",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-c",
+              "hist": "h2",
+              "zone": "west"
+            },
+            "time": 500,
+            "value": 10
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "wire_response": {
+      "sequence": 21,
+      "accepted": 1,
+      "new_series": 1,
+      "watermark": 5000
+    },
+    "client_receipt": null
+  },
+  {
+    "step": "D2b",
+    "kind": "http",
+    "note": "... then a peer writes the identical value",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-c",
+              "hist": "h2",
+              "zone": "west"
+            },
+            "time": 500,
+            "value": 10
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 22,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "D3a",
+    "kind": "http",
+    "note": "history 3: collector write, receipt kept ...",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-c",
+              "hist": "h3",
+              "zone": "west"
+            },
+            "time": 500,
+            "value": 10
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 23,
+      "accepted": 1,
+      "new_series": 1,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "D3b",
+    "kind": "http",
+    "note": "... an operator delete hides it ...",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/deletions",
+      "body": {
+        "start": 0,
+        "end": 1000,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-c"
+          },
+          {
+            "label": "hist",
+            "op": "=",
+            "value": "h3"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "id": "00000000000000000024",
+      "series": [
+        "6714384877e9068776f26f7256af9ebdb8c65f8c41e8d279089650c529b506a8"
+      ],
+      "start": 0,
+      "end": 1000,
+      "sequence": 24
+    }
+  },
+  {
+    "step": "D3c",
+    "kind": "http",
+    "note": "... and a peer re-admits the identical value",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/points",
+      "body": {
+        "now": 10000,
+        "points": [
+          {
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "edge-c",
+              "hist": "h3",
+              "zone": "west"
+            },
+            "time": 500,
+            "value": 10
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 25,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 5000
+    }
+  },
+  {
+    "step": "D4",
+    "kind": "http",
+    "note": "one read, three identical visible values",
+    "request": {
+      "method": "POST",
+      "path": "/ridge/v1/spaces/backfill/range",
+      "body": {
+        "start": 0,
+        "end": 1000,
+        "matchers": [
+          {
+            "label": "node",
+            "op": "=",
+            "value": "edge-c"
+          }
+        ]
+      }
+    },
+    "status": 200,
+    "response": {
+      "sequence": 25,
+      "floor": -4503599627370496,
+      "series": [
+        {
+          "series": {
+            "id": "1d27d64eec795b6656b13099e99dfd46af366ff6f543436917b7746c68c05cdf",
+            "labels": {
+              "__name__": "pulse_total",
+              "hist": "h1",
+              "node": "edge-c",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 10,
+              "sequence": 20
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "6714384877e9068776f26f7256af9ebdb8c65f8c41e8d279089650c529b506a8",
+            "labels": {
+              "__name__": "pulse_total",
+              "hist": "h3",
+              "node": "edge-c",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 10,
+              "sequence": 25
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "a22e5fa1b0a471e9075bd87577ab422e61421dcfe8169689599123d5c7b30ead",
+            "labels": {
+              "__name__": "pulse_total",
+              "hist": "h2",
+              "node": "edge-c",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 10,
+              "sequence": 22
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "series": 3,
+        "blocks": 0,
+        "head": 3,
+        "decoded": 3,
+        "visible": 3,
+        "tombstones": 1
+      },
+      "truncated": false
+    }
+  },
+  {
+    "step": "D5",
+    "kind": "http",
+    "note": "h3's tombstone is still listed (no compact since)",
+    "request": {
+      "method": "GET",
+      "path": "/ridge/v1/spaces/backfill/deletions",
+      "body": null
+    },
+    "status": 200,
+    "response": [
+      {
+        "id": "00000000000000000024",
+        "series": [
+          "6714384877e9068776f26f7256af9ebdb8c65f8c41e8d279089650c529b506a8"
+        ],
+        "start": 0,
+        "end": 1000,
+        "sequence": 24
+      }
+    ]
+  },
+  {
+    "step": "D6",
+    "kind": "decision",
+    "note": "identical visible values, three different commit histories: the naive rule 'readable == my request succeeded' confirms all three; the manual confirms only h1, hands h2 back upstream (unattributable) and h3 as well (its own commit is hidden by a delete, the visible point is a peer's)",
+    "naive_rule": {
+      "h1": "my write succeeded",
+      "h3": "my write succeeded",
+      "h2": "my write succeeded"
+    },
+    "manual_rule": {
+      "h1": "confirmed_yours",
+      "h2": "unattributable",
+      "h3": "not_yours_hidden"
+    },
+    "visible_sequences": {
+      "h1": 20,
+      "h3": 25,
+      "h2": 22
+    }
+  },
+  {
+    "step": "summary",
+    "kind": "summary",
+    "exclusive_stream": {
+      "confirmed_increments": 5,
+      "naive_accepted_counter": 7
+    },
+    "shared_stream": {
+      "confirmed_increments": 1,
+      "naive_accepted_counter": 2
+    },
+    "contrast_classification": {
+      "h1": "confirmed_yours",
+      "h2": "unattributable",
+      "h3": "not_yours_hidden"
+    },
+    "claims": [
+      "accepted counts request points, not new increments",
+      "lost receipts reconcile by read-back, never by blind resend",
+      "shared-stream conflicts hand back upstream with evidence",
+      "tombstones are evidence only until the next compact/retention",
+      "the retention floor is the only permanent terminal fact",
+      "identical visible values do not imply identical commit history"
+    ]
+  }
+]
