@@ -1,0 +1,165 @@
+{
+  "label_schema": {
+    "required": [
+      "__name__",
+      "device",
+      "site"
+    ],
+    "identity": "series = (namespace, canonical label set); the fix source must reuse the slow source's exact label set or it would create a new series instead of correcting",
+    "shard_rule": "fast shard = device_index // 5"
+  },
+  "metrics": [
+    {
+      "name": "cpu_util",
+      "cadence_ms": 1000,
+      "source": "fast",
+      "namespaces": [
+        "edge_fast_0",
+        "edge_fast_1",
+        "edge_fast_2",
+        "edge_fast_3"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 5
+    },
+    {
+      "name": "mem_util",
+      "cadence_ms": 1000,
+      "source": "fast",
+      "namespaces": [
+        "edge_fast_0",
+        "edge_fast_1",
+        "edge_fast_2",
+        "edge_fast_3"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 5
+    },
+    {
+      "name": "net_rx_bps",
+      "cadence_ms": 1000,
+      "source": "fast",
+      "namespaces": [
+        "edge_fast_0",
+        "edge_fast_1",
+        "edge_fast_2",
+        "edge_fast_3"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 5
+    },
+    {
+      "name": "net_tx_bps",
+      "cadence_ms": 1000,
+      "source": "fast",
+      "namespaces": [
+        "edge_fast_0",
+        "edge_fast_1",
+        "edge_fast_2",
+        "edge_fast_3"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 5
+    },
+    {
+      "name": "temp_c",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    },
+    {
+      "name": "humidity_pct",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    },
+    {
+      "name": "power_w",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    },
+    {
+      "name": "fan_rpm",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    },
+    {
+      "name": "voltage_v",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    },
+    {
+      "name": "current_a",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    },
+    {
+      "name": "disk_iops",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    },
+    {
+      "name": "disk_used_pct",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    },
+    {
+      "name": "fan_duty_pct",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    },
+    {
+      "name": "psu_w",
+      "cadence_ms": 60000,
+      "source": "slow+fix",
+      "namespaces": [
+        "edge_slow"
+      ],
+      "series_total": 20,
+      "series_per_namespace": 20
+    }
+  ]
+}

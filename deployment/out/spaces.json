@@ -1,0 +1,47 @@
+[
+  {
+    "name": "edge_fast_0",
+    "retention_ms": 86400000,
+    "lateness_ms": 2500,
+    "future_ms": 500,
+    "max_series": 22,
+    "max_write": 100,
+    "max_scan": 2000000
+  },
+  {
+    "name": "edge_fast_1",
+    "retention_ms": 86400000,
+    "lateness_ms": 2500,
+    "future_ms": 500,
+    "max_series": 22,
+    "max_write": 100,
+    "max_scan": 2000000
+  },
+  {
+    "name": "edge_fast_2",
+    "retention_ms": 86400000,
+    "lateness_ms": 2500,
+    "future_ms": 500,
+    "max_series": 22,
+    "max_write": 100,
+    "max_scan": 2000000
+  },
+  {
+    "name": "edge_fast_3",
+    "retention_ms": 86400000,
+    "lateness_ms": 2500,
+    "future_ms": 500,
+    "max_series": 22,
+    "max_write": 100,
+    "max_scan": 2000000
+  },
+  {
+    "name": "edge_slow",
+    "retention_ms": 86400000,
+    "lateness_ms": 3900500,
+    "future_ms": 500,
+    "max_series": 300,
+    "max_write": 2500,
+    "max_scan": 1000000
+  }
+]

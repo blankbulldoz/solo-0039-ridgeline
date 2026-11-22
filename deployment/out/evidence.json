@@ -1,0 +1,249 @@
+{
+  "seed": 42,
+  "devices": 20,
+  "minutes": 95,
+  "checks": [
+    {
+      "check": "namespaces created",
+      "ok": true,
+      "detail": {
+        "edge_slow": {
+          "lateness_ms": 3900500,
+          "future_ms": 500,
+          "max_write": 2500,
+          "max_scan": 1000000,
+          "has_watermark": false
+        }
+      }
+    },
+    {
+      "check": "duplicate namespace rejected",
+      "ok": true,
+      "detail": {
+        "code": "conflict",
+        "detail": "namespace already exists"
+      }
+    },
+    {
+      "check": "all batches admitted",
+      "ok": true,
+      "detail": {
+        "batches": 22945,
+        "points": 487000,
+        "sealed_at_minute": 65,
+        "wall_seconds": 113.4
+      }
+    },
+    {
+      "check": "shared watermark monotonic per namespace",
+      "ok": true,
+      "detail": {
+        "edge_fast_0": 5699500,
+        "edge_fast_1": 5699000,
+        "edge_fast_2": 5699000,
+        "edge_fast_3": 5699000,
+        "edge_slow": 5640000
+      }
+    },
+    {
+      "check": "same device, two namespaces, disjoint series",
+      "ok": true,
+      "detail": {
+        "edge_fast_0": 4,
+        "edge_slow": 10,
+        "note": "device label is the only join key; two HTTP calls, client-side join, no cross-namespace operator"
+      }
+    },
+    {
+      "check": "correction duplicates inflate decoded points",
+      "ok": true,
+      "detail": {
+        "pre_compact": {
+          "series": 10,
+          "blocks": 10,
+          "head": 600,
+          "decoded": 1250,
+          "visible": 600,
+          "tombstones": 0
+        },
+        "explain": {
+          "candidates": 10,
+          "blocks": 10,
+          "source_point_hint": 650,
+          "head_records": 17000
+        }
+      }
+    },
+    {
+      "check": "compact resolves duplicates, one block per series",
+      "ok": true,
+      "detail": {
+        "compact": {
+          "sequence": 22956,
+          "blocks": 200,
+          "points": 19000,
+          "floor": -4503599627370496
+        },
+        "post_compact": {
+          "series": 10,
+          "blocks": 10,
+          "head": 0,
+          "decoded": 950,
+          "visible": 600,
+          "tombstones": 0
+        },
+        "explain": {
+          "blocks": 10,
+          "head_records": 0
+        }
+      }
+    },
+    {
+      "check": "corrected value visible (sequence wins)",
+      "ok": true,
+      "detail": {
+        "time_offset_min": 30,
+        "value": 117.564,
+        "expected": 117.564
+      }
+    },
+    {
+      "check": "fast: 2501ms late rejected",
+      "ok": true,
+      "detail": {
+        "code": "conflict",
+        "detail": "point exceeds out-of-order time policy"
+      }
+    },
+    {
+      "check": "fast: exactly 2500ms late admitted",
+      "ok": true,
+      "detail": {
+        "watermark": 5699500
+      }
+    },
+    {
+      "check": "fast: correction-age point (30min) rejected",
+      "ok": true,
+      "detail": {
+        "note": "corrections cannot live in the fast tier",
+        "code": "conflict",
+        "detail": "point exceeds out-of-order time policy"
+      }
+    },
+    {
+      "check": "future: 600ms ahead of now rejected",
+      "ok": true,
+      "detail": {
+        "code": "conflict",
+        "detail": "point exceeds future skew policy"
+      }
+    },
+    {
+      "check": "future: 400ms fast client clock admitted",
+      "ok": true,
+      "detail": {
+        "watermark": 5699900
+      }
+    },
+    {
+      "check": "slow: 30min-old correction admitted",
+      "ok": true,
+      "detail": {
+        "watermark": 5640000
+      }
+    },
+    {
+      "check": "slow: beyond 3_900_500ms budget rejected (lateness is finite)",
+      "ok": true,
+      "detail": {
+        "code": "conflict",
+        "detail": "point exceeds out-of-order time policy"
+      }
+    },
+    {
+      "check": "latest correction overrides the daily fix",
+      "ok": true,
+      "detail": {
+        "points": [
+          {
+            "time": 1700003840000,
+            "value": -999,
+            "sequence": 22959
+          }
+        ]
+      }
+    },
+    {
+      "check": "maintenance locked when live points exceed max_scan",
+      "ok": true,
+      "detail": {
+        "retention": {
+          "code": "capacity",
+          "detail": "query decoded point budget exceeded"
+        },
+        "compact": {
+          "code": "capacity",
+          "detail": "query decoded point budget exceeded"
+        },
+        "empty_namespace_had_watermark": false,
+        "note": "1200 live points > max_scan 1000; writes still work, maintenance does not -> sizing is a hard invariant"
+      }
+    },
+    {
+      "check": "retention advances within budget",
+      "ok": true,
+      "detail": {
+        "edge_fast_0": {
+          "sequence": 22974,
+          "blocks": 21,
+          "points": 114002,
+          "floor": 1699919360000
+        },
+        "edge_slow": {
+          "sequence": 22975,
+          "blocks": 200,
+          "points": 19000,
+          "floor": 1699919360000
+        }
+      }
+    }
+  ],
+  "replay": {
+    "batches": 22945,
+    "points": 487000,
+    "sealed_at_minute": 65,
+    "wall_seconds": 113.4
+  },
+  "final": {
+    "edge_fast_0": {
+      "name": "edge_fast_0",
+      "read_only": false,
+      "retention_ms": 86400000,
+      "lateness_ms": 2500,
+      "future_ms": 500,
+      "max_series": 22,
+      "max_write": 100,
+      "max_scan": 2000000,
+      "floor": 1699919360000,
+      "watermark": 1700005699900,
+      "has_watermark": true,
+      "last_sequence": 22974
+    },
+    "edge_slow": {
+      "name": "edge_slow",
+      "read_only": false,
+      "retention_ms": 86400000,
+      "lateness_ms": 3900500,
+      "future_ms": 500,
+      "max_series": 300,
+      "max_write": 2500,
+      "max_scan": 1000000,
+      "floor": 1699919360000,
+      "watermark": 1700005640000,
+      "has_watermark": true,
+      "last_sequence": 22975
+    }
+  },
+  "ok": true
+}
