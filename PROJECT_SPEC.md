@@ -87,6 +87,8 @@ runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to
-exercise real API operations, process restart and failure responses. Formal
-automated tests are deferred. The walkthrough is a bounded production demo
-using temporary database files and synthetic infrastructure measurements.
+exercise real API operations, process restart and failure responses. Window
+aggregation has an independent numerical test suite (see
+`docs/window-testing.md`); other formal automated tests are deferred. The
+walkthrough is a bounded production demo using temporary database files and
+synthetic infrastructure measurements.

@@ -1,0 +1,260 @@
+{
+  "comment": "Counterexample catalog for window aggregation. Every expectation is hand-computed and expressed as a rational literal; no value here was produced by running window.Aggregate or window.Bucket. Each plausible_wrong entry encodes a concrete buggy rule whose output looks reasonable; the test fails if the implementation matches any of them. See docs/window-testing.md for the derivation of every number.",
+  "cases": [
+    {
+      "name": "negative-delta-floor-attribution",
+      "comment": "t=-4 with origin=7 step=10: delta=-11, floor division gives window [-13,-3). Truncated division toward zero puts the point in [-3,7), a window that starts after the point.",
+      "query": {"start": -100, "end": 100, "step": 10, "origin": 7, "function": "sum", "group_by": ["zone"]},
+      "series": [
+        {"id": "s1", "labels": {"__name__": "m", "zone": "e"},
+         "points": [{"time": -4, "value": 5}, {"time": 3, "value": 7}]}
+      ],
+      "expect": [
+        {"labels": {"zone": "e"}, "start": -13, "end": -3, "count": 1, "value": "5"},
+        {"labels": {"zone": "e"}, "start": -3, "end": 7, "count": 1, "value": "7"}
+      ],
+      "plausible_wrong": [
+        {"rule": "truncated division toward zero on (t-origin)/step",
+         "cells": [
+           {"labels": {"zone": "e"}, "start": -3, "end": 7, "count": 2, "value": "12"}
+         ]}
+      ]
+    },
+    {
+      "name": "upper-edge-belongs-to-next-window",
+      "comment": "Windows are half-open: t=10 and t=20 are the first points of [10,20) and [20,30), never members of the window they close.",
+      "query": {"start": -10, "end": 40, "step": 10, "origin": 0, "function": "sum"},
+      "series": [
+        {"id": "s1", "labels": {"__name__": "m"},
+         "points": [{"time": 0, "value": 1}, {"time": 10, "value": 2}, {"time": 20, "value": 4}]}
+      ],
+      "expect": [
+        {"labels": {}, "start": 0, "end": 10, "count": 1, "value": "1"},
+        {"labels": {}, "start": 10, "end": 20, "count": 1, "value": "2"},
+        {"labels": {}, "start": 20, "end": 30, "count": 1, "value": "4"}
+      ],
+      "plausible_wrong": [
+        {"rule": "boundary point assigned to the window it closes (closed upper edge)",
+         "cells": [
+           {"labels": {}, "start": 0, "end": 10, "count": 2, "value": "3"},
+           {"labels": {}, "start": 10, "end": 20, "count": 2, "value": "6"}
+         ]}
+      ]
+    },
+    {
+      "name": "origin-shifts-the-lattice",
+      "comment": "origin=-3 step=7: windows start at ...,-10,-3,4,11,... Ignoring the origin and aligning to the Unix epoch produces tidy-looking but wrong windows.",
+      "query": {"start": -20, "end": 20, "step": 7, "origin": -3, "function": "sum"},
+      "series": [
+        {"id": "s1", "labels": {"__name__": "m"},
+         "points": [{"time": -4, "value": 1}, {"time": -3, "value": 2}, {"time": 3, "value": 4}, {"time": 4, "value": 8}]}
+      ],
+      "expect": [
+        {"labels": {}, "start": -10, "end": -3, "count": 1, "value": "1"},
+        {"labels": {}, "start": -3, "end": 4, "count": 2, "value": "6"},
+        {"labels": {}, "start": 4, "end": 11, "count": 1, "value": "8"}
+      ],
+      "plausible_wrong": [
+        {"rule": "origin ignored, windows aligned to the Unix epoch",
+         "cells": [
+           {"labels": {}, "start": -7, "end": 0, "count": 2, "value": "3"},
+           {"labels": {}, "start": 0, "end": 7, "count": 2, "value": "12"}
+         ]}
+      ]
+    },
+    {
+      "name": "average-weights-observations-not-series",
+      "comment": "Series id-a contributes 3 observations, id-b contributes 1. The average weights observations: (1+2+3+10)/4 = 4. Averaging per-series averages gives 6, which silently overweights the sparse series.",
+      "query": {"start": -100, "end": 100, "step": 100, "origin": 0, "function": "avg", "group_by": ["zone"]},
+      "series": [
+        {"id": "id-a", "labels": {"__name__": "m", "zone": "e"},
+         "points": [{"time": 0, "value": 1}, {"time": 1, "value": 2}, {"time": 2, "value": 3}]},
+        {"id": "id-b", "labels": {"__name__": "m", "zone": "e"},
+         "points": [{"time": 1, "value": 10}]}
+      ],
+      "expect": [
+        {"labels": {"zone": "e"}, "start": 0, "end": 100, "count": 4, "value": "4"}
+      ],
+      "plausible_wrong": [
+        {"rule": "mean of per-series means (series-weighted average)",
+         "cells": [
+           {"labels": {"zone": "e"}, "start": 0, "end": 100, "count": 4, "value": "6"}
+         ]}
+      ]
+    },
+    {
+      "name": "first-tie-broken-by-smaller-series-id",
+      "comment": "Both series have their oldest point at t=50. The tie is broken by series ID: id-a < id-b, so first is id-a's value 5. The series list deliberately puts id-b first to tempt arrival-order tie-breaking.",
+      "query": {"start": 0, "end": 100, "step": 100, "origin": 0, "function": "first", "group_by": ["zone"]},
+      "series": [
+        {"id": "id-b", "labels": {"__name__": "m", "zone": "e"},
+         "points": [{"time": 50, "value": 9}, {"time": 80, "value": 3}]},
+        {"id": "id-a", "labels": {"__name__": "m", "zone": "e"},
+         "points": [{"time": 50, "value": 5}, {"time": 80, "value": 7}]}
+      ],
+      "expect": [
+        {"labels": {"zone": "e"}, "start": 0, "end": 100, "count": 4, "value": "5"}
+      ],
+      "plausible_wrong": [
+        {"rule": "first tie broken by arrival order (id-b arrived first)",
+         "cells": [
+           {"labels": {"zone": "e"}, "start": 0, "end": 100, "count": 4, "value": "9"}
+         ]}
+      ]
+    },
+    {
+      "name": "last-tie-broken-by-larger-series-id",
+      "comment": "Both series have their newest point at t=80. The tie is broken by series ID: id-b > id-a, so last is id-b's value 3.",
+      "query": {"start": 0, "end": 100, "step": 100, "origin": 0, "function": "last", "group_by": ["zone"]},
+      "series": [
+        {"id": "id-b", "labels": {"__name__": "m", "zone": "e"},
+         "points": [{"time": 50, "value": 9}, {"time": 80, "value": 3}]},
+        {"id": "id-a", "labels": {"__name__": "m", "zone": "e"},
+         "points": [{"time": 50, "value": 5}, {"time": 80, "value": 7}]}
+      ],
+      "expect": [
+        {"labels": {"zone": "e"}, "start": 0, "end": 100, "count": 4, "value": "3"}
+      ],
+      "plausible_wrong": [
+        {"rule": "last tie broken by arrival order (id-a arrived last)",
+         "cells": [
+           {"labels": {"zone": "e"}, "start": 0, "end": 100, "count": 4, "value": "7"}
+         ]}
+      ]
+    },
+    {
+      "name": "rate-reset-counts-as-zero-plus-restart",
+      "comment": "Counter 0,10,3,8: the drop 10->3 is a reset to zero, so increase is 10+3+5=18 over 3s = 6/s. Taking last-first loses the reset; dropping the negative delta loses the restart value 3.",
+      "query": {"start": 0, "end": 10000, "step": 10000, "origin": 0, "function": "rate", "group_by": ["zone"]},
+      "series": [
+        {"id": "c1", "labels": {"__name__": "requests_total", "zone": "e"},
+         "points": [{"time": 0, "value": 0}, {"time": 1000, "value": 10}, {"time": 2000, "value": 3}, {"time": 3000, "value": 8}]}
+      ],
+      "expect": [
+        {"labels": {"zone": "e"}, "start": 0, "end": 10000, "count": 4, "value": "6"}
+      ],
+      "plausible_wrong": [
+        {"rule": "naive last-minus-first ignores the reset",
+         "cells": [
+           {"labels": {"zone": "e"}, "start": 0, "end": 10000, "count": 4, "value": "8/3"}
+         ]},
+        {"rule": "negative delta clamped to zero without crediting the restart value",
+         "cells": [
+           {"labels": {"zone": "e"}, "start": 0, "end": 10000, "count": 4, "value": "5"}
+         ]}
+      ]
+    },
+    {
+      "name": "rate-denominator-is-observed-elapsed",
+      "comment": "Two points 1s apart inside a 10s window: the denominator is the observed elapsed time (1s), not the window width (10s).",
+      "query": {"start": 0, "end": 10000, "step": 10000, "origin": 0, "function": "rate"},
+      "series": [
+        {"id": "c1", "labels": {"__name__": "requests_total"},
+         "points": [{"time": 0, "value": 0}, {"time": 1000, "value": 6}]}
+      ],
+      "expect": [
+        {"labels": {}, "start": 0, "end": 10000, "count": 2, "value": "6"}
+      ],
+      "plausible_wrong": [
+        {"rule": "window width used as the rate denominator",
+         "cells": [
+           {"labels": {}, "start": 0, "end": 10000, "count": 2, "value": "3/5"}
+         ]}
+      ]
+    },
+    {
+      "name": "rate-single-point-windows-emit-nothing",
+      "comment": "Each window observes the counter only once: no elapsed time exists, so no rate cell may appear. Only populated, at-least-two-observation windows produce rates.",
+      "query": {"start": 0, "end": 30, "step": 10, "origin": 0, "function": "rate"},
+      "series": [
+        {"id": "c1", "labels": {"__name__": "requests_total"},
+         "points": [{"time": 0, "value": 5}, {"time": 15, "value": 9}]}
+      ],
+      "expect": [],
+      "plausible_wrong": [
+        {"rule": "single-observation windows emit value/window-width rates",
+         "cells": [
+           {"labels": {}, "start": 0, "end": 10, "count": 1, "value": "1/2"},
+           {"labels": {}, "start": 10, "end": 20, "count": 1, "value": "9/10"}
+         ]}
+      ]
+    },
+    {
+      "name": "decimal-tenths-sum-needs-rational-tolerance",
+      "comment": "0.1+0.1+0.1 is 0.30000000000000004 in binary64, one ulp above 3/10. The expectation 3/10 is exact as a rational and matched with tolerance; demanding exact equality with decimal 0.3 is a test-authoring bug, not an implementation bug.",
+      "query": {"start": 0, "end": 10, "step": 10, "origin": 0, "function": "sum"},
+      "series": [
+        {"id": "d1", "labels": {"__name__": "m"},
+         "points": [{"time": 0, "value": 0.1}, {"time": 1, "value": 0.1}, {"time": 2, "value": 0.1}]}
+      ],
+      "expect": [
+        {"labels": {}, "start": 0, "end": 10, "count": 3, "value": "3/10"}
+      ],
+      "plausible_wrong": [
+        {"rule": "golden value compared with exact decimal equality (test bug)",
+         "compare": "exact",
+         "cells": [
+           {"labels": {}, "start": 0, "end": 10, "count": 3, "value": "0.3"}
+         ]}
+      ]
+    },
+    {
+      "name": "group-key-omits-absent-labels",
+      "comment": "Series id-b has no zone label. Its group key is the empty set {}, not {zone:\"\"}: label absence is preserved, matching the series-identity contract.",
+      "query": {"start": 0, "end": 100, "step": 100, "origin": 0, "function": "count", "group_by": ["zone"]},
+      "series": [
+        {"id": "id-a", "labels": {"__name__": "m", "zone": "e"},
+         "points": [{"time": 0, "value": 1}]},
+        {"id": "id-b", "labels": {"__name__": "m"},
+         "points": [{"time": 5, "value": 2}]}
+      ],
+      "expect": [
+        {"labels": {"zone": "e"}, "start": 0, "end": 100, "count": 1, "value": "1"},
+        {"labels": {}, "start": 0, "end": 100, "count": 1, "value": "1"}
+      ],
+      "plausible_wrong": [
+        {"rule": "absent label materialized as the empty string in the group key",
+         "cells": [
+           {"labels": {"zone": "e"}, "start": 0, "end": 100, "count": 1, "value": "1"},
+           {"labels": {"zone": ""}, "start": 0, "end": 100, "count": 1, "value": "1"}
+         ]}
+      ]
+    },
+    {
+      "name": "min-seeded-from-first-value-not-zero",
+      "comment": "All values are negative. The minimum is -5; an accumulator seeded at 0 instead of the first observation returns a phantom 0 that was never measured.",
+      "query": {"start": 0, "end": 100, "step": 100, "origin": 0, "function": "min"},
+      "series": [
+        {"id": "s1", "labels": {"__name__": "m"},
+         "points": [{"time": 0, "value": -5}, {"time": 1, "value": -2}]}
+      ],
+      "expect": [
+        {"labels": {}, "start": 0, "end": 100, "count": 2, "value": "-5"}
+      ],
+      "plausible_wrong": [
+        {"rule": "min accumulator initialized to zero",
+         "cells": [
+           {"labels": {}, "start": 0, "end": 100, "count": 2, "value": "0"}
+         ]}
+      ]
+    },
+    {
+      "name": "max-seeded-from-first-value-not-zero",
+      "comment": "All values are negative. The maximum is -2; an accumulator seeded at 0 returns a phantom 0.",
+      "query": {"start": 0, "end": 100, "step": 100, "origin": 0, "function": "max"},
+      "series": [
+        {"id": "s1", "labels": {"__name__": "m"},
+         "points": [{"time": 0, "value": -5}, {"time": 1, "value": -2}]}
+      ],
+      "expect": [
+        {"labels": {}, "start": 0, "end": 100, "count": 2, "value": "-2"}
+      ],
+      "plausible_wrong": [
+        {"rule": "max accumulator initialized to zero",
+         "cells": [
+           {"labels": {}, "start": 0, "end": 100, "count": 2, "value": "0"}
+         ]}
+      ]
+    }
+  ]
+}

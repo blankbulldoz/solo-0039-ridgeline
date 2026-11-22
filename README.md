@@ -27,7 +27,10 @@ python3 examples/walkthrough.py --output var/observations.json
 
 The bounded walkthrough uses temporary volumes and an available ephemeral port.
 Each named workflow runs the entire related stateful scenario so its required
-preconditions and recovery remain reproducible. Formal tests are deferred.
+preconditions and recovery remain reproducible. Window aggregation semantics
+are pinned by an independent numerical test suite (`internal/window`,
+`internal/engine`); its tolerance rationale and counterexample catalog are in
+`docs/window-testing.md`. Other formal tests are deferred.
 `examples/input.json` contains the original measurements; a recorded production
 session is in `examples/session.json`. These are synthetic, non-sensitive inputs.
 
