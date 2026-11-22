@@ -55,8 +55,8 @@ All methods below return 200 on success.
 | GET | `/spaces/{space}/deletions` | deletion sequence inventory |
 | POST | `/spaces/{space}/retention` | `{"now":11000}` |
 | POST | `/spaces/{space}/compact` | empty object |
-| PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
-| GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
+| PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition; refreshed rollup view |
+| GET | `/spaces/{space}/rollups/{name}` | last success, latest attempt, stale flag |
 | GET | `/image` | consistent binary image, SHA-256 and sequence headers |
 
 Sample query:
@@ -72,6 +72,16 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+A rollup refresh scans a consistent snapshot outside the write path, so reads
+and ingestion continue during expensive recalculations; a short transaction
+then publishes the outcome. The record keeps the last successful
+materialization — its definition and result together — apart from the latest
+attempt. A failed refresh responds with an error but leaves the stored success
+intact and queryable, and the attempt records its definition, source sequence
+and failure reason. An attempt that finishes after newer writes were admitted
+is marked `overtaken`; `stale` tells whether the stored success trails the
+namespace. A new definition never appears paired with an older result.
 
 ## Storage And Recovery
 

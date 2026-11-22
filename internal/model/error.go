@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Error struct {
 	Code   string `json:"code"`
@@ -25,4 +28,14 @@ func Conflict(s string) error {
 
 func Capacity(s string) error {
 	return &Error{Code: "capacity", Detail: s}
+}
+
+// Describe normalizes any failure into the stable code/detail form so a
+// failed refresh attempt can be stored and inspected later.
+func Describe(err error) *Error {
+	var domain *Error
+	if errors.As(err, &domain) {
+		return domain
+	}
+	return &Error{Code: "internal", Detail: err.Error()}
 }

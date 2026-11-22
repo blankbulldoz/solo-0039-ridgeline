@@ -638,8 +638,8 @@
         "start": 500,
         "end": 501,
         "count": 1,
-        "bytes": 64,
-        "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+        "bytes": 63,
+        "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
         "format": 1
       },
       {
@@ -648,8 +648,8 @@
         "start": -500,
         "end": 501,
         "count": 2,
-        "bytes": 105,
-        "checksum": "4c2f12747df3833972d963a29b9b86b6225d2de929c6252543feb51e3c6ceb20",
+        "bytes": 73,
+        "checksum": "67554c8210e89949fe93abb4183361e90e4d0ef3188ded86e5c95226c6e6dbb8",
         "format": 1
       },
       {
@@ -658,8 +658,8 @@
         "start": -1500,
         "end": 1501,
         "count": 4,
-        "bytes": 80,
-        "checksum": "f62effbef22081bacda4663b08c17e44f621f0135a4c07c22feb6b601c4c1d4a",
+        "bytes": 83,
+        "checksum": "a5aaa1fe183543af75d3cdc1e2003d1bc07505a8d69db05054df535e2da42728",
         "format": 1
       },
       {
@@ -668,8 +668,8 @@
         "start": -1500,
         "end": 501,
         "count": 2,
-        "bytes": 100,
-        "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+        "bytes": 71,
+        "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
         "format": 1
       }
     ]
@@ -751,68 +751,90 @@
     },
     "response": {
       "name": "pulse",
-      "query": {
-        "start": -5000,
-        "end": 10000,
-        "matchers": null,
-        "limit": 0,
-        "step": 1000,
-        "origin": 0,
-        "group_by": [
-          "zone"
-        ],
-        "function": "avg"
-      },
-      "source_sequence": 5,
-      "result": {
-        "sequence": 5,
-        "cells": [
-          {
-            "labels": {
-              "zone": "east"
+      "current": {
+        "name": "pulse",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "result": {
+          "sequence": 5,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
             },
-            "start": -2000,
-            "end": -1000,
-            "value": 6.5,
-            "count": 2
-          },
-          {
-            "labels": {
-              "zone": "east"
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 7.5,
+              "count": 2
             },
-            "start": 0,
-            "end": 1000,
-            "value": 7.5,
-            "count": 2
-          },
-          {
-            "labels": {
-              "zone": "east"
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
             },
-            "start": 1000,
-            "end": 2000,
-            "value": 6,
-            "count": 1
-          },
-          {
-            "labels": {
-              "zone": "west"
-            },
-            "start": 0,
-            "end": 1000,
-            "value": 0.5,
-            "count": 1
+            {
+              "labels": {
+                "zone": "west"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 0.5,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 4,
+            "blocks": 4,
+            "head": 1,
+            "decoded": 10,
+            "visible": 6,
+            "tombstones": 1
           }
-        ],
-        "stats": {
-          "series": 4,
-          "blocks": 4,
-          "head": 1,
-          "decoded": 10,
-          "visible": 6,
-          "tombstones": 1
         }
-      }
+      },
+      "attempt": {
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "sequence": 6,
+        "status": "ok",
+        "overtaken": false
+      },
+      "stale": false
     }
   },
   {
@@ -820,67 +842,88 @@
     "request": null,
     "response": {
       "name": "pulse",
-      "query": {
-        "start": -5000,
-        "end": 10000,
-        "matchers": null,
-        "limit": 0,
-        "step": 1000,
-        "origin": 0,
-        "group_by": [
-          "zone"
-        ],
-        "function": "avg"
-      },
-      "source_sequence": 5,
-      "result": {
-        "sequence": 5,
-        "cells": [
-          {
-            "labels": {
-              "zone": "east"
+      "current": {
+        "name": "pulse",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "result": {
+          "sequence": 5,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
             },
-            "start": -2000,
-            "end": -1000,
-            "value": 6.5,
-            "count": 2
-          },
-          {
-            "labels": {
-              "zone": "east"
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 7.5,
+              "count": 2
             },
-            "start": 0,
-            "end": 1000,
-            "value": 7.5,
-            "count": 2
-          },
-          {
-            "labels": {
-              "zone": "east"
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
             },
-            "start": 1000,
-            "end": 2000,
-            "value": 6,
-            "count": 1
-          },
-          {
-            "labels": {
-              "zone": "west"
-            },
-            "start": 0,
-            "end": 1000,
-            "value": 0.5,
-            "count": 1
+            {
+              "labels": {
+                "zone": "west"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 0.5,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 4,
+            "blocks": 4,
+            "head": 1,
+            "decoded": 10,
+            "visible": 6,
+            "tombstones": 1
           }
-        ],
-        "stats": {
-          "series": 4,
-          "blocks": 4,
-          "head": 1,
-          "decoded": 10,
-          "visible": 6,
-          "tombstones": 1
         }
+      },
+      "attempt": {
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "sequence": 6,
+        "status": "ok",
+        "overtaken": false
       },
       "stale": false
     }
@@ -913,67 +956,88 @@
     "request": null,
     "response": {
       "name": "pulse",
-      "query": {
-        "start": -5000,
-        "end": 10000,
-        "matchers": null,
-        "limit": 0,
-        "step": 1000,
-        "origin": 0,
-        "group_by": [
-          "zone"
-        ],
-        "function": "avg"
-      },
-      "source_sequence": 5,
-      "result": {
-        "sequence": 5,
-        "cells": [
-          {
-            "labels": {
-              "zone": "east"
+      "current": {
+        "name": "pulse",
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "result": {
+          "sequence": 5,
+          "cells": [
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": -2000,
+              "end": -1000,
+              "value": 6.5,
+              "count": 2
             },
-            "start": -2000,
-            "end": -1000,
-            "value": 6.5,
-            "count": 2
-          },
-          {
-            "labels": {
-              "zone": "east"
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 7.5,
+              "count": 2
             },
-            "start": 0,
-            "end": 1000,
-            "value": 7.5,
-            "count": 2
-          },
-          {
-            "labels": {
-              "zone": "east"
+            {
+              "labels": {
+                "zone": "east"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 6,
+              "count": 1
             },
-            "start": 1000,
-            "end": 2000,
-            "value": 6,
-            "count": 1
-          },
-          {
-            "labels": {
-              "zone": "west"
-            },
-            "start": 0,
-            "end": 1000,
-            "value": 0.5,
-            "count": 1
+            {
+              "labels": {
+                "zone": "west"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 0.5,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 4,
+            "blocks": 4,
+            "head": 1,
+            "decoded": 10,
+            "visible": 6,
+            "tombstones": 1
           }
-        ],
-        "stats": {
-          "series": 4,
-          "blocks": 4,
-          "head": 1,
-          "decoded": 10,
-          "visible": 6,
-          "tombstones": 1
         }
+      },
+      "attempt": {
+        "query": {
+          "start": -5000,
+          "end": 10000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "zone"
+          ],
+          "function": "avg"
+        },
+        "source_sequence": 5,
+        "sequence": 6,
+        "status": "ok",
+        "overtaken": false
       },
       "stale": true
     }
@@ -1215,8 +1279,8 @@
           "start": 500,
           "end": 501,
           "count": 1,
-          "bytes": 64,
-          "checksum": "64a6971d6e7f851a636d6f808a37acfba100a6aae97665701679f189c13857b3",
+          "bytes": 63,
+          "checksum": "bb6d550eba2b611cd171fb431333888c9c7b81aed26c20d9d892a4b8ab872506",
           "format": 1
         },
         {
@@ -1225,8 +1289,8 @@
           "start": -1500,
           "end": 1501,
           "count": 3,
-          "bytes": 138,
-          "checksum": "9708840faecc69e8a599e826d25e9b7707f5963797d8fbe2830ada1117d4df87",
+          "bytes": 81,
+          "checksum": "b4466d94f2096f50dbddfb490d297e5d0c8c72b777bc6992b72dfdd2e62dd118",
           "format": 1
         },
         {
@@ -1235,8 +1299,8 @@
           "start": -1500,
           "end": 501,
           "count": 2,
-          "bytes": 100,
-          "checksum": "8445bf70d88ae7eb6353f0c812b4d4f2629278cd44da5b057769adca8b1e41cb",
+          "bytes": 71,
+          "checksum": "c7e3af12968ecefab634089ca87286feb9da107b989ac025635e36f92bfe16a7",
           "format": 1
         }
       ],
@@ -1340,13 +1404,931 @@
     }
   },
   {
+    "step": "refresh namespace",
+    "request": {
+      "name": "ledger",
+      "retention_ms": 100000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 16,
+      "max_write": 4,
+      "max_scan": 8
+    },
+    "response": {
+      "name": "ledger",
+      "read_only": false,
+      "retention_ms": 100000,
+      "lateness_ms": 30000,
+      "future_ms": 1000,
+      "max_series": 16,
+      "max_write": 4,
+      "max_scan": 8,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 12
+    }
+  },
+  {
+    "step": "refresh seed",
+    "request": {
+      "now": 11000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 0,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 1000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 2000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 3000,
+          "value": 1
+        }
+      ]
+    },
+    "response": {
+      "sequence": 13,
+      "accepted": 4,
+      "new_series": 1,
+      "watermark": 3000
+    }
+  },
+  {
+    "step": "refresh materialize",
+    "request": {
+      "start": 0,
+      "end": 4000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "sum"
+    },
+    "response": {
+      "name": "daily",
+      "current": {
+        "name": "daily",
+        "query": {
+          "start": 0,
+          "end": 4000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 13,
+        "result": {
+          "sequence": 13,
+          "cells": [
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 1,
+              "count": 1
+            },
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 1,
+              "count": 1
+            },
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 2000,
+              "end": 3000,
+              "value": 1,
+              "count": 1
+            },
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 3000,
+              "end": 4000,
+              "value": 1,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 4,
+            "decoded": 4,
+            "visible": 4,
+            "tombstones": 0
+          }
+        }
+      },
+      "attempt": {
+        "query": {
+          "start": 0,
+          "end": 4000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 13,
+        "sequence": 14,
+        "status": "ok",
+        "overtaken": false
+      },
+      "stale": false
+    }
+  },
+  {
+    "step": "refresh more points",
+    "request": {
+      "now": 11000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 4000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 5000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 6000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 7000,
+          "value": 1
+        }
+      ]
+    },
+    "response": {
+      "sequence": 15,
+      "accepted": 4,
+      "new_series": 0,
+      "watermark": 7000
+    }
+  },
+  {
+    "step": "refresh more points",
+    "request": {
+      "now": 11000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 8000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 9000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 10000,
+          "value": 1
+        },
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-c"
+          },
+          "time": 11000,
+          "value": 1
+        }
+      ]
+    },
+    "response": {
+      "sequence": 16,
+      "accepted": 4,
+      "new_series": 0,
+      "watermark": 11000
+    }
+  },
+  {
+    "step": "refresh over budget",
+    "request": {
+      "start": 0,
+      "end": 12000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "sum"
+    },
+    "response": {
+      "code": "capacity",
+      "detail": "query decoded point budget exceeded"
+    }
+  },
+  {
+    "step": "refresh kept state",
+    "request": null,
+    "response": {
+      "name": "daily",
+      "current": {
+        "name": "daily",
+        "query": {
+          "start": 0,
+          "end": 4000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 13,
+        "result": {
+          "sequence": 13,
+          "cells": [
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 1,
+              "count": 1
+            },
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 1,
+              "count": 1
+            },
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 2000,
+              "end": 3000,
+              "value": 1,
+              "count": 1
+            },
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 3000,
+              "end": 4000,
+              "value": 1,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 4,
+            "decoded": 4,
+            "visible": 4,
+            "tombstones": 0
+          }
+        }
+      },
+      "attempt": {
+        "query": {
+          "start": 0,
+          "end": 12000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 16,
+        "sequence": 17,
+        "status": "failed",
+        "failure": {
+          "code": "capacity",
+          "detail": "query decoded point budget exceeded"
+        },
+        "overtaken": false
+      },
+      "stale": true
+    }
+  },
+  {
+    "step": "refresh retry",
+    "request": {
+      "start": 0,
+      "end": 4000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "sum"
+    },
+    "response": {
+      "name": "daily",
+      "current": {
+        "name": "daily",
+        "query": {
+          "start": 0,
+          "end": 4000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 16,
+        "result": {
+          "sequence": 17,
+          "cells": [
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 0,
+              "end": 1000,
+              "value": 1,
+              "count": 1
+            },
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 1000,
+              "end": 2000,
+              "value": 1,
+              "count": 1
+            },
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 2000,
+              "end": 3000,
+              "value": 1,
+              "count": 1
+            },
+            {
+              "labels": {
+                "node": "ridge-c"
+              },
+              "start": 3000,
+              "end": 4000,
+              "value": 1,
+              "count": 1
+            }
+          ],
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 4,
+            "decoded": 4,
+            "visible": 4,
+            "tombstones": 0
+          }
+        }
+      },
+      "attempt": {
+        "query": {
+          "start": 0,
+          "end": 4000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 16,
+        "sequence": 18,
+        "status": "ok",
+        "overtaken": false
+      },
+      "stale": false
+    }
+  },
+  {
+    "step": "refresh first failure",
+    "request": {
+      "start": 0,
+      "end": 12000,
+      "step": 1000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "sum"
+    },
+    "response": {
+      "code": "capacity",
+      "detail": "query decoded point budget exceeded"
+    }
+  },
+  {
+    "step": "refresh no success yet",
+    "request": null,
+    "response": {
+      "name": "everything",
+      "current": null,
+      "attempt": {
+        "query": {
+          "start": 0,
+          "end": 12000,
+          "matchers": null,
+          "limit": 0,
+          "step": 1000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 16,
+        "sequence": 19,
+        "status": "failed",
+        "failure": {
+          "code": "capacity",
+          "detail": "query decoded point budget exceeded"
+        },
+        "overtaken": false
+      },
+      "stale": false
+    }
+  },
+  {
+    "step": "overtake namespace",
+    "request": {
+      "name": "burst",
+      "retention_ms": 1000000,
+      "lateness_ms": 300000,
+      "future_ms": 1000,
+      "max_series": 16,
+      "max_write": 10000,
+      "max_scan": 200000
+    },
+    "response": {
+      "name": "burst",
+      "read_only": false,
+      "retention_ms": 1000000,
+      "lateness_ms": 300000,
+      "future_ms": 1000,
+      "max_series": 16,
+      "max_write": 10000,
+      "max_scan": 200000,
+      "floor": -4503599627370496,
+      "watermark": 0,
+      "has_watermark": false,
+      "last_sequence": 20
+    }
+  },
+  {
+    "step": "overtake seed",
+    "points": 60000,
+    "response": {
+      "sequence": 26,
+      "accepted": 10000,
+      "new_series": 0,
+      "watermark": 59999
+    }
+  },
+  {
+    "step": "overtake materialize",
+    "request": {
+      "start": 0,
+      "end": 100000,
+      "step": 100000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "sum"
+    },
+    "response": {
+      "name": "total",
+      "current": {
+        "name": "total",
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 26,
+        "result": {
+          "sequence": 26,
+          "cells": [
+            {
+              "labels": {
+                "node": "ridge-d"
+              },
+              "start": 0,
+              "end": 100000,
+              "value": 60000,
+              "count": 60000
+            }
+          ],
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 60000,
+            "decoded": 60000,
+            "visible": 60000,
+            "tombstones": 0
+          }
+        }
+      },
+      "attempt": {
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 26,
+        "sequence": 27,
+        "status": "ok",
+        "overtaken": false
+      },
+      "stale": false
+    }
+  },
+  {
+    "step": "overtake read during refresh",
+    "response": {
+      "name": "total",
+      "current": {
+        "name": "total",
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 26,
+        "result": {
+          "sequence": 26,
+          "cells": [
+            {
+              "labels": {
+                "node": "ridge-d"
+              },
+              "start": 0,
+              "end": 100000,
+              "value": 60000,
+              "count": 60000
+            }
+          ],
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 60000,
+            "decoded": 60000,
+            "visible": 60000,
+            "tombstones": 0
+          }
+        }
+      },
+      "attempt": {
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 26,
+        "sequence": 27,
+        "status": "ok",
+        "overtaken": false
+      },
+      "stale": false
+    }
+  },
+  {
+    "step": "overtake late report",
+    "request": {
+      "now": 100000,
+      "points": [
+        {
+          "labels": {
+            "__name__": "pulse_total",
+            "node": "ridge-d"
+          },
+          "time": 60000,
+          "value": 1
+        }
+      ]
+    },
+    "response": {
+      "sequence": 28,
+      "accepted": 1,
+      "new_series": 0,
+      "watermark": 60000
+    }
+  },
+  {
+    "step": "overtake refresh",
+    "response": {
+      "name": "total",
+      "current": {
+        "name": "total",
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 26,
+        "result": {
+          "sequence": 27,
+          "cells": [
+            {
+              "labels": {
+                "node": "ridge-d"
+              },
+              "start": 0,
+              "end": 100000,
+              "value": 60000,
+              "count": 60000
+            }
+          ],
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 60000,
+            "decoded": 60000,
+            "visible": 60000,
+            "tombstones": 0
+          }
+        }
+      },
+      "attempt": {
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 26,
+        "sequence": 29,
+        "status": "ok",
+        "overtaken": true
+      },
+      "stale": true
+    }
+  },
+  {
+    "step": "overtake caught state",
+    "request": null,
+    "response": {
+      "name": "total",
+      "current": {
+        "name": "total",
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 26,
+        "result": {
+          "sequence": 27,
+          "cells": [
+            {
+              "labels": {
+                "node": "ridge-d"
+              },
+              "start": 0,
+              "end": 100000,
+              "value": 60000,
+              "count": 60000
+            }
+          ],
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 60000,
+            "decoded": 60000,
+            "visible": 60000,
+            "tombstones": 0
+          }
+        }
+      },
+      "attempt": {
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 26,
+        "sequence": 29,
+        "status": "ok",
+        "overtaken": true
+      },
+      "stale": true
+    }
+  },
+  {
+    "step": "overtake re-refresh",
+    "request": {
+      "start": 0,
+      "end": 100000,
+      "step": 100000,
+      "origin": 0,
+      "group_by": [
+        "node"
+      ],
+      "function": "sum"
+    },
+    "response": {
+      "name": "total",
+      "current": {
+        "name": "total",
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 28,
+        "result": {
+          "sequence": 29,
+          "cells": [
+            {
+              "labels": {
+                "node": "ridge-d"
+              },
+              "start": 0,
+              "end": 100000,
+              "value": 60001,
+              "count": 60001
+            }
+          ],
+          "stats": {
+            "series": 1,
+            "blocks": 0,
+            "head": 60001,
+            "decoded": 60001,
+            "visible": 60001,
+            "tombstones": 0
+          }
+        }
+      },
+      "attempt": {
+        "query": {
+          "start": 0,
+          "end": 100000,
+          "matchers": null,
+          "limit": 0,
+          "step": 100000,
+          "origin": 0,
+          "group_by": [
+            "node"
+          ],
+          "function": "sum"
+        },
+        "source_sequence": 28,
+        "sequence": 30,
+        "status": "ok",
+        "overtaken": false
+      },
+      "stale": false
+    }
+  },
+  {
     "step": "backup source",
     "request": {
       "start": -5000,
       "end": 10000
     },
     "response": {
-      "sequence": 11,
+      "sequence": 30,
       "floor": 1000,
       "series": [
         {
@@ -1380,14 +2362,14 @@
   },
   {
     "step": "backup",
-    "sequence": "11",
-    "sha256": "cdb56ddb25cd96fa8a54f65d69be87808dc0230b2bcb90df6e4bd957df35dbed",
-    "bytes": 196608
+    "sequence": "30",
+    "sha256": "9c77b3c0050e83d05df12bf1afca0447793424081394a6365e91dd6b79117db9",
+    "bytes": 16162816
   },
   {
     "step": "restored",
     "response": {
-      "sequence": 11,
+      "sequence": 30,
       "floor": 1000,
       "series": [
         {

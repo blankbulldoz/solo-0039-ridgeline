@@ -8,6 +8,7 @@ from pathlib import Path
 import socket
 import subprocess
 import tempfile
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -15,7 +16,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 FLOW_NAMES = [
     "namespace", "ingest", "discovery", "range", "windows", "counters", "seal",
-    "delete", "retention", "materialize", "freshness", "compact", "backup", "explain"
+    "delete", "retention", "materialize", "freshness", "refresh", "overtake",
+    "compact", "backup", "explain"
 ]
 
 
@@ -133,6 +135,112 @@ def exercise(workflow, output):
                     "now": 11000, "points": [{**seed["points"][0], "time": 1500}]
                 }, status=409)
                 op("resume", space + "/mode", {"read_only": False}, method="PUT")
+
+                # A failed refresh keeps the last success readable and the
+                # attempt definition, source and failure reason queryable.
+                ledger = {"name": "ledger", "retention_ms": 100000, "lateness_ms": 30000,
+                          "future_ms": 1000, "max_series": 16, "max_write": 4, "max_scan": 8}
+                op("refresh namespace", "spaces", ledger)
+
+                def ledger_points(*times):
+                    return [{"labels": {"__name__": "pulse_total", "node": "ridge-c"},
+                             "time": t, "value": 1} for t in times]
+
+                op("refresh seed", "spaces/ledger/points",
+                   {"now": 11000, "points": ledger_points(0, 1000, 2000, 3000)})
+                narrow = {"start": 0, "end": 4000, "step": 1000, "origin": 0,
+                          "group_by": ["node"], "function": "sum"}
+                wide = {**narrow, "end": 12000}
+                first = op("refresh materialize", "spaces/ledger/rollups/daily", narrow, method="PUT")
+                if first["stale"] or first["attempt"]["status"] != "ok" or first["attempt"]["overtaken"]:
+                    raise RuntimeError("first materialization should be fresh and undisputed")
+                op("refresh more points", "spaces/ledger/points",
+                   {"now": 11000, "points": ledger_points(4000, 5000, 6000, 7000)})
+                op("refresh more points", "spaces/ledger/points",
+                   {"now": 11000, "points": ledger_points(8000, 9000, 10000, 11000)})
+                over_budget = op("refresh over budget", "spaces/ledger/rollups/daily",
+                                 wide, method="PUT", status=422)
+                if over_budget["code"] != "capacity":
+                    raise RuntimeError("expected a capacity rejection")
+                kept = op("refresh kept state", "spaces/ledger/rollups/daily")
+                if kept["current"]["query"]["end"] != narrow["end"] or \
+                        kept["attempt"]["query"]["end"] != wide["end"]:
+                    raise RuntimeError("failed definition must not merge into the stored result")
+                if kept["current"]["result"] != first["current"]["result"]:
+                    raise RuntimeError("failed refresh must keep the last successful result")
+                if kept["attempt"]["status"] != "failed" or \
+                        kept["attempt"]["failure"]["code"] != "capacity":
+                    raise RuntimeError("failed attempt must stay queryable")
+                if not kept["stale"]:
+                    raise RuntimeError("kept result trails the namespace after later writes")
+                retry = op("refresh retry", "spaces/ledger/rollups/daily", narrow, method="PUT")
+                if retry["stale"] or retry["attempt"]["status"] != "ok" or "failure" in retry["attempt"]:
+                    raise RuntimeError("retry should produce a fresh success")
+                unlucky = op("refresh first failure", "spaces/ledger/rollups/everything",
+                             wide, method="PUT", status=422)
+                if unlucky["code"] != "capacity":
+                    raise RuntimeError("expected a capacity rejection")
+                empty = op("refresh no success yet", "spaces/ledger/rollups/everything")
+                if empty["current"] is not None or empty["attempt"]["status"] != "failed":
+                    raise RuntimeError("a failed first attempt has no result but stays queryable")
+
+                # An expensive refresh scans a snapshot: readers keep the old
+                # result, writes are not blocked, and the published attempt
+                # reports whether new writes overtook it before completion.
+                burst = {"name": "burst", "retention_ms": 1000000, "lateness_ms": 300000,
+                         "future_ms": 1000, "max_series": 16, "max_write": 10000,
+                         "max_scan": 200000}
+                op("overtake namespace", "spaces", burst)
+
+                def burst_points(start, stop):
+                    return [{"labels": {"__name__": "pulse_total", "node": "ridge-d"},
+                             "time": t, "value": 1} for t in range(start, stop)]
+
+                for base_t in range(0, 60000, 10000):
+                    receipt = request(base, "spaces/burst/points",
+                                      {"now": 100000, "points": burst_points(base_t, base_t + 10000)})
+                observations.append({"step": "overtake seed", "points": 60000, "response": receipt})
+                total = {"start": 0, "end": 100000, "step": 100000, "origin": 0,
+                         "group_by": ["node"], "function": "sum"}
+                established = op("overtake materialize", "spaces/burst/rollups/total",
+                                 total, method="PUT")
+                if established["stale"]:
+                    raise RuntimeError("undisturbed materialization should be fresh")
+                late_count = 0
+                raced = None
+                for _ in range(3):
+                    before = request(base, "spaces/burst/rollups/total")
+                    outcome = {}
+                    worker = threading.Thread(target=lambda: outcome.update(view=request(
+                        base, "spaces/burst/rollups/total", total, method="PUT")))
+                    worker.start()
+                    during = request(base, "spaces/burst/rollups/total")
+                    observations.append({"step": "overtake read during refresh", "response": during})
+                    if during["current"] != before["current"]:
+                        raise RuntimeError("readers must keep the previous result during a refresh")
+                    time.sleep(0.02)
+                    op("overtake late report", "spaces/burst/points", {"now": 100000, "points": [{
+                        "labels": {"__name__": "pulse_total", "node": "ridge-d"},
+                        "time": 60000 + late_count, "value": 1}]})
+                    late_count += 1
+                    worker.join()
+                    raced = outcome["view"]
+                    observations.append({"step": "overtake refresh", "response": raced})
+                    if raced["attempt"]["overtaken"]:
+                        break
+                else:
+                    raise RuntimeError("late report never overtook the refresh")
+                if not raced["stale"] or raced["attempt"]["status"] != "ok":
+                    raise RuntimeError("an overtaken refresh completes already stale")
+                caught = op("overtake caught state", "spaces/burst/rollups/total")
+                if not caught["stale"] or caught["attempt"]["status"] != "ok":
+                    raise RuntimeError("overtaken state should remain readable")
+                final = op("overtake re-refresh", "spaces/burst/rollups/total", total, method="PUT")
+                if final["stale"] or final["attempt"]["overtaken"]:
+                    raise RuntimeError("undisturbed re-refresh should complete current")
+                cells = final["current"]["result"]["cells"]
+                if len(cells) != 1 or cells[0]["value"] != 60000 + late_count:
+                    raise RuntimeError("re-refresh must include the late reports")
                 source = op("backup source", space + "/range", q)
                 image, headers = request(base, "image")
                 if hashlib.sha256(image).hexdigest() != headers["X-Ridge-Sha256"]:

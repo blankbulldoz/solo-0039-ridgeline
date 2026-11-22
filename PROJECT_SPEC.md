@@ -48,9 +48,16 @@ Deleting measurements does not erase catalog identity or promise to shrink the
 database file. bbolt reuses free pages; returning pages to the filesystem is
 outside the current API.
 
-Rollups store a query definition and its output at a database sequence.
-Inspection reports whether the namespace has changed since materialization;
-it never silently presents stale materialization as current. Backup returns
+Rollups store a query definition and its output at a namespace source
+sequence. A refresh scans a consistent snapshot outside the write path, so
+reads and ingestion continue during expensive recalculations, and publishes
+in a short transaction. The last successful materialization and the most
+recent attempt are recorded separately: a failed attempt keeps its
+definition, source sequence and failure reason queryable but never replaces
+or silently redefines the stored result. An attempt that commits after new
+writes were admitted is marked overtaken. Inspection reports whether the
+stored success trails the namespace; it never silently presents stale
+materialization as current. Backup returns
 a consistent bbolt database image plus SHA-256 and sequence headers. Starting
 the server with that image as RIDGE_DB restores that database directly.
 
@@ -67,9 +74,10 @@ the server with that image as RIDGE_DB restores that database directly.
 9. Advance retention and reject resurrection.
 10. Materialize a rollup with source-sequence provenance.
 11. Inspect materialization freshness after later writes.
-12. Compact physical blocks while preserving query results.
-13. Export a consistent image and restart from it.
-14. Explain candidate series, physical blocks and query budgets.
+12. Keep the last success readable when a refresh fails or is overtaken.
+13. Compact physical blocks while preserving query results.
+14. Export a consistent image and restart from it.
+15. Explain candidate series, physical blocks and query budgets.
 
 Each API operation crosses wire, engine and at least one domain/storage
 responsibility. Ingestion, range execution and maintenance cross several.
@@ -83,7 +91,8 @@ One process opens one database file. Storage transactions are provided by bbolt;
 the service does not implement distributed consensus, replication, historical
 revision queries, SQL, authentication or a background retention scheduler.
 Large raw scans are bounded by the namespace scan budget. Maintenance currently
-runs synchronously. Rollups are explicitly refreshed, not incrementally updated.
+runs synchronously. Rollups are explicitly refreshed, not incrementally updated;
+a refresh holds no write lock while it scans.
 Block format 1 is JSON encoded under gzip with a checksum of the encoded payload.
 
 Use `go build ./...` and `python3 examples/walkthrough.py --workflow all` to

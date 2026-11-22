@@ -118,6 +118,8 @@ type Block struct {
 	Format   int    `json:"format"`
 }
 
+// Materialization is the last successful refresh: the definition and the
+// result it produced always travel together and are replaced atomically.
 type Materialization struct {
 	Name           string          `json:"name"`
 	Query          Query           `json:"query"`
@@ -125,8 +127,33 @@ type Materialization struct {
 	Result         AggregateResult `json:"result"`
 }
 
+// Refresh attempt outcomes.
+const (
+	AttemptOK     = "ok"
+	AttemptFailed = "failed"
+)
+
+// RollupAttempt describes the most recent refresh attempt regardless of
+// outcome, so a failed recalculation stays queryable after the fact.
+type RollupAttempt struct {
+	Query          Query  `json:"query"`
+	SourceSequence uint64 `json:"source_sequence"`
+	Sequence       uint64 `json:"sequence"`
+	Status         string `json:"status"`
+	Failure        *Error `json:"failure,omitempty"`
+	Overtaken      bool   `json:"overtaken"`
+}
+
+// RollupRecord is the stored form: the last success and the latest attempt
+// are kept apart so a new definition is never paired with an old result.
+type RollupRecord struct {
+	Name    string           `json:"name"`
+	Current *Materialization `json:"current"`
+	Attempt RollupAttempt    `json:"attempt"`
+}
+
 type RollupView struct {
-	Materialization
+	RollupRecord
 	Stale bool `json:"stale"`
 }
 
