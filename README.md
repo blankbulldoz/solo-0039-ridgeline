@@ -31,6 +31,23 @@ preconditions and recovery remain reproducible. Formal tests are deferred.
 `examples/input.json` contains the original measurements; a recorded production
 session is in `examples/session.json`. These are synthetic, non-sensitive inputs.
 
+```sh
+python3 examples/migration_rehearsal.py
+```
+
+The migration rehearsal moves the database to another volume using temporary
+paths and independent database files: a consistent image copy while the old
+instance keeps serving reads, candidate verification of samples, deletions,
+the retention floor and rollup provenance on a temporary address, then the
+fixed-address switch. After a confirmed batch and an unreceipted second
+batch, the candidate process is killed and its file inspected in isolation;
+both outcomes (second batch committed or not) are rehearsed, the delta is
+replayed into the old directory and the fixed address is restored. It writes
+a JSON record (default `var/migration-rehearsal.json`; a recorded run is in
+`examples/migration-rehearsal.json`) covering the data that must move before
+the fixed address is restored, the evidence sufficient to resume collection
+and how the scene is preserved when evidence is insufficient.
+
 ## API
 
 All routes start with `/ridge/v1`. JSON request fields are strict; bodies have

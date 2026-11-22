@@ -1,0 +1,1223 @@
+{
+  "rehearsal": "ridgeline volume migration, crash fallback and evidence handling",
+  "state": "complete",
+  "operational_notes": {
+    "data_to_move_before_restoring_fixed_address": "Only the post-image delta crosses back to the old directory: samples whose database sequence is greater than the migration image sequence (in this rehearsal the two catch-up batches), grouped by sequence and replayed in order through the normal ingest API so each batch stays atomic and last-write-wins ordering is preserved. The production history never leaves the old volume; copying the whole candidate file back would move the entire database again for zero logical gain. The record carries full_image_bytes next to per-batch replay bytes so the ratio is explicit: in production the image holds the large history while the two batches are tiny by comparison.",
+    "sufficient_evidence_to_resume_collection": [
+      "Client-held receipt of batch one (sequence, accepted count, watermark): a confirmed write that must survive any fallback.",
+      "Quarantined candidate file (sha256 recorded at crash time, copy verified byte-identical) whose isolated inspection shows the namespace last_sequence advanced past batch one AND every batch-two point stored under one sequence: atomic-commit proof, so batch two is preserved through the delta replay and must not be retransmitted.",
+      "Inspection showing last_sequence equal to the batch-one receipt sequence and zero samples above it: atomic-absence proof, so the client retransmits batch two after the fixed address is restored.",
+      "Migration image headers (X-Ridge-Sequence, X-Ridge-SHA256) tying candidate lineage to the old directory, plus matching namespace floor/watermark and rollup source_sequence on both sides."
+    ],
+    "insufficient_evidence_preserve_scene": "If the candidate file cannot be trusted (checksum mismatch while copying, bbolt open or decode errors, torn metadata, or inspection cannot prove batch atomicity): stop writes on both volumes. Leave the crashed file immutable: record sha256/size/mtime, remove write permission, keep a byte copy in quarantine and never open the original with a writer. Keep the old directory untouched. Restore the fixed address on the OLD directory in read-only mode so reads continue while producers keep buffering. Reconcile producer logs against the quarantined file manually. Unreceipted batches are retransmitted only after reconciliation: ingestion is atomic per request and last-write-wins makes identical values idempotent, so a retransmitted batch converges whether or not the original attempt committed. Do not delete the quarantined file until the fixed-address service has acknowledged the reconciled state."
+  },
+  "scenarios": [
+    {
+      "scenario": "committed",
+      "phases": [
+        {
+          "phase": "topology",
+          "fixed_address": "127.0.0.1:34359",
+          "old_volume": "/tmp/ridgeline-migration-agivuntt/committed/oldvol",
+          "new_volume": "/tmp/ridgeline-migration-agivuntt/committed/newvol",
+          "note": "temporary paths; independent database files; verification, inspection and replay instances bind separate temporary addresses"
+        },
+        {
+          "phase": "seed_old_volume",
+          "checks": [
+            {
+              "check": "history ingested",
+              "ok": true,
+              "detail": {
+                "sequence": 2,
+                "accepted": 9,
+                "new_series": 4,
+                "watermark": 1500
+              }
+            },
+            {
+              "check": "sealed",
+              "ok": true
+            },
+            {
+              "check": "retention floor advanced",
+              "ok": true,
+              "detail": {
+                "sequence": 4,
+                "blocks": 4,
+                "points": 5,
+                "floor": 500
+              }
+            },
+            {
+              "check": "deletion recorded",
+              "ok": true,
+              "detail": {
+                "id": "00000000000000000005",
+                "series": [
+                  "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+                  "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+                ],
+                "start": 400,
+                "end": 600,
+                "sequence": 5
+              }
+            },
+            {
+              "check": "correction after delete admitted",
+              "ok": true,
+              "detail": {
+                "sequence": 6,
+                "accepted": 1,
+                "new_series": 0,
+                "watermark": 1500
+              }
+            },
+            {
+              "check": "rollup materialized at source sequence 6",
+              "ok": true,
+              "detail": 6
+            },
+            {
+              "check": "post-rollup write made it stale",
+              "ok": true,
+              "detail": {
+                "sequence": 8,
+                "accepted": 1,
+                "new_series": 0,
+                "watermark": 1500
+              }
+            },
+            {
+              "check": "seeded state",
+              "ok": true,
+              "detail": {
+                "name": "spindle",
+                "read_only": false,
+                "retention_ms": 10000,
+                "lateness_ms": 30000,
+                "future_ms": 1000,
+                "max_series": 100,
+                "max_write": 10000,
+                "max_scan": 100000,
+                "floor": 500,
+                "watermark": 1500,
+                "has_watermark": true,
+                "last_sequence": 8
+              }
+            }
+          ]
+        },
+        {
+          "phase": "consistent_copy_while_old_serves_reads",
+          "checks": [
+            {
+              "check": "image hash matches header",
+              "ok": true,
+              "detail": "be920c845f4885ba6b4ff39cb5dfc029b408a28b50dc04ed3a4431c2afa1b4fe"
+            },
+            {
+              "check": "image sequence",
+              "ok": true,
+              "detail": 8
+            },
+            {
+              "check": "old instance served identical reads across the copy",
+              "ok": true
+            }
+          ],
+          "write_freeze": true,
+          "image": {
+            "sequence": 8,
+            "sha256": "be920c845f4885ba6b4ff39cb5dfc029b408a28b50dc04ed3a4431c2afa1b4fe",
+            "bytes": 57344
+          },
+          "candidate_path": "/tmp/ridgeline-migration-agivuntt/committed/newvol/candidate.db"
+        },
+        {
+          "phase": "verify_candidate_on_temporary_address",
+          "checks": [
+            {
+              "check": "namespace state identical",
+              "ok": true,
+              "detail": {
+                "name": "spindle",
+                "read_only": false,
+                "retention_ms": 10000,
+                "lateness_ms": 30000,
+                "future_ms": 1000,
+                "max_series": 100,
+                "max_write": 10000,
+                "max_scan": 100000,
+                "floor": 500,
+                "watermark": 1500,
+                "has_watermark": true,
+                "last_sequence": 8
+              }
+            },
+            {
+              "check": "samples identical (full range)",
+              "ok": true
+            },
+            {
+              "check": "samples identical (truncated range)",
+              "ok": true
+            },
+            {
+              "check": "deletion inventory identical",
+              "ok": true,
+              "detail": [
+                {
+                  "id": "00000000000000000005",
+                  "series": [
+                    "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+                    "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+                  ],
+                  "start": 400,
+                  "end": 600,
+                  "sequence": 5
+                }
+              ]
+            },
+            {
+              "check": "deleted points stay hidden on both",
+              "ok": true
+            },
+            {
+              "check": "retention floor rejects pre-floor writes on both",
+              "ok": true,
+              "detail": {
+                "code": "conflict",
+                "detail": "point precedes retention floor"
+              }
+            },
+            {
+              "check": "rollup provenance identical (source sequence, staleness)",
+              "ok": true,
+              "detail": {
+                "source_sequence": 6,
+                "stale": true
+              }
+            },
+            {
+              "check": "aggregate results identical",
+              "ok": true
+            },
+            {
+              "check": "physical block inventory identical",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "phase": "switch_fixed_address_to_candidate",
+          "checks": [
+            {
+              "check": "candidate ready on the fixed address",
+              "ok": true
+            }
+          ],
+          "old_database_sha256_after_stop": "ef2475e825b7df7fe31087f183fd22f471aab56c31428855d68bd8761a1936fa"
+        },
+        {
+          "phase": "batch_one_confirmed",
+          "receipt": {
+            "sequence": 9,
+            "accepted": 3,
+            "new_series": 0,
+            "watermark": 2500
+          },
+          "note": "client holds this receipt; the write must survive any fallback"
+        },
+        {
+          "phase": "batch_two_receipt_lost_then_candidate_crash",
+          "signal": "SIGKILL",
+          "receipt_received": false,
+          "client_perspective": "request sent, connection abandoned before any response bytes were read",
+          "commit_proof_at_crash_time": {
+            "last_sequence": 10
+          }
+        },
+        {
+          "phase": "isolated_file_inspection",
+          "checks": [
+            {
+              "check": "quarantine copy byte-identical",
+              "ok": true
+            },
+            {
+              "check": "batch two committed atomically (all points under one sequence)",
+              "ok": true,
+              "detail": {
+                "last_sequence": 10,
+                "batch_two_points": [
+                  {
+                    "labels": {
+                      "__name__": "pulse_total",
+                      "node": "ridge-a",
+                      "zone": "east"
+                    },
+                    "time": 2000,
+                    "value": 110,
+                    "sequence": 10
+                  },
+                  {
+                    "labels": {
+                      "__name__": "pulse_total",
+                      "node": "ridge-a",
+                      "zone": "east"
+                    },
+                    "time": 2500,
+                    "value": 130,
+                    "sequence": 10
+                  },
+                  {
+                    "labels": {
+                      "__name__": "pulse_total",
+                      "node": "ridge-b",
+                      "zone": "east"
+                    },
+                    "time": 2500,
+                    "value": 19,
+                    "sequence": 10
+                  },
+                  {
+                    "labels": {
+                      "__name__": "load_ratio",
+                      "node": "ridge-c",
+                      "zone": "west"
+                    },
+                    "time": 2000,
+                    "value": 0.4,
+                    "sequence": 10
+                  }
+                ]
+              }
+            },
+            {
+              "check": "uncorrected batch one point survives; corrections superseded the rest",
+              "ok": true,
+              "detail": [
+                {
+                  "labels": {
+                    "__name__": "pulse_total",
+                    "node": "ridge-b",
+                    "zone": "east"
+                  },
+                  "time": 2000,
+                  "value": 17,
+                  "sequence": 9
+                }
+              ]
+            }
+          ],
+          "finding": "committed",
+          "evidence_file": {
+            "path": "/tmp/ridgeline-migration-agivuntt/committed/newvol/candidate.db",
+            "sha256": "16dfec40e0d9b510fd3c009139e72aab6f19019427820dd1087e5ac11d1d2f01",
+            "bytes": 131072
+          },
+          "quarantine_file": {
+            "path": "/tmp/ridgeline-migration-agivuntt/committed/quarantine/candidate-quarantine.db",
+            "sha256": "16dfec40e0d9b510fd3c009139e72aab6f19019427820dd1087e5ac11d1d2f01"
+          },
+          "note": "the crashed original is never opened by a server; inspection runs on a disposable working copy, quarantine stays pristine"
+        },
+        {
+          "phase": "restore_old_directory_and_fixed_address",
+          "checks": [
+            {
+              "check": "old directory untouched during candidate episode",
+              "ok": true
+            },
+            {
+              "check": "delta sequences are exactly the catch-up batches",
+              "ok": true,
+              "detail": [
+                9,
+                10
+              ]
+            },
+            {
+              "check": "replayed batch at sequence 9",
+              "ok": true,
+              "detail": {
+                "sequence": 9,
+                "accepted": 1,
+                "new_series": 0,
+                "watermark": 2000
+              }
+            },
+            {
+              "check": "replayed batch at sequence 10",
+              "ok": true,
+              "detail": {
+                "sequence": 10,
+                "accepted": 4,
+                "new_series": 1,
+                "watermark": 2500
+              }
+            },
+            {
+              "check": "replayed old database logically equals crashed candidate",
+              "ok": true
+            },
+            {
+              "check": "namespace state equals crashed candidate",
+              "ok": true
+            },
+            {
+              "check": "rollup provenance equals crashed candidate",
+              "ok": true
+            },
+            {
+              "check": "old directory serving the fixed address again",
+              "ok": true
+            }
+          ],
+          "data_moved_before_fixed_address_restore": {
+            "method": "delta replay from the quarantined candidate, in sequence order",
+            "note": "the delta is extracted from the candidate's final committed state, not from client memory: corrected points travel only with their winning values, and every timestamp batch one wrote remains visible in the restored view",
+            "full_image_bytes": 57344,
+            "delta_batches": [
+              {
+                "sequence": 9,
+                "points": 1,
+                "request_bytes": 129
+              },
+              {
+                "sequence": 10,
+                "points": 4,
+                "request_bytes": 440
+              }
+            ],
+            "delta_points": 5,
+            "delta_request_bytes": 569
+          }
+        },
+        {
+          "phase": "final_verification_on_fixed_address",
+          "checks": [
+            {
+              "check": "fixed-address view equals crashed candidate",
+              "ok": true
+            },
+            {
+              "check": "winning value at 2000 is 110",
+              "ok": true,
+              "detail": {
+                "time": 2000,
+                "value": 110,
+                "sequence": 10
+              }
+            },
+            {
+              "check": "winning value at 2500 is 130",
+              "ok": true,
+              "detail": {
+                "time": 2500,
+                "value": 130,
+                "sequence": 10
+              }
+            },
+            {
+              "check": "winning value at 2000 is 17",
+              "ok": true,
+              "detail": {
+                "time": 2000,
+                "value": 17,
+                "sequence": 9
+              }
+            },
+            {
+              "check": "winning value at 2500 is 19",
+              "ok": true,
+              "detail": {
+                "time": 2500,
+                "value": 19,
+                "sequence": 10
+              }
+            },
+            {
+              "check": "winning value at 2000 is 0.4",
+              "ok": true,
+              "detail": {
+                "time": 2000,
+                "value": 0.4,
+                "sequence": 10
+              }
+            },
+            {
+              "check": "batch one timestamp 2000 visible",
+              "ok": true
+            },
+            {
+              "check": "batch one timestamp 2500 visible",
+              "ok": true
+            },
+            {
+              "check": "batch one timestamp 2000 visible",
+              "ok": true
+            },
+            {
+              "check": "batch two whole-batch result",
+              "ok": true,
+              "detail": {
+                "points_present": 4
+              }
+            },
+            {
+              "check": "final sequence matches finding",
+              "ok": true,
+              "detail": {
+                "name": "spindle",
+                "read_only": false,
+                "retention_ms": 10000,
+                "lateness_ms": 30000,
+                "future_ms": 1000,
+                "max_series": 100,
+                "max_write": 10000,
+                "max_scan": 100000,
+                "floor": 500,
+                "watermark": 2500,
+                "has_watermark": true,
+                "last_sequence": 10
+              }
+            },
+            {
+              "check": "rollup provenance preserved through restore",
+              "ok": true
+            }
+          ],
+          "winning_values": [
+            {
+              "labels": {
+                "__name__": "load_ratio",
+                "node": "ridge-c",
+                "zone": "west"
+              },
+              "time": 2000,
+              "value": 0.4
+            },
+            {
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              },
+              "time": 2000,
+              "value": 110
+            },
+            {
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              },
+              "time": 2500,
+              "value": 130
+            },
+            {
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-b",
+                "zone": "east"
+              },
+              "time": 2000,
+              "value": 17
+            },
+            {
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-b",
+                "zone": "east"
+              },
+              "time": 2500,
+              "value": 19
+            }
+          ]
+        }
+      ],
+      "terminal_visible_series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 0.9,
+              "sequence": 8
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 8,
+              "sequence": 6
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2
+            },
+            {
+              "time": 2000,
+              "value": 110,
+              "sequence": 10
+            },
+            {
+              "time": 2500,
+              "value": 130,
+              "sequence": 10
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2
+            },
+            {
+              "time": 2000,
+              "value": 17,
+              "sequence": 9
+            },
+            {
+              "time": 2500,
+              "value": 19,
+              "sequence": 10
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "d652278e3735eaecbe7333d4bfb375377998988f144318f676524ea503176bdd",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-c",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 2000,
+              "value": 0.4,
+              "sequence": 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "uncommitted",
+      "phases": [
+        {
+          "phase": "topology",
+          "fixed_address": "127.0.0.1:54663",
+          "old_volume": "/tmp/ridgeline-migration-agivuntt/uncommitted/oldvol",
+          "new_volume": "/tmp/ridgeline-migration-agivuntt/uncommitted/newvol",
+          "note": "temporary paths; independent database files; verification, inspection and replay instances bind separate temporary addresses"
+        },
+        {
+          "phase": "seed_old_volume",
+          "checks": [
+            {
+              "check": "history ingested",
+              "ok": true,
+              "detail": {
+                "sequence": 2,
+                "accepted": 9,
+                "new_series": 4,
+                "watermark": 1500
+              }
+            },
+            {
+              "check": "sealed",
+              "ok": true
+            },
+            {
+              "check": "retention floor advanced",
+              "ok": true,
+              "detail": {
+                "sequence": 4,
+                "blocks": 4,
+                "points": 5,
+                "floor": 500
+              }
+            },
+            {
+              "check": "deletion recorded",
+              "ok": true,
+              "detail": {
+                "id": "00000000000000000005",
+                "series": [
+                  "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+                  "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+                ],
+                "start": 400,
+                "end": 600,
+                "sequence": 5
+              }
+            },
+            {
+              "check": "correction after delete admitted",
+              "ok": true,
+              "detail": {
+                "sequence": 6,
+                "accepted": 1,
+                "new_series": 0,
+                "watermark": 1500
+              }
+            },
+            {
+              "check": "rollup materialized at source sequence 6",
+              "ok": true,
+              "detail": 6
+            },
+            {
+              "check": "post-rollup write made it stale",
+              "ok": true,
+              "detail": {
+                "sequence": 8,
+                "accepted": 1,
+                "new_series": 0,
+                "watermark": 1500
+              }
+            },
+            {
+              "check": "seeded state",
+              "ok": true,
+              "detail": {
+                "name": "spindle",
+                "read_only": false,
+                "retention_ms": 10000,
+                "lateness_ms": 30000,
+                "future_ms": 1000,
+                "max_series": 100,
+                "max_write": 10000,
+                "max_scan": 100000,
+                "floor": 500,
+                "watermark": 1500,
+                "has_watermark": true,
+                "last_sequence": 8
+              }
+            }
+          ]
+        },
+        {
+          "phase": "consistent_copy_while_old_serves_reads",
+          "checks": [
+            {
+              "check": "image hash matches header",
+              "ok": true,
+              "detail": "be920c845f4885ba6b4ff39cb5dfc029b408a28b50dc04ed3a4431c2afa1b4fe"
+            },
+            {
+              "check": "image sequence",
+              "ok": true,
+              "detail": 8
+            },
+            {
+              "check": "old instance served identical reads across the copy",
+              "ok": true
+            }
+          ],
+          "write_freeze": true,
+          "image": {
+            "sequence": 8,
+            "sha256": "be920c845f4885ba6b4ff39cb5dfc029b408a28b50dc04ed3a4431c2afa1b4fe",
+            "bytes": 57344
+          },
+          "candidate_path": "/tmp/ridgeline-migration-agivuntt/uncommitted/newvol/candidate.db"
+        },
+        {
+          "phase": "verify_candidate_on_temporary_address",
+          "checks": [
+            {
+              "check": "namespace state identical",
+              "ok": true,
+              "detail": {
+                "name": "spindle",
+                "read_only": false,
+                "retention_ms": 10000,
+                "lateness_ms": 30000,
+                "future_ms": 1000,
+                "max_series": 100,
+                "max_write": 10000,
+                "max_scan": 100000,
+                "floor": 500,
+                "watermark": 1500,
+                "has_watermark": true,
+                "last_sequence": 8
+              }
+            },
+            {
+              "check": "samples identical (full range)",
+              "ok": true
+            },
+            {
+              "check": "samples identical (truncated range)",
+              "ok": true
+            },
+            {
+              "check": "deletion inventory identical",
+              "ok": true,
+              "detail": [
+                {
+                  "id": "00000000000000000005",
+                  "series": [
+                    "39221d1b5192ba577bd99dc708b70f6d0ad8d49fe739499eb321c5761d975d5f",
+                    "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87"
+                  ],
+                  "start": 400,
+                  "end": 600,
+                  "sequence": 5
+                }
+              ]
+            },
+            {
+              "check": "deleted points stay hidden on both",
+              "ok": true
+            },
+            {
+              "check": "retention floor rejects pre-floor writes on both",
+              "ok": true,
+              "detail": {
+                "code": "conflict",
+                "detail": "point precedes retention floor"
+              }
+            },
+            {
+              "check": "rollup provenance identical (source sequence, staleness)",
+              "ok": true,
+              "detail": {
+                "source_sequence": 6,
+                "stale": true
+              }
+            },
+            {
+              "check": "aggregate results identical",
+              "ok": true
+            },
+            {
+              "check": "physical block inventory identical",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "phase": "switch_fixed_address_to_candidate",
+          "checks": [
+            {
+              "check": "candidate ready on the fixed address",
+              "ok": true
+            }
+          ],
+          "old_database_sha256_after_stop": "ef2475e825b7df7fe31087f183fd22f471aab56c31428855d68bd8761a1936fa"
+        },
+        {
+          "phase": "batch_one_confirmed",
+          "receipt": {
+            "sequence": 9,
+            "accepted": 3,
+            "new_series": 0,
+            "watermark": 2500
+          },
+          "note": "client holds this receipt; the write must survive any fallback"
+        },
+        {
+          "phase": "batch_two_receipt_lost_then_candidate_crash",
+          "signal": "SIGKILL",
+          "receipt_received": false,
+          "client_perspective": "send failed, no receipt: <urlopen error [Errno 111] Connection refused>"
+        },
+        {
+          "phase": "isolated_file_inspection",
+          "checks": [
+            {
+              "check": "quarantine copy byte-identical",
+              "ok": true
+            },
+            {
+              "check": "batch one fully intact",
+              "ok": true,
+              "detail": [
+                {
+                  "labels": {
+                    "__name__": "pulse_total",
+                    "node": "ridge-a",
+                    "zone": "east"
+                  },
+                  "time": 2000,
+                  "value": 11,
+                  "sequence": 9
+                },
+                {
+                  "labels": {
+                    "__name__": "pulse_total",
+                    "node": "ridge-a",
+                    "zone": "east"
+                  },
+                  "time": 2500,
+                  "value": 13,
+                  "sequence": 9
+                },
+                {
+                  "labels": {
+                    "__name__": "pulse_total",
+                    "node": "ridge-b",
+                    "zone": "east"
+                  },
+                  "time": 2000,
+                  "value": 17,
+                  "sequence": 9
+                }
+              ]
+            },
+            {
+              "check": "batch two atomically absent (no trace above batch one)",
+              "ok": true,
+              "detail": {
+                "last_sequence": 9
+              }
+            }
+          ],
+          "finding": "not_committed",
+          "evidence_file": {
+            "path": "/tmp/ridgeline-migration-agivuntt/uncommitted/newvol/candidate.db",
+            "sha256": "f1ce6f09221725d17c4c4dd09eae321d2cfb8b6cdc4f558151128c8b3f14b0af",
+            "bytes": 57344
+          },
+          "quarantine_file": {
+            "path": "/tmp/ridgeline-migration-agivuntt/uncommitted/quarantine/candidate-quarantine.db",
+            "sha256": "f1ce6f09221725d17c4c4dd09eae321d2cfb8b6cdc4f558151128c8b3f14b0af"
+          },
+          "note": "the crashed original is never opened by a server; inspection runs on a disposable working copy, quarantine stays pristine"
+        },
+        {
+          "phase": "restore_old_directory_and_fixed_address",
+          "checks": [
+            {
+              "check": "old directory untouched during candidate episode",
+              "ok": true
+            },
+            {
+              "check": "delta sequences are exactly the catch-up batches",
+              "ok": true,
+              "detail": [
+                9
+              ]
+            },
+            {
+              "check": "replayed batch at sequence 9",
+              "ok": true,
+              "detail": {
+                "sequence": 9,
+                "accepted": 3,
+                "new_series": 0,
+                "watermark": 2500
+              }
+            },
+            {
+              "check": "replayed old database logically equals crashed candidate",
+              "ok": true
+            },
+            {
+              "check": "namespace state equals crashed candidate",
+              "ok": true
+            },
+            {
+              "check": "rollup provenance equals crashed candidate",
+              "ok": true
+            },
+            {
+              "check": "old directory serving the fixed address again",
+              "ok": true
+            }
+          ],
+          "data_moved_before_fixed_address_restore": {
+            "method": "delta replay from the quarantined candidate, in sequence order",
+            "note": "the delta is extracted from the candidate's final committed state, not from client memory: corrected points travel only with their winning values, and every timestamp batch one wrote remains visible in the restored view",
+            "full_image_bytes": 57344,
+            "delta_batches": [
+              {
+                "sequence": 9,
+                "points": 3,
+                "request_bytes": 335
+              }
+            ],
+            "delta_points": 3,
+            "delta_request_bytes": 335
+          }
+        },
+        {
+          "phase": "final_verification_on_fixed_address",
+          "checks": [
+            {
+              "check": "fixed-address view equals crashed candidate",
+              "ok": true
+            },
+            {
+              "check": "winning value at 2000 is 11",
+              "ok": true,
+              "detail": {
+                "time": 2000,
+                "value": 11,
+                "sequence": 9
+              }
+            },
+            {
+              "check": "winning value at 2500 is 13",
+              "ok": true,
+              "detail": {
+                "time": 2500,
+                "value": 13,
+                "sequence": 9
+              }
+            },
+            {
+              "check": "winning value at 2000 is 17",
+              "ok": true,
+              "detail": {
+                "time": 2000,
+                "value": 17,
+                "sequence": 9
+              }
+            },
+            {
+              "check": "batch one timestamp 2000 visible",
+              "ok": true
+            },
+            {
+              "check": "batch one timestamp 2500 visible",
+              "ok": true
+            },
+            {
+              "check": "batch one timestamp 2000 visible",
+              "ok": true
+            },
+            {
+              "check": "batch two whole-batch result",
+              "ok": true,
+              "detail": {
+                "points_present": 0
+              }
+            },
+            {
+              "check": "final sequence matches finding",
+              "ok": true,
+              "detail": {
+                "name": "spindle",
+                "read_only": false,
+                "retention_ms": 10000,
+                "lateness_ms": 30000,
+                "future_ms": 1000,
+                "max_series": 100,
+                "max_write": 10000,
+                "max_scan": 100000,
+                "floor": 500,
+                "watermark": 2500,
+                "has_watermark": true,
+                "last_sequence": 9
+              }
+            },
+            {
+              "check": "rollup provenance preserved through restore",
+              "ok": true
+            }
+          ],
+          "winning_values": [
+            {
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              },
+              "time": 2000,
+              "value": 11
+            },
+            {
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-a",
+                "zone": "east"
+              },
+              "time": 2500,
+              "value": 13
+            },
+            {
+              "labels": {
+                "__name__": "pulse_total",
+                "node": "ridge-b",
+                "zone": "east"
+              },
+              "time": 2000,
+              "value": 17
+            }
+          ]
+        },
+        {
+          "phase": "resume_collection_retransmission",
+          "checks": [
+            {
+              "check": "retransmitted batch two acknowledged",
+              "ok": true,
+              "detail": {
+                "sequence": 10,
+                "accepted": 4,
+                "new_series": 1,
+                "watermark": 2500
+              }
+            },
+            {
+              "check": "corrections now win",
+              "ok": true
+            }
+          ],
+          "receipt": {
+            "sequence": 10,
+            "accepted": 4,
+            "new_series": 1,
+            "watermark": 2500
+          },
+          "note": "safe because ingestion is atomic per request and last-write-wins makes identical values idempotent"
+        }
+      ],
+      "terminal_visible_series": [
+        {
+          "series": {
+            "id": "0f8fa51d16cf44764e3ef8d5bec20a41dee666c396716d60014c4f6859710888",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-b",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 0.5,
+              "sequence": 2
+            },
+            {
+              "time": 1500,
+              "value": 0.9,
+              "sequence": 8
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "ae37407678ef71c5a33ebe50d20bef7a18161f25a7a244d2c842f41f0bf0dc87",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-a",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 8,
+              "sequence": 6
+            },
+            {
+              "time": 1500,
+              "value": 6,
+              "sequence": 2
+            },
+            {
+              "time": 2000,
+              "value": 110,
+              "sequence": 10
+            },
+            {
+              "time": 2500,
+              "value": 130,
+              "sequence": 10
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "c9c72d2a25e46bc3425bd051c939c305b7e03e5fffc80d9b83c3815ca46cad69",
+            "labels": {
+              "__name__": "pulse_total",
+              "node": "ridge-b",
+              "zone": "east"
+            }
+          },
+          "points": [
+            {
+              "time": 500,
+              "value": 7,
+              "sequence": 2
+            },
+            {
+              "time": 2000,
+              "value": 17,
+              "sequence": 9
+            },
+            {
+              "time": 2500,
+              "value": 19,
+              "sequence": 10
+            }
+          ]
+        },
+        {
+          "series": {
+            "id": "d652278e3735eaecbe7333d4bfb375377998988f144318f676524ea503176bdd",
+            "labels": {
+              "__name__": "load_ratio",
+              "node": "ridge-c",
+              "zone": "west"
+            }
+          },
+          "points": [
+            {
+              "time": 2000,
+              "value": 0.4,
+              "sequence": 10
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "convergence": {
+    "committed_final_equals_uncommitted_after_retransmission": true,
+    "note": "both fallback paths end with identical visible samples, winning values and sequences"
+  }
+}
