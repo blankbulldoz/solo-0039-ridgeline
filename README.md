@@ -56,7 +56,7 @@ All methods below return 200 on success.
 | POST | `/spaces/{space}/retention` | `{"now":11000}` |
 | POST | `/spaces/{space}/compact` | empty object |
 | PUT | `/spaces/{space}/rollups/{name}` | aggregate query definition |
-| GET | `/spaces/{space}/rollups/{name}` | stored result and stale flag |
+| GET | `/spaces/{space}/rollups/{name}` | stored result, `stale`, `freshness` and `reason` |
 | GET | `/image` | consistent binary image, SHA-256 and sequence headers |
 
 Sample query:
@@ -72,6 +72,28 @@ the same string, but series identity preserves their distinction. Raw results
 are sorted by series ID, then timestamp, and expose truncation. Aggregate
 queries always use all admitted source points and ignore raw-result limits.
 Explain is an estimate of candidate blocks, not a guarantee of visible rows.
+
+### Rollup freshness
+
+A materialization records the namespace source sequence and a provenance
+marker. Reading it returns `stale` plus a `freshness` state of `fresh`, `stale`
+or `indeterminate` and, when not fresh, a human-readable `reason`. The verdict
+is computed from a journal of logical changes rather than sequence equality, so
+a rollup is judged by whether a later change could actually alter its result:
+
+- unrelated writes (a series the stored matchers do not select, or an
+  out-of-range timestamp) keep it `fresh`;
+- sealing, compaction and read-only transitions keep it `fresh`;
+- a correction, a deletion, a newly created series that matches the stored
+  selector, or a retention-floor advance that crosses the query interval make
+  it `stale`;
+- a record written before journaling, or one whose source sequence has aged out
+  of the retained journal, is `indeterminate`. This is reported with
+  `stale: true` so an unverifiable result is never presented as current;
+  re-running `PUT` restores a precise verdict.
+
+The change journal is bounded (4096 entries per namespace); pruning can only
+move a source sequence into `indeterminate`, never into a false `fresh`.
 
 ## Storage And Recovery
 

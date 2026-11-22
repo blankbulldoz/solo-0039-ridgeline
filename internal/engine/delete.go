@@ -45,6 +45,18 @@ func (e *Engine) Delete(name string, q model.Query) (model.Tombstone, error) {
 		if err := volume.PutJSON(b.Bucket(volume.Deletes), []byte(tomb.ID), tomb); err != nil {
 			return err
 		}
+		change := model.Change{
+			Sequence: seq, Kind: model.ChangeDelete,
+			Touches: make([]model.SeriesTouch, 0, len(tomb.Series)),
+		}
+		for _, id := range tomb.Series {
+			change.Touches = append(change.Touches, model.SeriesTouch{
+				Series: id, Runs: []model.TimeRun{{Start: q.Start, End: q.End}},
+			})
+		}
+		if err := recordChange(b, &n, change); err != nil {
+			return err
+		}
 		n.LastSequence = seq
 		return volume.PutJSON(b, volume.Config, n)
 	})

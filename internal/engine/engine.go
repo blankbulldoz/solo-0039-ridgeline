@@ -67,6 +67,9 @@ func (e *Engine) Create(n model.Namespace) (model.Namespace, error) {
 		if err != nil {
 			return err
 		}
+		// A new namespace journals every logical mutation from its creation,
+		// so any materialization it later stores can be judged precisely.
+		beginTracking(&n, n.LastSequence)
 		return volume.PutJSON(b, volume.Config, n)
 	})
 	return n, err

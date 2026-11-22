@@ -49,10 +49,21 @@ database file. bbolt reuses free pages; returning pages to the filesystem is
 outside the current API.
 
 Rollups store a query definition and its output at a database sequence.
-Inspection reports whether the namespace has changed since materialization;
-it never silently presents stale materialization as current. Backup returns
-a consistent bbolt database image plus SHA-256 and sequence headers. Starting
-the server with that image as RIDGE_DB restores that database directly.
+Inspection reports whether the materialization is still valid for its own
+definition; it never silently presents a stale or unverifiable result as
+current. Freshness is decided from a per-namespace journal of logical
+mutations, not from the raw namespace sequence alone. A change invalidates a
+materialization only when it can alter that query: it must touch a series the
+stored matchers select and a timestamp the stored interval contains. Writes to
+unselected series, writes outside the interval, sealing, compaction and
+read-only transitions therefore leave a successful result fresh. A correction,
+a deletion or a retention floor advance that crosses the query interval does
+invalidate it. When a record predates journaling, or its source sequence has
+been pruned from the retained journal, the verdict is `indeterminate`: the
+result is reported stale (never silently current) and the response explains
+that a refresh is required to regain a precise verdict. Backup returns a
+consistent bbolt database image plus SHA-256 and sequence headers. Starting the
+server with that image as RIDGE_DB restores that database directly.
 
 ## Workflows
 

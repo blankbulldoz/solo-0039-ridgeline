@@ -54,6 +54,19 @@ func (e *Engine) Write(name string, request model.WriteRequest) (model.WriteRece
 				n.Watermark, n.HasWatermark = p.Time, true
 			}
 		}
+		touches := map[string][]int64{}
+		for _, p := range request.Points {
+			id := model.SeriesID(p.Labels)
+			touches[id] = append(touches[id], p.Time)
+		}
+		change := model.Change{Sequence: seq, Kind: model.ChangeWrite}
+		for id, times := range touches {
+			change.Touches = append(change.Touches,
+				model.SeriesTouch{Series: id, Runs: mergeTimestamps(times)})
+		}
+		if err := recordChange(b, &n, change); err != nil {
+			return err
+		}
 		n.LastSequence = seq
 		receipt = model.WriteReceipt{
 			Sequence: seq, Accepted: len(request.Points),

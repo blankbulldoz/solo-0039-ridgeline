@@ -8,9 +8,9 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance, error) {
+func compact(tx *bolt.Tx, b *bolt.Bucket, n *model.Namespace) (model.Maintenance, error) {
 	// Maintenance is bounded by the same scan policy as user queries.
-	raw, err := scan(b, n, model.Query{Start: model.MinTime, End: model.MaxTime + 1}, volume.Current(tx))
+	raw, err := scan(b, *n, model.Query{Start: model.MinTime, End: model.MaxTime + 1}, volume.Current(tx))
 	if err != nil {
 		return model.Maintenance{}, err
 	}
@@ -32,7 +32,7 @@ func compact(tx *bolt.Tx, b *bolt.Bucket, n model.Namespace) (model.Maintenance,
 		receipt.Points += len(s.Points)
 	}
 	n.LastSequence = seq
-	return receipt, volume.PutJSON(b, volume.Config, n)
+	return receipt, volume.PutJSON(b, volume.Config, *n)
 }
 
 func (e *Engine) Compact(name string) (model.Maintenance, error) {
@@ -42,7 +42,7 @@ func (e *Engine) Compact(name string) (model.Maintenance, error) {
 		if err != nil {
 			return err
 		}
-		receipt, err = compact(tx, b, n)
+		receipt, err = compact(tx, b, &n)
 		return err
 	})
 	return receipt, err
@@ -58,12 +58,27 @@ func (e *Engine) Retain(name string, now int64) (model.Maintenance, error) {
 		if n.ReadOnly {
 			return model.Conflict("namespace is read-only")
 		}
+		previous := n.Floor
 		n.Floor, err = policy.RetentionFloor(n, now)
 		if err != nil {
 			return err
 		}
-		receipt, err = compact(tx, b, n)
-		return err
+		receipt, err = compact(tx, b, &n)
+		if err != nil {
+			return err
+		}
+		if n.Floor > previous {
+			// Only an advancing floor can remove previously visible samples.
+			// Recording it at the compaction sequence lets freshness compare the
+			// removed band against a materialization's query interval.
+			if err := recordChange(b, &n, model.Change{
+				Sequence: n.LastSequence, Kind: model.ChangeRetention,
+				PreviousFloor: previous, Floor: n.Floor,
+			}); err != nil {
+				return err
+			}
+		}
+		return volume.PutJSON(b, volume.Config, n)
 	})
 	return receipt, err
 }

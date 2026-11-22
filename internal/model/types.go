@@ -15,6 +15,13 @@ type Namespace struct {
 	Watermark    int64  `json:"watermark"`
 	HasWatermark bool   `json:"has_watermark"`
 	LastSequence uint64 `json:"last_sequence"`
+	// TrackedFrom is the source sequence from which this namespace's logical
+	// change journal is complete: every logical mutation committed after it is
+	// recorded. A materialization sourced at or after TrackedFrom can be judged
+	// precisely; an older one cannot and is reported as indeterminate.
+	TrackedFrom    uint64 `json:"tracked_from,omitempty"`
+	JournalTracked bool   `json:"journal_tracked,omitempty"`
+	JournalCount   int    `json:"journal_count,omitempty"`
 }
 
 type Series struct {
@@ -118,16 +125,62 @@ type Block struct {
 	Format   int    `json:"format"`
 }
 
+// MaterializationProvenance identifies materializations written with enough
+// metadata to judge freshness precisely. Records without it predate change
+// journaling and are reported as indeterminate rather than fresh.
+const MaterializationProvenance = 1
+
 type Materialization struct {
 	Name           string          `json:"name"`
 	Query          Query           `json:"query"`
 	SourceSequence uint64          `json:"source_sequence"`
+	Provenance     int             `json:"provenance,omitempty"`
 	Result         AggregateResult `json:"result"`
 }
 
+// TimeRun is a half-open interval of timestamps touched by a logical change.
+type TimeRun struct {
+	Start int64 `json:"start"`
+	End   int64 `json:"end"`
+}
+
+// SeriesTouch associates one series with the time runs a mutation touched.
+type SeriesTouch struct {
+	Series string    `json:"series"`
+	Runs   []TimeRun `json:"runs"`
+}
+
+// Change is one logical mutation recorded for rollup freshness evaluation.
+// Physical movement (seal, compaction) and policy-only transitions are not
+// recorded because they cannot alter a query result.
+type Change struct {
+	Sequence uint64        `json:"sequence"`
+	Kind     string        `json:"kind"`
+	Touches  []SeriesTouch `json:"touches,omitempty"`
+	// PreviousFloor and Floor are set for retention changes.
+	PreviousFloor int64 `json:"previous_floor,omitempty"`
+	Floor         int64 `json:"floor,omitempty"`
+}
+
+const (
+	ChangeWrite     = "write"
+	ChangeDelete    = "delete"
+	ChangeRetention = "retention"
+
+	FreshnessFresh         = "fresh"
+	FreshnessStale         = "stale"
+	FreshnessIndeterminate = "indeterminate"
+)
+
 type RollupView struct {
 	Materialization
+	// Stale is conservative: an indeterminate materialization also reports
+	// true so a client never treats an unverifiable result as current.
 	Stale bool `json:"stale"`
+	// Freshness is "fresh", "stale" or "indeterminate".
+	Freshness string `json:"freshness"`
+	// Reason explains a stale or indeterminate verdict.
+	Reason string `json:"reason,omitempty"`
 }
 
 type Maintenance struct {

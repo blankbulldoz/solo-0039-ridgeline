@@ -115,6 +115,34 @@ def exercise(workflow, output):
                 fresh = op("freshness", space + "/rollups/pulse")
                 if fresh["stale"]:
                     raise RuntimeError("new materialization is stale")
+                # Narrow the same window to one device class so that changes to
+                # other series must not invalidate it.
+                narrow = {**agg, "matchers": [
+                    {"label": "__name__", "op": "=", "value": "pulse_total"}]}
+                op("narrow materialize", space + "/rollups/narrow", narrow, method="PUT")
+                op("unrelated write", space + "/points", {
+                    "now": 10000, "points": [{**seed["points"][6], "time": 500, "value": 0.9}]
+                })
+                unrelated = op("fresh after unrelated write", space + "/rollups/narrow")
+                if unrelated["stale"] or unrelated["freshness"] != "fresh":
+                    raise RuntimeError("unrelated series invalidated the narrow rollup")
+                op("physical seal", space + "/seal", {})
+                sealed_fresh = op("fresh after seal", space + "/rollups/narrow")
+                if sealed_fresh["stale"]:
+                    raise RuntimeError("physical sealing invalidated the narrow rollup")
+                op("physical compact", space + "/compact", {})
+                compacted_fresh = op("fresh after compact", space + "/rollups/narrow")
+                if compacted_fresh["stale"]:
+                    raise RuntimeError("physical compaction invalidated the narrow rollup")
+                op("later matching series", space + "/points", {
+                    "now": 10000, "points": [{
+                        "labels": {"__name__": "pulse_total", "node": "ridge-c", "zone": "east"},
+                        "time": 1200, "value": 1,
+                    }]
+                })
+                newly_matching = op("stale after later matching series", space + "/rollups/narrow")
+                if not newly_matching["stale"] or newly_matching["freshness"] != "stale":
+                    raise RuntimeError("a newly matching series must invalidate the narrow rollup")
                 op("new correction", space + "/points", {
                     "now": 10000, "points": [{**seed["points"][0], "time": 500, "value": 9}]
                 })
